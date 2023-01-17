@@ -1,7 +1,9 @@
+import { Typography } from "@mui/material";
+
 function App() {
   return (
     <>
-      <p> This is a test </p>
+      <Typography>This is a test</Typography>
     </>
   );
 }
