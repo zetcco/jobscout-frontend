@@ -1,10 +1,10 @@
-import { Typography } from "@mui/material"
+import { SignupForm } from "../components/authentication/SignupForm"
 
 export const Signup = () => {
 
     return (
-        <Typography>
-            Signup Page
-        </Typography>
+        <>
+            <SignupForm/>
+        </>
     )
 }
