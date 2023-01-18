@@ -4,6 +4,7 @@ import { NavigationLayout } from "./components/layout/NavigationLayout";
 import { RootLayout } from "./components/layout/RootLayout";
 import { Home } from "./routes/Home";
 import { Login } from "./routes/Login";
+import { OrganizationProfileCreation } from "./routes/signup/organization/OrganizationProfileCreation";
 import { SelectAccountType } from "./routes/signup/SelectAccountType";
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -17,6 +18,9 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="login" element={<Login/>}/>
         <Route path="signup">
           <Route path="type" element={ <SelectAccountType/> }/>
+          <Route path="organization">
+            <Route path="profile" element={ <OrganizationProfileCreation/> }/>
+          </Route>
         </Route>
       </Route>
 
