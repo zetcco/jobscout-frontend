@@ -1,7 +1,6 @@
-import { Typography } from "@mui/material"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { BasicCard } from "../components/BasicCard"
+import { LoginForm } from "../components/authentication/LoginForm"
 import { fetchUsers } from "../features/usersSlice"
 
 export const Login = () => {
@@ -13,8 +12,8 @@ export const Login = () => {
     }, [disptach])
 
     return (
-        <BasicCard>
-            <Typography>Login Page</Typography>
-        </BasicCard>
+        <> 
+            <LoginForm/>
+        </>
     )
 }
