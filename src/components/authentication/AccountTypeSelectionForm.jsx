@@ -7,7 +7,7 @@ export const AccountTypeSelectionForm = () => {
   return (
         <CenteredHeaderCard 
             title={"Select Account Type"}
-            footer={<Button sx={{ width: '100%' }}>Continue</Button>}
+            footer={<Button variant='contained' sx={{ width: '100%' }}>Continue</Button>}
         >
             <Box sx={{ px: { sm: 4 } }}>
                 <Stack direction="row" spacing={2} >

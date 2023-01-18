@@ -7,10 +7,10 @@ export const OrganizationProfileCreationForm = () => {
   return (
     <CenteredHeaderCard
         title={"Create your Profile"} 
-        footer={<Button sx={{ width: '100%' }}>Continue</Button>}
+        footer={<Button variant='contained' sx={{ width: '100%' }}>Continue</Button>}
     >
-        <Stack spacing={2} sx={{ px: 2, width: '100%' }}>
-            <TextField id="outlined-basic" label="Outlined" variant="outlined"/>
+        <Stack spacing={2} sx={{ width: '100%' }}>
+            <TextField label="Outlined" variant="outlined"/>
             <DashedArea text={"Click here to Upload Logo"}/>
         </Stack>
     </CenteredHeaderCard>

@@ -7,7 +7,7 @@ export const DashedArea = ({ text, icon }) => {
         sx={{
             borderStyle: 'dashed',
             borderWidth: 2,
-            borderRadius: (theme) => theme.shape.borderRadius,
+            borderRadius: (theme) => theme.shape.borderRadius / 500,
             borderColor: (theme) => theme.palette.primary.main,
             padding: 5
         }}
