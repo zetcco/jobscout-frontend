@@ -47,6 +47,13 @@ const getDesignTokens = () => ({
         disableRipple: true
       }
     },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '25px'
+        }
+      }
+    }
   },
 });
 
