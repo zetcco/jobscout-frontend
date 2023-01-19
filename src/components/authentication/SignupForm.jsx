@@ -6,7 +6,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
-import { Link as RouterLink } from "react-router-dom";
 
 
 const SignupForm = () => {
