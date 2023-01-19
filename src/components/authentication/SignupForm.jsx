@@ -3,12 +3,9 @@ import TextField from '@mui/material/TextField';
 import { Button, Grid, Stack} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
-import { DashedArea } from "../input/DashedArea";
-import UploadIcon from '@mui/icons-material/FileUpload';
 import { Link as RouterLink } from "react-router-dom";
 
 
