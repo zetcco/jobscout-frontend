@@ -1,5 +1,4 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
-import { CenteredContent } from "./components/layout/CenteredContent";
 import { GridLayout } from "./components/layout/GridLayout";
 import { NavigationLayout } from "./components/layout/NavigationLayout";
 import { RootLayout } from "./components/layout/RootLayout";

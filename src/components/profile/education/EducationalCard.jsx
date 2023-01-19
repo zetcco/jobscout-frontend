@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Grid, Typography} from "@mui/material"
 import { BasicCard } from "../../BasicCard";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 
 export const EducationalCard = () => {
     return (
