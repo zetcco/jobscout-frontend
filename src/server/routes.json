@@ -1,3 +1,4 @@
 {
-    "/users/:id/recommendations": "/user_recommendations?userId=:id&_expand=recommendation"
+    "/users/:id/recommendations": "/user_recommendations?userId=:id&_expand=recommendation",
+    "/jobposts/:id/applicants": "/job_applications?postId=:id&_expand=user"
 }
