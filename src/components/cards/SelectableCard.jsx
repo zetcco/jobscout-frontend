@@ -3,7 +3,7 @@ import { Stack } from '@mui/system'
 import React from 'react'
 import { BasicCard } from '../BasicCard'
 
-export const SelectableCard = ({ title, selected, onClick }) => {
+export const SelectableCard = ({ title, selected, onClick, sx }) => {
   return (
     <BasicCard sx={{
         cursor: 'pointer',
@@ -16,7 +16,8 @@ export const SelectableCard = ({ title, selected, onClick }) => {
             borderColor: (theme) => theme.palette.primary.main,
             color: (theme) => theme.palette.primary.dark,
             backgroundColor: (theme) => theme.palette.primary.fade
-        }) 
+        }),
+        ...sx
     }}
     onClick={onClick}
     >

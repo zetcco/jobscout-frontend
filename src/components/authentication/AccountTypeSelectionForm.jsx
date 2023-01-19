@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { BasicCard } from '../BasicCard'
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard'
 import { SelectableCard } from '../cards/SelectableCard'
+import { Link as RounterLink } from 'react-router-dom'
 
 export const AccountTypeSelectionForm = () => {
     const [ selected, setSelected ] = useState()
@@ -10,18 +11,12 @@ export const AccountTypeSelectionForm = () => {
     return (
             <CenteredHeaderCard 
                 title={"Select Account Type"}
-                footer={<Button variant='contained' sx={{ width: '100%' }}>Continue</Button>}
+                footer={<Button component={RounterLink} to={ selected === "Organization" ? "/signup/organization/account" : "/signup/user/account"} variant='contained' sx={{ width: '100%' }}>Continue</Button>}
             >
-                <Stack direction="row" spacing={2} sx={{  width: '100%' }}>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <SelectableCard title={"Job Seeker"} onClick={() => setSelected("Job Seeker")} selected={selected === "Job Seeker" ? true : undefined}/>
-                    </Box>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <SelectableCard title={"Job Creator"} onClick={() => setSelected("Job Creator")} selected={selected === "Job Creator" ? true : undefined}/>
-                    </Box>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <SelectableCard title={"Organization"} onClick={() => setSelected("Organization")} selected={selected === "Organization" ? true : undefined}/>
-                    </Box>
+                <Stack direction={{ sm: "column", lg: "row" }} spacing={2} sx={{  width: '100%' }} alignItems="stretch">
+                    <SelectableCard sx={{ width: '100%' }} title={"Job Seeker"} onClick={() => setSelected("Job Seeker")} selected={selected === "Job Seeker" ? true : undefined}/>
+                    <SelectableCard sx={{ width: '100%' }} title={"Job Creator"} onClick={() => setSelected("Job Creator")} selected={selected === "Job Creator" ? true : undefined}/>
+                    <SelectableCard sx={{ width: '100%' }} title={"Organization"} onClick={() => setSelected("Organization")} selected={selected === "Organization" ? true : undefined}/>
                 </Stack>
             </CenteredHeaderCard>
     )
