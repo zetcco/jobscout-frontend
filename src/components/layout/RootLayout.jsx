@@ -50,7 +50,7 @@ const getDesignTokens = () => ({
     MuiPopover: {
       styleOverrides: {
         paper: {
-          borderRadius: '25px'
+          borderRadius: '20px'
         }
       }
     }
