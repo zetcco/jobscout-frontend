@@ -7,6 +7,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
+import { DashedArea } from "../input/DashedArea";
+import UploadIcon from '@mui/icons-material/FileUpload';
 
 
 
@@ -30,7 +32,7 @@ const OrgSignupFormy = () => {
             footer={<Button variant="contained" fullWidth>Login</Button>}
         >
                 <Stack spacing = {2} sx = {{width:'100%'}}>
-                    <Grid spacing={2}>
+                    <Grid spacing={2} xs = {12}>
                         <Grid item xs={12}>
                             <TextField
                                 id="outlined-basic"
@@ -66,6 +68,9 @@ const OrgSignupFormy = () => {
                                     fullWidth 
                                     required
                                 />
+                                <FormControl>
+                                    <FormHelperText>Enter your street number</FormHelperText>
+                                </FormControl>
                             </Grid>
 
                             <Grid item xs = {4}>
@@ -173,6 +178,14 @@ const OrgSignupFormy = () => {
                                 </FormControl>
                             </Grid>
                         </Grid>  
+
+                        <Grid item xs={12}>
+                            <DashedArea
+                                text = {'Click to upload Business Registration'}
+                                icon = {<UploadIcon fontSize="large"/>}
+                            ></DashedArea>
+                        </Grid>
+
                      </Grid>
                 </Stack>
         </CenteredHeaderCard>
