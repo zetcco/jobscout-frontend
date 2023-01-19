@@ -1,17 +1,16 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Grid, Paper } from '@mui/material';
+import { Button, Grid, Stack} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
 
 
 
-const OrgSignupForm = () => {
-
-    const paperStyle = { padding: '60px', margin: '20px auto', width: '700px', fontFamily: 'sans-serif' }
+const OrgSignupFormy = () => {
     const textFieldStyle = { margin: '10px auto' }
     const [city, setCity] = React.useState('')
     const [province, setProvince] = React.useState('')
@@ -27,10 +26,12 @@ const OrgSignupForm = () => {
         setCountry(event.target.value);
     };
     return (
-        <Grid container Spacing={2}>
-            <Paper elevation={10} style={paperStyle}>
-                <Grid>
-                        <Grid>
+        <CenteredHeaderCard
+            footer={<Button variant="contained" fullWidth>Login</Button>}
+        >
+                <Stack spacing = {2} sx = {{width:'100%'}}>
+                    <Grid spacing={2}>
+                        <Grid item xs={12}>
                             <TextField
                                 id="outlined-basic"
                                 label="Company Name"
@@ -42,7 +43,7 @@ const OrgSignupForm = () => {
                             />
                         </Grid>
 
-                        <Grid>
+                        <Grid item xs={12}>
                             <TextField
                                 id="outlined-basic"
                                 label="Company Email"
@@ -54,7 +55,62 @@ const OrgSignupForm = () => {
                                 style={textFieldStyle}
                             />
                         </Grid>
-                        <Grid container Spacing={2}>
+
+                        <Grid container spacing={2} item xs={12}>
+                            <Grid item xs = {4}>
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Steet Number" 
+                                    variant="outlined"
+                                    placeholder = "Your street number"
+                                    fullWidth 
+                                    required
+                                />
+                            </Grid>
+
+                            <Grid item xs = {4}>
+                                <FormControl sx = {{s:1, minWidth:'230px'}}>
+                                    <InputLabel id="Org-registration-street-select-label">Street</InputLabel>
+                                    <Select
+                                        labelId="Org-registration-town-select-label"
+                                        id="Org-registration-street-select"
+                                        value={province}
+                                        label="Street"
+                                        onChange={handleProvinceChange}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        <MenuItem value={10}>Ten</MenuItem>
+                                        <MenuItem value={20}>Twenty</MenuItem>
+                                        <MenuItem value={30}>Thirty</MenuItem>
+                                    </Select>
+                                    <FormHelperText>Select your province</FormHelperText>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs = {4}>
+                                <FormControl sx = {{s:1, minWidth:'230px'}}>
+                                    <InputLabel id="Org-registration-town-select-label">Town</InputLabel>
+                                    <Select
+                                        labelId="Org-registration-town-select-label"
+                                        id="Org-registration-town-select"
+                                        value={country}
+                                        label="Town"
+                                        onChange={handleCountryChange}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        <MenuItem value={10}>Ten</MenuItem>
+                                        <MenuItem value={20}>Twenty</MenuItem>
+                                        <MenuItem value={30}>Thirty</MenuItem>
+                                    </Select>
+                                    <FormHelperText>Select your country</FormHelperText>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={2} item xs={12}>
                             <Grid item xs = {4}>
                                 <FormControl sx = {{s:1, minWidth:'230px'}}>
                                     <InputLabel id="Org-registration-city-select-label">City</InputLabel>
@@ -117,15 +173,11 @@ const OrgSignupForm = () => {
                                 </FormControl>
                             </Grid>
                         </Grid>  
-                        
-                        <Grid>
-                            <Button variant="contained" sx={{ co2or: '#FFFFFF', backgroundColor: '#28AF38', borderRadius: '20px', margin: '10px auto' }} fullWidth>Login</Button>
-                        </Grid>
-                </Grid>
-            </Paper>
-        </Grid>
+                     </Grid>
+                </Stack>
+        </CenteredHeaderCard>
 
     );
 }
 
-export default OrgSignupForm;
+export default OrgSignupFormy;

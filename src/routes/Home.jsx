@@ -9,8 +9,8 @@ export const Home = () => {
     return (
         <>
             <SigninForm/>
-            {/* <SignupForm/> */}
-            {/* <OrgSingupForm/> */}
+            <SignupForm/>
+            <OrgSingupForm/>
         </>
     )
 }
