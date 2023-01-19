@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "json-server -w .\\src\\mock-db.json -p 3001",
+    "server": "json-server -w .\\src\\server\\mock-db.json -p 3001 -r .\\src\\server\\routes.json",
     "dev": "concurrently \"npm run server\" \"npm start\""
   },
   "eslintConfig": {

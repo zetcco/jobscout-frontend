@@ -1,0 +1,3 @@
+{
+    "/users/:id/recommendations": "/user_recommendations?userId=:id&_expand=recommendation"
+}

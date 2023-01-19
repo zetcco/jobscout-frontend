@@ -6,9 +6,11 @@ import { RootLayout } from "./components/layout/RootLayout";
 import { Home } from "./routes/Home";
 import { Login } from "./routes/Login";
 import { OrganizationProfileCreation } from "./routes/signup/organization/OrganizationProfileCreation";
+import { OrganizationSignup } from "./routes/signup/organization/OrganizationSignup";
 import { SelectAccountType } from "./routes/signup/SelectAccountType";
 import { Test } from "./routes/signup/Test/Test";
 import { UploadProfilePicture } from "./routes/signup/user/UploadProfilePicture";
+import { UserSignup } from "./routes/signup/users/UserSignup";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -22,6 +24,11 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="signup">
           <Route path="type" element={ <SelectAccountType/> }/>
           <Route path="organization">
+            <Route path="account" element={ <OrganizationSignup/> }/>
+            <Route path="profile" element={ <OrganizationProfileCreation/> }/>
+          </Route>
+          <Route path="user">
+            <Route path="account" element={ <UserSignup/> }/>
             <Route path="profile" element={ <OrganizationProfileCreation/> }/>
           </Route>
           <Route path="user">

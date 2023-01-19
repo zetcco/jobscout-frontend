@@ -25,12 +25,15 @@ const getDesignTokens = () => ({
   },
   shadows: Array.from({ length: 24 }, (_, i) => "none"),
   typography: {
-    fontFamily: "Inter",
+    fontFamily: "\"Inter\", \"Roboto\"",
     h5: {
         fontWeight: 700
     },
     button: {
         fontWeight: 600
+    },
+    body3: {
+      fontWeight: 600
     }
   },
   components: {
@@ -44,6 +47,13 @@ const getDesignTokens = () => ({
         disableRipple: true
       }
     },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '20px'
+        }
+      }
+    }
   },
 });
 
