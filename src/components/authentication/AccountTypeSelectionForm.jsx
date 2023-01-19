@@ -9,19 +9,23 @@ export const AccountTypeSelectionForm = () => {
             title={"Select Account Type"}
             footer={<Button variant='contained' sx={{ width: '100%' }}>Continue</Button>}
         >
-            <Box sx={{ px: { sm: 4 } }}>
-                <Stack direction="row" spacing={2} >
+            <Stack direction="row" spacing={2} sx={{  width: '100%' }}>
+                <Box sx={{ flexGrow: 1 }}>
                     <BasicCard>
                         <Typography>Job Seeker</Typography>
                     </BasicCard>
+                </Box>
+                <Box sx={{ flexGrow: 1 }}>
                     <BasicCard>
                         <Typography>Job Creator</Typography>
                     </BasicCard>
+                </Box>
+                <Box sx={{ flexGrow: 1 }}>
                     <BasicCard>
                         <Typography>Organization</Typography>
                     </BasicCard>
-                </Stack>
-            </Box>
+                </Box>
+            </Stack>
         </CenteredHeaderCard>
   )
 }

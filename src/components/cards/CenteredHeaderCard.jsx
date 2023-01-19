@@ -10,7 +10,7 @@ export const CenteredHeaderCard = ({ title, footer, children, icon }) => {
         justifyContent="center"
         alignItems="center"
         spacing={4}
-        sx={{ px: 5 }}
+        sx={{ px: 7 }}
       >
         { icon !== null && icon }
         <Typography variant="h5">{ title }</Typography>
