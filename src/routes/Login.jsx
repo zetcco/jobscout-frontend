@@ -1,19 +1,12 @@
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
-import { LoginForm } from "../components/authentication/LoginForm"
-import { fetchUsers } from "../features/usersSlice"
+import { Grid } from "@mui/material"
+import SigninForm from "../components/authentication/SigninForm"
 
 export const Login = () => {
-
-    const disptach = useDispatch()
-
-    useEffect(() => {
-        disptach(fetchUsers())
-    }, [disptach])
-
     return (
-        <> 
-            <LoginForm/>
-        </>
+    <Grid container>
+        <Grid item xs={12}>
+            <SigninForm/>
+        </Grid>
+    </Grid>
     )
 }

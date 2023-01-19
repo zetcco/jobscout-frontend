@@ -1,14 +1,12 @@
 import { Typography } from "@mui/material"
-import OrganizationSignup from "../components/authentication/OrganizationSignupForm"
-import SigninForm from "../components/authentication/SIgningForm"
-import SignupForm from "../components/authentication/SignupForm"
+import SigninForm from "../components/authentication/SigninForm"
 
 
 export const Home = () => {
 
     return (
         <>
-            <OrganizationSignup/>
+            <SigninForm/>
         </>
     )
 }
