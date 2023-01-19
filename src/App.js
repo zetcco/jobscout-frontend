@@ -29,9 +29,6 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
           <Route path="user">
             <Route path="account" element={ <UserSignup/> }/>
-            <Route path="profile" element={ <OrganizationProfileCreation/> }/>
-          </Route>
-          <Route path="user">
             <Route path="profile">
               <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
             </Route>
