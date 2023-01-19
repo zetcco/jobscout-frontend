@@ -31,6 +31,9 @@ const getDesignTokens = () => ({
     },
     button: {
         fontWeight: 600
+    },
+    body3: {
+      fontWeight: 600
     }
   },
   components: {
