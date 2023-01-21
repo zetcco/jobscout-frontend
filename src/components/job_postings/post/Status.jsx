@@ -1,14 +1,10 @@
 import { Box, Stack } from "@mui/system";
 import { Typography } from "@mui/material";
 import Chip from '@mui/material/Chip';
-import SmallPanel from "../../SmallPanel";
 
 export const Status = () => {
     return ( 
-        <SmallPanel
-            mainTitle={'Status'}
-            children = {[
-                <Stack direction={'row'} justifyContent='space-between'>                   
+              <Stack direction={'row'} justifyContent='space-between'>                   
                     <Box>
                         <Typography>Number of applicants</Typography>
                     </Box>
@@ -24,7 +20,5 @@ export const Status = () => {
                         <Chip label="2 days remaining" variant="outlined" color='error'/>
                     </Box>
                 </Stack>
-            ]}
-        />
      );
 }

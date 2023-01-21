@@ -1,8 +1,8 @@
 import React from "react";
 import { Stack } from "@mui/system";
-import ProfileWithHeader from "../profile/ProfileWithHeader";
+import ProfileWithHeader from "../../profile/ProfileWithHeader";
 
-const Ownership = () => {
+export const Ownership = () => {
     return ( 
             <Stack spacing={2} direction={'column'}>
                 <ProfileWithHeader
@@ -15,6 +15,4 @@ const Ownership = () => {
                 />
             </Stack> 
      );
-}
- 
-export default Ownership;
+};
