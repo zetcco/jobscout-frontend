@@ -2,17 +2,19 @@ import { createTheme, CssBaseline, responsiveFontSizes, ThemeProvider } from "@m
 import { Outlet } from "react-router-dom"
 import { grey } from '@mui/material/colors';
 
+const primary = "#00AE2B"
+
 const getDesignTokens = () => ({
   palette: {
     mode: "light",
     primary: {
-      main: "#00AE2B",
+      main: primary,
       light: "#adf75a",
       dark: "#006E17",
       fade: "#d5eaba",
     },
     success: {
-      main: "#00AE2B"
+      main: primary
     },
     background: {
       default: "#fff",
