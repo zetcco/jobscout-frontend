@@ -1,6 +1,6 @@
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
 import { Stack } from "@mui/system";
-import { Grid ,Button} from "@mui/material";
+import { Grid ,Button, Box} from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Status } from "../../components/job_postings/post/Status";
 import { Ownership } from "../../components/job_postings/post/Ownership";
@@ -15,17 +15,19 @@ export const JobPost = () => {
                         <Grid item xs = {12}>
                             <SingleJobPost/>
                         </Grid>
-                        <Grid item xs = {5}>
-                            <SmallPanel
-                                mainTitle={'Ownewship'}
-                                children={<Ownership/>}
-                            />
-                        </Grid>
-                        <Grid item xs = {7}>
-                            <SmallPanel
-                                mainTitle={'Status'}
-                                children={<Status/>}
-                            />
+                        <Grid item xs = {12}>
+                            <Stack direction={"row"} alignItems="stretch" justifyContent={"space-between"} spacing={4}>
+                                <SmallPanel
+                                    mainTitle={'Ownership'}
+                                    children={<Ownership/>}
+                                    sx={{ flexGrow: 1 }}
+                                />
+                                <SmallPanel
+                                    mainTitle={'Status'}
+                                    children={<Status/>}
+                                    sx={{ flexGrow: 2 }}
+                                />
+                            </Stack>
                         </Grid>
                         <Grid item xs = {9}>
                         </Grid>
