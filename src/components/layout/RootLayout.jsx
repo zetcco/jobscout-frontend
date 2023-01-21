@@ -11,6 +11,9 @@ const getDesignTokens = () => ({
       dark: "#006E17",
       fade: "#d5eaba",
     },
+    success: {
+      main: "#00AE2B"
+    },
     background: {
       default: "#fff",
       paper: "#fff",
