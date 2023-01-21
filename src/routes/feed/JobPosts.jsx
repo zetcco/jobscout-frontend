@@ -57,7 +57,6 @@ const JobPosts = () => {
                                 <SingleJobPost/>
                                 <SingleJobPost/>
                                 <SingleJobPost/>
-                                <SingleJobPost/>
                             </Stack>
                         </Grid>
                     </Stack>
