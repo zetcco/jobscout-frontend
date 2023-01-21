@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "@mui/system";
-import ProfileWithHeader from "../profile/ProfileHeaderCard";
+import ProfileWithHeader from "../profile/ProfileWithHeader";
 
 const PostetBy = () => {
     return ( 
