@@ -3,14 +3,14 @@ import { Stack } from "@mui/system";
 import { Grid, TextField,Button } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
-import { BasicCard } from "../BasicCard";
-import SmallPanel from "./SmallPanel";
 import FilterPosts from "../../components/job_postings/posts/FilterPosts";
-import SingleJobPost from "../../components/job_postings/singleJobPost";
-import SubCategories from "../../components/JobPosts/SubCategories";
+import SingleJobPost from "../../components/job_postings/SingleJobPost";
+import { BasicCard } from "../../components/BasicCard";
+import SmallPanel from "../../components/SmallPanel";
+import SubCategories from "../../components/job_postings/posts/SubCategories";
 
 
-const JobPosts = () => {
+export const JobPosts = () => {
     return ( 
         <BasicCard>
             <Stack spacing={2} sx={{ width: '100%' }}>
@@ -65,5 +65,3 @@ const JobPosts = () => {
         </BasicCard>
      );
 }
- 
-export default JobPosts;
