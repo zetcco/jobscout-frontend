@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const SmallPanel = () => {
+const FilterPosts = () => {
     return ( 
 
                         <Stack direction={'column'} spacing={4}>
@@ -59,4 +59,4 @@ const SmallPanel = () => {
      );
 }
  
-export default SmallPanel;
+export default FilterPosts;
