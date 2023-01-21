@@ -9,7 +9,7 @@ const FilterPosts = () => {
     return ( 
 
                         <Stack direction={'column'} spacing={4}>
-                                <FormControl sx = {{s:1, minWidth:'230px'}}>
+                                <FormControl>
                                     <InputLabel id="Small-panel-filter-by-fields-label">Filter by fields</InputLabel>
                                     <Select
                                         labelId="Small-panel-filter-by-fields-label"
@@ -24,7 +24,7 @@ const FilterPosts = () => {
                                         <MenuItem value={30}>Thirty</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx = {{s:1, minWidth:'230px'}}>
+                                <FormControl>
                                     <InputLabel id="Small-panel-filter-by-skills-label">Filter by skills</InputLabel>
                                     <Select
                                         labelId="Org-registration-city-select-label"
@@ -40,7 +40,7 @@ const FilterPosts = () => {
                                         <MenuItem value={30}>Thirty</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx = {{s:1, minWidth:'230px'}}>
+                                <FormControl>
                                     <InputLabel id="Small-panel-filter-by-location-label">Filter by location</InputLabel>
                                     <Select
                                         labelId="Org-registration-city-select-label"
