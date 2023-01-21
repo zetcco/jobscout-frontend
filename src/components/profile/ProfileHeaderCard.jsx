@@ -11,10 +11,9 @@ const ProfileHeaderCard = ({title , name , subtitle , iconSize}) => {
                             spacing = {0.5}
                             alignItems={'center'}
                             >
-                        <AccountCircleIcon sx={{fontSize:50}}/>
-                        <Stack direction={'column'} spacing={1}>
-                            <Typography variant= 'h6'>{ name }</Typography>
-                            <FormHelperText>{ subtitle }</FormHelperText>  
+                        <AccountCircleIcon sx={{fontSize:40}}/>
+                        <Stack direction={'column'} spacing={1} alignItems="center">
+                            <Typography variant= 'body'>{ name }</Typography>
                         </Stack>                      
                     </Stack>
             </Stack>
