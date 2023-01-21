@@ -21,7 +21,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path="posts" element={<JobPosts/>}/>
         <Route path="posts">
-          <Route path="post" element={<JobPost/>}/>
+          <Route path=":postId" element={<JobPost/>}/>
         </Route>
       </Route>
 
