@@ -9,6 +9,8 @@ import SingleJobPost from "../../components/job_postings/SingleJobPost";
 import { BasicCard } from "../../components/BasicCard";
 import SmallPanel from "../../components/SmallPanel";
 import SubCategories from "../../components/job_postings/posts/SubCategories";
+import { Link } from "react-router-dom";
+import { RouterLink } from "../../components/RouterLink";
 
 
 export const JobPosts = () => {
@@ -79,9 +81,36 @@ export const JobPosts = () => {
 
                     <Box sx={{ flexGrow: 9 }}>                           
                         <Stack direction={'column'} spacing={2}>
-                            <SingleJobPost/>
-                            <SingleJobPost/>
-                            <SingleJobPost/>
+                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
+                                "&:hover": {
+                                    backgroundColor: (theme) => theme.palette.grey[100],
+                                }
+                             }}/></RouterLink>
+                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
+                                "&:hover": {
+                                    backgroundColor: (theme) => theme.palette.grey[100],
+                                }
+                             }}/></RouterLink>
+                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
+                                "&:hover": {
+                                    backgroundColor: (theme) => theme.palette.grey[100],
+                                }
+                             }}/></RouterLink>
+                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
+                                "&:hover": {
+                                    backgroundColor: (theme) => theme.palette.grey[100],
+                                }
+                             }}/></RouterLink>
+                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
+                                "&:hover": {
+                                    backgroundColor: (theme) => theme.palette.grey[100],
+                                }
+                             }}/></RouterLink>
+                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
+                                "&:hover": {
+                                    backgroundColor: (theme) => theme.palette.grey[100],
+                                }
+                             }}/></RouterLink>
                         </Stack>
                     </Box>
                 </Stack>

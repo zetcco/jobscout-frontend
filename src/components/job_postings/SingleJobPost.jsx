@@ -4,13 +4,15 @@ import Chip from '@mui/material/Chip';
 import { BasicCard } from "../BasicCard";
 
 
-const SingleJobPost = () => {
+const SingleJobPost = ({ sx }) => {
 
     const handleDelete = () => {
         console.info('You clicked the delete icon.');
       };
     return (
-            <BasicCard>
+            <BasicCard sx={{ 
+                ...sx
+             }}>
                 <Stack
                     direction='column'
                     justifyContent='space-between'
