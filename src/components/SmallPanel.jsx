@@ -11,7 +11,9 @@ const SmallPanel = ({mainTitle ,children}) => {
         `       <Stack>
                         <Typography variant='h5'>{ mainTitle }</Typography>
                 </Stack>
-                        { children }
+                <Stack>
+                    { children }
+                </Stack>                   
             </Stack>
         </BasicCard>
      );
