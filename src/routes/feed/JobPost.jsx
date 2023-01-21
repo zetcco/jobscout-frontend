@@ -17,7 +17,7 @@ export const JobPost = () => {
                         </Grid>
                         <Grid item xs = {5}>
                             <SmallPanel
-                                mainTitle={'Ownewship'}
+                                mainTitle={'Ownership'}
                                 children={<Ownership/>}
                             />
                         </Grid>

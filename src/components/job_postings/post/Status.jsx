@@ -4,7 +4,8 @@ import Chip from '@mui/material/Chip';
 
 export const Status = () => {
     return ( 
-              <Stack direction={'row'} justifyContent='space-between'>                   
+            <Stack direction={'column'}>
+                <Stack direction={'row'} justifyContent='space-between'>                   
                     <Box>
                         <Typography>Number of applicants</Typography>
                     </Box>
@@ -20,5 +21,7 @@ export const Status = () => {
                         <Chip label="2 days remaining" variant="outlined" color='error'/>
                     </Box>
                 </Stack>
+            </Stack>
+              
      );
 }
