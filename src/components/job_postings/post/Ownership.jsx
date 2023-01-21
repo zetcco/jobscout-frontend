@@ -2,7 +2,7 @@ import React from "react";
 import { Stack } from "@mui/system";
 import ProfileWithHeader from "../profile/ProfileWithHeader";
 
-const PostetBy = () => {
+const Ownership = () => {
     return ( 
             <Stack spacing={2} direction={'column'}>
                 <ProfileWithHeader
@@ -17,4 +17,4 @@ const PostetBy = () => {
      );
 }
  
-export default PostetBy;
+export default Ownership;

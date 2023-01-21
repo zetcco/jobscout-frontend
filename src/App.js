@@ -2,6 +2,8 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import { GridLayout } from "./components/layout/GridLayout";
 import { NavigationLayout } from "./components/layout/NavigationLayout";
 import { RootLayout } from "./components/layout/RootLayout";
+import { JobPost } from "./routes/feed/JobPost";
+import { JobPosts } from "./routes/feed/JobPosts";
 import { Home } from "./routes/Home";
 import { Login } from "./routes/Login";
 import { OrganizationProfileCreation } from "./routes/signup/organization/OrganizationProfileCreation";
@@ -16,6 +18,11 @@ const router = createBrowserRouter(createRoutesFromElements(
 
       <Route path="/" element={<NavigationLayout/>}>
         <Route path="home" element={<Home/>}/>
+
+        <Route path="posts" element={<JobPosts/>}/>
+        <Route path="posts">
+          <Route path="post" element={<JobPost/>}/>
+        </Route>
       </Route>
 
       <Route path="/" element={ <GridLayout/> }>
