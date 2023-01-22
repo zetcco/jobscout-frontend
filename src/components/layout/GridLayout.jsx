@@ -1,10 +1,21 @@
-import { Box, Grid } from '@mui/material'
+import { AnimatePresence, motion } from "framer-motion"
+import { Box, Grid, Typography } from '@mui/material'
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 export const GridLayout = () => {
+
+  const { pathname } = useLocation();
+
   return (
     <Box sx={{ mx: { md: '200px', lg: '350px' } }}>
+        <motion.div
+          key={pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+        >
       <Grid
           container
           direction="column"
@@ -14,6 +25,7 @@ export const GridLayout = () => {
       >
           <Outlet/>
       </Grid>
+      </motion.div>
     </Box>
   )
 }
