@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material"
 import { BasicCard } from "../components/BasicCard"
-import SigninForm from "../components/authentication/SigninForm"
-import { Comments } from "../components/SocialMedia/Comments"
+import { JobSeekerRecommendation } from "./feed/JobSeekerRecommendation"
 
 
 export const Home = () => {
@@ -11,9 +10,7 @@ export const Home = () => {
         <BasicCard>
             <Typography>Home Page</Typography>
         </BasicCard>
-           
-            <SigninForm/>
-            <Comments/>
+            <JobSeekerRecommendation/>
         </>
     )
 }
