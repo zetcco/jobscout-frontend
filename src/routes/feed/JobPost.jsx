@@ -1,5 +1,5 @@
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
-import { Stack } from "@mui/system";
+import { Stack, Box } from "@mui/system";
 import { Grid ,Button} from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Status } from "../../components/job_postings/post/Status";
