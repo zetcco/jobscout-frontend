@@ -9,7 +9,7 @@ export const Topbar = () => {
                 zIndex: (theme) => theme.zIndex.drawer + 1
             }}>
                 <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}> JobScout </Typography>
+                    <Typography variant="h5" sx={{ flexGrow: 1, color: (theme) => theme.palette.common.white }}> JobScout </Typography>
                 </Toolbar>
             </AppBar>
         </Box>

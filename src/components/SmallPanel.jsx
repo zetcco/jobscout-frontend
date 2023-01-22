@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "@mui/system";
-import { Typography} from "@mui/material";
+import { Box, Typography} from "@mui/material";
 import { BasicCard } from "./BasicCard";
 
 
@@ -8,8 +8,10 @@ const SmallPanel = ({mainTitle ,children, sx}) => {
     return ( 
         <BasicCard sx={sx}>
             <Stack direction={'column'} spacing={2}>
-                <Typography variant='h5'>{ mainTitle }</Typography>
-                <Stack> { children } </Stack>                   
+                <Typography variant='button'>{ mainTitle }</Typography>
+                <Box>
+                    { children }
+                </Box>
             </Stack>
         </BasicCard>
      );
