@@ -1,6 +1,6 @@
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
 import { Stack } from "@mui/system";
-import { Grid ,Button} from "@mui/material";
+import { Box ,Button} from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Status } from "../../components/job_postings/post/Status";
 import { Ownership } from "../../components/job_postings/post/Ownership";

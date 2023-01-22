@@ -11,7 +11,7 @@ export const Recommendations = () => {
             profileIcon={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Creative Software'}/>}
             buttonSet1 ={[
                 <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Message</Button> , 
-                <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Recommendations</Button>
+                <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Add Recommendations</Button>
             ]}
 
             buttonSet2 ={[
@@ -21,7 +21,7 @@ export const Recommendations = () => {
                 <Button variant = {'outlined'}>Portfolio</Button>
             ]}
 
-            comments = {[
+            contend = {[
                 <Comments name = {'Nipun Madumal'}/> , 
                 <Comments name = {'Rajitha Thilanka'}/> ,
                 <Comments name = {'Praveen Chamod'}/> 
