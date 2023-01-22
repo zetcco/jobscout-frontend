@@ -5,16 +5,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 const ProfileHeaderCard = ({title , name , subtitle , iconSize}) => {
     return ( 
             <Stack direction={'column'} spacing={1}>
-                    <FormHelperText>{ title }</FormHelperText>                 
+                    { title && <FormHelperText>{ title }</FormHelperText> }
                     <Stack 
                             direction={'row'} 
                             spacing = {0.5}
                             alignItems={'center'}
                             >
-                        <AccountCircleIcon style={{fontSize: 50 }}/>
+                        <AccountCircleIcon style={{fontSize: 40 }}/>
                         <Stack direction={'column'} spacing={1}>
                             <Typography variant= 'h6'>{ name }</Typography>
-                            <FormHelperText>{ subtitle }</FormHelperText>  
+                            { subtitle && (<FormHelperText>{ subtitle }</FormHelperText>) }
                         </Stack>                      
                     </Stack>
             </Stack>

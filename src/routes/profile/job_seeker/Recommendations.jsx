@@ -1,11 +1,11 @@
 import { Button } from '@mui/material'
 import React from 'react'
-import { Profile } from '../../components/profile/Profile'
-import { ProfileWithFullNameSubtitle } from '../../components/profile/ProfileWithFullNameSubtitle'
-import { Comments } from '../../components/SocialMedia/Comments'
+import { Profile } from '../../../components/profile/Profile'
+import { ProfileWithFullNameSubtitle } from '../../../components/profile/ProfileWithFullNameSubtitle'
 import AddIcon from '@mui/icons-material/Add';
+import { Comments } from '../../../components/SocialMedia/Comments';
 
-export const JobSeekerRecommendation = () => {
+export const Recommendations = () => {
   return (
         <Profile
             profileIcon={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Creative Software'}/>}

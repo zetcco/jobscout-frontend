@@ -1,7 +1,7 @@
 import React from 'react'
 import { BasicCard } from '../BasicCard'
 import { Stack } from '@mui/system'
-import { Grid } from '@mui/material'
+import { Box, Grid } from '@mui/material'
 
 
 export const Profile = ({profileIcon , buttonSet1 , buttonSet2 , comments}) => {
@@ -9,8 +9,10 @@ export const Profile = ({profileIcon , buttonSet1 , buttonSet2 , comments}) => {
         <BasicCard>
             <Stack direction={'column'} spacing={4}>
                 <Stack direction={'row'} justifyContent={'space-between'} spacing={2}>
-                    <Stack>{ profileIcon }</Stack>
-                    <Stack direction={'row'} spacing = {2}>{ buttonSet1}</Stack>
+                    { profileIcon }
+                    <Stack direction={"row"} alignItems="center" spacing={2}>
+                        {buttonSet1}
+                    </Stack>
                 </Stack>
                 <Stack spacing= {4} direction={'row'}>
                     <Grid item xs = {4} lg ={4}>

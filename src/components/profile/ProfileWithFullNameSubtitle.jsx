@@ -14,7 +14,7 @@ export const ProfileWithFullNameSubtitle = ({title , name , subtitle}) => {
                         <AccountCircleIcon style={{fontSize:100}}/>
                         <Stack direction={'column'} spacing={0.5}>
                             <Typography variant= 'h4'>{ name }</Typography>
-                            <Typography variant= 'h6'>{ subtitle }</Typography>  
+                            { subtitle && <Typography variant= 'button'>{ subtitle }</Typography>  }
                         </Stack>                      
                     </Stack>
             </Stack>
