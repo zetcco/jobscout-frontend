@@ -2,23 +2,21 @@ import { Stack } from "@mui/system";
 import { FormHelperText ,Typography} from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const ProfileHeaderCard = ({title , name , subtitle}) => {
+export const ProfileWithFullNameSubtitle = ({title , name , subtitle}) => {
     return ( 
             <Stack direction={'column'} spacing={1}>
-                    { title && <FormHelperText>{ title }</FormHelperText> }
+                    <FormHelperText>{ title }</FormHelperText>                 
                     <Stack 
                             direction={'row'} 
                             spacing = {0.5}
                             alignItems={'center'}
                             >
-                        <AccountCircleIcon style={{fontSize: 40 }}/>
-                        <Stack direction={'column'} spacing={1}>
-                            <Typography variant= 'h6'>{ name }</Typography>
-                            { subtitle && (<FormHelperText>{ subtitle }</FormHelperText>) }
+                        <AccountCircleIcon style={{fontSize:100}}/>
+                        <Stack direction={'column'} spacing={0.5}>
+                            <Typography variant= 'h4'>{ name }</Typography>
+                            { subtitle && <Typography variant= 'button'>{ subtitle }</Typography>  }
                         </Stack>                      
                     </Stack>
             </Stack>
      );
 }
- 
-export default ProfileHeaderCard;

@@ -11,7 +11,7 @@ const SmallPanel = ({mainTitle ,children, sx}) => {
                 <Typography variant='button'>{ mainTitle }</Typography>
                 <Box>
                     { children }
-                </Box>                   
+                </Box>
             </Stack>
         </BasicCard>
      );
