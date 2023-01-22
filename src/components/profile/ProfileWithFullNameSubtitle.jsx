@@ -2,7 +2,7 @@ import { Stack } from "@mui/system";
 import { FormHelperText ,Typography} from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const ProfileHeaderCard = ({title , name , subtitle , iconSize}) => {
+export const ProfileWithFullNameSubtitle = ({title , name , subtitle}) => {
     return ( 
             <Stack direction={'column'} spacing={1}>
                     <FormHelperText>{ title }</FormHelperText>                 
@@ -11,14 +11,12 @@ const ProfileHeaderCard = ({title , name , subtitle , iconSize}) => {
                             spacing = {0.5}
                             alignItems={'center'}
                             >
-                        <AccountCircleIcon style={{fontSize: 50 }}/>
-                        <Stack direction={'column'} spacing={1}>
-                            <Typography variant= 'h6'>{ name }</Typography>
-                            <FormHelperText>{ subtitle }</FormHelperText>  
+                        <AccountCircleIcon style={{fontSize:100}}/>
+                        <Stack direction={'column'} spacing={0.5}>
+                            <Typography variant= 'h4'>{ name }</Typography>
+                            <Typography variant= 'h6'>{ subtitle }</Typography>  
                         </Stack>                      
                     </Stack>
             </Stack>
      );
 }
- 
-export default ProfileHeaderCard;
