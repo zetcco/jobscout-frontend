@@ -1,7 +1,7 @@
 import React from 'react'
 import { BasicCard } from '../BasicCard'
 import { Stack } from '@mui/system'
-import { Box, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 
 
 export const Profile = ({profileIcon , buttonSet1 , buttonSet2 , comments}) => {
