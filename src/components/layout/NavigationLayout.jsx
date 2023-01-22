@@ -9,7 +9,9 @@ export const NavigationLayout = () => {
             <Topbar/>
             <Box>
                 <Toolbar/>
-                <Outlet/>
+                <Box sx={{ mx: { md: '100px', lg: '250px' }, mt: 4 }}>
+                    <Outlet/>
+                </Box>
             </Box>
         </>
     );

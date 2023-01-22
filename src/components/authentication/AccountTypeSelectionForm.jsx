@@ -1,6 +1,5 @@
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import React, { useState } from 'react'
-import { BasicCard } from '../BasicCard'
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard'
 import { SelectableCard } from '../cards/SelectableCard'
 import { Link as RounterLink } from 'react-router-dom'

@@ -12,7 +12,7 @@ export const BasicCard = ({ children, sx, onClick }) => {
         }}
         onClick={onClick ? onClick : undefined}
         >
-            <Box sx={{ p: (theme) => theme.spacing(4) }}>
+            <Box sx={{ p: { xs: 2, sm: 4 } }}>
                 {children}
             </Box>
         </Paper>
