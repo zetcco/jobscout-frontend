@@ -4,10 +4,10 @@ import { Profile } from '../../../components/profile/Profile'
 import { ProfileWithFullNameSubtitle } from '../../../components/profile/ProfileWithFullNameSubtitle'
 import SingleJobPost from '../../../components/job_postings/SingleJobPost';
 
-export const JobPost = () => {
+export const OrgJobPosts = () => {
   return (
         <Profile
-            profileIcon={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Creative Software'}/>}
+            profileIcon={<ProfileWithFullNameSubtitle name = {'Creative Software'} subtitle={'Organization'}/>}
 
             buttonSet2 ={[
                 <Button variant = {'outlined'}>Job Posts</Button> , 
