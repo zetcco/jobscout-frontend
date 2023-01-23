@@ -8,11 +8,17 @@ export const SelectableCard = ({ title, selected, onClick, sx }) => {
     <BasicCard sx={{
         cursor: 'pointer',
         ...( selected === false && {
+            transition: (theme) => theme.transitions.create(['border-color'], {
+                duration: theme.transitions.duration.standard
+            }),
             "&:hover": {
                 borderColor: (theme) => theme.palette.primary.light,
             }
         }),
         ...(selected !== false && { 
+            transition: (theme) => theme.transitions.create(['border-color', 'background-color'], {
+                duration: theme.transitions.duration.standard
+            }),
             borderColor: (theme) => theme.palette.primary.main,
             color: (theme) => theme.palette.primary.dark,
             backgroundColor: (theme) => theme.palette.primary.fade
