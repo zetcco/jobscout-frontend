@@ -3,10 +3,7 @@ import ProfileHeaderCard from "./ProfileHeaderCard";
 
 const ProfileWithHeader = ({title , name }) => {
     return ( 
-                <ProfileHeaderCard
-                    title={ title }
-                    name={ name }
-                />
+                <ProfileHeaderCard title={ title } name={ name }/>
      );
 }
  
