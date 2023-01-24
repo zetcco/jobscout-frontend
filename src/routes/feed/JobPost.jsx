@@ -15,16 +15,8 @@ export const JobPost = () => {
                             <SingleJobPost/>
                         </Box>
                         <Stack direction={{ xs: "column", sm: "row" }} alignItems="stretch" justifyContent={"space-between"} spacing={2}>
-                            <SmallPanel
-                                mainTitle={'Ownership'}
-                                children={<Ownership/>}
-                                sx={{ flexGrow: 1 }}
-                            />
-                            <SmallPanel
-                                mainTitle={'Status'}
-                                children={<Status/>}
-                                sx={{ flexGrow: 2 }}
-                            />
+                            <SmallPanel mainTitle={'Ownership'} children={<Ownership/>} sx={{ flexGrow: 1 }} />
+                            <SmallPanel mainTitle={'Status'} children={<Status/>} sx={{ flexGrow: 2 }} />
                         </Stack>
                         <Button variant="contained" color='success' fullWidth size='large'>Apply now</Button>
             </Stack>                   
