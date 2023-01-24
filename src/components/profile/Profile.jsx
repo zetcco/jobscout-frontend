@@ -7,7 +7,7 @@ import { Box, Grid } from '@mui/material'
 export const Profile = ({profileIcon , buttonSet1 , buttonSet2 , contend}) => {
   return (
         <BasicCard>
-            <Stack direction={'column'} spacing={4}>
+            <Stack direction={'column'} spacing={6}>
                 <Stack direction={'row'} justifyContent={'space-between'} spacing={2}>
                     { profileIcon }
                     {buttonSet1 && <Stack direction={"row"} alignItems="center" spacing={2}>
