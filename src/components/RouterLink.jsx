@@ -3,7 +3,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const StyledLink = styled(Link)(({ theme }) => ({
-  textDecoration: 'none'
+  textDecoration: 'none',
+  '&:active, &:visited': {
+    color: 'inherit'
+  },
 }))
 
 export const RouterLink = ({ to, children }) => {
