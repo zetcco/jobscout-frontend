@@ -8,20 +8,20 @@ import { Comments } from '../../../components/SocialMedia/Comments';
 export const Recommendations = () => {
   return (
         <Profile
-            profileIcon={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Creative Software'}/>}
-            buttonSet1 ={[
+            profile={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Creative Software'}/>}
+            profileActionButtons ={[
                 <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Message</Button> , 
-                <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Add Recommendations</Button>
+                <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Recommend</Button>
             ]}
 
-            buttonSet2 ={[
+            profileRouteButtons ={[
                 <Button variant = {'outlined'}>Recommendations</Button> , 
                 <Button variant = {'outlined'}>Posts</Button>,
                 <Button variant = {'outlined'}>Qualification</Button> , 
                 <Button variant = {'outlined'}>Portfolio</Button>
             ]}
 
-            contend = {[
+            content = {[
                 <Comments name = {'Nipun Madumal'}/> , 
                 <Comments name = {'Rajitha Thilanka'}/> ,
                 <Comments name = {'Praveen Chamod'}/> 
