@@ -4,7 +4,8 @@ import { grey } from '@mui/material/colors';
 
 const primary = "#00AE2B"
 
-const getDesignTokens = () => ({
+
+const getDesignTokens = (theme) => ({
   palette: {
     mode: "light",
     primary: {
@@ -33,6 +34,16 @@ const getDesignTokens = () => ({
     fontFamily: "\"Inter\", \"Roboto\"",
     h5: {
         fontWeight: 700
+    },
+    profile_name: {
+      [theme.breakpoints.up('xs')]: {
+        fontSize: "1.3rem",
+        fontWeight: 700
+      },
+      [theme.breakpoints.up('md')]: {
+        fontSize: "2.125rem",
+        fontWeight: 600
+      }
     },
     button: {
         fontWeight: 600
@@ -63,7 +74,8 @@ const getDesignTokens = () => ({
 });
 
 export const RootLayout = () => {
-    let theme = responsiveFontSizes(createTheme(getDesignTokens()))
+    const defaultTheme = createTheme();
+    let theme = responsiveFontSizes(createTheme(getDesignTokens(defaultTheme)))
 
     return (
         <ThemeProvider theme={theme}>
