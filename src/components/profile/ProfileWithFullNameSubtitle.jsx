@@ -6,10 +6,10 @@ export const ProfileWithFullNameSubtitle = ({title , name , subtitle}) => {
     return ( 
             <Stack direction={'column'} spacing={1}>
                     <FormHelperText>{ title }</FormHelperText>                 
-                    <Stack direction={'row'} spacing = {0.5} alignItems={'center'} >
-                        <AccountCircleIcon style={{fontSize:100}}/>
+                    <Stack direction={'row'} spacing = {0.5} alignItems={'center'}>
+                        <AccountCircleIcon sx={ {fontSize:{ xs: 80, md: 100 } }}/>
                         <Stack direction={'column'} spacing={0.5}>
-                            <Typography variant= 'h4'>{ name }</Typography>
+                            <Typography variant='h4'>{ name }</Typography>
                             { subtitle && <Typography variant= 'button'>{ subtitle }</Typography>  }
                         </Stack>                      
                     </Stack>

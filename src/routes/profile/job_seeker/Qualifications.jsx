@@ -3,28 +3,28 @@ import React from 'react'
 import { Profile } from '../../../components/profile/Profile'
 import { ProfileWithFullNameSubtitle } from '../../../components/profile/ProfileWithFullNameSubtitle'
 import AddIcon from '@mui/icons-material/Add';
-import { Comments } from '../../../components/SocialMedia/Comments';
+import { EducationalCard } from '../../../components/profile/education/EducationalCard';
 
-export const Recommendations = () => {
+export const Qualification = () => {
   return (
         <Profile
-            profile={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Job Seeker'}/>}
-            profileActionButtons ={[
+            profileIcon={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Job Seeker'}/>}
+            buttonSet1 ={[
                 <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Message</Button> , 
-                <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Recommend</Button>
+                <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Add Recommendations</Button>
             ]}
 
-            profileRouteButtons ={[
+            buttonSet2 ={[
                 <Button variant = {'outlined'}>Recommendations</Button> , 
                 <Button variant = {'outlined'}>Posts</Button>,
                 <Button variant = {'outlined'}>Qualification</Button> , 
                 <Button variant = {'outlined'}>Portfolio</Button>
             ]}
 
-            content = {[
-                <Comments name = {'Nipun Madumal'}/> , 
-                <Comments name = {'Rajitha Thilanka'}/> ,
-                <Comments name = {'Praveen Chamod'}/> 
+            contend = {[
+                <EducationalCard/>,
+                <EducationalCard/>,
+                <EducationalCard/>,
             ]}
         />
   )
