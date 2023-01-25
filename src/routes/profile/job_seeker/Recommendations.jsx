@@ -8,7 +8,7 @@ import { Comments } from '../../../components/SocialMedia/Comments';
 export const Recommendations = () => {
   return (
         <Profile
-            profile={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Creative Software'}/>}
+            profile={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Job Seeker'}/>}
             profileActionButtons ={[
                 <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Message</Button> , 
                 <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Recommend</Button>

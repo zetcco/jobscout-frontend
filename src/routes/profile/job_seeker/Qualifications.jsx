@@ -8,7 +8,7 @@ import { EducationalCard } from '../../../components/profile/education/Education
 export const Qualification = () => {
   return (
         <Profile
-            profileIcon={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Creative Software'}/>}
+            profileIcon={<ProfileWithFullNameSubtitle name = {'Nipun Madumal'} subtitle={'Job Seeker'}/>}
             buttonSet1 ={[
                 <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Message</Button> , 
                 <Button variant = {'outlined'} startIcon = {<AddIcon/>}>Add Recommendations</Button>
