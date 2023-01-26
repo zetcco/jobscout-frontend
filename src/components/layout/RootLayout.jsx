@@ -30,7 +30,7 @@ const getDesignTokens = () => ({
   },
   shadows: Array.from({ length: 24 }, (_, i) => "none"),
   typography: {
-    fontFamily: "\"Inter\", \"Roboto\"",
+    fontFamily: "\"Inter\", \"Roboto\", \"sans-serif\"",
     h5: {
         fontWeight: 700
     },
