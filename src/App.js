@@ -12,6 +12,7 @@ import { OrganizationProfileCreation } from "./routes/signup/organization/Organi
 import { OrganizationSignup } from "./routes/signup/organization/OrganizationSignup";
 import { SelectAccountType } from "./routes/signup/SelectAccountType";
 import { Test } from "./routes/signup/Test/Test";
+import UploadEducationalQualification from './routes/signup/user/UploadEducationalQualification';
 import { UploadProfilePicture } from "./routes/signup/user/UploadProfilePicture";
 import { UserSignup } from "./routes/signup/users/UserSignup";
 
@@ -49,6 +50,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="account" element={ <UserSignup/> }/>
             <Route path="profile">
               <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
+              <Route path="qualification" element={ <UploadEducationalQualification/> }/>
             </Route>
           </Route>
           <Route path="Test">
