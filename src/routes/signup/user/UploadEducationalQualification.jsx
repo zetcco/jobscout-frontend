@@ -9,19 +9,10 @@ const UploadEducationalQualification = () => {
       <CenteredHeaderCard
         title={'Add Educational Qualification'}
         footer={
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}></Grid>
-            <Grid item xs={12} md={4}>
-              <Button variant='outlined' fullWidth>
-                Cancel
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Button variant='contained' fullWidth>
-                Done
-              </Button>
-            </Grid>
-          </Grid>
+            <Stack direction={"row"} spacing={2}>
+              <Button variant='outlined' fullWidth>Cancel</Button>
+              <Button variant='contained' fullWidth>Done</Button>
+            </Stack>
         }
       >
         <Grid container spacing={2}>
@@ -64,36 +55,3 @@ const UploadEducationalQualification = () => {
 };
 
 export default UploadEducationalQualification;
-
-{
-  /* <Stack display="flex" flexDirection='row'>
-        <Typography>Add Educational Qualification</Typography>
-        <CancelIcon />
-    </Stack>
-      <Stack spacing={2}>
-        <TextField
-          id='outlined-basic'
-          label='Add your organization'
-          variant='outlined'
-        />
-        <TextField
-          id='outlined-basic'
-          label='Add your organization'
-          variant='outlined'
-        />
-      </Stack>
-      <Stack sx={5} direction='row'/>
-      <TextField
-        id='outlined-basic'
-        label='Add your organization'
-        variant='outlined'
-      />
-      <TextField
-        id='outlined-basic'
-        label='Add your organization'
-        variant='outlined'
-      />
-      <Stack sx={4} spacing={2} />
-      <Button variant='contained'>Contained</Button>
-      <Button variant='outlined'>Outlined</Button> */
-}
