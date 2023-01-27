@@ -51,7 +51,7 @@ const router = createBrowserRouter(createRoutesFromElements(
               <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
             </Route>
           </Route>
-          <Route path="test">
+          <Route path="Test">
             <Route path="hello" element={ <Test/> }/>
           </Route>
         </Route>
