@@ -50,7 +50,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="account" element={ <UserSignup/> }/>
             <Route path="profile">
               <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
-              <Route path="educationalqualification" element={ <UploadEducationalQualification/> }/>
+              <Route path="qualification" element={ <UploadEducationalQualification/> }/>
             </Route>
           </Route>
           <Route path="test">
