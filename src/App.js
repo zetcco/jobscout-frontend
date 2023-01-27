@@ -1,4 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import { DesignedTopbar } from './components/layout/DesignedTopbar';
 import { GridLayout } from "./components/layout/GridLayout";
 import { NavigationLayout } from "./components/layout/NavigationLayout";
 import { RootLayout } from "./components/layout/RootLayout";
@@ -6,6 +7,7 @@ import { JobPost } from "./routes/feed/JobPost";
 import { JobPosts } from "./routes/feed/JobPosts";
 import { Home } from "./routes/Home";
 import { Login } from "./routes/Login";
+import { CreateJobPost } from './routes/profile/CreateJobPost';
 import { Recommendations } from "./routes/profile/job_seeker/Recommendations";
 import { OrgJobPosts } from "./routes/profile/organization/OrgJobPosts";
 import { OrganizationProfileCreation } from "./routes/signup/organization/OrganizationProfileCreation";
@@ -42,6 +44,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="login" element={<Login/>}/>
         <Route path="signup">
           <Route path="type" element={ <SelectAccountType/> }/>
+          <Route path='creation' element={<CreateJobPost />}/>
           <Route path="organization">
             <Route path="account" element={ <OrganizationSignup/> }/>
             <Route path="profile" element={ <OrganizationProfileCreation/> }/>
@@ -53,6 +56,7 @@ const router = createBrowserRouter(createRoutesFromElements(
               <Route path="qualification" element={ <UploadEducationalQualification/> }/>
             </Route>
           </Route>
+          <Route path='createjobpost' element={<CreateJobPost/>}/>
           <Route path="Test">
             <Route path="hello" element={ <Test/> }/>
           </Route>
