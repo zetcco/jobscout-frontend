@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Stack, TextField, Typography, Grid } from '@mui/material';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { Button, Stack, TextField, Grid } from '@mui/material';
 import { CenteredHeaderCard } from '../../../components/cards/CenteredHeaderCard';
 
 const UploadEducationalQualification = () => {
