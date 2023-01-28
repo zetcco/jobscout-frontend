@@ -14,7 +14,7 @@ export const EducationalCard = () => {
                 >
                     <Grid item>
                         <Box>
-                            <Typography variant="h4">Bachelor of Computer Science</Typography>
+                            <Typography variant="h6_bold">Bachelor of Computer Science</Typography>
                             <Typography variant="h6">University of Ruhuna</Typography>
                             <Typography variant="h6">2018 - 2022</Typography>
                         </Box>
