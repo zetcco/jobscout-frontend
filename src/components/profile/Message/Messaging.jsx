@@ -10,6 +10,7 @@ export const Messaging = () => {
   return (
     <BasicCard>
         <Stack direction={'row'} spacing = {4}>
+          
           <Stack>
             <SmallPanel 
                 mainTitle={'Chats'}
@@ -30,7 +31,9 @@ export const Messaging = () => {
                 ]}
             />
           </Stack>
+
           <Stack direction={'column'} spacing = {4}>
+            
             <Stack direction={'row'} justifyContend={'space-between'}>
                 <Stack alignItems={'center'}>
                     <ProfileWithFullNameSubtitleSmall
@@ -42,9 +45,11 @@ export const Messaging = () => {
                     <Button vatiant = {'outlined'} fullWidth>Schedule a meeting</Button>
                 </Stack>         
             </Stack>
+
             <Stack>
                 <Box margin={'auto'}></Box> 
             </Stack>
+
             <Stack >
                 <Stack>
                     <TextField></TextField>
@@ -53,6 +58,7 @@ export const Messaging = () => {
                     <Button></Button>
                 </Stack>
             </Stack>
+            
           </Stack>
         </Stack>
     </BasicCard>
