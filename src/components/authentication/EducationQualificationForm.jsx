@@ -4,10 +4,12 @@ import React from 'react'
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard'
 import { DashedArea } from '../input/DashedArea'
 import { EducationalCard } from '../profile/education/EducationalCard'
+import UploadIcon from '@mui/icons-material/Upload';
 
 export const EducationQualificationForm = () => {
   return (
     <CenteredHeaderCard
+        
         title={" Add Educational Qualifications"} 
         footer={
             <Stack direction="row" spacing={2}>
@@ -17,8 +19,15 @@ export const EducationQualificationForm = () => {
         }
     >
         <Stack spacing={2} sx={{ width: '100%' }}>
+                <DashedArea
+              
+                    text = {'Click to Add Educational Qualifications'}
+                    icon = {<UploadIcon fontSize="large"/>}
+                    
+                />
+                     
             
-            <DashedArea text={"Click to Add Educational Qualifications "}/>
+            
             <EducationalCard />
             <EducationalCard />
 
