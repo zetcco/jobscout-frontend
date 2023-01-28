@@ -13,10 +13,11 @@ import { OrganizationProfileCreation } from "./routes/signup/organization/Organi
 import { OrganizationSignup } from "./routes/signup/organization/OrganizationSignup";
 import { SelectAccountType } from "./routes/signup/SelectAccountType";
 import { Test } from "./routes/signup/Test/Test";
-import { UploadProfilePicture } from "./routes/signup/user/UploadProfilePicture";
-import { UserSignup } from "./routes/signup/users/UserSignup";
-import { AddEducationalQualifications } from "./routes/signup/user/AddEducationalQualifications";
-import { AddSkillsForm } from "./components/authentication/user/job_seeker/AddSkillsForm";
+import { SeekerSignup } from "./routes/signup/users/job_seeker/SeekerSignup";
+import { AddEducationalQualifications } from "./routes/signup/users/job_seeker/AddEducationalQualifications";
+import { AddSkills } from "./routes/signup/users/job_seeker/AddSkills";
+import { UploadProfilePicture } from "./routes/signup/users/job_seeker/UploadProfilePicture";
+import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -45,17 +46,24 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="login" element={<Login/>}/>
         <Route path="signup">
           <Route path="type" element={ <SelectAccountType/> }/>
-          <Route path='creation' element={<CreateJobPost />}/>
           <Route path="organization">
             <Route path="account" element={ <OrganizationSignup/> }/>
             <Route path="profile" element={ <OrganizationProfileCreation/> }/>
           </Route>
           <Route path="user">
-            <Route path="account" element={ <UserSignup/> }/>
-            <Route path="profile">
-              <Route path="skills" element={ <AddSkillsForm/> }/>
-              <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
-              <Route path="qualification" element={ <AddEducationalQualifications/> }/>
+            <Route path="dp" element={ <UploadProfilePicture/> }/>
+            <Route path="seeker">
+              <Route path="account" element={ <SeekerSignup/> }/>
+              <Route path="profile">
+                <Route path="skills" element={ <AddSkills/> }/>
+                <Route path="qualification" element={ <AddEducationalQualifications/> }/>
+              </Route>
+            </Route>
+            <Route path="creator">
+              <Route path="account" element={ <CreatorSignup/> }/>
+              <Route path="profile">
+                <Route path="company" element={ <AddEducationalQualifications/> }/>
+              </Route>
             </Route>
           </Route>
           <Route path="Test">

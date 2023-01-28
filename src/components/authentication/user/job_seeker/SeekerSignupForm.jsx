@@ -5,13 +5,18 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
+import { CenteredHeaderCard } from "../../../cards/CenteredHeaderCard";
+import { RouterLink } from "../../../RouterLink";
 
-const UserSignupForm = () => {
+const SeekerSignupForm = () => {
     return ( 
         <CenteredHeaderCard
             title={"Register to JobScout"}
-            footer = {<Button variant="contained" fullWidth>Register</Button>}
+            footer = {
+                <RouterLink to="/signup/user/seeker/profile/skills">
+                    <Button variant="contained" fullWidth>Register</Button>
+                </RouterLink>
+            }
         >
             <Stack spacing={2} sx={{ width: '100%' }}>
                 <Grid container spacing={2}>
@@ -233,4 +238,4 @@ const UserSignupForm = () => {
      );
 }
  
-export default UserSignupForm;
+export default SeekerSignupForm;

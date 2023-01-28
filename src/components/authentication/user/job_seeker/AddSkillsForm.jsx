@@ -9,7 +9,7 @@ export const AddSkillsForm =() =>{
         <CenteredHeaderCard 
             title={"Add your Skills"}
             footer={
-                <RouterLink to={"/signup/user/profile/qualification"}>
+                <RouterLink to={"/signup/user/seeker/profile/qualification"}>
                     <Button variant='contained' sx={{ width: '100%' }}>Continue</Button>
                 </RouterLink>
             }
@@ -18,9 +18,9 @@ export const AddSkillsForm =() =>{
                 <TextField id="outlined-basic" label="Select your Field" variant="outlined" />   
                 <TextField id="outlined-basic" label="Select yor Skills" variant="outlined" />
                 <Stack direction="row" spacing={1}>
-                <Chip label="React" variant="outlined" />
-                <Chip label="Sql" variant="outlined" />
-                <Chip label="Python" variant="outlined" />
+                    <Chip label="React" color="primary" variant="outlined" />
+                    <Chip label="Sql" color="primary" variant="outlined" />
+                    <Chip label="Python" color="primary" variant="outlined" />
                 </Stack>
             </Stack>
            
