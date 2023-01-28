@@ -35,6 +35,10 @@ const getDesignTokens = (theme) => ({
     h5: {
         fontWeight: 700
     },
+    h6_bold: {
+      ...( theme.typography.h6 ),
+      fontWeight: 800
+    },
     profile_name: {
       [theme.breakpoints.up('xs')]: {
         fontSize: "1.3rem",

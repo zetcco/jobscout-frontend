@@ -16,6 +16,7 @@ import { Test } from "./routes/signup/Test/Test";
 import UploadEducationalQualification from './routes/signup/user/UploadEducationalQualification';
 import { UploadProfilePicture } from "./routes/signup/user/UploadProfilePicture";
 import { UserSignup } from "./routes/signup/users/UserSignup";
+import { AddEducationalQualifications } from "./routes/signup/user/AddEducationalQualifications";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -53,7 +54,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="account" element={ <UserSignup/> }/>
             <Route path="profile">
               <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
-              <Route path="qualification" element={ <UploadEducationalQualification/> }/>
+              <Route path="qualification" element={ <AddEducationalQualifications/> }/>
             </Route>
           </Route>
           <Route path="Test">
