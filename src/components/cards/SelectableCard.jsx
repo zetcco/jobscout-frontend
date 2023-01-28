@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
-import { BasicCard } from '../BasicCard'
+import { BasicCard } from './BasicCard'
 
 export const SelectableCard = ({ title, selected, onClick, sx }) => {
   return (

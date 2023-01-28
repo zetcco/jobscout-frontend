@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack } from "@mui/system";
-import {Typography} from "@mui/material";
-import { BasicCard } from "./BasicCard";
+import { Typography } from "@mui/material";
+import { BasicCard } from "./cards/BasicCard";
 
 
 const SmallPanel = ({mainTitle ,children, sx}) => {

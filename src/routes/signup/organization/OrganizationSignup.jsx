@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import React from 'react'
-import OrganizationSignupForm from '../../../components/authentication/OrganizationSignupForm'
+import OrganizationSignupForm from '../../../components/authentication/organization/OrganizationSignupForm'
 
 export const OrganizationSignup = () => {
   return (

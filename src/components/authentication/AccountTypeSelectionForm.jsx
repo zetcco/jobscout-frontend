@@ -10,7 +10,7 @@ export const AccountTypeSelectionForm = () => {
     return (
             <CenteredHeaderCard 
                 title={"Select Account Type"}
-                footer={<Button component={RounterLink} to={ selected === "Organization" ? "/signup/organization/account" : "/signup/user/account"} variant='contained' sx={{ width: '100%' }}>Continue</Button>}
+                footer={<Button component={RounterLink} to={ selected === "Organization" ? "/signup/organization/account" : ( selected === "Job Seeker" ) ? "/signup/user/seeker/account" : "/signup/user/creator/account"} variant='contained' sx={{ width: '100%' }}>Continue</Button>}
             >
                 <Stack direction={{ sm: "column", lg: "row" }} spacing={2} sx={{  width: '100%' }} alignItems="stretch">
                     <SelectableCard sx={{ width: '100%' }} title={"Job Seeker"} onClick={() => setSelected("Job Seeker")} selected={selected === "Job Seeker" ? true : undefined}/>

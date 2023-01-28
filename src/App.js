@@ -6,16 +6,18 @@ import { JobPost } from "./routes/feed/JobPost";
 import { JobPosts } from "./routes/feed/JobPosts";
 import { Home } from "./routes/Home";
 import { Login } from "./routes/Login";
+import { CreateJobPost } from "./routes/feed/CreateJobPost";
 import { Recommendations } from "./routes/profile/job_seeker/Recommendations";
 import { OrgJobPosts } from "./routes/profile/organization/OrgJobPosts";
 import { OrganizationProfileCreation } from "./routes/signup/organization/OrganizationProfileCreation";
 import { OrganizationSignup } from "./routes/signup/organization/OrganizationSignup";
 import { SelectAccountType } from "./routes/signup/SelectAccountType";
 import { Test } from "./routes/signup/Test/Test";
-import { UploadProfilePicture } from "./routes/signup/user/UploadProfilePicture";
-import { UserSignup } from "./routes/signup/users/UserSignup";
-
-
+import { SeekerSignup } from "./routes/signup/users/job_seeker/SeekerSignup";
+import { AddEducationalQualifications } from "./routes/signup/users/job_seeker/AddEducationalQualifications";
+import { AddSkills } from "./routes/signup/users/job_seeker/AddSkills";
+import { UploadProfilePicture } from "./routes/signup/users/job_seeker/UploadProfilePicture";
+import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -26,6 +28,9 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="posts" element={<JobPosts/>}/>
         <Route path="posts">
           <Route path=":postId" element={<JobPost/>}/>
+        </Route>
+        <Route path="posts">
+          <Route path="create" element={<CreateJobPost/>}/>
         </Route>
 
         <Route path="users">
@@ -46,12 +51,22 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="profile" element={ <OrganizationProfileCreation/> }/>
           </Route>
           <Route path="user">
-            <Route path="account" element={ <UserSignup/> }/>
-            <Route path="profile">
-              <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
+            <Route path="dp" element={ <UploadProfilePicture/> }/>
+            <Route path="seeker">
+              <Route path="account" element={ <SeekerSignup/> }/>
+              <Route path="profile">
+                <Route path="skills" element={ <AddSkills/> }/>
+                <Route path="qualification" element={ <AddEducationalQualifications/> }/>
+              </Route>
+            </Route>
+            <Route path="creator">
+              <Route path="account" element={ <CreatorSignup/> }/>
+              <Route path="profile">
+                <Route path="company" element={ <AddEducationalQualifications/> }/>
+              </Route>
             </Route>
           </Route>
-          <Route path="test">
+          <Route path="Test">
             <Route path="hello" element={ <Test/> }/>
           </Route>
         </Route>

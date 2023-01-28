@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Stack } from "@mui/system";
-import { TextField,Button, Box, Popover, IconButton } from "@mui/material";
+import { TextField, Box, Popover, IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import FilterPosts from "../../components/job_postings/posts/FilterPosts";
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
-import { BasicCard } from "../../components/BasicCard";
+import { BasicCard } from "../../components/cards/BasicCard";
 import SmallPanel from "../../components/SmallPanel";
 import SubCategories from "../../components/job_postings/posts/SubCategories";
-import { Link } from "react-router-dom";
 import { RouterLink } from "../../components/RouterLink";
 
 
