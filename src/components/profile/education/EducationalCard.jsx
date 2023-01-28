@@ -3,7 +3,7 @@ import { Box, Grid, Typography} from "@mui/material"
 import { BasicCard } from "../../BasicCard";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-export const EducationalCard = () => {
+export const EducationalCard = ({DegreeName,Institution,Duration}) => {
     return (
         <BasicCard>
             <Grid
@@ -14,9 +14,9 @@ export const EducationalCard = () => {
                 >
                     <Grid item>
                         <Box>
-                            <Typography variant="h4">Bachelor of Computer Science</Typography>
-                            <Typography variant="h6">University of Ruhuna</Typography>
-                            <Typography variant="h6">2018 - 2022</Typography>
+                            <Typography variant="h4">{ DegreeName }</Typography>
+                            <Typography variant="h6">{ Institution }</Typography>
+                            <Typography variant="h6">{ Duration }</Typography>
                         </Box>
                     </Grid>
                     <Grid item>
