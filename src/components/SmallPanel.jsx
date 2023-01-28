@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "@mui/system";
-import { Box, Typography} from "@mui/material";
+import {Typography} from "@mui/material";
 import { BasicCard } from "./BasicCard";
 
 
