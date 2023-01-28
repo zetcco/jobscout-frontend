@@ -23,14 +23,9 @@ export const EducationQualificationForm = () => {
               
                     text = {'Click to Add Educational Qualifications'}
                     icon = {<UploadIcon fontSize="large"/>}
-                    
-                />
-                     
-            
-            
+                 /> 
             <EducationalCard />
             <EducationalCard />
-
         </Stack>
     </CenteredHeaderCard>
   )
