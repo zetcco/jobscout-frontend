@@ -1,6 +1,6 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
-import { Avatar, Button, Grid, Stack} from '@mui/material';
+import { Avatar, Button, Grid, Stack, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
 import { Link as RouterLink } from "react-router-dom";
@@ -23,7 +23,6 @@ const SigninForm = () => {
                         fullWidth 
                         required
                         />
-                    <p>Enter your email</p>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField 
@@ -35,14 +34,13 @@ const SigninForm = () => {
                         fullWidth 
                         required
                     />
-                    <p>Enter your password</p>
                 </Grid>
                 <Grid item xs={12}>
                     <Button variant="contained" fullWidth>Login</Button>
                     
                 </Grid>
                 <Grid margin="100px 0px 0px 0px">
-                    <p align='center'>Don't you have an Account?</p>
+                    <Typography align='center'>Don't you have an Account?</Typography>
                 </Grid>
             </Grid>
         </Stack>

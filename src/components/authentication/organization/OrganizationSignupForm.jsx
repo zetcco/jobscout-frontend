@@ -5,8 +5,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
-import { DashedArea } from "../input/DashedArea";
+import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
+import { DashedArea } from "../../input/DashedArea";
 import UploadIcon from '@mui/icons-material/FileUpload';
 import { Link as RouterLink } from "react-router-dom";
 

@@ -1,7 +1,7 @@
 import React from 'react'
-import { BasicCard } from '../BasicCard'
+import { BasicCard } from '../cards/BasicCard'
 import { Stack } from '@mui/system'
-import { Box, Grid, IconButton, Popover } from '@mui/material'
+import { Box, IconButton, Popover } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 

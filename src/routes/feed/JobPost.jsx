@@ -1,10 +1,10 @@
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
 import { Stack, Box } from "@mui/system";
-import { Grid ,Button} from "@mui/material";
+import { Button } from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Status } from "../../components/job_postings/post/Status";
 import { Ownership } from "../../components/job_postings/post/Ownership";
-import { BasicCard } from "../../components/BasicCard";
+import { BasicCard } from "../../components/cards/BasicCard";
 
 
 export const JobPost = () => {
