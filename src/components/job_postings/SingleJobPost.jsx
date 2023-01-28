@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Typography} from '@mui/material'
 import Chip from '@mui/material/Chip';
-import { BasicCard } from "../BasicCard";
+import { BasicCard } from "../cards/BasicCard";
 
 
 const SingleJobPost = ({ sx }) => {

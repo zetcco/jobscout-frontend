@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { BasicCard } from '../BasicCard'
+import { BasicCard } from './BasicCard'
 
 export const CenteredHeaderCard = ({ title, footer, children, icon }) => {
   return (

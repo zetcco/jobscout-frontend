@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import React from 'react'
-import EducationQualificationForm from '../../../components/authentication/EducationQualificationForm'
+import EducationQualificationForm from '../../../components/authentication/user/job_seeker/EducationQualificationForm'
 
 export const AddEducationalQualifications = () => {
   return (

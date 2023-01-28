@@ -13,10 +13,10 @@ import { OrganizationProfileCreation } from "./routes/signup/organization/Organi
 import { OrganizationSignup } from "./routes/signup/organization/OrganizationSignup";
 import { SelectAccountType } from "./routes/signup/SelectAccountType";
 import { Test } from "./routes/signup/Test/Test";
-import UploadEducationalQualification from './routes/signup/user/UploadEducationalQualification';
 import { UploadProfilePicture } from "./routes/signup/user/UploadProfilePicture";
 import { UserSignup } from "./routes/signup/users/UserSignup";
 import { AddEducationalQualifications } from "./routes/signup/user/AddEducationalQualifications";
+import { AddSkillsForm } from "./components/authentication/user/job_seeker/AddSkillsForm";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -53,6 +53,7 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="user">
             <Route path="account" element={ <UserSignup/> }/>
             <Route path="profile">
+              <Route path="skills" element={ <AddSkillsForm/> }/>
               <Route path="profilepicture" element={ <UploadProfilePicture/> }/>
               <Route path="qualification" element={ <AddEducationalQualifications/> }/>
             </Route>

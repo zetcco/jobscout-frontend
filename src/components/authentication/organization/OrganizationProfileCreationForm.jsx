@@ -1,7 +1,7 @@
-import { Box, Button, Stack, TextField, Typography } from '@mui/material'
+import { Button, Stack, TextField } from '@mui/material'
 import React from 'react'
-import { CenteredHeaderCard } from '../cards/CenteredHeaderCard'
-import { DashedArea } from '../input/DashedArea'
+import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard'
+import { DashedArea } from '../../input/DashedArea'
 
 export const OrganizationProfileCreationForm = () => {
   return (

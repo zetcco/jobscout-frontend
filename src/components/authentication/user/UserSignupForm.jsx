@@ -5,10 +5,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
+import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
 
-
-const SignupForm = () => {
+const UserSignupForm = () => {
     return ( 
         <CenteredHeaderCard
             title={"Register to JobScout"}
@@ -234,4 +233,4 @@ const SignupForm = () => {
      );
 }
  
-export default SignupForm;
+export default UserSignupForm;

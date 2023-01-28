@@ -1,9 +1,9 @@
-import { Button, TextField } from '@mui/material'
+import { Button } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
-import { CenteredHeaderCard } from '../cards/CenteredHeaderCard'
-import { DashedArea } from '../input/DashedArea'
-import { EducationalCard } from '../profile/education/EducationalCard'
+import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
+import { DashedArea } from '../../../input/DashedArea'
+import { EducationalCard } from '../../../profile/education/EducationalCard'
 import UploadIcon from '@mui/icons-material/Upload';
 
 export const EducationQualificationForm = () => {

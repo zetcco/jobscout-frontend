@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography} from "@mui/material"
-import { BasicCard } from "../../BasicCard";
+import { BasicCard } from "../../cards/BasicCard";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 export const EducationalCard = ({DegreeName,Institution,Duration}) => {

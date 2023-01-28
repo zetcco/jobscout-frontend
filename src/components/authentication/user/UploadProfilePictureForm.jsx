@@ -1,7 +1,7 @@
 import { Button, Stack, TextField, Typography } from "@mui/material"
 import React from "react"
-import { CenteredHeaderCard } from "../cards/CenteredHeaderCard"
-import { DashedArea } from "../input/DashedArea"
+import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard"
+import { DashedArea } from "../../input/DashedArea"
 import UploadIcon from '@mui/icons-material/Upload';
 
 
