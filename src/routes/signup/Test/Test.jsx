@@ -4,14 +4,11 @@ import { EducationalCard } from '../../../components/profile/education/Education
 import EducationQualificationForm from '../../../components/authentication/EducationQualificationForm'
 import { OrganizationProfileCreation } from '../organization/OrganizationProfileCreation'
 
-
 export const Test = () => {
     return (
       <Grid container>
         <Grid item xs={12}>
-          
           <EducationQualificationForm />
-          
         </Grid>
       </Grid>
     )
