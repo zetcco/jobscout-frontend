@@ -22,8 +22,8 @@ export const EducationQualificationForm = () => {
                     text = {'Click to Add Educational Qualifications'}
                     icon = {<UploadIcon fontSize="large"/>}
                  /> 
-            <EducationalCard />
-            <EducationalCard />
+            <EducationalCard DegreeName={"Bachelor of Computer Science"} Institution={"University of Ruhuna"} Duration={"2019 - 2023"}/>
+            <EducationalCard DegreeName={"Bachelor of Computer Science"} Institution={"University of Ruhuna"} Duration={"2019 - 2023"}/>
         </Stack>
     </CenteredHeaderCard>
   )
