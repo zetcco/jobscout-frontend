@@ -1,5 +1,5 @@
 import React from 'react'
-import { BasicCard } from '../../BasicCard'
+import { BasicCard } from '../../cards/BasicCard'
 import { Stack } from '@mui/system'
 import SmallPanel from '../../SmallPanel'
 import { Button, TextField ,IconButton } from '@mui/material'
