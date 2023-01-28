@@ -9,9 +9,9 @@ const SmallPanel = ({mainTitle ,children, sx}) => {
         <BasicCard sx={sx}>
             <Stack direction={'column'} spacing={2}>
                 <Typography variant='button'>{ mainTitle }</Typography>
-                <Box>
+                <Stack  direction = {'column'}spacing = {2}>
                     { children }
-                </Box>
+                </Stack>
             </Stack>
         </BasicCard>
      );
