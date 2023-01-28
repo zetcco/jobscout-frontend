@@ -20,7 +20,6 @@ export const EducationQualificationForm = () => {
     >
         <Stack spacing={2} sx={{ width: '100%' }}>
                 <DashedArea
-              
                     text = {'Click to Add Educational Qualifications'}
                     icon = {<UploadIcon fontSize="large"/>}
                  /> 
