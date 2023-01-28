@@ -1,19 +1,13 @@
 import { Grid, Stack, TextField, Button } from '@mui/material';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
-import { useState } from 'react';
 import { CenteredHeaderCard } from '../../components/cards/CenteredHeaderCard';
 import { DesignedTopbar } from '../../components/layout/DesignedTopbar';
 
 export const CreateJobPost = () => {
-  const [value, setValue] = useState(dayjs('2018-01-01T00:00:00.000Z'));
 
   return (
     <>
       <Stack>
-        <DesignedTopbar/>
+        <DesignedTopbar />
       </Stack>
       <Stack>
         <CenteredHeaderCard
@@ -60,18 +54,14 @@ export const CreateJobPost = () => {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  label='Closing Date'
-                  renderInput={(params) => <TextField {...params} />}
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  sx={{width: '100%'}}
-                  fullWidth
-                />
-              </LocalizationProvider>
+              <TextField
+                label='Date of Birth'
+                type='date'
+                placeholder='Enter your Date of Birth'
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                required
+              />
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
