@@ -10,7 +10,9 @@ function Blog() {
               mainTitle={'Left'}
             />
           <Stack><BlogPostSummary/></Stack>
-          
+          <SmallPanel 
+             mainTitle={'Right'} 
+          />
         </Stack>
     </>
   )
