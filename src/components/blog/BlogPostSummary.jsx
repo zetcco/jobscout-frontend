@@ -8,7 +8,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import { RouteOutlined, Router, RouteRounded } from '@mui/icons-material'
 import { RouterLink } from '../RouterLink'
 
 function BlogPostSummary() {
