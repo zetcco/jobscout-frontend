@@ -18,7 +18,7 @@ import { AddEducationalQualifications } from "./routes/signup/users/job_seeker/A
 import { AddSkills } from "./routes/signup/users/job_seeker/AddSkills";
 import { UploadProfilePicture } from "./routes/signup/users/job_seeker/UploadProfilePicture";
 import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
-import AddCompany from "./routes/profile/job_creator/AddCompany";
+import AddCompany from "./routes/signup/users/job_creator/AddCompany";
 
 
 const router = createBrowserRouter(createRoutesFromElements(

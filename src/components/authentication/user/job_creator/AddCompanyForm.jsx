@@ -4,9 +4,6 @@ import React from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
 import SearchIcon from '@mui/icons-material/Search';
 
-
-
-
 const AddCompanyForm = () => {
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
