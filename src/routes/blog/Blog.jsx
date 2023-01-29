@@ -1,11 +1,12 @@
+import { Stack } from "@mui/system"
 import BlogPostSummary from "../../components/blog/BlogPostSummary"
 
 function Blog() {
   return (
     <>
-          <div>
+        <Stack>
             <BlogPostSummary/>
-        </div>
+        </Stack>
     </>
   )
 }
