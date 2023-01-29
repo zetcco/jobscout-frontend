@@ -13,6 +13,7 @@ function BlogPostSummary() {
   return (
     <>
         <BasicCard>
+         <Stack spacing = {2}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                 <Stack direction="row" alignItems="center" spacing={2}>
                         <ProfileHeaderCard name={'Indrajith Madhumal'} /> 
@@ -22,12 +23,12 @@ function BlogPostSummary() {
             </Stack>
             <Stack alignItems={'flex-start'}>
                <Typography>
-               Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
                </Typography>
             </Stack>
 
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-               <RouterLink> view more</RouterLink>
+               <RouterLink  to={"/blog/1"}> view more</RouterLink>
             </Stack>
 
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
@@ -37,6 +38,7 @@ function BlogPostSummary() {
                 </Stack>
                 <BookmarkBorderOutlinedIcon />
             </Stack>
+        </Stack>
         </BasicCard>
     </>
   )
