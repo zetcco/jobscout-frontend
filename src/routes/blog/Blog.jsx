@@ -5,14 +5,14 @@ import SmallPanel from "../../components/SmallPanel"
 function Blog() {
   return (
     <>
-        <Stack direction="colomn" justifyContent="space-between" alignItems="stretch" spacing={5}>
+        <Stack direction="colomn" justifyContent="space-between" alignItems="flex-start" spacing={5}>
             <SmallPanel 
               mainTitle={'Left'}
               children = {[
                 <button variant = {'outlined'} fullWidth>Left Button</button>
               ]}
             />
-          <Stack>
+          <Stack spacing={3}>
             <BlogPostSummary/>
             <BlogPostSummary/>
           </Stack>

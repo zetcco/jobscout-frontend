@@ -76,7 +76,9 @@ const router = createBrowserRouter(createRoutesFromElements(
 
       <Route path="/" element={<NavigationLayout/>}>
         <Route path="blog" element={<Blog/>}/>
-        <Route path="blog" element={<BlogPost/>}/>
+        <Route path="blog">
+          <Route path=":blogId" element={<BlogPost/>}/>
+        </Route>
       </Route>
 
     </Route>
