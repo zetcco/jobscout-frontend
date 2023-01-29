@@ -3,7 +3,6 @@ import { Stack } from '@mui/system'
 import React from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import ProfileHeaderCard from '../profile/ProfileHeaderCard'
-import SmallPanel from '../SmallPanel'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
