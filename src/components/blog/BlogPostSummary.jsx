@@ -14,12 +14,10 @@ function BlogPostSummary() {
     <>
         <BasicCard>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                 <div>
-                    <Stack direction="row" alignItems="center" spacing={2}>
+                <Stack direction="row" alignItems="center" spacing={2}>
                         <ProfileHeaderCard name={'Indrajith Madhumal'} /> 
                         <tr>18:00 - Dec 28</tr>
-                    </Stack>
-                </div>
+                </Stack>
                 <MoreVertIcon />
             </Stack>
             <Stack alignItems={'flex-start'}>
@@ -33,12 +31,10 @@ function BlogPostSummary() {
             </Stack>
 
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                <div>
-                    <Stack direction="row" alignItems="center" spacing={2}>
+                <Stack direction="row" alignItems="center" spacing={2}>
                         <ThumbUpOffAltIcon />
                         <ModeCommentOutlinedIcon />
-                    </Stack>
-                </div>
+                </Stack>
                 <BookmarkBorderOutlinedIcon />
             </Stack>
         </BasicCard>
