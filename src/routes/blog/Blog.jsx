@@ -5,11 +5,13 @@ import SmallPanel from "../../components/SmallPanel"
 function Blog() {
   return (
     <>
-        <Stack direction="colomn" justifyContent="space-between" alignItems="stretch" spacing={4}>
+        <Stack direction="colomn" justifyContent="space-between" alignItems="stretch" spacing={5}>
             <SmallPanel 
               mainTitle={'Left'}
             />
-          <Stack><BlogPostSummary/></Stack>
+          <Stack>
+            <BlogPostSummary/>
+          </Stack>
           <SmallPanel 
              mainTitle={'Right'} 
           />
