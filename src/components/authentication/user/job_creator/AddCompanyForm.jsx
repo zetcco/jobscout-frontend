@@ -1,8 +1,9 @@
-import { Button, TextField, Box } from '@mui/material'
+import { Button, TextField, Box, InputAdornment } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
 import SearchIcon from '@mui/icons-material/Search';
+import { RouterLink } from '../../../RouterLink';
 
 
 
@@ -14,22 +15,37 @@ const AddCompanyForm = () => {
       <CenteredHeaderCard
         title={" Add Your Company"} 
         footer={
-            <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2}>
+          <Box sx={{ width: '100%' }}>
+            <RouterLink to="/signup/organization/account">
+              <Button variant='outlined' sx={{ width: '100%' }}>Create Your Company</Button>
+            </RouterLink>
+          </Box>
+          <Box sx={{ width: '100%' }}>
+            <RouterLink to="/signup/user/dp">
+              <Button variant='contained' sx={{ width: '100%' }}>Continue</Button>
+            </RouterLink>
+          </Box>
+      </Stack>     
                 
-                  <Button variant='outlined' sx={{ width: '100%' }}> Create Your Company Profile </Button>
-                              
-                  <Button variant='contained' sx={{ width: '100%' }}>Continue</Button>
-                
-                
-            </Stack>
+            
       }>
             
       
-        <Stack spacing={2} sx={{ width: '100%' }}> 
-          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <SearchIcon fontSize='large' />
-            <TextField sx={{ width: '100%' }} id="outlined-basic" label="Search Your Company" variant="outlined" />
-          </Box>
+        <Stack spacing={2} sx={{ width: '100%' }}>
+
+        <TextField
+          id="input-with-icon-textfield"
+          label="Search Your Company"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          variant="outlined"
+        />
         </Stack>
       
       </CenteredHeaderCard>
