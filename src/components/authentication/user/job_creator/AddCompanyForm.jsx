@@ -5,9 +5,6 @@ import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
 import SearchIcon from '@mui/icons-material/Search';
 import { RouterLink } from '../../../RouterLink';
 
-
-
-
 const AddCompanyForm = () => {
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
