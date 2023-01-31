@@ -9,13 +9,17 @@ import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
 import { DashedArea } from "../../input/DashedArea";
 import UploadIcon from '@mui/icons-material/FileUpload';
 import { Link as RouterLink } from "react-router-dom";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+
+
 
 
 const OrganizationSignupForm = () => {
     const [city, setCity] = React.useState('')
     const [province, setProvince] = React.useState('')
     const [country, setCountry] = React.useState('')
+
+    const {control, handleSubmit, formState: { errors } }= useForm();
 
     const handleCityChange = (event) => {
         setCity(event.target.value);
@@ -26,12 +30,16 @@ const OrganizationSignupForm = () => {
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
+   /* const onSubmit=(data) =>{
+        dispatch(requestLogin(data))
+    }*/
     return (
         <CenteredHeaderCard
             footer={<Button component={RouterLink} to={"/signup/organization/profile"} variant="contained" fullWidth>Continue</Button>}
             title={"Register to JobScout"}
         >
                 <Stack spacing = {2} sx = {{width:'100%'}}>
+
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Controller 
@@ -46,7 +54,7 @@ const OrganizationSignupForm = () => {
                                 variant="outlined"
                                 placeholder="Enter your company name"
                                 fullWidth
-                                error={error.companyName && true}
+                                error={errors.companyName && true}
                             />
                             )}
 
@@ -67,7 +75,7 @@ const OrganizationSignupForm = () => {
                                 variant="outlined"
                                 placeholder="Enter your company Email"
                                 fullWidth
-                                error={error.companyEmail && true}
+                                error={errors.companyEmail && true}
                             />
                             )}
 
@@ -77,7 +85,7 @@ const OrganizationSignupForm = () => {
 
                         <Grid item xs={6} lg={4}>
                             <Controller
-                            name="streetNumber"
+                            name="steetNumber"
                             rules={ ({required: true})}
                             control={control}
                             defaultValue=""
@@ -88,7 +96,7 @@ const OrganizationSignupForm = () => {
                                 variant="outlined"
                                 placeholder = "Your street number"
                                 fullWidth 
-                                error={error.steetNumber && true}
+                                error={errors.steetNumber && true}
                             />) }
                             />
                             
