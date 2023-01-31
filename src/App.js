@@ -19,7 +19,8 @@ import { AddSkills } from "./routes/signup/users/job_seeker/AddSkills";
 import { UploadProfilePicture } from "./routes/signup/users/job_seeker/UploadProfilePicture";
 import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
 import AddCompany from "./routes/signup/users/job_creator/AddCompany";
-
+import Blog from "./routes/blog/Blog";
+import BlogPost from "./routes/blog/BlogPost";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -71,6 +72,13 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="Test">
             <Route path="hello" element={ <Test/> }/>
           </Route>
+        </Route>
+      </Route>
+
+      <Route path="/" element={<NavigationLayout/>}>
+        <Route path="blog" element={<Blog/>}/>
+        <Route path="blog">
+          <Route path=":blogId" element={<BlogPost/>}/>
         </Route>
       </Route>
 
