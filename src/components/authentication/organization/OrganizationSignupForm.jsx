@@ -12,20 +12,21 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../features/addressSlice";
+import { requestOrganizationSignup } from '../../../features/authSlice'
 
 const OrganizationSignupForm = () => {
     const {control, handleSubmit, formState: { errors }, watch }= useForm();
     const dispatch = useDispatch();
 
-    const watchCountry = watch("country");
-    const watchProvince = watch("province");
+    const watchCountry = watch("address.country");
+    const watchProvince = watch("address.province");
 
     const countries = useSelector(selectCountries);
     const provice = useSelector(selectProvince);
     const cities = useSelector(selectCities);
 
     const onSubmit=(data) =>{
-        console.log(data)
+        dispatch(requestOrganizationSignup(data))
     }
 
     useEffect(() => {
@@ -68,7 +69,7 @@ const OrganizationSignupForm = () => {
 
                         <Grid item xs={12}>
                             <Controller
-                                name="companyEmail"
+                                name="email"
                                 rules={ { required: true } }
                                 control={control}
                                 defaultValue=""
@@ -79,16 +80,35 @@ const OrganizationSignupForm = () => {
                                     variant="outlined"
                                     placeholder="Enter your company Email"
                                     fullWidth
-                                    error={errors.companyEmail && true}
+                                    error={errors.email && true}
+                                />)}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Controller
+                                name="password"
+                                rules={ { required: true } }
+                                control={control}
+                                defaultValue=""
+                                render={ ({field}) =>( 
+                                <TextField
+                                    {...field}
+                                    label="Password"
+                                    variant="outlined"
+                                    type="password"
+                                    placeholder="Enter your Password"
+                                    fullWidth
+                                    error={errors.password && true}
                                 />)}
                             />
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth error={errors.country && true}>
+                            <FormControl fullWidth error={errors.address && true}>
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
                                 <Controller
-                                    name="country"
+                                    name="address.country"
                                     rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
@@ -110,10 +130,10 @@ const OrganizationSignupForm = () => {
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth error={errors.province && true}>
+                            <FormControl fullWidth error={errors.address && true}>
                                 <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
                                 <Controller
-                                    name="province"
+                                    name="address.province"
                                     rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
@@ -135,10 +155,10 @@ const OrganizationSignupForm = () => {
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth error={errors.city && true}>
+                            <FormControl fullWidth error={errors.address && true}>
                                 <InputLabel id="Org-registration-city-select-label">City</InputLabel>
                                 <Controller
-                                    name="city"
+                                    name="address.city"
                                     rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
@@ -161,7 +181,7 @@ const OrganizationSignupForm = () => {
 
                         <Grid item  xs={6} lg={4}>
                             <Controller
-                                name="town"
+                                name="address.town"
                                 control={control}
                                 defaultValue=""
                                 render={ ({field}) =>(
@@ -171,14 +191,13 @@ const OrganizationSignupForm = () => {
                                     variant="outlined"
                                     placeholder = "Your Town"
                                     fullWidth 
-                                    error={errors.town && true}
                                 />)}
                             />
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
                             <Controller
-                                name="street"
+                                name="address.street"
                                 control={control}
                                 defaultValue=""
                                 render={ ({field}) =>(
@@ -188,14 +207,13 @@ const OrganizationSignupForm = () => {
                                     variant="outlined"
                                     placeholder = "Your Street"
                                     fullWidth 
-                                    error={errors.street && true}
                                 />)}
                             />
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
                             <Controller
-                                name="steetNumber"
+                                name="address.steetNumber"
                                 control={control}
                                 defaultValue=""
                                 render={ ({field}) =>(
@@ -205,7 +223,6 @@ const OrganizationSignupForm = () => {
                                     variant="outlined"
                                     placeholder = "Your street number"
                                     fullWidth 
-                                    error={errors.steetNumber && true}
                                 />)}
                             />
                         </Grid>
