@@ -120,6 +120,7 @@ const OrganizationSignupForm = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
+
                         <Grid item  xs={6} lg={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="Org-registration-town-select-label">Town</InputLabel>
@@ -139,6 +140,7 @@ const OrganizationSignupForm = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
+
                         <Grid item xs={6} lg={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="Org-registration-city-select-label">City</InputLabel>
@@ -178,6 +180,7 @@ const OrganizationSignupForm = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
+                        
                         <Grid item xs={6} lg={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
