@@ -18,6 +18,7 @@ import { AddEducationalQualifications } from "./routes/signup/users/job_seeker/A
 import { AddSkills } from "./routes/signup/users/job_seeker/AddSkills";
 import { UploadProfilePicture } from "./routes/signup/users/job_seeker/UploadProfilePicture";
 import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
+import AddCompany from "./routes/signup/users/job_creator/AddCompany";
 import Blog from "./routes/blog/Blog";
 import BlogPost from "./routes/blog/BlogPost";
 
@@ -64,7 +65,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="creator">
               <Route path="account" element={ <CreatorSignup/> }/>
               <Route path="profile">
-                <Route path="company" element={ <AddEducationalQualifications/> }/>
+                <Route path="company" element={ <AddCompany/> }/>
               </Route>
             </Route>
           </Route>
