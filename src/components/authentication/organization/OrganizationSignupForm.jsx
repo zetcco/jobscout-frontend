@@ -38,16 +38,17 @@ const OrganizationSignupForm = () => {
         >
                 <Stack spacing = {2} sx = {{width:'100%'}}>
 
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Controller 
                             name="companyName"
-                            rules={ ({ required: true })}
+                            rules={ { required: true } }
                             control={control}
                             defaultValue=""
                             render={ ({field}) =>(
                             <TextField
-                                id="outlined-basic"
+                                {...field}
                                 label="Company Name"
                                 variant="outlined"
                                 placeholder="Enter your company name"
@@ -208,10 +209,11 @@ const OrganizationSignupForm = () => {
                         </Grid>
 
                         <Grid item xs={12}>
-                            <Button variant="contained" fullWidth>Continue</Button>
+                            <Button type="submit" variant="contained" fullWidth>Continue</Button>
                         </Grid>
-
+                    
                      </Grid>
+                    </form>
                 </Stack>
         </CenteredHeaderCard>
 
