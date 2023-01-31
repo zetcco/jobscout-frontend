@@ -108,9 +108,9 @@ const CreatorSignupForm = () => {
                                         <MenuItem value={30}>Transgender</MenuItem>
                                     </Select>
                                 </FormControl>
-                            </Grid>
+                        </Grid>
 
-                            <Grid item xs={6} lg={4}>
+                        <Grid item xs={6} lg={4}>
                             <TextField 
                                 id="outlined-basic" 
                                 label="Steet Number" 

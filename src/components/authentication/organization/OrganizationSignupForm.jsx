@@ -9,12 +9,14 @@ import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
 import { DashedArea } from "../../input/DashedArea";
 import UploadIcon from '@mui/icons-material/FileUpload';
 import { Link as RouterLink } from "react-router-dom";
-
+import { Controller, useForm } from "react-hook-form";
 
 const OrganizationSignupForm = () => {
     const [city, setCity] = React.useState('')
     const [province, setProvince] = React.useState('')
     const [country, setCountry] = React.useState('')
+
+    const {control, handleSubmit, formState: { errors } }= useForm();
 
     const handleCityChange = (event) => {
         setCity(event.target.value);
@@ -25,45 +27,78 @@ const OrganizationSignupForm = () => {
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
+    
+    const onSubmit=(data) =>{
+        console.log(data)
+    }
+
     return (
         <CenteredHeaderCard
-            footer={<Button component={RouterLink} to={"/signup/organization/profile"} variant="contained" fullWidth>Continue</Button>}
             title={"Register to JobScout"}
         >
                 <Stack spacing = {2} sx = {{width:'100%'}}>
+
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
+                            <Controller 
+                            name="companyName"
+                            rules={ { required: true } }
+                            control={control}
+                            defaultValue=""
+                            render={ ({field}) =>(
                             <TextField
-                                id="outlined-basic"
+                                {...field}
                                 label="Company Name"
                                 variant="outlined"
                                 placeholder="Enter your company name"
                                 fullWidth
-                                required
+                                error={errors.companyName && true}
                             />
+                            )}
+
+                           />
+
                         </Grid>
 
                         <Grid item xs={12}>
+                            <Controller
+                            name="companyEmail"
+                            rules={ { required: true } }
+                            control={control}
+                            defaultValue=""
+                            render={ ({field}) =>( 
                             <TextField
-                                id="outlined-basic"
+                                {...field}
                                 label="Company Email"
                                 variant="outlined"
                                 placeholder="Enter your company Email"
-                                type="password"
                                 fullWidth
-                                required
+                                error={errors.companyEmail && true}
                             />
+                            )}
+
+                            />
+
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
+                            <Controller
+                            name="steetNumber"
+                            rules={ {required: true} }
+                            control={control}
+                            defaultValue=""
+                            render={ ({field}) =>(
                             <TextField 
-                                id="outlined-basic" 
+                                {...field}
                                 label="Steet Number" 
                                 variant="outlined"
                                 placeholder = "Your street number"
                                 fullWidth 
-                                required
+                                error={errors.steetNumber && true}
+                            />) }
                             />
+                            
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
@@ -85,6 +120,7 @@ const OrganizationSignupForm = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
+
                         <Grid item  xs={6} lg={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="Org-registration-town-select-label">Town</InputLabel>
@@ -104,6 +140,7 @@ const OrganizationSignupForm = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
+
                         <Grid item xs={6} lg={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="Org-registration-city-select-label">City</InputLabel>
@@ -143,6 +180,7 @@ const OrganizationSignupForm = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
+
                         <Grid item xs={6} lg={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
@@ -170,7 +208,12 @@ const OrganizationSignupForm = () => {
                             ></DashedArea>
                         </Grid>
 
+                        <Grid item xs={12}>
+                            <Button type="submit" variant="contained" fullWidth>Continue</Button>
+                        </Grid>
+                    
                      </Grid>
+                    </form>
                 </Stack>
         </CenteredHeaderCard>
 
