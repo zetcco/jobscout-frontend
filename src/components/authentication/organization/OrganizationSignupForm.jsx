@@ -34,7 +34,6 @@ const OrganizationSignupForm = () => {
 
     return (
         <CenteredHeaderCard
-            footer={<Button variant="contained" fullWidth>Continue</Button>}
             title={"Register to JobScout"}
         >
                 <Stack spacing = {2} sx = {{width:'100%'}}>
@@ -180,7 +179,7 @@ const OrganizationSignupForm = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        
+
                         <Grid item xs={6} lg={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
@@ -206,6 +205,10 @@ const OrganizationSignupForm = () => {
                                 text = {'Click to upload Business Registration'}
                                 icon = {<UploadIcon fontSize="large"/>}
                             ></DashedArea>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Button variant="contained" fullWidth>Continue</Button>
                         </Grid>
 
                      </Grid>
