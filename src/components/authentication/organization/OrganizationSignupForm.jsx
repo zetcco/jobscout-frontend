@@ -80,7 +80,7 @@ const OrganizationSignupForm = () => {
 
                             />
 
-                           </Grid>
+                        </Grid>
 
                         <Grid item xs={6} lg={4}>
                             <Controller
