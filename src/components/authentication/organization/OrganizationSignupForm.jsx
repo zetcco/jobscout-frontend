@@ -27,9 +27,11 @@ const OrganizationSignupForm = () => {
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
-   /* const onSubmit=(data) =>{
-        dispatch(requestLogin(data))
-    }*/
+    
+    const onSubmit=(data) =>{
+        console.log(data)
+    }
+
     return (
         <CenteredHeaderCard
             footer={<Button component={RouterLink} to={"/signup/organization/profile"} variant="contained" fullWidth>Continue</Button>}
