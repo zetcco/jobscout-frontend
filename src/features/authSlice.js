@@ -5,11 +5,12 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
 
 const initialState = {
     loading: false,
-    authenticated: false,
     userInfo: JSON.parse(localStorage.getItem('userInfo')),
     token: JSON.parse(localStorage.getItem('token')),
     error: null
 }
+
+export const selectAuthUser = (state) => state.auth.userInfo;
 
 const authenticationSlice = createSlice({
     name: 'auth',
@@ -19,7 +20,6 @@ const authenticationSlice = createSlice({
         builder
             .addCase(requestLogin.fulfilled, (state, action) => {
                 state.loading = false
-                state.authenticated = true
                 state.token = action.payload.jwtToken
                 localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
                 let userInfo = {
