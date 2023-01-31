@@ -34,7 +34,7 @@ const OrganizationSignupForm = () => {
 
     return (
         <CenteredHeaderCard
-            footer={<Button component={RouterLink} to={"/signup/organization/profile"} variant="contained" fullWidth>Continue</Button>}
+            footer={<Button variant="contained" fullWidth>Continue</Button>}
             title={"Register to JobScout"}
         >
                 <Stack spacing = {2} sx = {{width:'100%'}}>
