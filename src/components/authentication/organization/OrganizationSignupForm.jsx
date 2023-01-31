@@ -9,6 +9,7 @@ import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
 import { DashedArea } from "../../input/DashedArea";
 import UploadIcon from '@mui/icons-material/FileUpload';
 import { Link as RouterLink } from "react-router-dom";
+import { Controller } from "react-hook-form";
 
 
 const OrganizationSignupForm = () => {
@@ -33,37 +34,64 @@ const OrganizationSignupForm = () => {
                 <Stack spacing = {2} sx = {{width:'100%'}}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
+                            <Controller 
+                            name="companyName"
+                            rules={ ({ required: true })}
+                            control={control}
+                            defaultValue=""
+                            render={ ({field}) =>(
                             <TextField
                                 id="outlined-basic"
                                 label="Company Name"
                                 variant="outlined"
                                 placeholder="Enter your company name"
                                 fullWidth
-                                required
+                                error={error.companyName && true}
                             />
+                            )}
+
+                           />
+
                         </Grid>
 
                         <Grid item xs={12}>
+                            <Controller
+                            name="companyEmail"
+                            rules={ ({ required: true })}
+                            control={control}
+                            defaultValue=""
+                            render={ ({field}) =>( 
                             <TextField
                                 id="outlined-basic"
                                 label="Company Email"
                                 variant="outlined"
                                 placeholder="Enter your company Email"
-                                type="password"
                                 fullWidth
-                                required
+                                error={error.companyEmail && true}
                             />
-                        </Grid>
+                            )}
+
+                            />
+
+                           </Grid>
 
                         <Grid item xs={6} lg={4}>
+                            <Controller
+                            name="streetNumber"
+                            rules={ ({required: true})}
+                            control={control}
+                            defaultValue=""
+                            render={ ({field}) =>(
                             <TextField 
                                 id="outlined-basic" 
                                 label="Steet Number" 
                                 variant="outlined"
                                 placeholder = "Your street number"
                                 fullWidth 
-                                required
+                                error={error.steetNumber && true}
+                            />) }
                             />
+                            
                         </Grid>
 
                         <Grid item xs={6} lg={4}>
