@@ -11,9 +11,6 @@ import UploadIcon from '@mui/icons-material/FileUpload';
 import { Link as RouterLink } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
-
-
-
 const OrganizationSignupForm = () => {
     const [city, setCity] = React.useState('')
     const [province, setProvince] = React.useState('')
