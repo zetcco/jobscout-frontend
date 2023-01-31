@@ -64,12 +64,12 @@ const OrganizationSignupForm = () => {
                         <Grid item xs={12}>
                             <Controller
                             name="companyEmail"
-                            rules={ ({ required: true })}
+                            rules={ { required: true } }
                             control={control}
                             defaultValue=""
                             render={ ({field}) =>( 
                             <TextField
-                                id="outlined-basic"
+                                {...field}
                                 label="Company Email"
                                 variant="outlined"
                                 placeholder="Enter your company Email"
@@ -85,12 +85,12 @@ const OrganizationSignupForm = () => {
                         <Grid item xs={6} lg={4}>
                             <Controller
                             name="steetNumber"
-                            rules={ ({required: true})}
+                            rules={ {required: true} }
                             control={control}
                             defaultValue=""
                             render={ ({field}) =>(
                             <TextField 
-                                id="outlined-basic" 
+                                {...field}
                                 label="Steet Number" 
                                 variant="outlined"
                                 placeholder = "Your street number"
