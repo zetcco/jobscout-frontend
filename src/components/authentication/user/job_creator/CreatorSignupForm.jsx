@@ -6,232 +6,326 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { CenteredHeaderCard } from "../../../cards/CenteredHeaderCard";
-import { RouterLink } from "../../../RouterLink";
+import { Controller, useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
+import { selectAuthLoading } from "../../../../features/authSlice";
+import { requestJobCreatorSignup } from '../../../../features/authSlice'
 
 const CreatorSignupForm = () => {
+
+    const {control, handleSubmit, formState: { errors }, watch }= useForm();
+    const dispatch = useDispatch();
+
+    const loading = useSelector(selectAuthLoading);
+
+    const watchCountry = watch("address.country");
+    const watchProvince = watch("address.province");
+
+    const countries = useSelector(selectCountries);
+    const provice = useSelector(selectProvince);
+    const cities = useSelector(selectCities);
+
+    const onSubmit=(data) =>{
+        dispatch(requestJobCreatorSignup(data))
+    }
+
+    useEffect(() => {
+        dispatch(fetchCountries())
+    }, [dispatch])
+
+    useEffect(() => {
+        dispatch(fetchProvince(watchCountry))
+    }, [dispatch, watchCountry])
+
+    useEffect(() => {
+        dispatch(fetchCities(watchProvince))
+    }, [dispatch, watchProvince])
+
     return ( 
         <CenteredHeaderCard
             title={"Register to JobScout"}
-            footer = {
-                <RouterLink to="/signup/user/creator/profile/company">
-                    <Button variant="contained" fullWidth>Register</Button>
-                </RouterLink>
-            }
         >
             <Stack spacing={2} sx={{ width: '100%' }}>
-                <Grid container spacing={2}>
-                        <Grid item xs={12} md={2}>
-                            <FormControl fullWidth>
-                                <InputLabel id="Signup-title-select-label">Title</InputLabel>
-                                <Select
-                                    labelId="Signup-title-select-label"
-                                    id="Signup-title-select"
-                                    label="Title"                             
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Mr.</MenuItem>
-                                    <MenuItem value={20}>Mrs.</MenuItem>
-                                    <MenuItem value={30}>Miss.</MenuItem>
-                                </Select>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={4} xl={2}>
+                            <FormControl fullWidth error={errors.title && true}>
+                                <InputLabel id="Org-registration-province-select-label">Title</InputLabel>
+                                <Controller
+                                    name="title"
+                                    rules={{ required: true }}
+                                    control={control}
+                                    defaultValue=""
+                                    render={ ({ field }) => (
+                                        <Select
+                                            {...field}
+                                            labelId="Org-registration-province-select-label"
+                                            label="Title"
+                                        >
+                                            <MenuItem value="MR">Mr.</MenuItem>
+                                            <MenuItem value="MRS">Mrs.</MenuItem>
+                                            <MenuItem value="MISS">Miss</MenuItem>
+                                        </Select>
+                                    )}
+                                />
                             </FormControl>
                         </Grid>              
-                        <Grid item xs={12} md={5}>            
-                            <TextField 
-                                id="outlined-basic" 
-                                label="First Name" 
-                                variant="outlined"
-                                placeholder = "Enter your first name"
-                                fullWidth 
-                                required
-                            />               
-                        </Grid>
-
-                        <Grid item xs={12} md={5}>
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Last Name" 
-                                variant="outlined"
-                                placeholder = "Enter your last name"
-                                fullWidth 
-                                required
+                        <Grid item xs={12} md={4} xl={5}>            
+                            <Controller
+                                name="firstName"
+                                rules={{ required: true }}
+                                control={control}
+                                defaultValue=""
+                                render={ ({ field }) => (
+                                    <TextField 
+                                        {...field}
+                                        label="First Name" 
+                                        variant="outlined"
+                                        placeholder = "Enter your first name"
+                                        error={errors.firstName && true}
+                                        fullWidth 
+                                    />               
+                                )}
                             />
                         </Grid>
-
+                        <Grid item xs={12} md={4} xl={5}>
+                            <Controller
+                                name="lastName"
+                                rules={{ required: true }}
+                                control={control}
+                                defaultValue=""
+                                render={ ({ field }) => (
+                                    <TextField 
+                                        {...field}
+                                        label="Last Name" 
+                                        variant="outlined"
+                                        error={errors.lastName && true}
+                                        placeholder = "Enter your Last Name"
+                                        fullWidth 
+                                    />               
+                                )}
+                            />
+                        </Grid>
                         <Grid item xs={12} md={6}>
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Email" 
-                                variant="outlined"
-                                placeholder = "Enter your Email"
-                                fullWidth 
-                                required
+                            <Controller
+                                name="email"
+                                rules={{ required: true }}
+                                control={control}
+                                defaultValue=""
+                                render={ ({ field }) => (
+                                    <TextField 
+                                        {...field}
+                                        label="Email" 
+                                        variant="outlined"
+                                        error={errors.email && true}
+                                        placeholder = "Enter your Email"
+                                        fullWidth 
+                                    />               
+                                )}
                             />
                         </Grid>
-
                         <Grid item xs={12} md={6}>   
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Contact Number" 
-                                variant="outlined"
-                                placeholder = "Enter your Contact No"
-                                fullWidth 
-                                required
-                            />          
-                        </Grid>
-
-                        <Grid item xs={12} md={8}>   
-                            <TextField 
-                                label="Date of Birth" 
-                                type="date"
-                                placeholder = "Enter your Date of Birth"
-                                InputLabelProps={{ shrink: true }}
-                                fullWidth 
-                                required
-                            />        
-                        </Grid>
-
-                        <Grid item xs={12} md={4}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="Signup-gender-select-label">Gender</InputLabel>
-                                    <Select
-                                        labelId="Signup-gender-select-label"
-                                        id="Signup-gender-select"
-                                        label="Gender"                             
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={10}>Male</MenuItem>
-                                        <MenuItem value={20}>Female</MenuItem>
-                                        <MenuItem value={30}>Transgender</MenuItem>
-                                    </Select>
-                                </FormControl>
-                        </Grid>
-
-                        <Grid item xs={6} lg={4}>
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Steet Number" 
-                                variant="outlined"
-                                placeholder = "Your street number"
-                                fullWidth 
-                                required
+                            <Controller
+                                name="contactNo"
+                                rules={{ required: true }}
+                                control={control}
+                                defaultValue=""
+                                render={ ({ field }) => (
+                                    <TextField 
+                                        {...field}
+                                        error={errors.contactNo && true}
+                                        label="Contact Number" 
+                                        variant="outlined"
+                                        placeholder = "Enter Contact Number"
+                                        fullWidth 
+                                    />               
+                                )}
                             />
                         </Grid>
-
+                        <Grid item xs={12} md={8}>   
+                            <Controller
+                                name="dob"
+                                rules={{ required: true }}
+                                control={control}
+                                defaultValue=""
+                                render={( { field } ) => ( 
+                                    <TextField 
+                                        {...field}
+                                        error={errors.dob && true}
+                                        label="Date of Birth" 
+                                        type="date"
+                                        placeholder = "Enter your Date of Birth"
+                                        InputLabelProps={{ shrink: true }}
+                                        fullWidth 
+                                    />        
+                                )}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <FormControl fullWidth error={errors.gender && true}>
+                                <InputLabel id="Org-registration-province-select-label">Gender</InputLabel>
+                                <Controller
+                                    name="gender"
+                                    rules={{ required: true }}
+                                    control={control}
+                                    defaultValue=""
+                                    render={ ({ field }) => (
+                                        <Select
+                                            {...field}
+                                            labelId="Org-registration-province-select-label"
+                                            label="Gender"
+                                        >
+                                            <MenuItem value="MALE">Male</MenuItem>
+                                            <MenuItem value="FEMALE">Female</MenuItem>
+                                        </Select>
+                                    )}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} md={12}>   
+                            <Controller
+                                name="password"
+                                rules={{ required: true }}
+                                control={control}
+                                defaultValue=""
+                                render={ ({ field }) => (
+                                    <TextField 
+                                        {...field}
+                                        error={errors.password && true}
+                                        label="Password" 
+                                        type="password"
+                                        variant="outlined"
+                                        placeholder = "Enter your password"
+                                        fullWidth 
+                                    />               
+                                )}
+                            />
+                        </Grid>
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="Org-registration-street-select-label">Street</InputLabel>
-                                <Select
-                                    labelId="Org-registration-town-select-label"
-                                    id="Org-registration-street-select"
-                                    label="Street"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
+                            <FormControl fullWidth error={errors.address && true}>
+                                <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
+                                <Controller
+                                    name="address.country"
+                                    rules={{ required: true }}
+                                    control={control}
+                                    defaultValue=""
+                                    render={ ({ field }) => (
+                                        <Select
+                                            {...field}
+                                            labelId="Org-registration-country-select-label"
+                                            label="Country"
+                                        >
+                                            { 
+                                                countries.map( (country, index) => (
+                                                    <MenuItem value={country} key={index}>{country}</MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6} lg={4}>
+                            <FormControl fullWidth error={errors.address && true}>
+                                <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
+                                <Controller
+                                    name="address.province"
+                                    rules={{ required: true }}
+                                    control={control}
+                                    defaultValue=""
+                                    render={ ({ field }) => (
+                                        <Select
+                                            {...field}
+                                            labelId="Org-registration-province-select-label"
+                                            label="Province"
+                                        >
+                                            { 
+                                                provice.map( (provice, index) => (
+                                                    <MenuItem value={provice} key={index}>{provice}</MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6} lg={4}>
+                            <FormControl fullWidth error={errors.address && true}>
+                                <InputLabel id="Org-registration-city-select-label">City</InputLabel>
+                                <Controller
+                                    name="address.city"
+                                    rules={{ required: true }}
+                                    control={control}
+                                    defaultValue=""
+                                    render={ ({ field }) => (
+                                        <Select
+                                            {...field}
+                                            labelId="Org-registration-city-select-label"
+                                            label="City"
+                                        >
+                                            { 
+                                                cities.map( (city, index) => (
+                                                    <MenuItem value={city} key={index}>{city}</MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
+                                />
                             </FormControl>
                         </Grid>
                         <Grid item  xs={6} lg={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="Org-registration-town-select-label">Town</InputLabel>
-                                <Select
-                                    labelId="Org-registration-town-select-label"
-                                    id="Org-registration-town-select"
-                                    label="Town"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Controller
+                                name="address.town"
+                                control={control}
+                                defaultValue=""
+                                render={ ({field}) =>(
+                                <TextField 
+                                    {...field}
+                                    label="Town" 
+                                    variant="outlined"
+                                    placeholder = "Your Town"
+                                    fullWidth 
+                                />)}
+                            />
                         </Grid>
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="Org-registration-city-select-label">City</InputLabel>
-                                <Select
-                                    labelId="Org-registration-city-select-label"
-                                    id="Org-registration-city-select"
-                                    label="City"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
-                                <Select
-                                    labelId="Org-registration-city-select-label"
-                                    id="Org-registration-city-select"
-                                    label="Province"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Controller
+                                name="address.street"
+                                control={control}
+                                defaultValue=""
+                                render={ ({field}) =>(
+                                <TextField 
+                                    {...field}
+                                    label="Steet" 
+                                    variant="outlined"
+                                    placeholder = "Your Street"
+                                    fullWidth 
+                                />)}
+                            />
                         </Grid>
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
-                                <Select
-                                    labelId="Org-registration-country-select-label"
-                                    id="Org-registration-country-select"
-                                    label="Country"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Controller
+                                name="address.steetNumber"
+                                control={control}
+                                defaultValue=""
+                                render={ ({field}) =>(
+                                <TextField 
+                                    {...field}
+                                    label="Steet Number" 
+                                    variant="outlined"
+                                    placeholder = "Your street number"
+                                    fullWidth 
+                                />)}
+                            />
                         </Grid>
 
                     <Grid item xs={12}>   
-                        <TextField 
-                            id="outlined-basic" 
-                            label="Password" 
-                            variant="outlined"
-                            placeholder = "Enter your Password"
-                            type = "password"
-                            fullWidth 
-                            required
-                        />      
-                    </Grid>
-
-                    <Grid item xs={12}>   
-                        <TextField 
-                            id="outlined-basic" 
-                            label="Password Conformation" 
-                            variant="outlined"
-                            placeholder = "Re-enter your Password"
-                            type = "password"
-                            fullWidth 
-                            required
-                        />     
+                        <Button type="submit" variant="contained" fullWidth disabled={loading && true}>Continue</Button>
                     </Grid>     
-                </Grid>
+                    </Grid>
+            </form>
             </Stack>
         </CenteredHeaderCard>
         

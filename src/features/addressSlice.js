@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
 const ADDRESS_API_URL = "https://www.universal-tutorial.com/api";
+const ADDRESS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrcmFuaWV0aXNtZUBnbWFpbC5jb20iLCJhcGlfdG9rZW4iOiJETmxYWWdMeTJNMTVUczAxSzU2LWg2Tl9zakpqRFJQSEljTXJwYU1ncDRyRkNaby1lYWZ4V0JCdDk0ZTFjMlhGUzlFIn0sImV4cCI6MTY3NTM3MTEzNX0.C8uamyJ9qtOdifzLd2KwOhbqvORGr-bkXPOjRSpPP4A";
 
 const initialState = {
     countries: [],
@@ -35,7 +36,7 @@ export default addressSlice.reducer;
 export const fetchCountries = createAsyncThunk('address/countries', async () => {
     const response = await axios.get(`${ADDRESS_API_URL}/countries`, {
         headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrcmFuaWV0aXNtZUBnbWFpbC5jb20iLCJhcGlfdG9rZW4iOiJETmxYWWdMeTJNMTVUczAxSzU2LWg2Tl9zakpqRFJQSEljTXJwYU1ncDRyRkNaby1lYWZ4V0JCdDk0ZTFjMlhGUzlFIn0sImV4cCI6MTY3NTI2NjQxMH0.OzFgBF4wY-dyk5dMxvTxG7jV7nmdVUdaKSMPsOY3qS4",
+            "Authorization": `Bearer ${ADDRESS_API_KEY}`,
             "Accept": "application/json"
         }
     })
@@ -45,7 +46,7 @@ export const fetchCountries = createAsyncThunk('address/countries', async () => 
 export const fetchProvince = createAsyncThunk('address/province', async (country) => {
     const response = await axios.get(`${ADDRESS_API_URL}/states/${country}`, {
         headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrcmFuaWV0aXNtZUBnbWFpbC5jb20iLCJhcGlfdG9rZW4iOiJETmxYWWdMeTJNMTVUczAxSzU2LWg2Tl9zakpqRFJQSEljTXJwYU1ncDRyRkNaby1lYWZ4V0JCdDk0ZTFjMlhGUzlFIn0sImV4cCI6MTY3NTI2NjQxMH0.OzFgBF4wY-dyk5dMxvTxG7jV7nmdVUdaKSMPsOY3qS4",
+            "Authorization": `Bearer ${ADDRESS_API_KEY}`,
             "Accept": "application/json"
         }
     })
@@ -55,7 +56,7 @@ export const fetchProvince = createAsyncThunk('address/province', async (country
 export const fetchCities = createAsyncThunk('address/cities', async (state) => {
     const response = await axios.get(`${ADDRESS_API_URL}/cities/${state}`, {
         headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrcmFuaWV0aXNtZUBnbWFpbC5jb20iLCJhcGlfdG9rZW4iOiJETmxYWWdMeTJNMTVUczAxSzU2LWg2Tl9zakpqRFJQSEljTXJwYU1ncDRyRkNaby1lYWZ4V0JCdDk0ZTFjMlhGUzlFIn0sImV4cCI6MTY3NTI2NjQxMH0.OzFgBF4wY-dyk5dMxvTxG7jV7nmdVUdaKSMPsOY3qS4",
+            "Authorization": `Bearer ${ADDRESS_API_KEY}`,
             "Accept": "application/json"
         }
     })

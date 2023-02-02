@@ -12,11 +12,14 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../features/addressSlice";
+import { selectAuthLoading } from "../../../features/authSlice";
 import { requestOrganizationSignup } from '../../../features/authSlice'
 
 const OrganizationSignupForm = () => {
     const {control, handleSubmit, formState: { errors }, watch }= useForm();
     const dispatch = useDispatch();
+
+    const loading = useSelector(selectAuthLoading);
 
     const watchCountry = watch("address.country");
     const watchProvince = watch("address.province");
@@ -235,7 +238,7 @@ const OrganizationSignupForm = () => {
                         </Grid>
 
                         <Grid item xs={12}>
-                            <Button type="submit" variant="contained" fullWidth>Continue</Button>
+                            <Button type="submit" variant="contained" fullWidth disabled={loading && true}>Continue</Button>
                         </Grid>
                     
                      </Grid>
