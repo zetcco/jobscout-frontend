@@ -4,14 +4,17 @@ import { JobCreatorHome } from "./profile/job_creator/JobCreatorHome/JobCreatorH
 import { useSelector } from "react-redux"
 import { Messaging } from "../components/profile/Message/Messaging"
 import { selectAuthUser } from "../features/authSlice"
+import { OrganizationHome } from "../components/profile/OrganizationHome"
+import { JobPosts } from "./feed/JobPosts"
 
 export const Home = () => {
     
     const authUser = useSelector(selectAuthUser)
 
-    return (
-        <>
-            <JobCreatorHome/>
-        </>
-    )
+    if (authUser.role == "ROLE_JOB_SEEKER")
+        return <JobPosts/>
+    else if (authUser.role == "ROLE_JOB_CREATOR")
+        return (<JobCreatorHome/>)
+    else
+        return <OrganizationHome/>
 }

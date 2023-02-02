@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
-import { selectAuthLoading } from "../../../../features/authSlice";
+import { requestJobSeekerSignup, selectAuthLoading } from "../../../../features/authSlice";
 import { requestJobCreatorSignup } from '../../../../features/authSlice'
 
 const SeekerSignupForm = () => {
@@ -27,7 +27,7 @@ const SeekerSignupForm = () => {
     const cities = useSelector(selectCities);
 
     const onSubmit=(data) =>{
-        dispatch(requestJobCreatorSignup(data))
+        dispatch(requestJobSeekerSignup(data))
     }
 
     useEffect(() => {
