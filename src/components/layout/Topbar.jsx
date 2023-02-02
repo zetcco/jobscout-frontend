@@ -34,13 +34,15 @@ export const Topbar = () => {
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: '12', md: 'flex' } }}>
                         <RouterLink to={"/blog"}>
-                        <IconButton size='large' color='inherit'>
-                            <RssFeed />
-                        </IconButton>
+                            <IconButton size='large' color='inherit'>
+                                <RssFeed />
+                            </IconButton>
                         </RouterLink>
-                        <IconButton size='large' color='inherit'>
-                            <ChatBubbleOutlineOutlined />
-                        </IconButton>
+                        <RouterLink to={"/messages"}>
+                            <IconButton size='large' color='inherit'>
+                                <ChatBubbleOutlineOutlined />
+                            </IconButton>
+                        </RouterLink>
                         <IconButton size='large' color='inherit'>
                             <DashboardCustomizeOutlined />
                         </IconButton>

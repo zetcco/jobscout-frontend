@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
+  color: 'inherit',
   '&:active, &:visited': {
     color: 'inherit'
   },
