@@ -30,7 +30,7 @@ export const Topbar = () => {
                 zIndex: (theme) => theme.zIndex.drawer + 1
             }}>
                 <Toolbar sx={{ color: (theme) => theme.palette.common.white }}>
-                    <Typography variant="h5" sx={{ flexGrow: 1 }}> JobScout </Typography>
+                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1 }}> JobScout </Typography></RouterLink>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: '12', md: 'flex' } }}>
                         <RouterLink to={"/blog"}>
