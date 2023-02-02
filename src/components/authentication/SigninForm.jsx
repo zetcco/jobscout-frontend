@@ -5,13 +5,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
 import { Link as RouterLink } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { requestLogin } from "../../features/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { requestLogin, selectAuthLoading } from "../../features/authSlice";
 
 const SigninForm = () => {
 
     const { control, handleSubmit, formState: { errors } } = useForm();
     const dispatch = useDispatch();
+
+    const loading = useSelector(selectAuthLoading);
 
     const onSubmit = (data) => { 
         dispatch(requestLogin(data))
@@ -19,7 +21,7 @@ const SigninForm = () => {
 
     return (
         <CenteredHeaderCard
-        title = {"Login to JobScout"}
+        title = {"Welcome Back"}
         icon = {<Avatar style = {{backgroundColor:'#28AF38'}}><LockOutlinedIcon/></Avatar>}
         footer = {<Button component={RouterLink} to={"/signup/type"} variant="contained" fullWidth>Register</Button>}
         children = {
@@ -62,7 +64,7 @@ const SigninForm = () => {
                                 />
                             )}
                         />
-                        <Button type="submit" variant="contained" fullWidth>Login</Button>                  
+                        <Button type="submit" variant="contained" fullWidth disabled={loading && true}>Login</Button>                  
                     </Stack>
                 </form>
                 <Stack>
