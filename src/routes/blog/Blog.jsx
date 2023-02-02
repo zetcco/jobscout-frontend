@@ -1,4 +1,5 @@
 import { Stack } from "@mui/system"
+import {Button } from '@mui/material'
 import BlogPostSummary from "../../components/blog/BlogPostSummary"
 import SmallPanel from "../../components/SmallPanel"
 
@@ -9,7 +10,7 @@ function Blog() {
             <SmallPanel 
               mainTitle={'Left'}
               children = {[
-                <button variant = {'outlined'} fullWidth>Left Button</button>
+                <Button variant = {'outlined'} fullWidth>Left Button</Button>
               ]}
             />
           <Stack spacing={3}>
@@ -19,7 +20,7 @@ function Blog() {
           <SmallPanel 
              mainTitle={'Right'} 
              children = {[
-              <button variant = {'outlined'} fullWidth>Right Button</button>
+              <Button variant = {'outlined'} fullWidth>Right Button</Button>
             ]}
           />
         </Stack>
