@@ -14,13 +14,18 @@ const AddCompanyForm = () => {
         footer={
           <Stack direction="row" spacing={2}>
           <Box sx={{ width: '100%' }}>
+            <RouterLink to="/signup/user/dp">
+              <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
+            </RouterLink>
+          </Box>
+          <Box sx={{ width: '100%' }}>
             <RouterLink to="/signup/organization/account">
               <Button variant='outlined' sx={{ width: '100%' }}>Create Your Company</Button>
             </RouterLink>
           </Box>
           <Box sx={{ width: '100%' }}>
             <RouterLink to="/signup/user/dp">
-              <Button variant='contained' sx={{ width: '100%' }}>Continue</Button>
+              <Button variant='contained' sx={{ width: '100%' }} disabled>Continue</Button>
             </RouterLink>
           </Box>
       </Stack>     

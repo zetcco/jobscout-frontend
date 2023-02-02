@@ -21,7 +21,7 @@ export const GridLayout = () => {
           direction="column"
           alignItems={"center"}
           justifyContent={"center"}
-          sx={{ height: '100vh' }}
+          sx={{ minHeight: '100vh' }}
       >
           <Outlet/>
       </Grid>
