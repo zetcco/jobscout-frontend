@@ -22,6 +22,7 @@ import AddCompany from "./routes/signup/users/job_creator/AddCompany";
 import Blog from "./routes/blog/Blog";
 import BlogPost from "./routes/blog/BlogPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Messaging } from "./components/profile/Message/Messaging";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -83,6 +84,10 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="blog">
             <Route path=":blogId" element={<BlogPost/>}/>
           </Route>
+        </Route>
+
+        <Route path="/" element={<NavigationLayout/>}>
+          <Route path="messages" element={<Messaging/>}/>
         </Route>
 
         <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>

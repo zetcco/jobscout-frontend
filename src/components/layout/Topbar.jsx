@@ -1,9 +1,10 @@
-import { AccountCircle, ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined } from "@mui/icons-material"
+import { AccountCircle, ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
 import { AppBar, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
 import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
+import { RouterLink } from "../RouterLink";
 
 export const Topbar = () => {
 
@@ -29,12 +30,19 @@ export const Topbar = () => {
                 zIndex: (theme) => theme.zIndex.drawer + 1
             }}>
                 <Toolbar sx={{ color: (theme) => theme.palette.common.white }}>
-                    <Typography variant="h5" sx={{ flexGrow: 1 }}> JobScout </Typography>
+                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1 }}> JobScout </Typography></RouterLink>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: '12', md: 'flex' } }}>
-                        <IconButton size='large' color='inherit'>
-                            <ChatBubbleOutlineOutlined />
-                        </IconButton>
+                        <RouterLink to={"/blog"}>
+                            <IconButton size='large' color='inherit'>
+                                <RssFeed />
+                            </IconButton>
+                        </RouterLink>
+                        <RouterLink to={"/messages"}>
+                            <IconButton size='large' color='inherit'>
+                                <ChatBubbleOutlineOutlined />
+                            </IconButton>
+                        </RouterLink>
                         <IconButton size='large' color='inherit'>
                             <DashboardCustomizeOutlined />
                         </IconButton>
