@@ -21,6 +21,7 @@ import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
 import AddCompany from "./routes/signup/users/job_creator/AddCompany";
 import Blog from "./routes/blog/Blog";
 import BlogPost from "./routes/blog/BlogPost";
+import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -64,8 +65,7 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="posts" element={<JobPosts/>}/>
           <Route path="posts">
             <Route path=":postId" element={<JobPost/>}/>
-          </Route>
-          <Route path="posts">
+            <Route path=":postId/manage" element={<ManageJobPost/>}/>
             <Route path="create" element={<CreateJobPost/>}/>
           </Route>
 
