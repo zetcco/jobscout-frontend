@@ -6,10 +6,9 @@ import SmallPanel from "../../components/SmallPanel"
 function Blog() {
   return (
     <>
-        <Stack direction="colomn" justifyContent="space-between" alignItems="flex-start" spacing={5}>
-            <SmallPanel 
-              mainTitle={'Left'}
-              children = {[
+        <Stack direction="row" justifyContent="center" alignItems="flex-start" spacing={2}>
+            <SmallPanel
+            children = {[
                 <Button variant = {'outlined'} fullWidth>Left Button</Button>
               ]}
             />
@@ -18,7 +17,6 @@ function Blog() {
             <BlogPostSummary/>
           </Stack>
           <SmallPanel 
-             mainTitle={'Right'} 
              children = {[
               <Button variant = {'outlined'} fullWidth>Right Button</Button>
             ]}
