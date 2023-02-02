@@ -11,39 +11,41 @@ import WorkIcon from '@mui/icons-material/Work';
 
 export const JobCreatorHome = () => {
   return (
-        <BasicCard>
+        
             <Stack direction = {'column'} spacing = {4}>
                 <Stack>
                     <SmallPanel
                         mainTitle = {'Actions'}
                     >
-                            <Stack direction={'row'} spacing = {2} sx = {{justifyContent:'space-evenly'}}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={4}>
                                 <SelectableCard
-                                    sx  = {{flexGrow:1}}
                                     title = { 
                                             <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                                 <AddBoxIcon sx = {{height:'30px' , width:'30px'}}/>
-                                                <Typography variant = 'h5'>CREATE</Typography>
+                                                <Typography variant = 'h6'>CREATE</Typography>
                                              </Stack> }
                                     />
+                                </Grid>
+                                <Grid item xs={4}>
                                 <SelectableCard
-                                    sx  = {{flexGrow:1}}
                                     title = { 
                                             <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                                 <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>
-                                                <Typography variant = 'h5'>MANAGE</Typography>
-                                            </Stack> }
+                                                <Typography variant = 'h6'>MANAGE</Typography>
+                                             </Stack> }
                                     />
-
+                                </Grid>
+                                <Grid item xs={4}>
                                 <SelectableCard
-                                    sx  = {{flexGrow:1}}
                                     title = { 
                                             <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                                 <WorkIcon sx = {{height:'30px' , width:'30px'}}/>
-                                                <Typography variant = 'h5'>VACANCIES</Typography>
-                                            </Stack> }
+                                                <Typography variant = 'h6'>VACCANCIES</Typography>
+                                             </Stack> }
                                     />
-                            </Stack>
+                                </Grid>
+                            </Grid>
                     </SmallPanel> 
                 </Stack>
                
@@ -55,7 +57,6 @@ export const JobCreatorHome = () => {
                                     title = {'POSTS'}
                                     subtitle = {'No of job posts'}
                                     count = {6}
-                                    color = {'blue'}
                                 />
                             </Stack>
                         </Grid>
@@ -65,7 +66,6 @@ export const JobCreatorHome = () => {
                                     title = {'ACTIVATED POSTS'}
                                     subtitle = {'No of activated posts'}
                                     count = {10}
-                                    color = {'green'}
                                 />
                             </Stack>
                         </Grid>
@@ -75,7 +75,6 @@ export const JobCreatorHome = () => {
                                     title = {'DEACTIVATED POSTS'}
                                     subtitle = {'No of deactivated posts'}
                                     count = {2}
-                                    color = {'red'}
                                 />
                             </Stack>
                         </Grid>
@@ -83,6 +82,6 @@ export const JobCreatorHome = () => {
                 </Stack>
 
             </Stack>
-        </BasicCard>
+        
   )
 }
