@@ -1,6 +1,6 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Grid, Stack} from '@mui/material';
+import { Button, Grid, Stack, Typography} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -12,8 +12,10 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../features/addressSlice";
-import { selectAuthLoading } from "../../../features/authSlice";
+import { selectAuthLoading, uploadBusinessRegistration  } from "../../../features/authSlice";
 import { requestOrganizationSignup } from '../../../features/authSlice'
+import { useState } from 'react'
+import { UploadArea } from '../../input/UploadArea'
 
 const OrganizationSignupForm = () => {
     const {control, handleSubmit, formState: { errors }, watch }= useForm();
@@ -27,6 +29,8 @@ const OrganizationSignupForm = () => {
     const countries = useSelector(selectCountries);
     const provice = useSelector(selectProvince);
     const cities = useSelector(selectCities);
+
+    const [ file, setFile ] = useState();
 
     const onSubmit=(data) =>{
         dispatch(requestOrganizationSignup(data))
@@ -231,10 +235,14 @@ const OrganizationSignupForm = () => {
                         </Grid>
 
                         <Grid item xs={12}>
-                            <DashedArea
-                                text = {'Click to upload Business Registration'}
-                                icon = {<UploadIcon fontSize="large"/>}
-                            ></DashedArea>
+            <UploadArea text={"Click here to Upload Logo"} handleFile={(data) => { setFile(data) }}/>
+            { file && (
+              <Typography>{ file.name }</Typography>
+            ) }
+            <Stack spacing={2} direction="row">
+              <Button variant='outlined' sx={{ width: '100%' }}>Clear</Button>
+              <Button disabled={loading && true} variant='contained' onClick={() => dispatch(uploadBusinessRegistration(file))} sx={{ width: '100%' }}>Continue</Button>
+          </Stack>
                         </Grid>
 
                         <Grid item xs={12}>

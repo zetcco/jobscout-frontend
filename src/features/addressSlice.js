@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
 const ADDRESS_API_URL = "https://www.universal-tutorial.com/api";
-const ADDRESS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrcmFuaWV0aXNtZUBnbWFpbC5jb20iLCJhcGlfdG9rZW4iOiJETmxYWWdMeTJNMTVUczAxSzU2LWg2Tl9zakpqRFJQSEljTXJwYU1ncDRyRkNaby1lYWZ4V0JCdDk0ZTFjMlhGUzlFIn0sImV4cCI6MTY3NTM3MTEzNX0.C8uamyJ9qtOdifzLd2KwOhbqvORGr-bkXPOjRSpPP4A";
+const ADDRESS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrcmFuaWV0aXNtZUBnbWFpbC5jb20iLCJhcGlfdG9rZW4iOiJETmxYWWdMeTJNMTVUczAxSzU2LWg2Tl9zakpqRFJQSEljTXJwYU1ncDRyRkNaby1lYWZ4V0JCdDk0ZTFjMlhGUzlFIn0sImV4cCI6MTY3NTQ4OTYyOH0.6NFa6UhWuQPibWpPl3Gj7rvNf7HxACz1d1teuAdBVnU";
 
 const initialState = {
     countries: [],

@@ -8,6 +8,7 @@ import { SelectableCard } from '../../../../components/cards/SelectableCard'
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import WorkIcon from '@mui/icons-material/Work';
+import { RouterLink } from '../../../../components/RouterLink'
 
 export const JobCreatorHome = () => {
   return (
@@ -19,6 +20,7 @@ export const JobCreatorHome = () => {
                     >
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
+                                <RouterLink to={"/posts/create"}>
                                 <SelectableCard
                                     title = { 
                                             <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -26,8 +28,10 @@ export const JobCreatorHome = () => {
                                                 <Typography variant = 'h6'>CREATE</Typography>
                                              </Stack> }
                                     />
+                                </RouterLink>
                                 </Grid>
                                 <Grid item xs={4}>
+                                <RouterLink to={"/posts/1/manage"}>
                                 <SelectableCard
                                     title = { 
                                             <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -35,6 +39,7 @@ export const JobCreatorHome = () => {
                                                 <Typography variant = 'h6'>MANAGE</Typography>
                                              </Stack> }
                                     />
+                                </RouterLink>
                                 </Grid>
                                 <Grid item xs={4}>
                                 <SelectableCard
