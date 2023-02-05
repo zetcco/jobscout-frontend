@@ -235,14 +235,10 @@ const OrganizationSignupForm = () => {
                         </Grid>
 
                         <Grid item xs={12}>
-            <UploadArea text={"Click here to Upload Logo"} handleFile={(data) => { setFile(data) }}/>
-            { file && (
-              <Typography>{ file.name }</Typography>
-            ) }
-            <Stack spacing={2} direction="row">
-              <Button variant='outlined' sx={{ width: '100%' }}>Clear</Button>
-              <Button disabled={loading && true} variant='contained' onClick={() => dispatch(uploadBusinessRegistration(file))} sx={{ width: '100%' }}>Continue</Button>
-          </Stack>
+                            <UploadArea text={"Click here to Business Registration"} handleFile={(data) => { setFile(data) }}/>
+                            { file && (
+                            <Typography>{ file.name }</Typography>
+                            ) }
                         </Grid>
 
                         <Grid item xs={12}>
