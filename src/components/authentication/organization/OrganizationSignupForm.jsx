@@ -59,7 +59,7 @@ const OrganizationSignupForm = () => {
                         <Grid item xs={12}>
                             <Controller 
                                 name="companyName"
-                                rules={ { required: true } }
+                                rules={ { required: true, maxLength: 20 } }
                                 control={control}
                                 defaultValue=""
                                 render={ ({field}) =>(
@@ -77,7 +77,7 @@ const OrganizationSignupForm = () => {
                         <Grid item xs={12}>
                             <Controller
                                 name="email"
-                                rules={ { required: true } }
+                                rules={ { required: true, pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ } }
                                 control={control}
                                 defaultValue=""
                                 render={ ({field}) =>( 
