@@ -2,6 +2,7 @@ import { Stack } from "@mui/system"
 import {Button } from '@mui/material'
 import BlogPostSummary from "../../components/blog/BlogPostSummary"
 import SmallPanel from "../../components/SmallPanel"
+import {Button } from '@mui/material'
 
 function Blog() {
   return (
