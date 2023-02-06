@@ -1,4 +1,5 @@
 import { Stack } from "@mui/system"
+import {Button } from '@mui/material'
 import BlogPostSummary from "../../components/blog/BlogPostSummary"
 import SmallPanel from "../../components/SmallPanel"
 import {Button } from '@mui/material'
@@ -6,7 +7,7 @@ import {Button } from '@mui/material'
 function Blog() {
   return (
     <>
-          <Stack direction="row" justifyContent="center" alignItems="flex-start" spacing={2}>
+        <Stack direction="row" justifyContent="center" alignItems="flex-start" spacing={2}>
             <SmallPanel
             children = {[
                 <Button variant = {'outlined'} fullWidth>Left Button</Button>
