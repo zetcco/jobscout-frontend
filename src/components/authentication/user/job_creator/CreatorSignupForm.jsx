@@ -111,7 +111,7 @@ const CreatorSignupForm = () => {
                         <Grid item xs={12} md={6}>
                             <Controller
                                 name="email"
-                                rules={{ required: true }}
+                                rules={ { required: true, pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ } }
                                 control={control}
                                 defaultValue=""
                                 render={ ({ field }) => (
