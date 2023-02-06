@@ -18,24 +18,34 @@ import { UploadArea } from '../../input/UploadArea'
 /* eslint-disable no-useless-escape */
 
 const OrganizationSignupForm = () => {
-    const {control, handleSubmit, formState: { errors }, watch }= useForm();
+    const {control, handleSubmit, formState: { errors }, watch, setError }= useForm();
     const dispatch = useDispatch();
 
+    /* Form submission */
     const loading = useSelector(selectAuthLoading);
-    const authError = useSelector(selectAuthError);
-
-    const watchCountry = watch("address.country");
-    const watchProvince = watch("address.province");
-
-    const countries = useSelector(selectCountries);
-    const provice = useSelector(selectProvince);
-    const cities = useSelector(selectCities);
-
-    const [ file, setFile ] = useState();
-
     const onSubmit=(data) =>{
         dispatch(requestOrganizationSignup(data))
     }
+    /* ---------------- */
+
+    /* Error handling */
+    const authError = useSelector(selectAuthError);
+    useEffect(() => {
+        if (authError && authError.status === 409) {
+            setError('companyName')
+            setError('email')
+        }
+    }, [setError, authError])
+    /* ---------------- */
+    
+    const [ file, setFile ] = useState();
+
+    /* Address api handling */
+    const watchCountry = watch("address.country");
+    const watchProvince = watch("address.province");
+    const countries = useSelector(selectCountries);
+    const provice = useSelector(selectProvince);
+    const cities = useSelector(selectCities);
 
     useEffect(() => {
         dispatch(fetchCountries())
@@ -48,6 +58,7 @@ const OrganizationSignupForm = () => {
     useEffect(() => {
         dispatch(fetchCities(watchProvince))
     }, [dispatch, watchProvince])
+    /* ---------------- */
 
     return (
         <CenteredHeaderCard
