@@ -109,7 +109,10 @@ export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizat
     try {
         return (await axios.post(`${BACKEND_URL}/auth/register/organization`, data)).data
     } catch (e) {
-        return rejectWithValue({ status: e.response.status, message: e.response.data.status })
+        if (e.code === "ERR_BAD_REQUEST")
+            return rejectWithValue({ status: e.response.status, message: e.response.data.status })
+        else if (e.code === "ERR_NETWORK")
+            return rejectWithValue({ status: 500, message: "Network Error" })
     }
 })
 
