@@ -1,4 +1,3 @@
-import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useRef } from 'react'
 import { DashedArea } from './DashedArea';
