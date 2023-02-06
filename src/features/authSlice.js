@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import jwtDecode from "jwt-decode";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
 
@@ -27,101 +28,66 @@ const authenticationSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(requestLogin.fulfilled, (state, action) => {
-                state.loading = false
-                state.token = action.payload.jwtToken
-                localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
-                let userInfo = getUserInfo(action.payload);
-                state.userInfo = userInfo
-                localStorage.setItem('userInfo', JSON.stringify(userInfo))
-            })
-            .addCase(requestLogin.pending, (state, action) => {
-                state.loading = true
-            })
-            .addCase(requestLogin.rejected, (state, action) => {
-                state.loading = false
-                state.error = action.error
-            })
-            .addCase(requestOrganizationSignup.fulfilled, (state, action) => {
-                state.loading = false
-                state.token = action.payload.jwtToken
-                localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
-                let userInfo = getUserInfo(action.payload);
-                state.userInfo = userInfo
-                localStorage.setItem('userInfo', JSON.stringify(userInfo))
-            })
-            .addCase(requestOrganizationSignup.pending, (state, action) => {
-                state.loading = true
-            })
-            .addCase(requestOrganizationSignup.rejected, (state, action) => {
-                state.loading = false
-                state.error = action.payload
-            })
-            .addCase(requestJobCreatorSignup.fulfilled, (state, action) => {
-                state.loading = false
-                state.token = action.payload.jwtToken
-                localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
-                let userInfo = getUserInfo(action.payload);
-                state.userInfo = userInfo
-                localStorage.setItem('userInfo', JSON.stringify(userInfo))
-            })
-            .addCase(requestJobCreatorSignup.pending, (state, action) => {
-                state.loading = true
-            })
-            .addCase(requestJobCreatorSignup.rejected, (state, action) => {
-                state.loading = false
-                state.error = action.error
-            })
-            .addCase(requestJobSeekerSignup.fulfilled, (state, action) => {
-                state.loading = false
-                state.token = action.payload.jwtToken
-                localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
-                let userInfo = getUserInfo(action.payload);
-                state.userInfo = userInfo
-                localStorage.setItem('userInfo', JSON.stringify(userInfo))
-            })
-            .addCase(requestJobSeekerSignup.pending, (state, action) => {
-                state.loading = true
-            })
-            .addCase(requestJobSeekerSignup.rejected, (state, action) => {
-                state.loading = false
-                state.error = action.error
-            })
-            .addCase(uploadBusinessRegistration.fulfilled, (state, action) => {
-                state.loading = false
-            })
-            .addCase(uploadBusinessRegistration.pending, (state, action) => {
-                state.loading = true
-            })
-            .addCase(uploadBusinessRegistration.rejected, (state, action) => {
-                state.loading = false
-            })
+            .addMatcher(
+                (action) => /auth.*fulfilled/.test(action.type),
+                (state, action) => {
+                    state.loading = false
+                    state.token = action.payload.jwtToken
+                    let { name, sub, role } = jwtDecode(state.token)
+                    let userInfo = {name, email: sub, role}
+                    state.userInfo = userInfo
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                    localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
+                }
+            )
+            .addMatcher(
+                (action) => /auth.*rejected/.test(action.type),
+                (state, action) => {
+                    state.loading = false
+                    state.error = action.payload
+                }
+            )
+            .addMatcher(
+                (action) => /auth.*pending/.test(action.type),
+                (state, action) => {
+                    state.loading = true
+                }
+            )
     }
 })
 
 export default authenticationSlice.reducer;
 
-export const requestLogin = createAsyncThunk('auth/requestLogin', async (data) => {
-    return (await axios.post(`${BACKEND_URL}/auth/login`, data)).data
+export const requestLogin = createAsyncThunk('auth/requestLogin', async (data, { rejectWithValue }) => {
+    try {
+        return (await axios.post(`${BACKEND_URL}/auth/login`, data)).data
+    } catch (e) {
+        return rejectWithValue({ status: e.response.status, message: e.response.data.status })
+    }
 })
 
 export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
     try {
         return (await axios.post(`${BACKEND_URL}/auth/register/organization`, data)).data
     } catch (e) {
-        if (e.code === "ERR_BAD_REQUEST")
-            return rejectWithValue({ status: e.response.status, message: e.response.data.status })
-        else if (e.code === "ERR_NETWORK")
-            return rejectWithValue({ status: 500, message: "Network Error" })
+        return handleError(e, rejectWithValue)
     }
 })
 
-export const requestJobCreatorSignup = createAsyncThunk('auth/requestJobCreatorSignup', async (data) => {
-    return (await axios.post(`${BACKEND_URL}/auth/register/jobcreator`, data)).data
+export const requestJobCreatorSignup = createAsyncThunk('auth/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
+    try {
+        return (await axios.post(`${BACKEND_URL}/auth/register/jobcreator`, data)).data
+    } catch (e) {
+        return handleError(e, rejectWithValue)
+    }
 })
 
-export const requestJobSeekerSignup = createAsyncThunk('auth/requestJobSeekerSignup', async (data) => {
-    return (await axios.post(`${BACKEND_URL}/auth/register/jobseeker`, data)).data
+export const requestJobSeekerSignup = createAsyncThunk('auth/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
+    try {
+        return (await axios.post(`${BACKEND_URL}/auth/register/jobseeker`, data)).data
+    } catch (e) {
+        return handleError(e, rejectWithValue)
+    }
 })
 
 export const uploadBusinessRegistration = createAsyncThunk('auth/uploadBusinessRegistration', async (data) => {
@@ -134,4 +100,8 @@ export const uploadBusinessRegistration = createAsyncThunk('auth/uploadBusinessR
 
 export const { logout } = authenticationSlice.actions;
 
-const getUserInfo = (payload) => ({ name: payload.name, email: payload.email, role: payload.role })
+const handleError = (e, rejectWithValue) => {
+    if (e.code === "ERR_NETWORK")
+        return rejectWithValue({ status: 500, message: e.message })
+    return rejectWithValue({ status: e.response.status, message: e.response.data.status })
+}
