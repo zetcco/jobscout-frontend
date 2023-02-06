@@ -13,6 +13,8 @@ import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountri
 import { selectAuthLoading } from "../../../../features/authSlice";
 import { requestJobCreatorSignup } from '../../../../features/authSlice'
 
+/* eslint-disable no-useless-escape */
+
 const CreatorSignupForm = () => {
 
     const {control, handleSubmit, formState: { errors }, watch }= useForm();

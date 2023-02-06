@@ -55,7 +55,7 @@ const authenticationSlice = createSlice({
             })
             .addCase(requestOrganizationSignup.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.error
+                state.error = action.payload
             })
             .addCase(requestJobCreatorSignup.fulfilled, (state, action) => {
                 state.loading = false
@@ -105,8 +105,12 @@ export const requestLogin = createAsyncThunk('auth/requestLogin', async (data) =
     return (await axios.post(`${BACKEND_URL}/auth/login`, data)).data
 })
 
-export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizationSignup', async (data) => {
-    return (await axios.post(`${BACKEND_URL}/auth/register/organization`, data)).data
+export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
+    try {
+        return (await axios.post(`${BACKEND_URL}/auth/register/organization`, data)).data
+    } catch (e) {
+        return rejectWithValue({ status: e.response.status, message: e.response.data.status })
+    }
 })
 
 export const requestJobCreatorSignup = createAsyncThunk('auth/requestJobCreatorSignup', async (data) => {

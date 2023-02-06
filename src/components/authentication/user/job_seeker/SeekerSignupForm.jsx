@@ -11,7 +11,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
 import { requestJobSeekerSignup, selectAuthLoading } from "../../../../features/authSlice";
-import { requestJobCreatorSignup } from '../../../../features/authSlice'
+
+/* eslint-disable no-useless-escape */
 
 const SeekerSignupForm = () => {
     const {control, handleSubmit, formState: { errors }, watch }= useForm();

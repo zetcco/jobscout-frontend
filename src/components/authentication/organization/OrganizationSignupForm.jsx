@@ -1,27 +1,28 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Grid, Stack, Typography} from '@mui/material';
+import { Alert, AlertTitle, Button, Grid, Stack, Typography} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
-import { DashedArea } from "../../input/DashedArea";
-import UploadIcon from '@mui/icons-material/FileUpload';
 import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../features/addressSlice";
-import { selectAuthLoading, uploadBusinessRegistration  } from "../../../features/authSlice";
+import { selectAuthError, selectAuthLoading } from "../../../features/authSlice";
 import { requestOrganizationSignup } from '../../../features/authSlice'
 import { useState } from 'react'
 import { UploadArea } from '../../input/UploadArea'
+
+/* eslint-disable no-useless-escape */
 
 const OrganizationSignupForm = () => {
     const {control, handleSubmit, formState: { errors }, watch }= useForm();
     const dispatch = useDispatch();
 
     const loading = useSelector(selectAuthLoading);
+    const authError = useSelector(selectAuthError);
 
     const watchCountry = watch("address.country");
     const watchProvince = watch("address.province");
@@ -52,10 +53,22 @@ const OrganizationSignupForm = () => {
         <CenteredHeaderCard
             title={"Register to JobScout"}
         >
-                <Stack spacing = {2} sx = {{width:'100%'}}>
+                <Stack>
+
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            {
+                                authError && 
+                                (
+                                    <Alert severity="error">
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>{authError.message}</strong>
+                                    </Alert>
+                                )
+                            }
+                        </Grid>
                         <Grid item xs={12}>
                             <Controller 
                                 name="companyName"
@@ -116,7 +129,7 @@ const OrganizationSignupForm = () => {
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
                                 <Controller
                                     name="address.country"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (
@@ -141,7 +154,7 @@ const OrganizationSignupForm = () => {
                                 <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
                                 <Controller
                                     name="address.province"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (
@@ -166,7 +179,7 @@ const OrganizationSignupForm = () => {
                                 <InputLabel id="Org-registration-city-select-label">City</InputLabel>
                                 <Controller
                                     name="address.city"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (
