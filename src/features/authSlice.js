@@ -68,8 +68,12 @@ export const requestLogin = createAsyncThunk('auth/requestLogin', async (data, {
 
 export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
     try {
-        return (await axios.post(`${BACKEND_URL}/auth/register/organization`, data)).data
+        var formData = new FormData()
+        formData.append('request', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
+        formData.append('file', data.file[0]);
+        return (await axios.post(`${BACKEND_URL}/auth/register/organization`, formData)).data
     } catch (e) {
+        console.log(e)
         return handleError(e, rejectWithValue)
     }
 })
@@ -91,6 +95,7 @@ export const requestJobSeekerSignup = createAsyncThunk('auth/requestJobSeekerSig
 })
 
 export const uploadBusinessRegistration = createAsyncThunk('auth/uploadBusinessRegistration', async (data) => {
+    console.log({ file: data })
     return (await axios.post(`${BACKEND_URL}/auth/upload/file`, { file: data }, { 
         headers: {
             "Content-Type": "multipart/form-data"

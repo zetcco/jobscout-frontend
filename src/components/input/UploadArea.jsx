@@ -2,22 +2,22 @@ import React from 'react'
 import { useRef } from 'react'
 import { DashedArea } from './DashedArea';
 
-export const UploadArea = ({ text, handleFile }) => {
+export const UploadArea = ({ text, register, error }) => {
 
     const hiddenFileInput = useRef(null);
+    const { ref, ...rest } = register
 
-    const handleClick = event => {
+    const handleClick = (_) => {
         hiddenFileInput.current.click();
-    }
-
-    const handleChange = event => {
-        handleFile(event.target.files[0]);
     }
 
     return (
     <>
-        <DashedArea text={text} onClick={handleClick}/>
-        <input type="file" ref={hiddenFileInput} onChange={handleChange} style={{ display: 'none' }}/>
+        <DashedArea text={text} onClick={handleClick} error={error}/>
+        <input type="file" {...rest} ref={(e) => {
+            ref(e)
+            hiddenFileInput.current = e
+        }} style={{ display: 'none' }}/>
     </>
     )
 }
