@@ -111,7 +111,7 @@ const OrganizationSignupForm = () => {
                     </Grid>
 
                     <Grid item xs={6} lg={4}>
-                        <FormControl fullWidth error={errors.request?.address && true}>
+                        <FormControl fullWidth error={errors.request?.address.country && true}>
                             <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
                             <Controller
                                 name="request.address.country"
@@ -136,7 +136,7 @@ const OrganizationSignupForm = () => {
                     </Grid>
 
                     <Grid item xs={6} lg={4}>
-                        <FormControl fullWidth error={errors.request?.address && true}>
+                        <FormControl fullWidth error={errors.request?.address.province && true}>
                             <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
                             <Controller
                                 name="request.address.province"
@@ -161,7 +161,7 @@ const OrganizationSignupForm = () => {
                     </Grid>
 
                     <Grid item xs={6} lg={4}>
-                        <FormControl fullWidth error={errors.request?.address && true}>
+                        <FormControl fullWidth error={errors.request?.address.city && true}>
                             <InputLabel id="Org-registration-city-select-label">City</InputLabel>
                             <Controller
                                 name="request.address.city"
