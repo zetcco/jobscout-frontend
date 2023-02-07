@@ -21,9 +21,9 @@ import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
 import AddCompany from "./routes/signup/users/job_creator/AddCompany";
 import Blog from "./routes/blog/Blog";
 import BlogPost from "./routes/blog/BlogPost";
-import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
+import { ManageJobPost } from "./components/job_postings/manage/ManageJobPost";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
