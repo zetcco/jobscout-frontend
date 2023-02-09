@@ -7,10 +7,6 @@ import {
   uploadBusinessRegistration,
 } from '../../../features/authSlice';
 import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard';
-<<<<<<< Updated upstream
-=======
-import { DashedArea } from '../../input/DashedArea';
->>>>>>> Stashed changes
 import { UploadArea } from '../../input/UploadArea';
 
 export const OrganizationProfileCreationForm = () => {
