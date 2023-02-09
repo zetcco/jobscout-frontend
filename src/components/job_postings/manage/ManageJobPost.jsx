@@ -13,7 +13,7 @@ export const ManageJobPost = () => {
                   <JobApplication />
                   <JobApplication />
                 </Stack>
-                <Stack direction={''}>
+                <Stack>
                   <SmallPanel children={'children'}>
                            <Button variant="outlined">Button</Button>
                    </SmallPanel>
