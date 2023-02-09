@@ -15,7 +15,7 @@ export const ManageJobPost = () => {
                 </Stack>
                 <Stack>
                   <SmallPanel children={'children'}>
-                           <Button variant="outlined">Button</Button>
+                           <Button variant="outlined">Done</Button>
                    </SmallPanel>
                 </Stack>
 
