@@ -13,10 +13,12 @@ export const JobApplication = () => {
       alignItems="center"
       spacing={2}>
         <Box>
+          <Stack spacing={1}>
           <ProfileHeaderCard name={'Rokcy Bhai'} />
             <Typography>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, asperiores reprehenderit hic praesentium vel earum laboriosam beatae pariatur quas vero eaque blanditiis officia voluptate soluta assumenda voluptatibus necessitatibus, ad laborum.
             </Typography>
+          </Stack>
         </Box> 
         <Box>
           <Stack 
