@@ -1,4 +1,4 @@
-import { Button, Chip, Grid, MenuItem, Select, TextField } from "@mui/material"
+import { Button, Chip, MenuItem, Select } from "@mui/material"
 import { Box, Stack } from "@mui/system"
 import React from "react"
 import { CenteredHeaderCard } from "../../../cards/CenteredHeaderCard"
@@ -14,7 +14,7 @@ export const AddSkillsForm =() =>{
     const [ selected, setSeletected ] = useState([]);
     let skills = []
     
-    if (field == "IT & Software")
+    if (field === "IT & Software")
         skills = ["React", "Spring", ".NET", "Angular", "Flutter"]
 
     return(

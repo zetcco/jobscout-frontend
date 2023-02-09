@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion"
-import { Box, Grid, Typography } from '@mui/material'
+import { motion } from "framer-motion"
+import { Box, Grid } from '@mui/material'
 import React from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 

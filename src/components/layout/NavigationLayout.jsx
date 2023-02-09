@@ -1,5 +1,5 @@
 import { Box, Toolbar } from "@mui/material";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Outlet, useLocation } from "react-router-dom";
 import { Topbar } from "./Topbar";
 

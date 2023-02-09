@@ -1,6 +1,6 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Grid, Stack} from '@mui/material';
+import { Alert, AlertTitle, Button, Grid, Stack} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -10,18 +10,30 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
-import { selectAuthLoading } from "../../../../features/authSlice";
+import { selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
 import { requestJobCreatorSignup } from '../../../../features/authSlice'
+
+/* eslint-disable no-useless-escape */
 
 const CreatorSignupForm = () => {
 
-    const {control, handleSubmit, formState: { errors }, watch }= useForm();
+    const {control, handleSubmit, formState: { errors }, watch, setError }= useForm();
     const dispatch = useDispatch();
 
     const loading = useSelector(selectAuthLoading);
 
     const watchCountry = watch("address.country");
     const watchProvince = watch("address.province");
+
+    /* Error handling */
+    const authError = useSelector(selectAuthError);
+    useEffect(() => {
+        if (authError && authError.status === 409) {
+            setError('companyName')
+            setError('email')
+        } 
+    }, [setError, authError])
+    /* ---------------- */
 
     const countries = useSelector(selectCountries);
     const provice = useSelector(selectProvince);
@@ -50,6 +62,17 @@ const CreatorSignupForm = () => {
             <Stack spacing={2} sx={{ width: '100%' }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            {
+                                authError && 
+                                (
+                                    <Alert severity="error">
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>{authError.message}</strong>
+                                    </Alert>
+                                )
+                            }
+                        </Grid>
                         <Grid item xs={12} md={4} xl={2}>
                             <FormControl fullWidth error={errors.title && true}>
                                 <InputLabel id="Org-registration-province-select-label">Title</InputLabel>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { BasicCard } from '../../../../components/cards/BasicCard'
 import { Stack } from '@mui/system'
 import SmallPanel from '../../../../components/SmallPanel'
 import {Grid, Typography } from '@mui/material'

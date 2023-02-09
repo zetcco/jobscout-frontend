@@ -1,10 +1,9 @@
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuthLoading, uploadBusinessRegistration } from '../../../features/authSlice'
 import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard'
-import { DashedArea } from '../../input/DashedArea'
 import { UploadArea } from '../../input/UploadArea'
 
 export const OrganizationProfileCreationForm = () => {
