@@ -22,12 +22,12 @@ export const UploadArea = ({ text, register, error, files }) => {
             }} style={{ display: 'none' }}/>
             <Box>
                 {
-                    files.length > 0 && (
-                        files.map()
-                    )
+                    // files && (files.length > 0 && (
+                    //     // files.map()
+                    // ))
                 }
-                <Typography>filename.txt</Typography>
-                <Typography>filename.txt</Typography>
+                {/* <Typography>filename.txt</Typography> */}
+                {/* <Typography>filename.txt</Typography> */}
             </Box>
         </Stack>
     )
