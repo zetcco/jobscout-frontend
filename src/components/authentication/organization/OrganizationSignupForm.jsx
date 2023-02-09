@@ -242,6 +242,7 @@ const OrganizationSignupForm = () => {
                                 )} 
                             text={"Click here to Upload Business Registration"}
                             error={errors.file}
+                            files={watch("file")}
                         />
                     </Grid>
 
