@@ -225,7 +225,7 @@ const SeekerSignupForm = () => {
                             />
                         </Grid>
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth error={errors.address && true}>
+                            <FormControl fullWidth error={errors.request?.address?.country && true}>
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
                                 <Controller
                                     name="address.country"
@@ -249,7 +249,7 @@ const SeekerSignupForm = () => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth error={errors.address && true}>
+                            <FormControl fullWidth error={errors.request?.address?.province && true}>
                                 <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
                                 <Controller
                                     name="address.province"
@@ -273,7 +273,7 @@ const SeekerSignupForm = () => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={6} lg={4}>
-                            <FormControl fullWidth error={errors.address && true}>
+                            <FormControl fullWidth error={errors.request?.address?.city && true}>
                                 <InputLabel id="Org-registration-city-select-label">City</InputLabel>
                                 <Controller
                                     name="address.city"
