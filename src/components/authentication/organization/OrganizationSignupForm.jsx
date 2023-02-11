@@ -115,7 +115,7 @@ const OrganizationSignupForm = () => {
                             <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
                             <Controller
                                 name="request.address.country"
-                                // rules={{ required: true }}
+                                rules={{ required: true }}
                                 control={control}
                                 defaultValue=""
                                 render={ ({ field }) => (
@@ -140,7 +140,7 @@ const OrganizationSignupForm = () => {
                             <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
                             <Controller
                                 name="request.address.province"
-                                // rules={{ required: true }}
+                                rules={{ required: true }}
                                 control={control}
                                 defaultValue=""
                                 render={ ({ field }) => (
@@ -165,7 +165,7 @@ const OrganizationSignupForm = () => {
                             <InputLabel id="Org-registration-city-select-label">City</InputLabel>
                             <Controller
                                 name="request.address.city"
-                                // rules={{ required: true }}
+                                rules={{ required: true }}
                                 control={control}
                                 defaultValue=""
                                 render={ ({ field }) => (
