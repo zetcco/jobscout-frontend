@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
-const ADDRESS_API_URL = "https://www.universal-tutorial.com/api";
-const ADDRESS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrcmFuaWV0aXNtZUBnbWFpbC5jb20iLCJhcGlfdG9rZW4iOiJETmxYWWdMeTJNMTVUczAxSzU2LWg2Tl9zakpqRFJQSEljTXJwYU1ncDRyRkNaby1lYWZ4V0JCdDk0ZTFjMlhGUzlFIn0sImV4cCI6MTY3NTc3NzE0NH0.A7z-pgd8T-Nr5GyptKfAhzGy1Rw6gipvG3d2Q_rDO1Q";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL + "/address"
 
 const initialState = {
     countries: [],
@@ -34,31 +33,16 @@ const addressSlice = createSlice({
 export default addressSlice.reducer;
 
 export const fetchCountries = createAsyncThunk('address/countries', async () => {
-    const response = await axios.get(`${ADDRESS_API_URL}/countries`, {
-        headers: {
-            "Authorization": `Bearer ${ADDRESS_API_KEY}`,
-            "Accept": "application/json"
-        }
-    })
-    return response.data.map((country) => country.country_name);
+    const response = await axios.get(`${BACKEND_URL}/countries`);
+    return response.data.map((country) => country.name);
 });
 
 export const fetchProvince = createAsyncThunk('address/province', async (country) => {
-    const response = await axios.get(`${ADDRESS_API_URL}/states/${country}`, {
-        headers: {
-            "Authorization": `Bearer ${ADDRESS_API_KEY}`,
-            "Accept": "application/json"
-        }
-    })
-    return response.data.map((state) => state.state_name);
+    const response = await axios.get(`${BACKEND_URL}/states/${country}`)
+    return response.data.map((state) => state.name);
 })
 
 export const fetchCities = createAsyncThunk('address/cities', async (state) => {
-    const response = await axios.get(`${ADDRESS_API_URL}/cities/${state}`, {
-        headers: {
-            "Authorization": `Bearer ${ADDRESS_API_KEY}`,
-            "Accept": "application/json"
-        }
-    })
-    return response.data.map((city) => city.city_name);
+    const response = await axios.get(`${BACKEND_URL}/cities/${state}`)
+    return response.data.map((city) => city.name);
 })
