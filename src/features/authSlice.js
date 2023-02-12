@@ -43,6 +43,7 @@ const authenticationSlice = createSlice({
             .addMatcher(
                 (action) => /auth.*rejected/.test(action.type),
                 (state, action) => {
+                    console.log(action);
                     state.loading = false
                     state.error = action.payload
                 }
@@ -62,7 +63,7 @@ export const requestLogin = createAsyncThunk('auth/requestLogin', async (data, {
     try {
         return (await axios.post(`${BACKEND_URL}/auth/login`, data)).data
     } catch (e) {
-        return rejectWithValue({ status: e.response.status, message: e.response.data.status })
+        return handleError(e, rejectWithValue)
     }
 })
 
@@ -73,7 +74,6 @@ export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizat
         formData.append('file', data.file[0]);
         return (await axios.post(`${BACKEND_URL}/auth/register/organization`, formData)).data
     } catch (e) {
-        console.log(e)
         return handleError(e, rejectWithValue)
     }
 })
@@ -95,7 +95,6 @@ export const requestJobSeekerSignup = createAsyncThunk('auth/requestJobSeekerSig
 })
 
 export const uploadBusinessRegistration = createAsyncThunk('auth/uploadBusinessRegistration', async (data) => {
-    console.log({ file: data })
     return (await axios.post(`${BACKEND_URL}/auth/upload/file`, { file: data }, { 
         headers: {
             "Content-Type": "multipart/form-data"
@@ -106,7 +105,8 @@ export const uploadBusinessRegistration = createAsyncThunk('auth/uploadBusinessR
 export const { logout } = authenticationSlice.actions;
 
 const handleError = (e, rejectWithValue) => {
+    console.log(e)
     if (e.code === "ERR_NETWORK")
         return rejectWithValue({ status: 500, message: e.message })
-    return rejectWithValue({ status: e.response.status, message: e.response.data.status })
+    return rejectWithValue(e.response.data)
 }

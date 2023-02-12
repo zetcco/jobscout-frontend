@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { DashedArea } from './DashedArea';
 import CloseIcon from '@mui/icons-material/Close';
 
-export const UploadArea = ({ text, register, error, files }) => {
+export const UploadArea = ({ text, register, error, files, multiple }) => {
 
     const hiddenFileInput = useRef(null);
     const { ref, ...rest } = register
@@ -13,21 +13,20 @@ export const UploadArea = ({ text, register, error, files }) => {
         hiddenFileInput.current.click();
     }
 
+    const fileList = files?.length > 0 ? [...files] : []
+
     return (
         <Stack spacing={2}>
             <DashedArea text={text} onClick={handleClick} error={error}/>
             <input type="file" {...rest} ref={(e) => {
                 ref(e)
                 hiddenFileInput.current = e
-            }} style={{ display: 'none' }}/>
+            }} style={{ display: 'none' }}
+            multiple={multiple}/>
             <Box>
                 {
-                    // files && (files.length > 0 && (
-                    //     // files.map()
-                    // ))
+                    fileList.map((file, index) => <Typography variant='subtitle2' key={index}>{file.name}</Typography>)
                 }
-                {/* <Typography>filename.txt</Typography> */}
-                {/* <Typography>filename.txt</Typography> */}
             </Box>
         </Stack>
     )

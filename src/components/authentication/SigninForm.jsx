@@ -1,12 +1,12 @@
 import React from "react";
 import TextField from '@mui/material/TextField';
-import { Avatar, Button, Stack, Typography} from '@mui/material';
+import { Alert, Box, AlertTitle, Avatar, Button, Stack, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
 import { Link as RouterLink } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { requestLogin, selectAuthLoading } from "../../features/authSlice";
+import { requestLogin, selectAuthError, selectAuthLoading } from "../../features/authSlice";
 
 const SigninForm = () => {
 
@@ -14,6 +14,7 @@ const SigninForm = () => {
     const dispatch = useDispatch();
 
     const loading = useSelector(selectAuthLoading);
+    const authError = useSelector(selectAuthError);
 
     const onSubmit = (data) => { 
         dispatch(requestLogin(data))
@@ -28,6 +29,17 @@ const SigninForm = () => {
             <Stack direction={'column'} spacing={15} sx={{ width: '100%' }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Stack direction={'column'} spacing = {2}>
+                        <Box>
+                            {
+                                authError && 
+                                (
+                                    <Alert severity="error">
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>{authError.message}</strong>
+                                    </Alert>
+                                )
+                            }
+                        </Box>
                         <Controller
                             name="email"
                             rules={{ required: true }}
