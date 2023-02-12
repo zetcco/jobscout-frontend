@@ -6,11 +6,6 @@ import { OrganizationProfileCreationForm } from '../../../components/authenticat
 import { selectAuthUser } from '../../../features/authSlice';
 
 export const OrganizationProfileCreation = () => {
-  const authUser = useSelector(selectAuthUser);
-
-  if (authUser)
-      return (<Navigate to={"/home"} replace/>)
-
   return (
     <Grid container>
       <Grid item xs={12}>

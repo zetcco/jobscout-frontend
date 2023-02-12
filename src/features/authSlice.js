@@ -28,20 +28,33 @@ const authenticationSlice = createSlice({
     },
     extraReducers(builder) {
         builder
+            .addCase(requestUserProfile.fulfilled, (state, action) => {
+                let userInfo = {  ...state.userInfo, displayName: action.payload.displayName, displayPicture: action.payload.displayPicture  }
+                state.userInfo = userInfo
+                state.loading = false
+            })
+            .addCase(requestUserProfile.pending, (state, action) => {
+                state.loading = true
+            })
+            .addCase(requestUserProfile.rejected, (state, action) => {
+                console.log(action)
+                state.error = action.payload
+                state.loading = false
+            })
             .addMatcher(
-                (action) => /auth.*fulfilled/.test(action.type),
+                (action) => /auth\/auth.*fulfilled/.test(action.type),
                 (state, action) => {
                     state.loading = false
                     state.token = action.payload.jwtToken
-                    let { name, sub, role } = jwtDecode(state.token)
-                    let userInfo = {name, email: sub, role}
+                    let { sub, role } = jwtDecode(state.token)
+                    let userInfo = {email: sub, role}
                     state.userInfo = userInfo
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
                 }
             )
             .addMatcher(
-                (action) => /auth.*rejected/.test(action.type),
+                (action) => /auth\/.*rejected/.test(action.type),
                 (state, action) => {
                     console.log(action);
                     state.loading = false
@@ -49,7 +62,7 @@ const authenticationSlice = createSlice({
                 }
             )
             .addMatcher(
-                (action) => /auth.*pending/.test(action.type),
+                (action) => /auth\/.*pending/.test(action.type),
                 (state, action) => {
                     state.loading = true
                 }
@@ -59,7 +72,7 @@ const authenticationSlice = createSlice({
 
 export default authenticationSlice.reducer;
 
-export const requestLogin = createAsyncThunk('auth/requestLogin', async (data, { rejectWithValue }) => {
+export const requestLogin = createAsyncThunk('auth/auth/requestLogin', async (data, { rejectWithValue }) => {
     try {
         return (await axios.post(`${BACKEND_URL}/auth/login`, data)).data
     } catch (e) {
@@ -67,7 +80,7 @@ export const requestLogin = createAsyncThunk('auth/requestLogin', async (data, {
     }
 })
 
-export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
+export const requestOrganizationSignup = createAsyncThunk('auth/auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
     try {
         var formData = new FormData()
         formData.append('request', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
@@ -78,7 +91,7 @@ export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizat
     }
 })
 
-export const requestJobCreatorSignup = createAsyncThunk('auth/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
+export const requestJobCreatorSignup = createAsyncThunk('auth/auth/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
     try {
         return (await axios.post(`${BACKEND_URL}/auth/register/jobcreator`, data)).data
     } catch (e) {
@@ -86,7 +99,7 @@ export const requestJobCreatorSignup = createAsyncThunk('auth/requestJobCreatorS
     }
 })
 
-export const requestJobSeekerSignup = createAsyncThunk('auth/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
+export const requestJobSeekerSignup = createAsyncThunk('auth/auth/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
     try {
         return (await axios.post(`${BACKEND_URL}/auth/register/jobseeker`, data)).data
     } catch (e) {
@@ -94,12 +107,19 @@ export const requestJobSeekerSignup = createAsyncThunk('auth/requestJobSeekerSig
     }
 })
 
-export const uploadBusinessRegistration = createAsyncThunk('auth/uploadBusinessRegistration', async (data) => {
+export const uploadBusinessRegistration = createAsyncThunk('auth/auth/uploadBusinessRegistration', async (data) => {
     return (await axios.post(`${BACKEND_URL}/auth/upload/file`, { file: data }, { 
         headers: {
             "Content-Type": "multipart/form-data"
         }
      })).data
+})
+
+export const requestUserProfile = createAsyncThunk('auth/profile/requestUserProfile', async (_, { getState }) => {
+    const state = getState()
+    return (await axios.get(`${BACKEND_URL}/user/`, { headers: {
+        "Authorization": `Bearer ${state.auth.token}`
+    }})).data;
 })
 
 export const { logout } = authenticationSlice.actions;
