@@ -55,7 +55,13 @@ export const Topbar = () => {
                         </IconButton>
                         <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={handleClick}>
                             <Stack direction='row' spacing={0.5}>
-                                <Avatar sx={{ width: 24, height: 24 }}>{ authUser?.displayName && (Array.from(authUser.displayName)[0]) }</Avatar>
+                                {
+                                    authUser?.displayPicture ? (
+                                        <Avatar src={authUser.displayPicture} sx={{ width: 24, height: 24 }}/>
+                                    ) : (
+                                        <Avatar sx={{ width: 24, height: 24 }}>{ authUser?.displayName && (Array.from(authUser.displayName)[0]) }</Avatar>
+                                    )
+                                }
                                 <Typography>{ authUser?.displayName }</Typography>
                                 <KeyboardArrowDownOutlined size='small'/>
                             </Stack>
