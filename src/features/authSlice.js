@@ -2,10 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import jwtDecode from "jwt-decode";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
-
 const initialState = {
-    loading: false,
+    loading: 'idle',
     userInfo: JSON.parse(localStorage.getItem('userInfo')),
     token: JSON.parse(localStorage.getItem('token')),
     error: null
@@ -28,43 +26,52 @@ const authenticationSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(requestUserProfile.fulfilled, (state, action) => {
-                let userInfo = {  ...state.userInfo, displayName: action.payload.displayName, displayPicture: action.payload.displayPicture  }
-                state.userInfo = userInfo
-                state.loading = false
-            })
-            .addCase(requestUserProfile.pending, (state, action) => {
-                state.loading = true
-            })
-            .addCase(requestUserProfile.rejected, (state, action) => {
-                console.log(action)
-                state.error = action.payload
-                state.loading = false
-            })
+            .addMatcher(
+                (action) => /auth\/profile.*fulfilled/.test(action.type),
+                (state, action) => {
+                    state.userInfo = { ...action.payload, ...state.userInfo }
+                    state.loading = 'success'
+                }
+            )
+            .addMatcher(
+                (action) => /auth\/profile.*pending/.test(action.type),
+                (state, action) => {
+                    state.userInfo = { ...action.payload, ...state.userInfo }
+                    state.loading = 'loading'
+                }
+            )
+            .addMatcher(
+                (action) => /auth\/profile.*rejected/.test(action.type),
+                (state, action) => {
+                    console.log(action)
+                    state.error = action.payload
+                    state.loading = 'failed'
+                }
+            )
             .addMatcher(
                 (action) => /auth\/auth.*fulfilled/.test(action.type),
                 (state, action) => {
-                    state.loading = false
                     state.token = action.payload.jwtToken
                     let { sub, role } = jwtDecode(state.token)
                     let userInfo = {email: sub, role}
                     state.userInfo = userInfo
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
+                    state.loading = 'success'
                 }
             )
             .addMatcher(
                 (action) => /auth\/.*rejected/.test(action.type),
                 (state, action) => {
                     console.log(action);
-                    state.loading = false
                     state.error = action.payload
+                    state.loading = 'failed'
                 }
             )
             .addMatcher(
                 (action) => /auth\/.*pending/.test(action.type),
                 (state, action) => {
-                    state.loading = true
+                    state.loading = 'loading'
                 }
             )
     }
@@ -74,7 +81,7 @@ export default authenticationSlice.reducer;
 
 export const requestLogin = createAsyncThunk('auth/auth/requestLogin', async (data, { rejectWithValue }) => {
     try {
-        return (await axios.post(`${BACKEND_URL}/auth/login`, data)).data
+        return (await axios.post(`/auth/login`, data)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
@@ -85,7 +92,7 @@ export const requestOrganizationSignup = createAsyncThunk('auth/auth/requestOrga
         var formData = new FormData()
         formData.append('request', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
         formData.append('file', data.file[0]);
-        return (await axios.post(`${BACKEND_URL}/auth/register/organization`, formData)).data
+        return (await axios.post(`/auth/register/organization`, formData)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
@@ -93,7 +100,7 @@ export const requestOrganizationSignup = createAsyncThunk('auth/auth/requestOrga
 
 export const requestJobCreatorSignup = createAsyncThunk('auth/auth/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
     try {
-        return (await axios.post(`${BACKEND_URL}/auth/register/jobcreator`, data)).data
+        return (await axios.post(`/auth/register/jobcreator`, data)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
@@ -101,14 +108,14 @@ export const requestJobCreatorSignup = createAsyncThunk('auth/auth/requestJobCre
 
 export const requestJobSeekerSignup = createAsyncThunk('auth/auth/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
     try {
-        return (await axios.post(`${BACKEND_URL}/auth/register/jobseeker`, data)).data
+        return (await axios.post(`/auth/register/jobseeker`, data)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
 })
 
 export const uploadBusinessRegistration = createAsyncThunk('auth/auth/uploadBusinessRegistration', async (data) => {
-    return (await axios.post(`${BACKEND_URL}/auth/upload/file`, { file: data }, { 
+    return (await axios.post(`/auth/upload/file`, { file: data }, { 
         headers: {
             "Content-Type": "multipart/form-data"
         }
@@ -117,9 +124,19 @@ export const uploadBusinessRegistration = createAsyncThunk('auth/auth/uploadBusi
 
 export const requestUserProfile = createAsyncThunk('auth/profile/requestUserProfile', async (_, { getState }) => {
     const state = getState()
-    return (await axios.get(`${BACKEND_URL}/user/`, { headers: {
+    return (await axios.get(`/user/`, { headers: {
         "Authorization": `Bearer ${state.auth.token}`
     }})).data;
+})
+
+export const updateDisplayPicture = createAsyncThunk('auth/profile/updateDisplayPicture', async (data, { getState }) => {
+    const state = getState()
+    var formData = new FormData()
+    formData.append('file', data.file[0]);
+    const response = (await axios.put(`/user/display-picture`, formData, { headers: {
+        "Authorization": `Bearer ${state.auth.token}`
+    }})).data;
+    console.log(response);
 })
 
 export const { logout } = authenticationSlice.actions;

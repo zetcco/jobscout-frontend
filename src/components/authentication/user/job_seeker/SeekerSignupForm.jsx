@@ -343,7 +343,7 @@ const SeekerSignupForm = () => {
                         </Grid>
 
                     <Grid item xs={12}>   
-                        <Button type="submit" variant="contained" fullWidth disabled={loading && true}>Continue</Button>
+                        <Button type="submit" variant="contained" fullWidth disabled={loading === 'loading'}>Continue</Button>
                     </Grid>     
                     </Grid>
             </form>
