@@ -1,8 +1,6 @@
 import { Stack, Box, Typography } from '@mui/material';
-import React, { useEffect } from 'react'
 import { useRef } from 'react'
 import { DashedArea } from './DashedArea';
-import CloseIcon from '@mui/icons-material/Close';
 
 export const UploadArea = ({ text, register, error, files, multiple }) => {
 

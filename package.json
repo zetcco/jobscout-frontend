@@ -32,6 +32,7 @@
     "server": "json-server -w .\\src\\server\\mock-db.json -p 3001 -r .\\src\\server\\routes.json",
     "dev": "concurrently \"npm run server\" \"npm start\""
   },
+  "proxy" : "http://localhost:8080",
   "eslintConfig": {
     "extends": [
       "react-app",

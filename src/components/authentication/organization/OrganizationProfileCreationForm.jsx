@@ -1,30 +1,51 @@
-import { Button, Stack, Typography } from '@mui/material'
+import { Alert, AlertTitle, Button, Stack } from '@mui/material'
 import React from 'react'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectAuthLoading, uploadBusinessRegistration } from '../../../features/authSlice'
+import { Navigate } from 'react-router-dom'
+import { selectAuthError, selectAuthLoading, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
 import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard'
 import { UploadArea } from '../../input/UploadArea'
 
 export const OrganizationProfileCreationForm = () => {
   const dispatch = useDispatch();
   const loading = useSelector(selectAuthLoading);
-  const [ file, setFile ] = useState();
+  const authError = useSelector(selectAuthError);
+  const authUser = useSelector(selectAuthUser);
+  const { register, handleSubmit, formState: { errors }, watch } = useForm();
 
-  console.log(file)
+  if(authUser.displayPicture) 
+    return <Navigate to="/home"/>
+
+  const onSubmit = (data) => {
+    dispatch(updateDisplayPicture(data))
+  }
 
   return (
     <CenteredHeaderCard title={"Create your Profile"} >
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
         <Stack spacing={2} sx={{ width: '100%' }}>
-            <UploadArea text={"Click here to Upload Logo"} handleFile={(data) => { setFile(data) }}/>
-            { file && (
-              <Typography>{ file.name }</Typography>
-            ) }
+            {
+                authError && 
+                (
+                    <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        <strong>{authError.message}</strong>
+                    </Alert>
+                )
+            }
+            <UploadArea 
+                register={ register( "file") } 
+                text={"Click here to Upload Profile Picture"}
+                error={errors.file}
+                files={watch("file")}
+            />
             <Stack spacing={2} direction="row">
               <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
-              <Button disabled={loading && true} variant='contained' onClick={() => dispatch(uploadBusinessRegistration(file))} sx={{ width: '100%' }}>Continue</Button>
-          </Stack>
+              <Button type="submit" variant="contained" fullWidth disabled={loading}>Continue</Button>
+            </Stack>
         </Stack>
+        </form>
     </CenteredHeaderCard>
   )
 }

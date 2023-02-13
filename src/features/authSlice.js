@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import jwtDecode from "jwt-decode";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
-
 const initialState = {
     loading: false,
     userInfo: JSON.parse(localStorage.getItem('userInfo')),
@@ -29,27 +27,50 @@ const authenticationSlice = createSlice({
     extraReducers(builder) {
         builder
             .addMatcher(
-                (action) => /auth.*fulfilled/.test(action.type),
+                (action) => /auth\/profile.*fulfilled/.test(action.type),
                 (state, action) => {
+                    const userInfo = { ...action.payload, ...state.userInfo }
+                    state.userInfo = userInfo
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     state.loading = false
+                }
+            )
+            .addMatcher(
+                (action) => /auth\/profile.*pending/.test(action.type),
+                (state, action) => {
+                    state.loading = true
+                }
+            )
+            .addMatcher(
+                (action) => /auth\/profile.*rejected/.test(action.type),
+                (state, action) => {
+                    console.log(action)
+                    state.error = action.payload
+                    state.loading = false
+                }
+            )
+            .addMatcher(
+                (action) => /auth\/auth.*fulfilled/.test(action.type),
+                (state, action) => {
                     state.token = action.payload.jwtToken
-                    let { name, sub, role } = jwtDecode(state.token)
-                    let userInfo = {name, email: sub, role}
+                    let { sub, role } = jwtDecode(state.token)
+                    let userInfo = {email: sub, role}
                     state.userInfo = userInfo
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
+                    state.loading = false
                 }
             )
             .addMatcher(
-                (action) => /auth.*rejected/.test(action.type),
+                (action) => /auth\/.*rejected/.test(action.type),
                 (state, action) => {
                     console.log(action);
-                    state.loading = false
                     state.error = action.payload
+                    state.loading = false
                 }
             )
             .addMatcher(
-                (action) => /auth.*pending/.test(action.type),
+                (action) => /auth\/.*pending/.test(action.type),
                 (state, action) => {
                     state.loading = true
                 }
@@ -59,54 +80,74 @@ const authenticationSlice = createSlice({
 
 export default authenticationSlice.reducer;
 
-export const requestLogin = createAsyncThunk('auth/requestLogin', async (data, { rejectWithValue }) => {
+export const requestLogin = createAsyncThunk('auth/auth/requestLogin', async (data, { rejectWithValue }) => {
     try {
-        return (await axios.post(`${BACKEND_URL}/auth/login`, data)).data
+        return (await axios.post(`/auth/login`, data)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
 })
 
-export const requestOrganizationSignup = createAsyncThunk('auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
+export const requestOrganizationSignup = createAsyncThunk('auth/auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
     try {
         var formData = new FormData()
         formData.append('request', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
         formData.append('file', data.file[0]);
-        return (await axios.post(`${BACKEND_URL}/auth/register/organization`, formData)).data
+        return (await axios.post(`/auth/register/organization`, formData)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
 })
 
-export const requestJobCreatorSignup = createAsyncThunk('auth/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
+export const requestJobCreatorSignup = createAsyncThunk('auth/auth/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
     try {
-        return (await axios.post(`${BACKEND_URL}/auth/register/jobcreator`, data)).data
+        return (await axios.post(`/auth/register/jobcreator`, data)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
 })
 
-export const requestJobSeekerSignup = createAsyncThunk('auth/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
+export const requestJobSeekerSignup = createAsyncThunk('auth/auth/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
     try {
-        return (await axios.post(`${BACKEND_URL}/auth/register/jobseeker`, data)).data
+        return (await axios.post(`/auth/register/jobseeker`, data)).data
     } catch (e) {
         return handleError(e, rejectWithValue)
     }
 })
 
-export const uploadBusinessRegistration = createAsyncThunk('auth/uploadBusinessRegistration', async (data) => {
-    return (await axios.post(`${BACKEND_URL}/auth/upload/file`, { file: data }, { 
+export const uploadBusinessRegistration = createAsyncThunk('auth/auth/uploadBusinessRegistration', async (data) => {
+    return (await axios.post(`/auth/upload/file`, { file: data }, { 
         headers: {
             "Content-Type": "multipart/form-data"
         }
      })).data
 })
 
+export const requestUserProfile = createAsyncThunk('auth/profile/requestUserProfile', async (_, { getState }) => {
+    const state = getState()
+    return (await axios.get(`/user/`, { headers: {
+        "Authorization": `Bearer ${state.auth.token}`
+    }})).data;
+})
+
+export const updateDisplayPicture = createAsyncThunk('auth/profile/updateDisplayPicture', async (data, { getState, rejectWithValue }) => {
+    try {
+        const state = getState()
+        var formData = new FormData()
+        formData.append('file', data.file[0]);
+        return (await axios.put(`/user/display-picture`, formData, { headers: {
+            "Authorization": `Bearer ${state.auth.token}`
+        }})).data;
+    } catch (e) {
+        return handleError(e, rejectWithValue)
+    }
+})
+
 export const { logout } = authenticationSlice.actions;
 
 const handleError = (e, rejectWithValue) => {
     console.log(e)
-    if (e.code === "ERR_NETWORK")
-        return rejectWithValue({ status: 500, message: e.message })
+    if (e.response.status === 500)
+        return rejectWithValue({ status: 500, message: (e.response.data.message ? e.response.data.message : "Internal Server Error") })
     return rejectWithValue(e.response.data)
 }

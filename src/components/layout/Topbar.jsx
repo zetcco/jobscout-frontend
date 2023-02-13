@@ -1,16 +1,20 @@
-import { AccountCircle, ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
-import { AppBar, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
-import { useState } from "react";
+import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
+import { AppBar, Avatar, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, selectAuthUser } from '../../features/authSlice'
+import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 
 export const Topbar = () => {
 
-    const authUser = useSelector(selectAuthUser)
+    const authUser = useSelector(selectAuthUser);
     const [anchorEl, setAnchorEl] = useState(null);
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(requestUserProfile())
+    }, [dispatch])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -51,8 +55,14 @@ export const Topbar = () => {
                         </IconButton>
                         <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={handleClick}>
                             <Stack direction='row' spacing={0.5}>
-                                <AccountCircle size='large'/>
-                                <Typography>{ authUser.name }</Typography>
+                                {
+                                    authUser?.displayPicture ? (
+                                        <Avatar src={authUser.displayPicture} sx={{ width: 24, height: 24 }}/>
+                                    ) : (
+                                        <Avatar sx={{ width: 24, height: 24 }}>{ authUser?.displayName && (Array.from(authUser.displayName)[0]) }</Avatar>
+                                    )
+                                }
+                                <Typography>{ authUser?.displayName }</Typography>
                                 <KeyboardArrowDownOutlined size='small'/>
                             </Stack>
                         </IconButton>
