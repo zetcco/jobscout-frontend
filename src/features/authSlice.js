@@ -29,14 +29,15 @@ const authenticationSlice = createSlice({
             .addMatcher(
                 (action) => /auth\/profile.*fulfilled/.test(action.type),
                 (state, action) => {
-                    state.userInfo = { ...action.payload, ...state.userInfo }
+                    const userInfo = { ...action.payload, ...state.userInfo }
+                    state.userInfo = userInfo
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     state.loading = false
                 }
             )
             .addMatcher(
                 (action) => /auth\/profile.*pending/.test(action.type),
                 (state, action) => {
-                    state.userInfo = { ...action.payload, ...state.userInfo }
                     state.loading = true
                 }
             )
