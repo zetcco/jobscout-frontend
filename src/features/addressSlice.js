@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL + "/address"
-
 const initialState = {
     countries: [],
     province: [],
@@ -33,16 +31,16 @@ const addressSlice = createSlice({
 export default addressSlice.reducer;
 
 export const fetchCountries = createAsyncThunk('address/countries', async () => {
-    const response = await axios.get(`${BACKEND_URL}/countries`);
+    const response = await axios.get(`/address/countries`);
     return response.data.map((country) => country.name);
 });
 
 export const fetchProvince = createAsyncThunk('address/province', async (country) => {
-    const response = await axios.get(`${BACKEND_URL}/states/${country}`)
+    const response = await axios.get(`/address/states/${country}`)
     return response.data.map((state) => state.name);
 })
 
 export const fetchCities = createAsyncThunk('address/cities', async (state) => {
-    const response = await axios.get(`${BACKEND_URL}/cities/${state}`)
+    const response = await axios.get(`/address/cities/${state}`)
     return response.data.map((city) => city.name);
 })
