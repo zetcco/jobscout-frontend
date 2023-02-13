@@ -3,7 +3,7 @@ import axios from "axios"
 import jwtDecode from "jwt-decode";
 
 const initialState = {
-    loading: 'idle',
+    loading: false,
     userInfo: JSON.parse(localStorage.getItem('userInfo')),
     token: JSON.parse(localStorage.getItem('token')),
     error: null
@@ -30,14 +30,14 @@ const authenticationSlice = createSlice({
                 (action) => /auth\/profile.*fulfilled/.test(action.type),
                 (state, action) => {
                     state.userInfo = { ...action.payload, ...state.userInfo }
-                    state.loading = 'success'
+                    state.loading = false
                 }
             )
             .addMatcher(
                 (action) => /auth\/profile.*pending/.test(action.type),
                 (state, action) => {
                     state.userInfo = { ...action.payload, ...state.userInfo }
-                    state.loading = 'loading'
+                    state.loading = true
                 }
             )
             .addMatcher(
@@ -45,7 +45,7 @@ const authenticationSlice = createSlice({
                 (state, action) => {
                     console.log(action)
                     state.error = action.payload
-                    state.loading = 'failed'
+                    state.loading = false
                 }
             )
             .addMatcher(
@@ -57,7 +57,7 @@ const authenticationSlice = createSlice({
                     state.userInfo = userInfo
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
-                    state.loading = 'success'
+                    state.loading = false
                 }
             )
             .addMatcher(
@@ -65,13 +65,13 @@ const authenticationSlice = createSlice({
                 (state, action) => {
                     console.log(action);
                     state.error = action.payload
-                    state.loading = 'failed'
+                    state.loading = false
                 }
             )
             .addMatcher(
                 (action) => /auth\/.*pending/.test(action.type),
                 (state, action) => {
-                    state.loading = 'loading'
+                    state.loading = true
                 }
             )
     }
@@ -129,21 +129,24 @@ export const requestUserProfile = createAsyncThunk('auth/profile/requestUserProf
     }})).data;
 })
 
-export const updateDisplayPicture = createAsyncThunk('auth/profile/updateDisplayPicture', async (data, { getState }) => {
-    const state = getState()
-    var formData = new FormData()
-    formData.append('file', data.file[0]);
-    const response = (await axios.put(`/user/display-picture`, formData, { headers: {
-        "Authorization": `Bearer ${state.auth.token}`
-    }})).data;
-    console.log(response);
+export const updateDisplayPicture = createAsyncThunk('auth/profile/updateDisplayPicture', async (data, { getState, rejectWithValue }) => {
+    try {
+        const state = getState()
+        var formData = new FormData()
+        formData.append('file', data.file[0]);
+        return (await axios.put(`/user/display-picture`, formData, { headers: {
+            "Authorization": `Bearer ${state.auth.token}`
+        }})).data;
+    } catch (e) {
+        return handleError(e, rejectWithValue)
+    }
 })
 
 export const { logout } = authenticationSlice.actions;
 
 const handleError = (e, rejectWithValue) => {
     console.log(e)
-    if (e.code === "ERR_NETWORK")
-        return rejectWithValue({ status: 500, message: e.message })
+    if (e.response.status === 500)
+        return rejectWithValue({ status: 500, message: (e.response.data.message ? e.response.data.message : "Internal Server Error") })
     return rejectWithValue(e.response.data)
 }
