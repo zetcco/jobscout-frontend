@@ -14,7 +14,7 @@ export const OrganizationProfileCreationForm = () => {
   const authUser = useSelector(selectAuthUser);
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
 
-  if(authUser.displayPicture) 
+  if(authUser?.displayPicture) 
     return <Navigate to="/home"/>
 
   const onSubmit = (data) => {
