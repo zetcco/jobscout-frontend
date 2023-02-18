@@ -10,6 +10,7 @@ const initialState = {
 }
 
 export const selectAuthUser = (state) => state.auth.userInfo;
+export const selectAuthUserToken = (state) => state.auth.token;
 export const selectAuthError = (state) => state.auth.error;
 export const selectAuthLoading = (state) => state.auth.loading;
 
@@ -53,8 +54,8 @@ const authenticationSlice = createSlice({
                 (action) => /auth\/auth.*fulfilled/.test(action.type),
                 (state, action) => {
                     state.token = action.payload.jwtToken
-                    let { sub, role } = jwtDecode(state.token)
-                    let userInfo = {email: sub, role}
+                    let { sub, id, role } = jwtDecode(state.token)
+                    let userInfo = {id, email: sub, role}
                     state.userInfo = userInfo
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
