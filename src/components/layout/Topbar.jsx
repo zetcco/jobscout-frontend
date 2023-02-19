@@ -1,44 +1,25 @@
 import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
-import { AppBar, Avatar, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { AppBar, Avatar, Badge, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { AvatarWithInitials } from "components/AvatarWithInitials";
+import { selectNotifications } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import SockJS from "sockjs-client";
-import { over } from "stompjs";
-import { logout, requestUserProfile, selectAuthUser, selectAuthUserToken } from '../../features/authSlice'
+import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 
-var stompClient = null;
-
 export const Topbar = () => {
 
-    const authUser = useSelector(selectAuthUser);
-    const authToken = useSelector(selectAuthUserToken);
-    const [anchorEl, setAnchorEl] = useState(null);
     const dispatch = useDispatch()
+    const authUser = useSelector(selectAuthUser);
+    const notifications = useSelector(selectNotifications)
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
 
     useEffect(() => {
         dispatch(requestUserProfile())
-        let sock = new SockJS('http://localhost:8080/ws')
-        stompClient = over(sock);
-        console.log(authToken);
-        stompClient.connect({"token": authToken}, () => {
-            stompClient.subscribe("/all/notify", (payload) => { console.log(payload) })
-        }, (error) => {
-            console.error(error);
-        })
     }, [dispatch])
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -63,10 +44,29 @@ export const Topbar = () => {
                         <IconButton size='large' color='inherit'>
                             <DashboardCustomizeOutlined />
                         </IconButton>
-                        <IconButton size='large' color='inherit'>
-                            <NotificationsNoneOutlined/>
+                        <IconButton size='large' color='inherit' onClick={(e) => { setNotificationAnchorEl(e.target) }}>
+                            <Badge badgeContent={notifications.filter((val) => val.status === "UNREAD").length} color="error">
+                                <NotificationsNoneOutlined/>
+                            </Badge>
                         </IconButton>
-                        <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={handleClick}>
+                        <Popover open={Boolean(notificationAnchorEl)} anchorEl={notificationAnchorEl} onClose={() => { setNotificationAnchorEl(null) }} anchorOrigin={{ vertical: 'bottom', horizontal: 'right', }}>
+                            <BasicCard>
+                                <Stack direction={"column"} spacing={2}>                           
+                                    {
+                                        notifications.map((notification, index) => (
+                                            <Stack direction={"row"} key={index}>
+                                                <Stack direction={"column"}>
+                                                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>{notification.header}</Typography>
+                                                    <Typography variant="subtitle1">{notification.content}</Typography>
+                                                </Stack>
+                                                <Box sx={{ backgroundColor: "primary.main", height: "10px", widht: "10px" }}></Box>
+                                            </Stack>
+                                        ))
+                                    }
+                                </Stack>
+                            </BasicCard>
+                        </Popover>
+                        <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={(e) => { setAnchorEl(e.target) }}>
                             <Stack direction='row' spacing={0.5}>
                                 {
                                     authUser?.displayPicture ? (
@@ -79,7 +79,7 @@ export const Topbar = () => {
                                 <KeyboardArrowDownOutlined size='small'/>
                             </Stack>
                         </IconButton>
-                        <Popover id={id} open={open} anchorEl={anchorEl} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left', }}>
+                        <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => { setAnchorEl(null) }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => dispatch(logout())}>Logout</Button>

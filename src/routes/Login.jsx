@@ -8,8 +8,9 @@ export const Login = () => {
 
     const authUser = useSelector(selectAuthUser);
 
-    if (authUser)
+    if (authUser) 
         return (<Navigate to={"/home"} replace/>)
+    
 
     return (
     <Grid container>
