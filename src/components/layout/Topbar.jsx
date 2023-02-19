@@ -2,18 +2,31 @@ import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNon
 import { AppBar, Avatar, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
+import SockJS from "sockjs-client";
+import { over } from "stompjs";
+import { logout, requestUserProfile, selectAuthUser, selectAuthUserToken } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
+
+var stompClient = null;
 
 export const Topbar = () => {
 
     const authUser = useSelector(selectAuthUser);
+    const authToken = useSelector(selectAuthUserToken);
     const [anchorEl, setAnchorEl] = useState(null);
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(requestUserProfile())
+        let sock = new SockJS('http://localhost:8080/ws')
+        stompClient = over(sock);
+        console.log(authToken);
+        stompClient.connect({"token": authToken}, () => {
+            stompClient.subscribe("/all/notify", (payload) => { console.log(payload) })
+        }, (error) => {
+            console.error(error);
+        })
     }, [dispatch])
 
     const handleClick = (event) => {
