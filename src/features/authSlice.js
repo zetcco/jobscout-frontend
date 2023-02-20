@@ -85,7 +85,7 @@ export const requestLogin = createAsyncThunk('auth/auth/requestLogin', async (da
     try {
         return (await axios.post(`/auth/login`, data)).data
     } catch (e) {
-        return handleError(e, rejectWithValue)
+        return handleCommsError(e, rejectWithValue)
     }
 })
 
@@ -96,7 +96,7 @@ export const requestOrganizationSignup = createAsyncThunk('auth/auth/requestOrga
         formData.append('file', data.file[0]);
         return (await axios.post(`/auth/register/organization`, formData)).data
     } catch (e) {
-        return handleError(e, rejectWithValue)
+        return handleCommsError(e, rejectWithValue)
     }
 })
 
@@ -104,7 +104,7 @@ export const requestJobCreatorSignup = createAsyncThunk('auth/auth/requestJobCre
     try {
         return (await axios.post(`/auth/register/jobcreator`, data)).data
     } catch (e) {
-        return handleError(e, rejectWithValue)
+        return handleCommsError(e, rejectWithValue)
     }
 })
 
@@ -112,7 +112,7 @@ export const requestJobSeekerSignup = createAsyncThunk('auth/auth/requestJobSeek
     try {
         return (await axios.post(`/auth/register/jobseeker`, data)).data
     } catch (e) {
-        return handleError(e, rejectWithValue)
+        return handleCommsError(e, rejectWithValue)
     }
 })
 
@@ -140,13 +140,13 @@ export const updateDisplayPicture = createAsyncThunk('auth/profile/updateDisplay
             "Authorization": `Bearer ${state.auth.token}`
         }})).data;
     } catch (e) {
-        return handleError(e, rejectWithValue)
+        return handleCommsError(e, rejectWithValue)
     }
 })
 
 export const { logout } = authenticationSlice.actions;
 
-const handleError = (e, rejectWithValue) => {
+export const handleCommsError = (e, rejectWithValue) => {
     console.log(e)
     if (e.response.status === 500)
         return rejectWithValue({ status: 500, message: (e.response.data.message ? e.response.data.message : "Internal Server Error") })
