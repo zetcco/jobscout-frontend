@@ -3,7 +3,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { AppBar, Avatar, Badge, Box, Button, IconButton, Menu, MenuItem, Popover, Stack, Toolbar, Typography } from "@mui/material"
 import { height } from "@mui/system";
 import { AvatarWithInitials } from "components/AvatarWithInitials";
-import { selectNotifications } from "features/notificationSlice";
+import { fetchNotifications, selectNotifications, selectNotificationsLoading, timeDifference } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
@@ -15,12 +15,14 @@ export const Topbar = () => {
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
     const notifications = useSelector(selectNotifications)
+    const notificationsLoading = useSelector(selectNotificationsLoading);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
 
     useEffect(() => {
         dispatch(requestUserProfile())
+        dispatch(fetchNotifications(2))
     }, [dispatch])
 
     return (
@@ -59,11 +61,11 @@ export const Topbar = () => {
                             PaperProps={{
                                 style: {
                                     maxHeight: 72 * 4.5,
-                                    width: '35ch'
+                                    width: '42ch'
                                 }
                             }}
                         >
-                            {
+                            {   
                                 notifications.map((notification, index) => (
                                     <MenuItem key={index}>
                                         <Stack direction={"row"} justifyContent="space-between" width="100%" alignItems="center" key={index}>
@@ -74,11 +76,18 @@ export const Topbar = () => {
                                                     textOverflow: "ellipsis"
                                                 }}>{notification.content}</Typography>
                                             </Stack>
+                                            <Stack direction={"row"} spacing={1}>
                                             { notification.status === "UNREAD" && <CircleIcon sx={{ width: 16, height: 16 }} fontSize="small" color="primary"/> }
+                                            <Typography variant="caption">{ timeDifference(new Date(), new Date(notification.timestamp)) }</Typography> 
+                                            </Stack>
                                         </Stack>
                                     </MenuItem>
                                 ))
                             }
+                            {notificationsLoading && <Typography>Loading</Typography>}
+                            <MenuItem onClick={ () => dispatch(fetchNotifications(2)) }>
+                                <Typography variant="subtitle2">Load More</Typography> 
+                            </MenuItem>
                         </Menu>
                         <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={(e) => { setAnchorEl(e.target) }}>
                             <Stack direction='row' spacing={0.5}>
