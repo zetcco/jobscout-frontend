@@ -1,4 +1,4 @@
-import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSelector, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const notificationAdapter = createEntityAdapter({
@@ -44,6 +44,10 @@ export const {
 } = notificationAdapter.getSelectors(state => state.notification)
 export const selectNotificationsLoading = (state) => state.notification.loading;
 export const { setNewNotification, setError } = notificationSlice.actions;
+export const selectUnreadNotificationCount = createSelector(
+    [selectNotifications],
+    (notifications) => notifications.filter((notification) => notification.status ===  "UNREAD").length
+)
 
 export const subscribeToNotification = (dispatch, getState) => {
     const state = getState();
