@@ -1,21 +1,18 @@
 import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
-import CircleIcon from '@mui/icons-material/Circle';
-import { AppBar, Avatar, Badge, Box, Button, IconButton, Menu, MenuItem, Popover, Stack, Toolbar, Typography } from "@mui/material"
-import { height } from "@mui/system";
-import { AvatarWithInitials } from "components/AvatarWithInitials";
-import { fetchNotifications, selectNotifications, selectNotificationsLoading, timeDifference } from "features/notificationSlice";
+import { AppBar, Avatar, Badge, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
+import { NotificationPanel } from "components/notification/NotificationPanel";
 
 export const Topbar = () => {
 
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
-    const notifications = useSelector(selectNotifications)
-    const notificationsLoading = useSelector(selectNotificationsLoading);
+    const unreadNotificationCount = useSelector(selectUnreadNotificationCount);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
@@ -49,46 +46,11 @@ export const Topbar = () => {
                             <DashboardCustomizeOutlined />
                         </IconButton>
                         <IconButton size='large' color='inherit' onClick={(e) => { setNotificationAnchorEl(e.target) }}>
-                            <Badge badgeContent={notifications.filter((val) => val.status === "UNREAD").length} color="error">
+                            <Badge badgeContent={unreadNotificationCount} color="error">
                                 <NotificationsNoneOutlined/>
                             </Badge>
                         </IconButton>
-                        <Menu
-                            open={Boolean(notificationAnchorEl)}
-                            anchorEl={notificationAnchorEl}
-                            onClose={() => { setNotificationAnchorEl(null) }}
-                            // anchorOrigin={{ vertical: 'bottom', horizontal: 'right', }}
-                            PaperProps={{
-                                style: {
-                                    maxHeight: 72 * 4.5,
-                                    width: '42ch'
-                                }
-                            }}
-                        >
-                            {   
-                                notifications.map((notification, index) => (
-                                    <MenuItem key={index}>
-                                        <Stack direction={"row"} justifyContent="space-between" width="100%" alignItems="center" key={index}>
-                                            <Stack direction={"column"} width={ notification.status === "UNREAD" ? "90%" : "100%" }>
-                                                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>{notification.header}</Typography>
-                                                <Typography variant="subtitle1" sx={{
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis"
-                                                }}>{notification.content}</Typography>
-                                            </Stack>
-                                            <Stack direction={"row"} spacing={1}>
-                                            { notification.status === "UNREAD" && <CircleIcon sx={{ width: 16, height: 16 }} fontSize="small" color="primary"/> }
-                                            <Typography variant="caption">{ timeDifference(new Date(), new Date(notification.timestamp)) }</Typography> 
-                                            </Stack>
-                                        </Stack>
-                                    </MenuItem>
-                                ))
-                            }
-                            {notificationsLoading && <Typography>Loading</Typography>}
-                            <MenuItem onClick={ () => dispatch(fetchNotifications(2)) }>
-                                <Typography variant="subtitle2">Load More</Typography> 
-                            </MenuItem>
-                        </Menu>
+                        <NotificationPanel anchorEl={notificationAnchorEl} setAnchorEl={setNotificationAnchorEl}/>
                         <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={(e) => { setAnchorEl(e.target) }}>
                             <Stack direction='row' spacing={0.5}>
                                 {
