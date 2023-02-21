@@ -1,27 +1,20 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { handleCommsError } from "./authSlice";
 
-const initialState = {
-    notifications: [],
+const notificationAdapter = createEntityAdapter({
+    sortComparer: (a, b) => b.timestamp.localeCompare(a.timestamp)
+})
+const initialState = notificationAdapter.getInitialState({
     page: 0,
     loading: false,
     error: null,
-};
-
-export const selectNotifications = (state) => state.notification.notifications;
-export const selectNotificationsLoading = (state) => state.notification.loading;
+})
 
 const notificationSlice = createSlice({
     name: "notification",
     initialState,
     reducers: {
-        setNewNotification: (state, action) => {
-            state.notifications = [
-                JSON.parse(action.payload.body),
-                ...state.notifications
-            ];
-        },
+        setNewNotification: notificationAdapter.addOne,
         setError: (state, action) => {
             state.error = action.payload;
         },
@@ -29,7 +22,7 @@ const notificationSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(fetchNotifications.fulfilled, (state, action) => {
-                state.notifications = [ ...state.notifications, ...action.payload ]
+                notificationAdapter.upsertMany(state, action.payload)
                 state.page = state.page + 1
                 state.loading = false
             })
@@ -44,18 +37,23 @@ const notificationSlice = createSlice({
 });
 
 export default notificationSlice.reducer;
+export const {
+    selectAll: selectNotifications,
+    selectById: selectNotificationById,
+    selectByIds: selectNotificationIds
+} = notificationAdapter.getSelectors(state => state.notification)
+export const selectNotificationsLoading = (state) => state.notification.loading;
 export const { setNewNotification, setError } = notificationSlice.actions;
 
-// export const subscribeToNotification = createAsyncThunk('notifications/subscribe', async (_, {getState, rejectWithValue}) => {
 export const subscribeToNotification = (dispatch, getState) => {
     const state = getState();
     state.websocket.stompClient.subscribe("/all/notify", (payload) => {
-        dispatch(setNewNotification(payload));
+        dispatch(setNewNotification(JSON.parse(payload.body)));
     });
     state.websocket.stompClient.subscribe(
         `/user/${state.auth.userInfo.id}/notify`,
         (payload) => {
-            dispatch(setNewNotification(payload));
+            dispatch(setNewNotification(JSON.parse( payload.body )));
         }
     );
 };
