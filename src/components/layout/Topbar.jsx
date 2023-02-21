@@ -1,31 +1,26 @@
 import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
-import { AppBar, Avatar, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { AppBar, Avatar, Badge, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
+import { NotificationPanel } from "components/notification/NotificationPanel";
 
 export const Topbar = () => {
 
-    const authUser = useSelector(selectAuthUser);
-    const [anchorEl, setAnchorEl] = useState(null);
     const dispatch = useDispatch()
+    const authUser = useSelector(selectAuthUser);
+    const unreadNotificationCount = useSelector(selectUnreadNotificationCount);
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
 
     useEffect(() => {
         dispatch(requestUserProfile())
+        dispatch(fetchNotifications(2))
     }, [dispatch])
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -50,10 +45,13 @@ export const Topbar = () => {
                         <IconButton size='large' color='inherit'>
                             <DashboardCustomizeOutlined />
                         </IconButton>
-                        <IconButton size='large' color='inherit'>
-                            <NotificationsNoneOutlined/>
+                        <IconButton size='large' color='inherit' onClick={(e) => { setNotificationAnchorEl(e.target) }}>
+                            <Badge badgeContent={unreadNotificationCount} color="error">
+                                <NotificationsNoneOutlined/>
+                            </Badge>
                         </IconButton>
-                        <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={handleClick}>
+                        <NotificationPanel anchorEl={notificationAnchorEl} setAnchorEl={setNotificationAnchorEl}/>
+                        <IconButton edge='end' aria-haspopup='true' color='inherit' onClick={(e) => { setAnchorEl(e.target) }}>
                             <Stack direction='row' spacing={0.5}>
                                 {
                                     authUser?.displayPicture ? (
@@ -66,7 +64,7 @@ export const Topbar = () => {
                                 <KeyboardArrowDownOutlined size='small'/>
                             </Stack>
                         </IconButton>
-                        <Popover id={id} open={open} anchorEl={anchorEl} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left', }}>
+                        <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => { setAnchorEl(null) }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => dispatch(logout())}>Logout</Button>
