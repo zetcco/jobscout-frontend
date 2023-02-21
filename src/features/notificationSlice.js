@@ -47,15 +47,20 @@ export const { setNewNotification, setError } = notificationSlice.actions;
 
 export const subscribeToNotification = (dispatch, getState) => {
     const state = getState();
-    state.websocket.stompClient.subscribe("/all/notify", (payload) => {
-        dispatch(setNewNotification(JSON.parse(payload.body)));
-    });
-    state.websocket.stompClient.subscribe(
-        `/user/${state.auth.userInfo.id}/notify`,
-        (payload) => {
-            dispatch(setNewNotification(JSON.parse( payload.body )));
-        }
-    );
+    if (state.auth.token != null) {
+        state.websocket.stompClient.subscribe("/all/notify", (payload) => {
+            dispatch(setNewNotification(JSON.parse(payload.body)));
+        },
+        {"token": state.auth.token}
+        );
+        state.websocket.stompClient.subscribe(
+            `/user/${state.auth.userInfo.id}/notify`,
+            (payload) => {
+                dispatch(setNewNotification(JSON.parse( payload.body )));
+            },
+            {"token": state.auth.token}
+        );
+    }
 };
 
 export const fetchNotifications = createAsyncThunk('notification/fetchNotification', async (limit, { getState, rejectWithValue }) => {
