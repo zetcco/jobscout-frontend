@@ -13,17 +13,25 @@ import { selectAuthUserToken } from 'features/authSlice';
 export const AddSkillsForm = () => {
   const [field, setField] = useState();
   const [skill, setSkill] = useState();
-  const [skills, setSkills] = useState(['react', 'mongo']);
+  const [skills, setSkills] = useState([
+    // 'react',
+    // 'mongo',
+    // 'postgres',
+    // 'angular',
+    // 'springboot',
+    // 'node',
+    // 'laraval',
+  ]);
   const [selected, setSeletected] = useState([]);
   const authToken = useSelector(selectAuthUserToken);
 
-  useEffect(() => {
-    console.log('Page Load');
-    axios.get(
-        `/skills`,
-         { headers: { Authorization: `Bearer ${authToken}` } }
-         );
-  }, []);
+//   useEffect(async () => {
+//     // console.log('Page Load');
+//     const response = await axios.get(`/skills`, {
+//       headers: { Authorization: `Bearer ${authToken}` },
+//     });
+//     setSkills(response.data);
+//   }, []);
 
   return (
     <CenteredHeaderCard
