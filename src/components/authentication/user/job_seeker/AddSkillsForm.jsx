@@ -33,6 +33,17 @@ export const AddSkillsForm = () => {
 //     setSkills(response.data);
 //   }, []);
 
+useEffect(() => {
+  fetchSkills();
+}, []);
+
+const fetchSkills = async () => {
+  const response = await axios.get(`/skills/`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    setSkills(response.data);
+}
+
   return (
     <CenteredHeaderCard
       title={'Add your Skills'}
@@ -87,7 +98,7 @@ export const AddSkillsForm = () => {
                 label='Select your Field'
               >
                 {skills.map((item) => (
-                  <MenuItem value={item}>{item}</MenuItem>
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
