@@ -33,12 +33,14 @@ export const { webSocketConnected, webSocketFailed } = websocketSlice.actions;
 
 export const connectToWebSocket = (dispatch, getState) => {
     const state = getState();
-    let sock = new SockJS('http://localhost:8080/ws')
+    let sock = new SockJS('/ws')
+    console.log(sock)
     let stompClient = over(sock);
     stompClient.connect({"token": state.auth.token}, () => {
         dispatch(webSocketConnected(stompClient))
     }, (error) => {
         dispatch(webSocketFailed(error))
+        console.error(error)
         console.error("Websocket connection error");
     })
 }
