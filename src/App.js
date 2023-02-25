@@ -24,6 +24,7 @@ import BlogPost from "./routes/blog/BlogPost";
 import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
+import { Meeting } from "components/profile/Message/Meeting";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -88,6 +89,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path="/" element={<NavigationLayout/>}>
           <Route path="messages" element={<Messaging/>}/>
+          <Route path="meeting" element={<Meeting/>}/>
         </Route>
 
         <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>
