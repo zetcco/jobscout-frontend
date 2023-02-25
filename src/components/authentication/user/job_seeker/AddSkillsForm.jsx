@@ -25,24 +25,29 @@ export const AddSkillsForm = () => {
   const [selected, setSeletected] = useState([]);
   const authToken = useSelector(selectAuthUserToken);
 
-//   useEffect(async () => {
-//     // console.log('Page Load');
-//     const response = await axios.get(`/skills`, {
-//       headers: { Authorization: `Bearer ${authToken}` },
-//     });
-//     setSkills(response.data);
-//   }, []);
+  //   useEffect(async () => {
+  //     // console.log('Page Load');
+  //     const response = await axios.get(`/skills`, {
+  //       headers: { Authorization: `Bearer ${authToken}` },
+  //     });
+  //     setSkills(response.data);
+  //   }, []);
 
-useEffect(() => {
-  fetchSkills();
-}, []);
+  useEffect(() => {
+    fetchSkills();
+  }, []);
 
-const fetchSkills = async () => {
-  const response = await axios.get(`/skills/`, {
+  const fetchSkills = async () => {
+    const response = await axios.get(`/skills/`, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
+
+    const searchResponse = await axios.get(`/skills/search?q=react`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+
     setSkills(response.data);
-}
+  };
 
   return (
     <CenteredHeaderCard
