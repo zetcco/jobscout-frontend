@@ -26,5 +26,5 @@ export const ProtectedRoute = ({ role, redirect, children }) => {
     if (!websocketConnected && !websocketLoading)
         dispatch(connectToWebSocket)
     
-    return children ? children : <Outlet/>
+    return <Outlet/>
 }
