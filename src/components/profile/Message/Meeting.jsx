@@ -16,7 +16,6 @@ export const Meeting = () => {
     const localVideo = useRef(null);
 
     const [ remoteVideos, setRemoteVideos ] = useState([])
-    const [ para, setPara ] = useState([])
 
     const [ meetingId, setMeetingId ] = useState('');
 
@@ -31,80 +30,61 @@ export const Meeting = () => {
         getMediaDevices()
     }, [])
 
-    useEffect(() => {
-        console.log("**************")
-        console.log(remoteVideos)
-    }, [remoteVideos])
-
     const onIceCandidate = (data, senderId) => {
-        console.warn(`Recieved ICE_CANDIDATE from ${data}`)
         const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
         rtcPeerConnection.addIceCandidate(data)
-        console.warn(`Set ICE_CANDIDATE ICE_CANDIDATE from ${data}`)
     }
 
     const onAnswerAccept = (data, senderId) => {
         const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
 
-        console.warn(`Recieved ANSWER from ${data}`)
         rtcPeerConnection.setRemoteDescription(data)
-        console.warn(`Set incoming ANSWER from ${data}`)
     }
 
     const onOffer = async (data, senderId) => {
 
         const rtcPeerConnection = getNewPeerConnection(senderId).connection;
 
-        console.warn(`Recieved OFFER from ${senderId}`)
         await rtcPeerConnection.setRemoteDescription(data)
 
-        const stream = await setLocalStreamVideo()
+        // const stream = await setLocalStreamVideo()
+        const stream = await getLocalStream()
 
         stream.getTracks().forEach(track => {
             rtcPeerConnection.addTrack(track, stream)
         });
 
         const answer = rtcPeerConnection.createAnswer()
-        console.warn(`Answer CREATED for user ${senderId}`)
         await rtcPeerConnection.setLocalDescription(answer)
         
         sendMessage(rtcPeerConnection.localDescription.toJSON(), "ANSWER", senderId)
-        console.warn(`Answer SENT for user ${senderId}`)
     }
 
     const joinMeeting = async () => {
-        await setLocalStreamVideo()
+        // await setLocalStreamVideo()
+        const stream = await getLocalStream()
+        setRemoteVideos((prevSate) => [...prevSate, stream])
 
         subscribe(meetingId)
         subscribe(meetingId, user.id)
 
         sendMessage({ content: `User(id: ${user.id}) Joined` }, "JOIN")
-        console.warn(`Sent JOIN message for everyone`)
     }
 
     const onCandidateJoin = async (data) => {
-
-        console.warn(`On response to new user ${data.senderId} JOIN, `)
-
         const rtcPeerConnection = getNewPeerConnection(data.senderId).connection
 
-        setPara([...para, new Date()])
-
-        console.error(remoteVideos)
-        console.log(para)
-
-        const stream = await setLocalStreamVideo()
+        // const stream = await setLocalStreamVideo()
+        const stream = await getLocalStream()
 
         stream.getTracks().forEach(track => {
             rtcPeerConnection.addTrack(track, stream)
         });
 
         let offer = rtcPeerConnection.createOffer();
-        console.warn(`Offer CREATED for user ${data.senderId}`)
         await rtcPeerConnection.setLocalDescription(offer)
 
         sendMessage(rtcPeerConnection.localDescription.toJSON(), "OFFER", data.senderId)
-        console.warn(`Offer SENT for user ${data.senderId}`)
     }
 
     const sendMessage = (data, type, to = null) => {
@@ -127,23 +107,18 @@ export const Meeting = () => {
         );
     }
 
-    const setLocalStreamVideo = async () => {
+    const getLocalStream = async () => {
         const constraint = {
             video: { deviceId: { exact: localStream.deviceId } },
             audio: false
         }
-        let stream = await navigator.mediaDevices.getUserMedia(constraint)
-        localVideo.current.srcObject = stream
-        return stream
+        return await navigator.mediaDevices.getUserMedia(constraint)
     }
 
     const getNewPeerConnection = (senderId = null) => {
 
         const newRTCPeerConnection = new RTCPeerConnection();
         newRTCPeerConnection.ontrack = (event) => {
-            console.log('fired bitch')
-            console.info(remoteVideos)
-            console.info(event.streams[0])
             setRemoteVideos((prevSate) => ([...prevSate, event.streams[0]]))
         }
 
@@ -151,7 +126,6 @@ export const Meeting = () => {
         newRTCPeerConnection.onicecandidate = async (event) => {
             if (event.candidate) {
                 sendMessage(event.candidate, "ICE_CANDIDATE", senderId)
-                console.warn(`Sent ICE_CANDIDATE to ${senderId}`)
             }
         }
 
@@ -166,9 +140,6 @@ export const Meeting = () => {
         answer: onAnswerAccept,
         join: onCandidateJoin
     }
-
-    console.log(remoteVideos)
-    console.log(para)
 
     return (
         <>
