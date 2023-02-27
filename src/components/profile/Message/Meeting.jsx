@@ -16,6 +16,7 @@ export const Meeting = () => {
     const localVideo = useRef(null);
 
     const [ remoteVideos, setRemoteVideos ] = useState([])
+    const [ para, setPara ] = useState([])
 
     const [ meetingId, setMeetingId ] = useState('');
 
@@ -30,9 +31,12 @@ export const Meeting = () => {
         getMediaDevices()
     }, [])
 
+    useEffect(() => {
+        console.log("**************")
+        console.log(remoteVideos)
+    }, [remoteVideos])
+
     const onIceCandidate = (data, senderId) => {
-        console.log("************")
-        console.log(data)
         console.warn(`Recieved ICE_CANDIDATE from ${data}`)
         const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
         rtcPeerConnection.addIceCandidate(data)
@@ -40,8 +44,6 @@ export const Meeting = () => {
     }
 
     const onAnswerAccept = (data, senderId) => {
-        console.log("************")
-        console.log(data)
         const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
 
         console.warn(`Recieved ANSWER from ${data}`)
@@ -50,19 +52,11 @@ export const Meeting = () => {
     }
 
     const onOffer = async (data, senderId) => {
-        const rtcPeer = peerConnections.find(obj => obj.peer === null)
-        rtcPeer.peer = senderId
-        const rtcPeerConnection = rtcPeer.connection
+
+        const rtcPeerConnection = getNewPeerConnection(senderId).connection;
 
         console.warn(`Recieved OFFER from ${senderId}`)
         await rtcPeerConnection.setRemoteDescription(data)
-
-        rtcPeerConnection.onicecandidate = (event) => {
-            if (event.candidate) {
-                sendMessage(event.candidate.toJSON(), "ICE_CANDIDATE", senderId)
-                console.warn(`Sent ICE_CANDIDATE to ${senderId}`)
-            }
-        }
 
         const stream = await setLocalStreamVideo()
 
@@ -79,44 +73,25 @@ export const Meeting = () => {
     }
 
     const joinMeeting = async () => {
-        const newRTCPeerConnection = new RTCPeerConnection();
-        newRTCPeerConnection.ontrack = (event) => {
-            console.log('fired bitch')
-            setRemoteVideos([...remoteVideos, <Video key={remoteVideos.length + 1} srcObject={event.streams[0]}/>])
-        }
-
-        const newConnection = { peer: null, connection: newRTCPeerConnection }
-        peerConnections = [ ...peerConnections, newConnection ]
-        
         await setLocalStreamVideo()
 
         subscribe(meetingId)
         subscribe(meetingId, user.id)
 
-        sendMessage({ content: `Hello everyone!! I'm ${user.id}` }, "JOIN")
+        sendMessage({ content: `User(id: ${user.id}) Joined` }, "JOIN")
         console.warn(`Sent JOIN message for everyone`)
     }
 
     const onCandidateJoin = async (data) => {
-        const newRTCPeerConnection = new RTCPeerConnection();
-        newRTCPeerConnection.ontrack = (event) => {
-            console.log('fired bitch')
-            setRemoteVideos([...remoteVideos, <Video key={remoteVideos.length + 1} srcObject={event.streams[0]}/>])
-        }
-
-        const newConnection = { peer: data.senderId, connection: newRTCPeerConnection }
-
-        peerConnections = [ ...peerConnections, newConnection ]
-
-        const rtcPeerConnection = peerConnections.find(obj => obj.peer === data.senderId).connection
 
         console.warn(`On response to new user ${data.senderId} JOIN, `)
-        rtcPeerConnection.onicecandidate = async (event) => {
-            if (event.candidate) {
-                sendMessage(event.candidate, "ICE_CANDIDATE", data.senderId)
-                console.warn(`Sent ICE_CANDIDATE to ${data.senderId}`)
-            }
-        }
+
+        const rtcPeerConnection = getNewPeerConnection(data.senderId).connection
+
+        setPara([...para, new Date()])
+
+        console.error(remoteVideos)
+        console.log(para)
 
         const stream = await setLocalStreamVideo()
 
@@ -162,12 +137,38 @@ export const Meeting = () => {
         return stream
     }
 
+    const getNewPeerConnection = (senderId = null) => {
+
+        const newRTCPeerConnection = new RTCPeerConnection();
+        newRTCPeerConnection.ontrack = (event) => {
+            console.log('fired bitch')
+            console.info(remoteVideos)
+            console.info(event.streams[0])
+            setRemoteVideos((prevSate) => ([...prevSate, event.streams[0]]))
+        }
+
+
+        newRTCPeerConnection.onicecandidate = async (event) => {
+            if (event.candidate) {
+                sendMessage(event.candidate, "ICE_CANDIDATE", senderId)
+                console.warn(`Sent ICE_CANDIDATE to ${senderId}`)
+            }
+        }
+
+        const newConnection = { peer: senderId, connection: newRTCPeerConnection }
+        peerConnections = [ ...peerConnections, newConnection ]
+        return newConnection;
+    }
+
     const resolverFunctions = {
         iceCandidate: onIceCandidate, 
         offer: onOffer,
         answer: onAnswerAccept,
         join: onCandidateJoin
     }
+
+    console.log(remoteVideos)
+    console.log(para)
 
     return (
         <>
@@ -182,7 +183,9 @@ export const Meeting = () => {
             <Button onClick={joinMeeting} variant='contained' disabled={localStream === ''}>Join</Button>
             <video ref={localVideo} autoPlay/>
             {
-                remoteVideos
+                remoteVideos.map((stream, index) => (
+                    <Video srcObject={stream} key={index}/>
+                ))
             }
         </>
     )
