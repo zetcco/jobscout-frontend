@@ -80,7 +80,6 @@ export const Meeting = () => {
             video: { deviceId: { exact: localStream.deviceId } },
             audio: false
         }
-        console.log(constraint)
         let stream = await navigator.mediaDevices.getUserMedia(constraint)
         localVideo.current.srcObject = stream
 
@@ -104,7 +103,6 @@ export const Meeting = () => {
             video: { deviceId: { exact: localStream.deviceId } },
             audio: false
         }
-        console.log(constraint)
         let stream = await navigator.mediaDevices.getUserMedia(constraint)
         localVideo.current.srcObject = stream
 
