@@ -1,21 +1,19 @@
-import { Button, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Button, MenuItem, Select, TextField } from "@mui/material";
 import { Video } from "components/Video";
 import { selectAuthUser, selectAuthUserToken } from "features/authSlice";
 import { selectWebSocketStompClient } from "features/websocketSlice";
-import React, { createElement, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const rtcPeerConnection = new RTCPeerConnection()
+// const rtcPeerConnection = new RTCPeerConnection()
+let peerConnections = []
 export const Meeting = () => {
-
-    const [ incomingCall, setIncomingCall ] = useState(false)
 
     const stompClient = useSelector(selectWebSocketStompClient)
     const authToken = useSelector(selectAuthUserToken)
     const user = useSelector(selectAuthUser)
 
     const localVideo = useRef(null);
-    const answerRef = useRef(null);
 
     const [ remoteVideos, setRemoteVideos ] = useState([])
 
@@ -32,24 +30,30 @@ export const Meeting = () => {
         getMediaDevices()
     }, [])
 
-
-    rtcPeerConnection.ontrack = (event) => {
-        setRemoteVideos([...remoteVideos, <Video key={remoteVideos.length + 1} srcObject={event.streams[0]}/>])
-    }
-
-    const onIceCandidate = (data) => {
+    const onIceCandidate = (data, senderId) => {
+        console.log("************")
+        console.log(data)
         console.warn(`Recieved ICE_CANDIDATE from ${data}`)
+        const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
         rtcPeerConnection.addIceCandidate(data)
         console.warn(`Set ICE_CANDIDATE ICE_CANDIDATE from ${data}`)
     }
 
-    const onAnswerAccept = (data) => {
+    const onAnswerAccept = (data, senderId) => {
+        console.log("************")
+        console.log(data)
+        const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
+
         console.warn(`Recieved ANSWER from ${data}`)
         rtcPeerConnection.setRemoteDescription(data)
         console.warn(`Set incoming ANSWER from ${data}`)
     }
 
     const onOffer = async (data, senderId) => {
+        const rtcPeer = peerConnections.find(obj => obj.peer === null)
+        rtcPeer.peer = senderId
+        const rtcPeerConnection = rtcPeer.connection
+
         console.warn(`Recieved OFFER from ${senderId}`)
         await rtcPeerConnection.setRemoteDescription(data)
 
@@ -60,8 +64,7 @@ export const Meeting = () => {
             }
         }
 
-        let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-        localVideo.current.srcObject = stream
+        const stream = await setLocalStreamVideo()
 
         stream.getTracks().forEach(track => {
             rtcPeerConnection.addTrack(track, stream)
@@ -76,12 +79,16 @@ export const Meeting = () => {
     }
 
     const joinMeeting = async () => {
-        const constraint = {
-            video: { deviceId: { exact: localStream.deviceId } },
-            audio: false
+        const newRTCPeerConnection = new RTCPeerConnection();
+        newRTCPeerConnection.ontrack = (event) => {
+            console.log('fired bitch')
+            setRemoteVideos([...remoteVideos, <Video key={remoteVideos.length + 1} srcObject={event.streams[0]}/>])
         }
-        let stream = await navigator.mediaDevices.getUserMedia(constraint)
-        localVideo.current.srcObject = stream
+
+        const newConnection = { peer: null, connection: newRTCPeerConnection }
+        peerConnections = [ ...peerConnections, newConnection ]
+        
+        await setLocalStreamVideo()
 
         subscribe(meetingId)
         subscribe(meetingId, user.id)
@@ -91,6 +98,18 @@ export const Meeting = () => {
     }
 
     const onCandidateJoin = async (data) => {
+        const newRTCPeerConnection = new RTCPeerConnection();
+        newRTCPeerConnection.ontrack = (event) => {
+            console.log('fired bitch')
+            setRemoteVideos([...remoteVideos, <Video key={remoteVideos.length + 1} srcObject={event.streams[0]}/>])
+        }
+
+        const newConnection = { peer: data.senderId, connection: newRTCPeerConnection }
+
+        peerConnections = [ ...peerConnections, newConnection ]
+
+        const rtcPeerConnection = peerConnections.find(obj => obj.peer === data.senderId).connection
+
         console.warn(`On response to new user ${data.senderId} JOIN, `)
         rtcPeerConnection.onicecandidate = async (event) => {
             if (event.candidate) {
@@ -99,12 +118,7 @@ export const Meeting = () => {
             }
         }
 
-        const constraint = {
-            video: { deviceId: { exact: localStream.deviceId } },
-            audio: false
-        }
-        let stream = await navigator.mediaDevices.getUserMedia(constraint)
-        localVideo.current.srcObject = stream
+        const stream = await setLocalStreamVideo()
 
         stream.getTracks().forEach(track => {
             rtcPeerConnection.addTrack(track, stream)
@@ -138,6 +152,16 @@ export const Meeting = () => {
         );
     }
 
+    const setLocalStreamVideo = async () => {
+        const constraint = {
+            video: { deviceId: { exact: localStream.deviceId } },
+            audio: false
+        }
+        let stream = await navigator.mediaDevices.getUserMedia(constraint)
+        localVideo.current.srcObject = stream
+        return stream
+    }
+
     const resolverFunctions = {
         iceCandidate: onIceCandidate, 
         offer: onOffer,
@@ -156,7 +180,6 @@ export const Meeting = () => {
             </Select>
             <TextField value={meetingId} onChange={(e) => setMeetingId(e.target.value)}/>
             <Button onClick={joinMeeting} variant='contained' disabled={localStream === ''}>Join</Button>
-            <Button ref={answerRef} variant='contained' disabled={!incomingCall}>Answer</Button>
             <video ref={localVideo} autoPlay/>
             {
                 remoteVideos
@@ -173,13 +196,13 @@ const rtcSignalResolver = (signal, actions) => {
 
     switch (type) {
         case "ICE_CANDIDATE":
-            iceCandidate(new RTCIceCandidate(data))
+            iceCandidate(new RTCIceCandidate(data), senderId)
             break;
         case "OFFER":
             offer(new RTCSessionDescription(data), senderId)
             break;
         case "ANSWER":
-            answer(new RTCSessionDescription(data))
+            answer(new RTCSessionDescription(data), senderId)
             break;
         case "JOIN":
             join({ senderId, data })
