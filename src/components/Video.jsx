@@ -9,6 +9,9 @@ export const Video = ({ srcObject }) => {
     }, [srcObject])
 
     return (
-        <video ref={element} autoPlay/>
+        <video ref={element} style={{
+            transform: `scale(-1, 1)`,
+            WebkitTransform: `scale(-1, 1)`
+        }} autoPlay/>
     )
 }
