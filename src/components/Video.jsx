@@ -1,4 +1,6 @@
+import { Grid } from '@mui/material';
 import React, { useEffect, useRef } from 'react'
+import { BasicCard } from './cards/BasicCard';
 
 export const Video = ({ srcObject }) => {
 
@@ -10,10 +12,13 @@ export const Video = ({ srcObject }) => {
 
     return (
         <>
-            <video ref={element} style={{
-                transform: `scale(-1, 1)`,
-                WebkitTransform: `scale(-1, 1)`
-            }} autoPlay/>
+            <BasicCard>
+                <video ref={element} style={{
+                    width: '100%',
+                    transform: `scale(-1, 1)`,
+                    WebkitTransform: `scale(-1, 1)`
+                }} autoPlay/>
+            </BasicCard>
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { Button, MenuItem, Select, TextField } from "@mui/material";
+import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
 import { Video } from "components/Video";
 import { selectAuthUser, selectAuthUserToken } from "features/authSlice";
 import { selectWebSocketStompClient } from "features/websocketSlice";
@@ -63,6 +63,7 @@ export const Meeting = () => {
     const joinMeeting = async () => {
         // await setLocalStreamVideo()
         const stream = await getLocalStream()
+        stream.getAudioTracks()[0].enabled = false
         setRemoteVideos((prevSate) => [...prevSate, stream])
 
         subscribe(meetingId)
@@ -158,11 +159,15 @@ export const Meeting = () => {
             </Select>
             <TextField value={meetingId} onChange={(e) => setMeetingId(e.target.value)}/>
             <Button onClick={joinMeeting} variant='contained' disabled={localStream === ''}>Join</Button>
-            {
-                remoteVideos.map((stream, index) => (
-                    <Video srcObject={stream} key={index}/>
-                ))
-            }
+            <Grid container>
+                {
+                    remoteVideos.map((stream, index) => (
+                        <Grid item xs={6} md={4}>
+                            <Video srcObject={stream} key={index}/>
+                        </Grid>
+                    ))
+                }
+            </Grid>
         </>
     )
 };
