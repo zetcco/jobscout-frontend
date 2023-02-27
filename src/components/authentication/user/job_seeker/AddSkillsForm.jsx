@@ -1,11 +1,14 @@
 import { Button, Chip, MenuItem, Select } from "@mui/material"
 import { Box, Stack } from "@mui/system"
-import React from "react"
+import React, { useEffect } from "react"
 import { CenteredHeaderCard } from "../../../cards/CenteredHeaderCard"
 import { RouterLink } from "../../../RouterLink"
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from "react"
+import { useSelector } from "react-redux"
+import { selectAuthError, selectAuthUserToken } from "features/authSlice"
+import axios from "axios"
 
 export const AddSkillsForm =() =>{
 
@@ -13,6 +16,24 @@ export const AddSkillsForm =() =>{
     const [ skill, setSkill ] = useState();
     const [ selected, setSeletected ] = useState([]);
     let skills = []
+
+
+    const [categories , setCategories] = useState([]);
+    const [category , setCategory] = useState('');
+    const token = useSelector(selectAuthUserToken);
+    useEffect(()=>{
+            axios.get('/category/' , {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(cat =>{
+                console.log(cat)
+                setCategories(cat.data)
+            }).catch(err =>{
+                console.log(err)
+            })
+    },[])
     
     if (field === "IT & Software")
         skills = ["React", "Spring", ".NET", "Angular", "Flutter"]
@@ -29,14 +50,11 @@ export const AddSkillsForm =() =>{
              <Stack spacing={2} sx={{ width: '100%' }}>
                 <FormControl fullWidth>
                     <InputLabel id="Org-registration-country-select-label">Select your Field</InputLabel>
-                    <Select labelId="Org-registration-country-select-label" value={field} onChange={(e) => { setField(e.target.value) }} label="Select your Field" >
-                        <MenuItem value="Accountancy & Finance">Accountancy & Finance</MenuItem>
-                        <MenuItem value="Hotel / Hospitality">Hotel / Hospitality</MenuItem>
-                        <MenuItem value="Production & Operations">Production & Operations</MenuItem>
-                        <MenuItem value="IT & Software">IT & Software</MenuItem>
-                        <MenuItem value="Retail & Fashion">Retail & Fashion</MenuItem>
-                        <MenuItem value="Engineering & Manufacturing">Engineering & Manufacturing</MenuItem>
-                        <MenuItem value="Digital Marketing">Digital Marketing</MenuItem>
+                    <Select labelId="Org-registration-country-select-label" value={category} onChange={(e) => { setCategory(e.target.value) }} label="Select your Field" >
+                        {
+                            categories.map((category) => 
+                            <MenuItem value = {category.id}>{category.name}</MenuItem>)
+                        }
                     </Select>
                 </FormControl>
                 <Stack direction={"row"} spacing={2}>
