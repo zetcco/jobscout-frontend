@@ -1,4 +1,4 @@
-import { Button, Select, TextField } from "@mui/material";
+import { Button, MenuItem, Select, TextField } from "@mui/material";
 import { Video } from "components/Video";
 import { selectAuthUser, selectAuthUserToken } from "features/authSlice";
 import { selectWebSocketStompClient } from "features/websocketSlice";
@@ -21,13 +21,15 @@ export const Meeting = () => {
 
     const [ meetingId, setMeetingId ] = useState('');
 
-    const [ localStream, setLocalStream ] = useState(null);
+    const [ localStream, setLocalStream ] = useState('');
     const [ devices, setDevices ] = useState([]);
 
     useEffect(() => {
-        const setDevices = async () => {
+        const getMediaDevices = async () => {
             const devices = await navigator.mediaDevices.enumerateDevices()
+            setDevices(devices)
         } 
+        getMediaDevices()
     }, [])
 
 
@@ -137,7 +139,13 @@ export const Meeting = () => {
 
     return (
         <>
-            {/* <Select value={} onChange={}/> */}
+            <Select value={localStream} onChange={ (e) => setLocalStream(e.target.value) }>
+                {
+                    devices.map((device, index) => (
+                        <MenuItem key={index} value={index}>{device.label}</MenuItem>
+                    ))
+                } 
+            </Select>
             <TextField value={meetingId} onChange={(e) => setMeetingId(e.target.value)}/>
             <Button onClick={joinMeeting} variant='contained'>Join</Button>
             <Button ref={answerRef} variant='contained' disabled={!incomingCall}>Answer</Button>
