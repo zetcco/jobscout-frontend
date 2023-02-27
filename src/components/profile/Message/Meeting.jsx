@@ -1,7 +1,8 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Select, TextField } from "@mui/material";
+import { Video } from "components/Video";
 import { selectAuthUser, selectAuthUserToken } from "features/authSlice";
 import { selectWebSocketStompClient } from "features/websocketSlice";
-import React, { useRef, useState } from "react";
+import React, { createElement, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 const rtcPeerConnection = new RTCPeerConnection()
@@ -14,43 +15,46 @@ export const Meeting = () => {
     const user = useSelector(selectAuthUser)
 
     const localVideo = useRef(null);
-    const remoteVideo = useRef(null);
     const answerRef = useRef(null);
+
+    const [ remoteVideos, setRemoteVideos ] = useState([])
 
     const [ meetingId, setMeetingId ] = useState('');
 
+    const [ localStream, setLocalStream ] = useState(null);
+    const [ devices, setDevices ] = useState([]);
+
+    useEffect(() => {
+        const setDevices = async () => {
+            const devices = await navigator.mediaDevices.enumerateDevices()
+        } 
+    }, [])
+
 
     rtcPeerConnection.ontrack = (event) => {
-        remoteVideo.current.srcObject = event.streams[0]
+        setRemoteVideos([...remoteVideos, <Video key={remoteVideos.length + 1} srcObject={event.streams[0]}/>])
     }
 
     const onIceCandidate = (data) => {
-        console.log("CALLER/ANSWERER: Setting CANDIDATE after recieving candidate")
+        console.warn(`Recieved ICE_CANDIDATE from ${data}`)
         rtcPeerConnection.addIceCandidate(data)
-        console.log("CALLER/ANSWERER: Setted CANDIDATE after recieving candidate")
+        console.warn(`Set ICE_CANDIDATE ICE_CANDIDATE from ${data}`)
     }
 
     const onAnswerAccept = (data) => {
-        console.log(data)
-        console.log(rtcPeerConnection)
-        console.log("CALLER: Setting REMOTE_DESC after recieving Answer accept")
+        console.warn(`Recieved ANSWER from ${data}`)
         rtcPeerConnection.setRemoteDescription(data)
-        console.log("CALLER: Setted REMOTE_DESC after recieving Answer accept")
+        console.warn(`Set incoming ANSWER from ${data}`)
     }
 
     const onOffer = async (data, senderId) => {
-        console.log("ANSWERER: Recieved Offer")
-        console.log("ANSWERER: Setting REMOTE_DESC after recieving RemoteDesc offer")
-        console.log(rtcPeerConnection)
+        console.warn(`Recieved OFFER from ${senderId}`)
         await rtcPeerConnection.setRemoteDescription(data)
-        console.log(rtcPeerConnection)
-        console.log("ANSWERER: Setted REMOTE_DESC after recieving RemoteDesc offer")
 
         rtcPeerConnection.onicecandidate = (event) => {
-            console.log('came here 888')
             if (event.candidate) {
-                console.log("CALLER: Sending CANIDATE object");
                 sendMessage(event.candidate.toJSON(), "ICE_CANDIDATE", senderId)
+                console.warn(`Sent ICE_CANDIDATE to ${senderId}`)
             }
         }
 
@@ -61,14 +65,12 @@ export const Meeting = () => {
             rtcPeerConnection.addTrack(track, stream)
         });
 
-        console.log("ANSWERER: Creating LOCAL_DESC after creating Answer accept")
         const answer = rtcPeerConnection.createAnswer()
-        console.log("ANSWERER: Setting LOCAL_DESC after creating Answer accept")
+        console.warn(`Answer CREATED for user ${senderId}`)
         await rtcPeerConnection.setLocalDescription(answer)
-        console.log("ANSWERER: Setted LOCAL_DESC after creating Answer accept")
         
-        console.log("ANSWERER: Sending ANSWER accept object");
         sendMessage(rtcPeerConnection.localDescription.toJSON(), "ANSWER", senderId)
+        console.warn(`Answer SENT for user ${senderId}`)
     }
 
     const joinMeeting = async () => {
@@ -79,16 +81,19 @@ export const Meeting = () => {
         subscribe(meetingId, user.id)
 
         sendMessage({ content: `Hello everyone!! I'm ${user.id}` }, "JOIN")
+        console.warn(`Sent JOIN message for everyone`)
     }
 
     const onCandidateJoin = async (data) => {
+        console.warn(`On response to new user ${data.senderId} JOIN, `)
         rtcPeerConnection.onicecandidate = async (event) => {
-            if (event.candidate) 
+            if (event.candidate) {
                 sendMessage(event.candidate, "ICE_CANDIDATE", data.senderId)
+                console.warn(`Sent ICE_CANDIDATE to ${data.senderId}`)
+            }
         }
 
         let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-        console.log(stream)
         localVideo.current.srcObject = stream
 
         stream.getTracks().forEach(track => {
@@ -96,9 +101,11 @@ export const Meeting = () => {
         });
 
         let offer = rtcPeerConnection.createOffer();
+        console.warn(`Offer CREATED for user ${data.senderId}`)
         await rtcPeerConnection.setLocalDescription(offer)
 
         sendMessage(rtcPeerConnection.localDescription.toJSON(), "OFFER", data.senderId)
+        console.warn(`Offer SENT for user ${data.senderId}`)
     }
 
     const sendMessage = (data, type, to = null) => {
@@ -130,11 +137,14 @@ export const Meeting = () => {
 
     return (
         <>
+            {/* <Select value={} onChange={}/> */}
             <TextField value={meetingId} onChange={(e) => setMeetingId(e.target.value)}/>
             <Button onClick={joinMeeting} variant='contained'>Join</Button>
             <Button ref={answerRef} variant='contained' disabled={!incomingCall}>Answer</Button>
             <video ref={localVideo} autoPlay/>
-            <video ref={remoteVideo} autoPlay/>
+            {
+                remoteVideos
+            }
         </>
     )
 };
