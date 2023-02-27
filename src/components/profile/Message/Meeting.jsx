@@ -1,4 +1,4 @@
-import { Button, MenuItem, Select, TextField } from "@mui/material";
+import { Button, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Video } from "components/Video";
 import { selectAuthUser, selectAuthUserToken } from "features/authSlice";
 import { selectWebSocketStompClient } from "features/websocketSlice";
@@ -142,7 +142,7 @@ export const Meeting = () => {
             <Select value={localStream} onChange={ (e) => setLocalStream(e.target.value) }>
                 {
                     devices.map((device, index) => (
-                        <MenuItem key={index} value={index}>{device.label}</MenuItem>
+                        <MenuItem key={index} value={device}>{device.label}</MenuItem>
                     ))
                 } 
             </Select>
