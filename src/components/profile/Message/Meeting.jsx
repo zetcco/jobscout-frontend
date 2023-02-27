@@ -76,7 +76,12 @@ export const Meeting = () => {
     }
 
     const joinMeeting = async () => {
-        let stream = await navigator.mediaDevices.getUserMedia({ video: localStream.deviceId, audio: false })
+        const constraint = {
+            video: { deviceId: { exact: localStream.deviceId } },
+            audio: false
+        }
+        console.log(constraint)
+        let stream = await navigator.mediaDevices.getUserMedia(constraint)
         localVideo.current.srcObject = stream
 
         subscribe(meetingId)
@@ -95,7 +100,12 @@ export const Meeting = () => {
             }
         }
 
-        let stream = await navigator.mediaDevices.getUserMedia({ video: localStream.deviceId, audio: false })
+        const constraint = {
+            video: { deviceId: { exact: localStream.deviceId } },
+            audio: false
+        }
+        console.log(constraint)
+        let stream = await navigator.mediaDevices.getUserMedia(constraint)
         localVideo.current.srcObject = stream
 
         stream.getTracks().forEach(track => {
