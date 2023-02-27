@@ -76,7 +76,7 @@ export const Meeting = () => {
     }
 
     const joinMeeting = async () => {
-        let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        let stream = await navigator.mediaDevices.getUserMedia({ video: localStream.deviceId, audio: false })
         localVideo.current.srcObject = stream
 
         subscribe(meetingId)
@@ -95,7 +95,7 @@ export const Meeting = () => {
             }
         }
 
-        let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        let stream = await navigator.mediaDevices.getUserMedia({ video: localStream.deviceId, audio: false })
         localVideo.current.srcObject = stream
 
         stream.getTracks().forEach(track => {
@@ -147,7 +147,7 @@ export const Meeting = () => {
                 } 
             </Select>
             <TextField value={meetingId} onChange={(e) => setMeetingId(e.target.value)}/>
-            <Button onClick={joinMeeting} variant='contained'>Join</Button>
+            <Button onClick={joinMeeting} variant='contained' disabled={localStream === ''}>Join</Button>
             <Button ref={answerRef} variant='contained' disabled={!incomingCall}>Answer</Button>
             <video ref={localVideo} autoPlay/>
             {
