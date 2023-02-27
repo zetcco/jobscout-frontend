@@ -12,7 +12,7 @@ import { selectAuthUserToken } from 'features/authSlice';
 
 export const AddSkillsForm = () => {
   const [field, setField] = useState();
-  const [skill, setSkill] = useState();
+  const [skill, setSkill] = useState('');
   const [skills, setSkills] = useState([
     // 'react',
     // 'mongo',
@@ -60,7 +60,7 @@ export const AddSkillsForm = () => {
         </RouterLink>
       }
     >
-      <Stack spacing={2} sx={{ width: '100%' }}>
+      <Stack spacing={2} sx={{ width: '100%' }} >
         <FormControl fullWidth>
           <InputLabel id='Org-registration-country-select-label'>
             Select your Field
@@ -103,7 +103,7 @@ export const AddSkillsForm = () => {
                 label='Select your Field'
               >
                 {skills.map((item, index) => (
-                  <MenuItem key={index} value={item.description}>
+                  <MenuItem key={index} value={item}>
                     {item.description}
                   </MenuItem>
                 ))}
@@ -125,7 +125,13 @@ export const AddSkillsForm = () => {
         </Stack>
         <Stack direction='row' spacing={1}>
           {selected.map((skill) => (
-            <Chip label={skill} color='primary' variant='outlined' />
+            <Chip
+              label={skill.description}
+              color='primary'
+              variant='outlined'
+              onDelete={() => setSeletected(selected.filter((skillItem) => skillItem.id !== skill.id))}
+              key={skill.id}
+            />
           ))}
         </Stack>
       </Stack>
