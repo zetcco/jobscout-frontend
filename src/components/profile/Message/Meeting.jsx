@@ -81,7 +81,7 @@ export const Meeting = () => {
             rtcPeerConnection.addTrack(track, stream)
         });
 
-        let offer = rtcPeerConnection.createOffer();
+        let offer = rtcPeerConnection.createOffer({ offerToReceiveVideo: true, offerToReceiveAudio: true });
         await rtcPeerConnection.setLocalDescription(offer)
 
         sendMessage(rtcPeerConnection.localDescription.toJSON(), "OFFER", data.senderId)
@@ -110,7 +110,7 @@ export const Meeting = () => {
     const getLocalStream = async () => {
         const constraint = {
             video: { deviceId: { exact: localStream.deviceId } },
-            audio: false
+            audio: true
         }
         return await navigator.mediaDevices.getUserMedia(constraint)
     }
@@ -119,9 +119,15 @@ export const Meeting = () => {
 
         const newRTCPeerConnection = new RTCPeerConnection();
         newRTCPeerConnection.ontrack = (event) => {
-            setRemoteVideos((prevSate) => ([...prevSate, event.streams[0]]))
+            setRemoteVideos(
+                (prevSate) => {
+                    if (!prevSate.includes(event.streams[0]))
+                        return ([...prevSate, event.streams[0]])
+                    else
+                        return prevSate
+                }
+            )
         }
-
 
         newRTCPeerConnection.onicecandidate = async (event) => {
             if (event.candidate) {
@@ -152,7 +158,6 @@ export const Meeting = () => {
             </Select>
             <TextField value={meetingId} onChange={(e) => setMeetingId(e.target.value)}/>
             <Button onClick={joinMeeting} variant='contained' disabled={localStream === ''}>Join</Button>
-            <video ref={localVideo} autoPlay/>
             {
                 remoteVideos.map((stream, index) => (
                     <Video srcObject={stream} key={index}/>
