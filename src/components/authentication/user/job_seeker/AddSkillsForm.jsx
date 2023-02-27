@@ -102,8 +102,10 @@ export const AddSkillsForm = () => {
                 }}
                 label='Select your Field'
               >
-                {skills.map((item) => (
-                  <MenuItem value={item.description}>{item.description}</MenuItem>
+                {skills.map((item, index) => (
+                  <MenuItem key={index} value={item.description}>
+                    {item.description}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
