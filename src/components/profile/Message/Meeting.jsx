@@ -13,8 +13,6 @@ export const Meeting = () => {
     const authToken = useSelector(selectAuthUserToken)
     const user = useSelector(selectAuthUser)
 
-    const localVideo = useRef(null);
-
     const [ remoteVideos, setRemoteVideos ] = useState([])
 
     const [ meetingId, setMeetingId ] = useState('');
