@@ -2,7 +2,7 @@ import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
 import { Video } from "components/Video";
 import { selectAuthUser, selectAuthUserToken } from "features/authSlice";
 import { selectWebSocketStompClient } from "features/websocketSlice";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 // const rtcPeerConnection = new RTCPeerConnection()
