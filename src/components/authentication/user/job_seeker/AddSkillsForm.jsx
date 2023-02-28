@@ -13,25 +13,9 @@ import { selectAuthUserToken } from 'features/authSlice';
 export const AddSkillsForm = () => {
   const [field, setField] = useState();
   const [skill, setSkill] = useState('');
-  const [skills, setSkills] = useState([
-    // 'react',
-    // 'mongo',
-    // 'postgres',
-    // 'angular',
-    // 'springboot',
-    // 'node',
-    // 'laraval',
-  ]);
+  const [skills, setSkills] = useState([]);
   const [selected, setSeletected] = useState([]);
   const authToken = useSelector(selectAuthUserToken);
-
-  //   useEffect(async () => {
-  //     // console.log('Page Load');
-  //     const response = await axios.get(`/skills`, {
-  //       headers: { Authorization: `Bearer ${authToken}` },
-  //     });
-  //     setSkills(response.data);
-  //   }, []);
 
   useEffect(() => {
     fetchSkills();
@@ -39,10 +23,6 @@ export const AddSkillsForm = () => {
 
   const fetchSkills = async () => {
     const response = await axios.get(`/skills/`, {
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-
-    const searchResponse = await axios.get(`/skills/search?q=react`, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
 
@@ -117,6 +97,7 @@ export const AddSkillsForm = () => {
               sx={{ height: '100%' }}
               onClick={() => {
                 setSeletected([...selected, skill]);
+                setSkills(skills.filter((item) => item != skill))
               }}
             >
               Add
@@ -129,7 +110,10 @@ export const AddSkillsForm = () => {
               label={skill.description}
               color='primary'
               variant='outlined'
-              onDelete={() => setSeletected(selected.filter((skillItem) => skillItem.id !== skill.id))}
+              onDelete={() => {
+                setSeletected(selected.filter((skillItem) => skillItem.id !== skill.id))
+                setSkills([...skills, skill])
+              }}
               key={skill.id}
             />
           ))}
