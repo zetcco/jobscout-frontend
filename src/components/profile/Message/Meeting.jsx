@@ -136,6 +136,17 @@ export const Meeting = () => {
             }
         }
 
+        newRTCPeerConnection.oniceconnectionstatechange = (event) => {
+            switch (newRTCPeerConnection.connectionState) {
+                case "disconnected":
+                    console.warn(`${senderId} disconnected`)
+                    break;
+                default:
+                    console.warn(`${senderId} - Unknown`)
+                    break;
+            }
+        }
+
         const newConnection = { peer: senderId, connection: newRTCPeerConnection }
         peerConnections = [ ...peerConnections, newConnection ]
         return newConnection;
