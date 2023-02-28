@@ -13,20 +13,22 @@ const FilterPosts = () => {
     const [categories , setCategories] = useState([]);
     const [category , setCategory] = useState('');
     const token = useSelector(selectAuthUserToken)
-    useEffect(() => {
-        axios.get('/category/' , {
-            headers:{
-                Authorization: `Bearer ${token}`
+    useEffect(()=>{
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('/category/' , {
+                    headers:{
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                setCategories(response.data)
+            } catch (error) {
+                console.error(error)
             }
-        })
-        .then(cat =>{
-            console.log(cat)
-            setCategories(cat.data)
-        })
-        .catch(err =>{
-            console.log(err)
-        })
-    } , [])
+        }
+        fetchCategories()
+    
+        },[token])
 
     return ( 
 
