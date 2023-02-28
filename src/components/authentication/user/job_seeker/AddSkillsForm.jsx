@@ -1,35 +1,51 @@
-import { Button, Chip, MenuItem, Select } from '@mui/material';
-import { Box, Stack } from '@mui/system';
-import React, { useEffect } from 'react';
-import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard';
-import { RouterLink } from '../../../RouterLink';
+import { Button, Chip, MenuItem, Select } from "@mui/material"
+import { Box, Stack } from "@mui/system"
+import React, { useEffect } from "react"
+import { CenteredHeaderCard } from "../../../cards/CenteredHeaderCard"
+import { RouterLink } from "../../../RouterLink"
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { useState } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useState } from "react"
+import { useSelector } from "react-redux"
+import axios from "axios"
 import { selectAuthUserToken } from 'features/authSlice';
 
 export const AddSkillsForm = () => {
-  const [field, setField] = useState();
-  const [skill, setSkill] = useState('');
-  const [skills, setSkills] = useState([]);
-  const [selected, setSeletected] = useState([]);
-  const authToken = useSelector(selectAuthUserToken);
+    const [field, setField] = useState();
+    const [skill, setSkill] = useState('');
+    const [skills, setSkills] = useState([]);
+    const [selected, setSeletected] = useState([]);
+    const authToken = useSelector(selectAuthUserToken);
 
-  useEffect(() => {
-    fetchSkills();
-  }, []);
+    const [categories , setCategories] = useState([]);
 
-  const fetchSkills = async () => {
-    const response = await axios.get(`/skills/`, {
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
+    useEffect(()=>{
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('/category/' , {
+                    headers:{
+                        Authorization: `Bearer ${authToken}`
+                    }
+                })
+                setCategories(response.data)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchCategories()
+    },[authToken])
+    
+    useEffect(() => {
+        const fetchSkills = async () => {
+            const response = await axios.get(`/skills/`, { headers: { Authorization: `Bearer ${authToken}` }});
+            setSkills(response.data);
+        }
 
-    setSkills(response.data);
-  };
+        fetchSkills();
+    }, [authToken]);
 
-  return (
+
+    return (
     <CenteredHeaderCard
       title={'Add your Skills'}
       footer={
@@ -48,24 +64,13 @@ export const AddSkillsForm = () => {
           <Select
             labelId='Org-registration-country-select-label'
             value={field}
-            onChange={(e) => {
-              setField(e.target.value);
-            }}
+            onChange={(e) => { setField(e.target.value) }}
             label='Select your Field'
           >
-            <MenuItem value='Accountancy & Finance'>
-              Accountancy & Finance
-            </MenuItem>
-            <MenuItem value='Hotel / Hospitality'>Hotel / Hospitality</MenuItem>
-            <MenuItem value='Production & Operations'>
-              Production & Operations
-            </MenuItem>
-            <MenuItem value='IT & Software'>IT & Software</MenuItem>
-            <MenuItem value='Retail & Fashion'>Retail & Fashion</MenuItem>
-            <MenuItem value='Engineering & Manufacturing'>
-              Engineering & Manufacturing
-            </MenuItem>
-            <MenuItem value='Digital Marketing'>Digital Marketing</MenuItem>
+            {
+                categories.map((category) => 
+                <MenuItem value = {category.id}>{category.name}</MenuItem>)
+            }
           </Select>
         </FormControl>
         <Stack direction={'row'} spacing={2}>
@@ -97,7 +102,7 @@ export const AddSkillsForm = () => {
               sx={{ height: '100%' }}
               onClick={() => {
                 setSeletected([...selected, skill]);
-                setSkills(skills.filter((item) => item != skill))
+                setSkills(skills.filter((item) => item !== skill))
               }}
             >
               Add
