@@ -11,7 +11,7 @@ import axios from "axios"
 import { selectAuthUserToken } from 'features/authSlice';
 
 export const AddSkillsForm = () => {
-    const [field, setField] = useState();
+    const [category, setCategory] = useState();
     const [skill, setSkill] = useState('');
     const [skills, setSkills] = useState([]);
     const [selected, setSeletected] = useState([]);
@@ -36,13 +36,14 @@ export const AddSkillsForm = () => {
     },[authToken])
     
     useEffect(() => {
+      console.log(category);
         const fetchSkills = async () => {
-            const response = await axios.get(`/skills/`, { headers: { Authorization: `Bearer ${authToken}` }});
+            const response = await axios.get(`/category/${category}/skills`, { headers: { Authorization: `Bearer ${authToken}` }});
             setSkills(response.data);
         }
 
         fetchSkills();
-    }, [authToken]);
+    }, [authToken, category]);
 
 
     return (
@@ -63,8 +64,8 @@ export const AddSkillsForm = () => {
           </InputLabel>
           <Select
             labelId='Org-registration-country-select-label'
-            value={field}
-            onChange={(e) => { setField(e.target.value) }}
+            value={category}
+            onChange={(e) => { setCategory(e.target.value) }}
             label='Select your Field'
           >
             {
