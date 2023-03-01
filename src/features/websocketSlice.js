@@ -20,25 +20,33 @@ const websocketSlice = createSlice({
         webSocketConnected: (state, action) => {
             state.stompClient = action.payload
             state.connected = true
+            state.loading = false
         },
         webSocketFailed: (state, action) => {
             state.stompClient = null
             state.connected = false
+            state.loading = false
+        },
+        webSocketLoading: (state, action) => {
+            state.loading = true
         }
     }
 })
 
 export default websocketSlice.reducer;
-export const { webSocketConnected, webSocketFailed } = websocketSlice.actions;
+export const { webSocketConnected, webSocketFailed, webSocketLoading } = websocketSlice.actions;
 
 export const connectToWebSocket = (dispatch, getState) => {
     const state = getState();
-    let sock = new SockJS('http://localhost:8080/ws')
+    dispatch(webSocketLoading())
+    let sock = new SockJS(`${process.env.REACT_APP_BACKEND_URL}/ws`)
+    console.log(sock)
     let stompClient = over(sock);
     stompClient.connect({"token": state.auth.token}, () => {
         dispatch(webSocketConnected(stompClient))
     }, (error) => {
         dispatch(webSocketFailed(error))
+        console.error(error)
         console.error("Websocket connection error");
     })
 }
