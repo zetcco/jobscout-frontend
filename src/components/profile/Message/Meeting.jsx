@@ -4,10 +4,13 @@ import { selectAuthUser, selectAuthUserToken } from "features/authSlice";
 import { selectWebSocketStompClient } from "features/websocketSlice";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 // const rtcPeerConnection = new RTCPeerConnection()
 let peerConnections = []
 export const Meeting = () => {
+
+    const { meetingLink } = useParams()
 
     const stompClient = useSelector(selectWebSocketStompClient)
     const authToken = useSelector(selectAuthUserToken)

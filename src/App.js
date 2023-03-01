@@ -89,7 +89,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path="/" element={<NavigationLayout/>}>
           <Route path="messages" element={<Messaging/>}/>
-          <Route path="meeting" element={<Meeting/>}/>
+          <Route path="meet/:link" element={<Meeting/>}/>
         </Route>
 
         <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>
