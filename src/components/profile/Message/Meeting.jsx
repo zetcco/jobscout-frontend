@@ -1,4 +1,5 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { AddIcCall, CallEnd, PhoneDisabled } from "@mui/icons-material";
+import { Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import axios from "axios";
 import { Video } from "components/Video";
@@ -16,13 +17,17 @@ export const Meeting = () => {
     const navigate = useNavigate()
     const [ meetingData, setMeetingData ] = useState('');
     const authToken = useSelector(selectAuthUserToken)
+    const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         const fetchMeeting = async () => {
             try {
+                setLoading(true)
                 const response = await axios.get(`/meeting/${link}`, { headers: { Authorization: `Bearer ${authToken}` } });
                 setMeetingData(response.data)
+                setLoading(false)
             } catch (error) {
+                setLoading(false)
                 navigate('/home')
             }
         }
@@ -56,17 +61,22 @@ export const Meeting = () => {
         getMediaDevices()
     }, [])
 
-    const onCandidateLeave = (senderId) => {
-        console.log(remoteVideos)
-        // const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
-        // rtcPeerConnection.close()
-    }
-
     // Fires when a ICE_CANDIDATE signal has been recived by the newly joined user (this fires after OFFER and ICE_CANDIDATE signals are sent by existing user)
     const onIceCandidate = (data, senderId) => {
         // Get the RTCPeerConnection object for the newly joined user (which was created when JOIN signal recivied)
         const rtcPeerConnection = peerConnections.find(obj => obj.peer === senderId).connection
         rtcPeerConnection.addIceCandidate(data)
+    }
+
+    const onEnd = async () => {
+        try {
+            await axios.delete(`/meeting/${link}`, { headers: { Authorization: `Bearer ${authToken}` } });
+            sendMessage({}, "END")
+            setMeetingData('')
+            leaveMeeting()
+        } catch (error) {
+            console.error("Could not end meeting")
+        }
     }
 
     // Fires when existing user gets a ANSWER signal from the newly joined user
@@ -122,6 +132,7 @@ export const Meeting = () => {
         setRemoteVideos([])
         unsubscribe(meetingData.link) 
         unsubscribe(meetingData.link, user.id) 
+        navigate('/home')
     }
 
     // Fires when a JOIN signal have been recived by a new user
@@ -215,6 +226,7 @@ export const Meeting = () => {
         newRTCPeerConnection.onconnectionstatechange = (event) => {
             switch (newRTCPeerConnection.connectionState) {
                 case "disconnected":
+                    peerConnections = peerConnections.filter((connection) => connection.peer !== senderId )
                     setRemoteVideos( (prevState) => prevState.filter( (stream) => stream.peer !== senderId ) )
                     break;
                 default:
@@ -232,8 +244,15 @@ export const Meeting = () => {
         offer: onOffer,
         answer: onAnswerAccept,
         join: onCandidateJoin,
-        leave: onCandidateLeave
+        end: leaveMeeting
     }
+
+    if (loading)
+        return (
+            <Stack alignItems="center" direction="column" spacing={2}>
+                <CircularProgress size={100}/>
+            </Stack>
+        )
 
     return (
         <Stack alignItems="center" direction="column" spacing={2}>
@@ -258,9 +277,9 @@ export const Meeting = () => {
                         } 
                     </Select>
                 </FormControl>
-                <Button onClick={joinMeeting} variant='contained' disabled={meetingData === ''}>Join</Button>
-                <Button onClick={leaveMeeting} variant='contained' disabled={remoteVideos.length === 0}>Disconnect</Button>
-                { user.id === meetingData.hoster?.id && (<Button onClick={joinMeeting} variant='contained' disabled={remoteVideos.length === 0}>End</Button>) }
+                <Button onClick={joinMeeting} variant='contained' disabled={meetingData === ''} startIcon={ <AddIcCall/> }>Join</Button>
+                <Button onClick={leaveMeeting} variant='contained' disabled={remoteVideos.length === 0} startIcon={ <CallEnd/> } >Disconnect</Button>
+                { user.id === meetingData.hoster?.id && (<Button onClick={onEnd} variant='contained' disabled={remoteVideos.length === 0} startIcon={ <PhoneDisabled/> } >End</Button>) }
             </Stack>
             <Grid container>
                 {
@@ -277,7 +296,7 @@ export const Meeting = () => {
 
 const rtcSignalResolver = (signal, actions) => {
     let { senderId, type, data } = signal
-    const { iceCandidate, offer, answer, join, leave } = actions
+    const { iceCandidate, offer, answer, join, end } = actions
 
     data = JSON.parse(data)
 
@@ -291,8 +310,8 @@ const rtcSignalResolver = (signal, actions) => {
         case "ANSWER":
             answer(new RTCSessionDescription(data), senderId)
             break;
-        case "LEAVE":
-            leave(senderId)
+        case "END":
+            end()
             break;
         case "JOIN":
             join({ senderId, data })
