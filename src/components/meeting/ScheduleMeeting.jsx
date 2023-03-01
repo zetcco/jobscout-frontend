@@ -1,4 +1,4 @@
-import { ContentCopyRounded } from "@mui/icons-material";
+import { ContentCopyRounded, OpenInNew } from "@mui/icons-material";
 import { Alert, AlertTitle, Button, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import SmallPanel from "components/SmallPanel";
@@ -42,6 +42,9 @@ export const ScheduleMeeting = () => {
                                     <InputAdornment position="end">
                                         <IconButton onClick={() => {navigator.clipboard.writeText(response)}}>
                                             <ContentCopyRounded/>
+                                        </IconButton>
+                                        <IconButton onClick={() => {window.open(response)}}>
+                                            <OpenInNew/>
                                         </IconButton>
                                     </InputAdornment>
                                 ),
