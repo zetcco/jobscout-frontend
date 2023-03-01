@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BasicCard } from '../../cards/BasicCard'
 import { Stack } from '@mui/system'
 import SmallPanel from '../../SmallPanel'
-import { Button, TextField ,IconButton } from '@mui/material'
+import { Button, TextField ,IconButton, Modal, Box, Typography, Divider } from '@mui/material'
 import { ProfileSmallWithName } from '../ProfileSmallWithName'
 import { ProfileWithFullNameSubtitleSmall } from '../ProfileWithFullNameSubtitleSmall'
 import SendIcon from '@mui/icons-material/Send';
+import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
 
 export const Messaging = () => {
+
+    const [ meetingModalOpen, setMeetingModalOpen ] = useState(false);
+
   return (
     <BasicCard fullHeight>
         <Stack direction={'row'} spacing = {4} sx={{ height: '100%' }}>
@@ -43,9 +47,22 @@ export const Messaging = () => {
                     />
                 </Stack>
                 <Stack alignItems={'center'}>
-                    <Button variant = {'outlined'} fullWidth>Schedule a meeting</Button>
+                    <Button variant = {'outlined'} fullWidth onClick={() => setMeetingModalOpen(true)}>Schedule a meeting</Button>
+                    <Modal
+                        open={meetingModalOpen}
+                        onClose={() => setMeetingModalOpen(false)}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <ScheduleMeeting/>
+                    </Modal>
                 </Stack>         
             </Stack>
+
+
 
             <Stack flexGrow={1} flexDirection={'column'}>
                 <BasicCard sx = {{height:'100%'}}flexDirection = {'column'} flexGrow = {1}/> 
