@@ -39,7 +39,7 @@ export const { webSocketConnected, webSocketFailed, webSocketLoading } = websock
 export const connectToWebSocket = (dispatch, getState) => {
     const state = getState();
     dispatch(webSocketLoading())
-    let sock = new SockJS('http://192.168.8.100:8080/ws')
+    let sock = new SockJS(`${process.env.REACT_APP_BACKEND_URL}/ws`)
     console.log(sock)
     let stompClient = over(sock);
     stompClient.connect({"token": state.auth.token}, () => {
