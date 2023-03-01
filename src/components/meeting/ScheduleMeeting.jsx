@@ -20,7 +20,7 @@ export const ScheduleMeeting = () => {
                 headers: { Authorization: `Bearer ${authToken}` }
             })
 
-            setResponse(response.data)
+            setResponse(process.env.REACT_APP_FRONTEND_URL + "/meet/" + response.data.link)
         } catch (error) {
             setError(error)
         }
@@ -36,11 +36,11 @@ export const ScheduleMeeting = () => {
                         <>
                         <Typography variant="body2">Copy this link and send it to people you want to meet with. Be sure to save it so you can use it later, too.</Typography>
                         <TextField
-                            value={response.link}
+                            value={response}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton onClick={() => {navigator.clipboard.writeText(response.link)}}>
+                                        <IconButton onClick={() => {navigator.clipboard.writeText(response)}}>
                                             <ContentCopyRounded/>
                                         </IconButton>
                                     </InputAdornment>
