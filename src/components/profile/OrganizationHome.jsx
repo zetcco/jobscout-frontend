@@ -21,7 +21,7 @@ export const OrganizationHome = () => {
                         title = { 
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                     <AddBoxIcon sx = {{height:'30px' , width:'30px'}}/>
-                                    <Typography variant='h6'>Create</Typography>
+                                    <Typography variant='h6'>CREATE</Typography>
                                 </Stack> }
                         />
                     </RouterLink>
