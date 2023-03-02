@@ -32,7 +32,7 @@ export const OrganizationHome = () => {
                         title = { 
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                     <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>
-                                    <Typography variant = 'h6'>Join Requests</Typography>
+                                    <Typography variant = 'h6'>REQUEST</Typography>
                                 </Stack> }
                         />
                     </RouterLink>
