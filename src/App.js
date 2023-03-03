@@ -28,7 +28,6 @@ import { ManageJobPost } from "components/job_postings/manage/ManageJobPost";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
-
       <Route path="/" element={ <GridLayout/> }>
         <Route path="login" element={<Login/>}/>
         <Route path="signup">
