@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Outlet, useLocation } from "react-router-dom";
 import { Topbar } from "./Topbar";
 
-export const NavigationLayout = () => {
+export const NavigationLayout = ({ sx }) => {
   const { pathname } = useLocation();
 
   return (
@@ -11,7 +11,7 @@ export const NavigationLayout = () => {
       <Topbar />
       <Box>
         <Toolbar />
-        <Box sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}>
+        <Box sx={sx ? sx : undefined}>
           <motion.div
             key={pathname}
             initial={{ opacity: 0 }}
