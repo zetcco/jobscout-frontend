@@ -89,7 +89,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         </Route>
 
         <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
-          {/* <Route path="messages" element={<Messaging/>}/> */}
+          <Route path="messages-meet" element={<Messaging/>}/>
           <Route path="meet/:link" element={<Meeting/>}/>
         </Route>
 
