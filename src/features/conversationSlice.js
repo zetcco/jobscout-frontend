@@ -15,7 +15,9 @@ const conversationsSlice = createSlice({
             state.conversations = [...state.conversations, action.payload ]
         },
         newMessage: (state, action) => {
+            console.log(action)
             const conversation = state.conversations.find((conversation) => conversation.id === action.payload.conversationId)
+            console.log(conversation)
             conversation.messages = [ action.payload, ...conversation.messages ]
         }
     },
@@ -91,6 +93,7 @@ export const sendNewMessage = createAsyncThunk('conversation/newMessage', async 
     })
     state.websocket.stompClient.send(`/app/messaging/${conversationId}`, {}, JSON.stringify({
         senderId: state.auth.userInfo.id,
+        conversationId,
         type: "MESSAGE",
         data: message
     }))
