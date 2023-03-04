@@ -59,14 +59,14 @@ export const subsribeToServerPrivateMessage = (dispatch, getState) => {
         state.websocket.stompClient.subscribe(
             `/messaging/private/${state.auth.userInfo.id}`,
             (payload) => {
-                console.log(payload)
                 const body = JSON.parse(payload.body)
-                switch (payload.command) {
+                const data = JSON.parse(body.data)
+                switch (body.type) {
                     case "MESSAGE":
-                        dispatch(newMessage(body))
+                        dispatch(newMessage(data))
                         break;
                     case "CONVERSATION":
-                        dispatch(newConversation(body));
+                        dispatch(newConversation(data));
                         break;
                     default:
                         break;
