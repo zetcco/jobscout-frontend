@@ -14,6 +14,10 @@ const conversationsSlice = createSlice({
         newConversation: (state, action) => {
             state.conversations = [...state.conversations, action.payload ]
         },
+        newMessage: (state, action) => {
+            const conversation = state.conversations.find((conversation) => conversation.id === action.payload.conversationId)
+            conversation.messages = [ action.payload, ...conversation.messages ]
+        }
     },
     extraReducers (builder) {
         builder
@@ -42,7 +46,7 @@ const conversationsSlice = createSlice({
 })
 
 export default conversationsSlice.reducer;
-export const { newConversation } = conversationsSlice.actions;
+export const { newConversation, newMessage } = conversationsSlice.actions;
 export const selectConversationLoading = (state) => state.conversations.loading
 export const selectConversations = (state) => state.conversations.conversations
 export const selectMessages = (state, selectedConversationId)  => state.conversations.conversations.find((conversation) => conversation.id === selectedConversationId)?.messages
@@ -53,7 +57,18 @@ export const subsribeToServerPrivateMessage = (dispatch, getState) => {
         state.websocket.stompClient.subscribe(
             `/messaging/private/${state.auth.userInfo.id}`,
             (payload) => {
-                dispatch(newConversation(JSON.parse( payload.body )));
+                console.log(payload)
+                const body = JSON.parse(payload.body)
+                switch (payload.command) {
+                    case "MESSAGE":
+                        dispatch(newMessage(body))
+                        break;
+                    case "CONVERSATION":
+                        dispatch(newConversation(body));
+                        break;
+                    default:
+                        break;
+                }
             },
             {"token": state.auth.token}
         );
@@ -67,13 +82,17 @@ export const fetchConversations = createAsyncThunk('conversations/fetchConversat
     }})).data;
 })
 
-export const newMessage = createAsyncThunk('conversation/newMessage', async ({ conversationId, content } , { getState }) => {
+export const sendNewMessage = createAsyncThunk('conversation/newMessage', async ({ conversationId, content } , { getState }) => {
     const state = getState()
-    state.websocket.stompClient.send(`/messaging/${conversationId}`, {}, JSON.stringify({
-        sender: {
-            id: state.auth.userInfo.id
-        },
-        content: content
+    const message = JSON.stringify({
+        conversationId,
+        senderId: state.auth.userInfo.id,
+        content
+    })
+    state.websocket.stompClient.send(`/app/messaging/${conversationId}`, {}, JSON.stringify({
+        senderId: state.auth.userInfo.id,
+        type: "MESSAGE",
+        data: message
     }))
 })
 

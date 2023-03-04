@@ -6,7 +6,7 @@ import { connectToWebSocket, selectWebSocketConnected, selectWebSocketLoading } 
 import { subscribeToNotification } from 'features/notificationSlice';
 import { subsribeToServerPrivateMessage } from 'features/conversationSlice';
 
-export const ProtectedRoute = ({ role, redirect, children }) => {
+export const ProtectedRoute = ({ role, redirect }) => {
 
     const authUser = useSelector(selectAuthUser);
     const websocketConnected = useSelector(selectWebSocketConnected);
