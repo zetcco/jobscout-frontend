@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton, MenuItem, Stack, TextField, Toolbar, useTheme } from "@mui/material";
+import { Box, Button, Divider, Drawer, IconButton, MenuItem, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
 import { selectAuthUser } from "features/authSlice";
 import { fetchConversationMessages, fetchConversations, sendNewMessage, selectConversations, selectMessages } from "features/conversationSlice";
 import React, { useEffect, useRef, useState } from "react";
@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { ProfileSmallWithName } from "../ProfileSmallWithName";
 import SendIcon from '@mui/icons-material/Send';
 import { ChatBubble } from "./ChatBubble";
+import { GroupAdd } from "@mui/icons-material";
+import AddIcon from '@mui/icons-material/Add';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const ConversationMessaging = () => {
 
@@ -42,18 +44,26 @@ const ConversationMessaging = () => {
 
     const sendMessage = () => {
         dispatch(sendNewMessage({ conversationId: selectedConvo, content: message }))
+        setMessage('')
     }
 
     const conversationList = (
-        conversations.length > 0 && (
+        <>
+        <Stack direction={"row"} justifyContent="space-between" alignItems={"center"} m={2}>
+            <Typography variant="h5">Chats</Typography>
+            <Button startIcon={<AddIcon/>}>New</Button>
+        </Stack>
+        <Divider/>
+        { conversations.length > 0 && (
             conversations.map( (conversation, index) => {
                 let user = conversation.participants.filter((participant) => participant.id !== authUser.id)[0]
                 return (
                     <MenuItem key={index} selected={selectedConvo === conversation.id} onClick={() => onConversationSelect(conversation.id)}>
-                        <ProfileSmallWithName sx={{ margin: '10px' }} avatar={user.displayPicture} name={user.displayName}/>
+                        <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user.displayPicture} name={user.displayName}/>
                     </MenuItem>
                 )
-        }))
+        }))}
+        </>
     )
 
     return (
@@ -86,21 +96,24 @@ const ConversationMessaging = () => {
                 </Drawer>
             </Box>
             <Box height={`calc(100vh - (${toolbar?.minHeight}px + ${8}px + ${typeEl.current?.clientHeight}px ))`}
-                sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}>
+                sx={{ 
+                    flexGrow: 1,
+                    width: { md: `calc(100% - ${drawerWidth}px)` },
+                    paddingX: 2,
+                }}>
                 <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }}>
                     {
-                        messages?.map((message, index) => (
-                            <ChatBubble key={index} sent={message.senderId === authUser.id} content={message.content}/>
-                        ))
+                        messages?.map((message, index) => { 
+                            let topSent = messages[index+1]?.senderId === message.senderId ? true : false;
+                            let bottomSent = messages[index-1]?.senderId === message.senderId ? true : false;
+                            let sent = message.senderId === authUser.id
+                            return (
+                                <ChatBubble topSent={topSent} bottomSent={bottomSent} key={index} sent={sent} content={message.content}/>
+                            )
+                        })
                     }
-                    {/* <ChatBubble sent={true} content={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available."}/>
-                    <ChatBubble sent={false} content={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available."}/>
-                    <ChatBubble sent={true} content={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available."}/>
-                    <ChatBubble sent={false} content={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available."}/>
-                    <ChatBubble sent={false} content={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available."}/>
-                    <ChatBubble sent={true} content={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available."}/> */}
                 </Box>
-                <Stack direction = {'row'} spacing = {2} ref={typeEl}>
+                <Stack direction = {'row'} spacing={2} ref={typeEl} py={1}>
                     <Stack flexGrow={1}>
                         <TextField 
                             value={message}
@@ -111,7 +124,7 @@ const ConversationMessaging = () => {
                             fullWidth 
                         />
                     </Stack>
-                    <Stack  justifyContent = {"center"}>
+                    <Stack justifyContent={"center"}>
                         <IconButton size = 'large' variant = 'contained' onClick={sendMessage}>
                             <SendIcon color = 'success' fontSize='large'/>
                         </IconButton>
