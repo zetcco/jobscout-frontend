@@ -56,6 +56,11 @@ const ConversationMessaging = () => {
         }
     }
 
+    const onKeyDown = (e) => {
+        if (e.keyCode === 13)
+            sendMessage()
+    }
+
     const debouceClearTyping = useCallback(
         debounce((selectedConvo) => {
             dispatch(stopTyping(selectedConvo))
@@ -174,6 +179,7 @@ const ConversationMessaging = () => {
                         <TextField 
                             value={message}
                             onChange={onTyping}
+                            onKeyDown={onKeyDown}
                             label="Send Message" 
                             variant="outlined"
                             placeholder = "Type the meassage "
