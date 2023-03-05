@@ -14,10 +14,25 @@ const conversationsSlice = createSlice({
         newConversation: (state, action) => {
             state.conversations = [...state.conversations, action.payload ]
         },
+        updateConversation: (state, action) => {
+            const conversation = state.conversations.find(conversation => conversation.id === action.payload.id)
+            const { name, picture } = action.payload
+            if (conversation) {
+                conversation.name = name
+                conversation.picture = picture
+            }
+        },
+        isTyping: (state, action) => {
+            const conversation = state.conversations.find(conversation => conversation.id === action.payload.conversationId)
+            conversation.typing = action.payload.name
+        },
+        stopTyping: (state, action) => {
+            const conversation = state.conversations.find(conversation => conversation.id === action.payload)
+            if (conversation)
+                conversation.typing = null
+        },
         newMessage: (state, action) => {
-            console.log(action)
             const conversation = state.conversations.find((conversation) => conversation.id === action.payload.conversationId)
-            console.log(conversation)
             conversation.messages = [ action.payload, ...conversation.messages ]
         }
     },
@@ -48,10 +63,11 @@ const conversationsSlice = createSlice({
 })
 
 export default conversationsSlice.reducer;
-export const { newConversation, newMessage } = conversationsSlice.actions;
+export const { newConversation, newMessage, updateConversation, isTyping, stopTyping } = conversationsSlice.actions;
 export const selectConversationLoading = (state) => state.conversations.loading
 export const selectConversations = (state) => state.conversations.conversations
 export const selectMessages = (state, selectedConversationId)  => state.conversations.conversations.find((conversation) => conversation.id === selectedConversationId)?.messages
+export const selectTyping = (state, selectedConversationId) => state.conversations.conversations.find((conversation) => conversation.id === selectedConversationId)?.typing
 
 export const subsribeToServerPrivateMessage = (dispatch, getState) => {
     const state = getState();
@@ -65,8 +81,14 @@ export const subsribeToServerPrivateMessage = (dispatch, getState) => {
                     case "MESSAGE":
                         dispatch(newMessage(data))
                         break;
+                    case "TYPING":
+                        dispatch(isTyping(data))
+                        break;
                     case "CONVERSATION":
                         dispatch(newConversation(data));
+                        break;
+                    case "CONVERSATION_UPDATE":
+                        dispatch(updateConversation(data));
                         break;
                     default:
                         break;
@@ -96,6 +118,20 @@ export const sendNewMessage = createAsyncThunk('conversation/newMessage', async 
         conversationId,
         type: "MESSAGE",
         data: message
+    }))
+})
+
+export const sendTyping = createAsyncThunk('conversation/onTyping', async (conversationId, { getState }) => {
+    const state = getState()
+    const payload = JSON.stringify({
+        conversationId,
+        senderId: state.auth.userInfo.id,
+    })
+    state.websocket.stompClient.send(`/app/messaging/${conversationId}`, {}, JSON.stringify({
+        senderId: state.auth.userInfo.id,
+        conversationId,
+        type: "TYPING",
+        data: payload
     }))
 })
 

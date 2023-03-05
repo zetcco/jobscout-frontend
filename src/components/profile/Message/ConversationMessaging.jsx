@@ -1,13 +1,15 @@
-import { Box, Button, Divider, Drawer, IconButton, MenuItem, Modal, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Button, Divider, Drawer, IconButton, MenuItem, Modal, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
 import { selectAuthUser } from "features/authSlice";
-import { fetchConversationMessages, fetchConversations, sendNewMessage, selectConversations, selectMessages } from "features/conversationSlice";
-import React, { useEffect, useRef, useState } from "react";
+import { fetchConversationMessages, fetchConversations, sendNewMessage, selectConversations, selectMessages, sendTyping, selectTyping, stopTyping, isTyping } from "features/conversationSlice";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ProfileSmallWithName } from "../ProfileSmallWithName";
 import SendIcon from '@mui/icons-material/Send';
 import { ChatBubble } from "./ChatBubble";
 import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
+import { Groups3 } from "@mui/icons-material";
+import { debounce } from "lodash";
 
 const drawerWidth = 300;
 
@@ -24,9 +26,8 @@ const ConversationMessaging = () => {
     const [ message, setMessage ] = useState('')
     const [ newChatOpen, setNewChatOpen ] = useState(false);
 
-    const chatModalRef = useRef(null)
-
     const messages = useSelector((state) => selectMessages(state, selectedConvo))
+    const typing = useSelector((state) => selectTyping(state, selectedConvo))
 
     useEffect(() => {
         dispatch(fetchConversations())
@@ -50,6 +51,23 @@ const ConversationMessaging = () => {
         setMessage('')
     }
 
+    const onTyping = (e) => {
+        if (selectedConvo) {
+            setMessage(e.target.value)
+            dispatch(sendTyping(selectedConvo))
+        }
+    }
+
+    const debouceClearTyping = useCallback(
+        debounce((selectedConvo) => {
+            dispatch(stopTyping(selectedConvo))
+        }, [1000]), 
+    []);
+
+    useEffect(() => {
+        debouceClearTyping(selectedConvo)
+    }, [typing])
+
     const conversationList = (
         <>
         <Stack direction={"row"} justifyContent="space-between" alignItems={"center"} m={2}>
@@ -57,15 +75,40 @@ const ConversationMessaging = () => {
             <Button startIcon={<AddIcon/>} onClick={() => setNewChatOpen(true)}>New</Button>
         </Stack>
         <Divider/>
-        { conversations.length > 0 && (
+        { conversations.length > 0 ? (
             conversations.map( (conversation, index) => {
                 let user = conversation.participants.filter((participant) => participant.id !== authUser.id)[0]
+
+                let picture;
+                if (conversation.picture)
+                    picture = conversation.picture
+                else if (conversation.participants.length === 2)
+                    picture = user?.displayPicture
+
+                let name;
+                if (conversation.name)
+                    name = conversation.name
+                else
+                    name = user?.displayName
+                
                 return (
                     <MenuItem key={index} selected={selectedConvo === conversation.id} onClick={() => onConversationSelect(conversation.id)}>
-                        <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user?.displayPicture} name={ conversation.name ? conversation.name : user?.displayName}/>
+                        {/* <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user?.displayPicture} name={ conversation.name ? conversation.name : user?.displayName}/> */}
+                        <Stack direction={"row"} spacing={1.5} alignItems="center">
+                            <Avatar alt={name} src={picture}/>
+                            <Typography>{name}</Typography>
+                        </Stack>
                     </MenuItem>
                 )
-        }))}
+        })) : (
+            <Stack direction={"column"} spacing={2} pt={3} px={4} sx={{ color: 'grey.600' }} alignItems="center">
+                <Typography align={"center"} fontSize={15}>Hey there! Want to connect with your colleagues?<br/>Start a chat now and stay in touch with your team!</Typography>
+                <Box>
+                    <Button variant="contained" onClick={() => setNewChatOpen(true)}>Start a Chat</Button>
+                </Box>
+            </Stack>
+        )
+        }
         </>
     )
 
@@ -107,7 +150,7 @@ const ConversationMessaging = () => {
                     justifyContent: 'center'
                 }}
             >
-                <NewChat/>
+                <NewChat onClose={() => setNewChatOpen(false)}/>
             </Modal>
             <Box height={`calc(100vh - (${toolbar?.minHeight}px + ${8}px + ${typeEl.current?.clientHeight}px ))`}
                 sx={{ 
@@ -116,6 +159,7 @@ const ConversationMessaging = () => {
                     paddingX: 2,
                 }}>
                 <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }}>
+                    { typing && typing + " is typing.." }
                     {
                         messages?.map((message, index) => { 
                             let topSent = messages[index+1]?.senderId === message.senderId ? true : false;
@@ -131,7 +175,7 @@ const ConversationMessaging = () => {
                     <Stack flexGrow={1}>
                         <TextField 
                             value={message}
-                            onChange={(e) => setMessage(e.target.value)}
+                            onChange={onTyping}
                             label="Send Message" 
                             variant="outlined"
                             placeholder = "Type the meassage "

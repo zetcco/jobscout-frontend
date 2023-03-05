@@ -9,6 +9,8 @@ import { Stack } from "@mui/system";
 import { debounce } from "lodash";
 import CircularProgress from '@mui/material/CircularProgress';
 import SearchIcon from '@mui/icons-material/Search';
+import { UploadArea } from "components/input/UploadArea";
+import { Controller, useForm } from "react-hook-form";
 
 export const NewChat = forwardRef(({ onClose }) => {
     const [ response, setResponse ] = useState(null)
@@ -17,10 +19,14 @@ export const NewChat = forwardRef(({ onClose }) => {
     const [ loading, setLoading ] = useState(false)
 
     const [ email, setEmail ] = useState('')
-    const [ emailLoading, setEmailLoading ] = useState(false);
+    const [ responseLoading, setResponseLoading ] = useState(false);
     const [ popupOpen, setPopupOpen ] = useState(false)
     const [ options, setOptions ] = useState([])
     const [ selectedParticipants, setSelectedParticipants ] = useState([])
+
+    const [ newChatName, setNewChatName ] = useState('')
+
+    const { register, control, handleSubmit, watch }= useForm();
 
     const authToken = useSelector(selectAuthUserToken);
 
@@ -39,13 +45,13 @@ export const NewChat = forwardRef(({ onClose }) => {
                     setOptions([])
                 }
             }
-            setEmailLoading(false)
+            setResponseLoading(false)
         }, [1000]), 
     []);
 
     const onEmailType = (value) => {
         setEmail(value)
-        setEmailLoading(true)
+        setResponseLoading(true)
         debouceEmailCheck(value, selectedParticipants)
     }
 
@@ -61,36 +67,81 @@ export const NewChat = forwardRef(({ onClose }) => {
              }, {
                 headers: { Authorization: `Bearer ${authToken}` }
             })
-            setResponse(response.data.name === null ? selectedParticipants[0].displayName : response.data.name)
+            setResponse(response.data)
+            setNewChatName(response.data.name ? response.data.name : response.data.participants[0].displayName)
         } catch (error) {
             setError(error)
         }
         setLoading(false)
     }
     
+    const onChatUpdateSubmit = async (data) =>{
+        setLoading(true)
+        try { 
+            var formData = new FormData()
+            formData.append('name', data.chatname);
+            formData.append('picture', data.file[0]);
+            await axios.post(`/messaging/conversation/${response.id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            })
+            setLoading(false)
+            onClose()
+        } catch (error) {
+            setError(error)
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
         if (email === '')
-            setEmailLoading(false)
+            setResponseLoading(false)
     }, [email])
 
     return (
         <SmallPanel mainTitle={response ? "Chat created! Yay!" : "Create a new chat"} sx={{ width: '40%' }}>
-            {loading ? (
-                <Typography>Loading</Typography>
-            ) : (
+            <Stack spacing={2}>
+            { error && (
+                <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>{error.response.data.message}</strong>
+                </Alert>
+            )}
+            {(
                     response ? (
-                        <>
-                            <TextField value={response}/>
-                        </>
+                        <form onSubmit={handleSubmit(onChatUpdateSubmit)} encType="multipart/form-data">
+                            <Stack spacing={2}>
+                                <Typography variant="body2">You can change the Chat name and the Chat picture too !</Typography>
+                                <Controller
+                                    name="chatname"
+                                    control={control}
+                                    defaultValue={newChatName}
+                                    render={ ({ field }) => (
+                                        <TextField 
+                                            {...field}
+                                            label="Chat name" 
+                                            variant="outlined"
+                                            fullWidth 
+                                        />               
+                                    )}
+                                />
+                                <UploadArea 
+                                    register={
+                                        register(
+                                            "file"
+                                        )} 
+                                    text={"Click here to upload Chat Picture"}
+                                    files={watch("file")}
+                                />
+                                <Stack direction={"row"} spacing={2}>
+                                    <Button fullWidth onClick={onClose}>Close</Button>
+                                    <Button type="submit" variant="contained" fullWidth disabled={loading}>Save</Button>
+                                </Stack>
+                            </Stack>
+                        </form>
                     ) : (
                         <>
-                        { error && (
-                            <Alert severity="error">
-                                <AlertTitle>Error</AlertTitle>
-                                <strong>{error.response.message}</strong>
-                            </Alert>
-                        )}
-                        <Stack spacing={2}>
                             <Autocomplete
                             value={null}
                             inputValue={email}
@@ -114,7 +165,7 @@ export const NewChat = forwardRef(({ onClose }) => {
                                     ...params.InputProps,
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            { emailLoading ? <CircularProgress size={20}/> : <SearchIcon /> }
+                                            { responseLoading ? <CircularProgress size={20}/> : <SearchIcon /> }
                                             {params.InputProps.endAdornment}
                                         </InputAdornment>
                                     ),
@@ -147,12 +198,12 @@ export const NewChat = forwardRef(({ onClose }) => {
                             </Stack>
                             <Stack direction={"row"} spacing={2}>
                                 <Button variant="outlined" onClick={onClose} fullWidth>Cancel</Button>
-                                <Button variant="contained" onClick={onSubmit} fullWidth disabled={selectedParticipants.length === 0}>Start Now</Button>
+                                <Button variant="contained" onClick={onSubmit} fullWidth disabled={selectedParticipants.length === 0 || loading}>Start Now</Button>
                             </Stack>
-                        </Stack>
                         </>
                     )
             )}
+            </Stack>
         </SmallPanel>
     );
 });
