@@ -1,14 +1,12 @@
 import { Avatar, Box, Button, Divider, Drawer, IconButton, MenuItem, Modal, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
 import { selectAuthUser } from "features/authSlice";
-import { fetchConversationMessages, fetchConversations, sendNewMessage, selectConversations, selectMessages, sendTyping, selectTyping, stopTyping, isTyping } from "features/conversationSlice";
+import { fetchConversationMessages, fetchConversations, sendNewMessage, selectConversations, selectMessages, sendTyping, selectTyping, stopTyping } from "features/conversationSlice";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ProfileSmallWithName } from "../ProfileSmallWithName";
 import SendIcon from '@mui/icons-material/Send';
 import { ChatBubble } from "./ChatBubble";
 import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
-import { Groups3 } from "@mui/icons-material";
 import { debounce } from "lodash";
 
 const drawerWidth = 300;
@@ -38,7 +36,7 @@ const ConversationMessaging = () => {
             setSelectedConvo(conversations[0]?.id) 
             dispatch(fetchConversationMessages(conversations[0]?.id))
         }
-    }, [conversations])
+    }, [conversations, dispatch])
 
     const onConversationSelect = (id) => {
         setSelectedConvo(id)

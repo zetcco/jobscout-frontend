@@ -1,5 +1,4 @@
-import { ContentCopyRounded, OpenInNew } from "@mui/icons-material";
-import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, Chip, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Alert, AlertTitle, Autocomplete, Avatar, Button, Chip, InputAdornment, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import SmallPanel from "components/SmallPanel";
 import { selectAuthUserToken } from "features/authSlice";
