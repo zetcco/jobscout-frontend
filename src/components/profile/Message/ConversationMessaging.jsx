@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Drawer, IconButton, MenuItem, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, Drawer, IconButton, MenuItem, Modal, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
 import { selectAuthUser } from "features/authSlice";
 import { fetchConversationMessages, fetchConversations, sendNewMessage, selectConversations, selectMessages } from "features/conversationSlice";
 import React, { useEffect, useRef, useState } from "react";
@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ProfileSmallWithName } from "../ProfileSmallWithName";
 import SendIcon from '@mui/icons-material/Send';
 import { ChatBubble } from "./ChatBubble";
-import { GroupAdd } from "@mui/icons-material";
 import AddIcon from '@mui/icons-material/Add';
+import { NewChat } from "./NewChat";
 
 const drawerWidth = 300;
 
@@ -22,6 +22,9 @@ const ConversationMessaging = () => {
     const conversations = useSelector(selectConversations);
     const [ selectedConvo, setSelectedConvo ] = useState(null);
     const [ message, setMessage ] = useState('')
+    const [ newChatOpen, setNewChatOpen ] = useState(false);
+
+    const chatModalRef = useRef(null)
 
     const messages = useSelector((state) => selectMessages(state, selectedConvo))
 
@@ -51,7 +54,7 @@ const ConversationMessaging = () => {
         <>
         <Stack direction={"row"} justifyContent="space-between" alignItems={"center"} m={2}>
             <Typography variant="h5">Chats</Typography>
-            <Button startIcon={<AddIcon/>}>New</Button>
+            <Button startIcon={<AddIcon/>} onClick={() => setNewChatOpen(true)}>New</Button>
         </Stack>
         <Divider/>
         { conversations.length > 0 && (
@@ -59,7 +62,7 @@ const ConversationMessaging = () => {
                 let user = conversation.participants.filter((participant) => participant.id !== authUser.id)[0]
                 return (
                     <MenuItem key={index} selected={selectedConvo === conversation.id} onClick={() => onConversationSelect(conversation.id)}>
-                        <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user.displayPicture} name={user.displayName}/>
+                        <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user?.displayPicture} name={ conversation.name ? conversation.name : user?.displayName}/>
                     </MenuItem>
                 )
         }))}
@@ -95,6 +98,17 @@ const ConversationMessaging = () => {
                     {conversationList}
                 </Drawer>
             </Box>
+            <Modal
+                open={newChatOpen}
+                onClose={() => setNewChatOpen(false)}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <NewChat/>
+            </Modal>
             <Box height={`calc(100vh - (${toolbar?.minHeight}px + ${8}px + ${typeEl.current?.clientHeight}px ))`}
                 sx={{ 
                     flexGrow: 1,

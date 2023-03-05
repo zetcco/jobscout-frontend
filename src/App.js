@@ -24,7 +24,7 @@ import BlogPost from "./routes/blog/BlogPost";
 import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
-import { Meeting } from "components/profile/Message/Meeting";
+import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 
 const router = createBrowserRouter(createRoutesFromElements(

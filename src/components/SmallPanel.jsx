@@ -1,10 +1,10 @@
 import React from "react";
 import { Stack } from "@mui/system";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { BasicCard } from "./cards/BasicCard";
 
 
-const SmallPanel = ({mainTitle ,children, sx}) => {
+const SmallPanel = ({mainTitle ,children, sx, ref}) => {
     return ( 
         <BasicCard sx={sx}>
             <Stack direction={'column'} spacing={2}>
