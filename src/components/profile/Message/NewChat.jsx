@@ -99,7 +99,7 @@ export const NewChat = forwardRef(({ onClose }) => {
     }, [email])
 
     return (
-        <SmallPanel mainTitle={response ? "Chat created! Yay!" : "Create a new chat"} sx={{ width: '40%' }}>
+        <SmallPanel mainTitle={response ? "Chat created! Yay!" : "Create a new chat"} sx={{ width: { xs: '80%', md: '40%' } }}>
             <Stack spacing={2}>
             { error && (
                 <Alert severity="error">

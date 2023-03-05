@@ -162,6 +162,14 @@ const ConversationMessaging = () => {
                     paddingX: 2,
                 }}>
                 <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }}>
+                    <IconButton
+                        color="inherit"
+                        edge="start"
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
+                        <AddIcon />
+                    </IconButton>
                     { typing && <Typography variant="body2" p={2}>{typing} is typing..</Typography> }
                     {
                         messages?.map((message, index) => { 
