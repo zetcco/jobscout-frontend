@@ -58,7 +58,7 @@ export const ScheduleMeeting = () => {
                         { error && (
                             <Alert severity="error">
                                 <AlertTitle>Error</AlertTitle>
-                                <strong>{error.response.message}</strong>
+                                <strong>{error.response.data.message}</strong>
                             </Alert>
                         )}
                         <TextField
