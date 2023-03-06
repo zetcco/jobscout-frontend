@@ -64,7 +64,8 @@ const getDesignTokens = (theme) => ({
         },
       },
       defaultProps: {
-        disableRipple: true
+        disableRipple: true,
+        disableElevation: true
       }
     },
     MuiPopover: {
