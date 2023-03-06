@@ -27,7 +27,9 @@ export const Topbar = () => {
             <AppBar sx={{
                 position: 'fixed',
                 zIndex: (theme) => theme.zIndex.drawer + 1
-            }}>
+            }}
+            elevation={0}
+            >
                 <Toolbar sx={{ color: (theme) => theme.palette.common.white }}>
                     <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1 }}> JobScout </Typography></RouterLink>
                     <Box sx={{ flexGrow: 1 }} />

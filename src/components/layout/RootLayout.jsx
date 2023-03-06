@@ -29,7 +29,7 @@ const getDesignTokens = (theme) => ({
   shape: {
     borderRadius: 100,
   },
-  shadows: Array.from({ length: 24 }, (_, i) => "none"),
+  // shadows: Array.from({ length: 24 }, (_, i) => "none"),
   typography: {
     fontFamily: "\"Inter\", \"Roboto\", \"sans-serif\"",
     h5: {
@@ -64,7 +64,8 @@ const getDesignTokens = (theme) => ({
         },
       },
       defaultProps: {
-        disableRipple: true
+        disableRipple: true,
+        disableElevation: true
       }
     },
     MuiPopover: {

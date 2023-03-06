@@ -24,7 +24,8 @@ import BlogPost from "./routes/blog/BlogPost";
 import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
-import { Meeting } from "components/profile/Message/Meeting";
+import { Meeting } from "components/meeting/Meeting";
+import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -61,7 +62,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
       <Route path="/" element={<ProtectedRoute/>}>
 
-        <Route path="/" element={<NavigationLayout/>}>
+        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
           <Route path="home" element={<Home/>}/>
 
           <Route path="posts" element={<JobPosts/>}/>
@@ -80,16 +81,20 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
         </Route>
 
-        <Route path="/" element={<NavigationLayout/>}>
+        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
           <Route path="blog" element={<Blog/>}/>
           <Route path="blog">
             <Route path=":blogId" element={<BlogPost/>}/>
           </Route>
         </Route>
 
-        <Route path="/" element={<NavigationLayout/>}>
-          <Route path="messages" element={<Messaging/>}/>
+        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
+          <Route path="messages-meet" element={<Messaging/>}/>
           <Route path="meet/:link" element={<Meeting/>}/>
+        </Route>
+
+        <Route path="/" element={<NavigationLayout/>}>
+          <Route path="messages" element={<ConversationMessaging/>}/>
         </Route>
 
         <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>
