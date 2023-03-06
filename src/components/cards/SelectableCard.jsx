@@ -13,6 +13,7 @@ export const SelectableCard = ({ title, selected, onClick, sx }) => {
             }),
             "&:hover": {
                 borderColor: (theme) => theme.palette.primary.light,
+                boxShadow: '0px 9px 21px 4px rgba(0,174,43,0.16)',
             }
         }),
         ...(selected !== false && { 
@@ -28,7 +29,6 @@ export const SelectableCard = ({ title, selected, onClick, sx }) => {
     onClick={onClick}
     >
         <Stack direction={"column"} alignItems={"center"}>
-            <Box></Box>
             <Typography variant={ selected ? "body3" : undefined}>{ title }</Typography>
         </Stack>
     </BasicCard>
