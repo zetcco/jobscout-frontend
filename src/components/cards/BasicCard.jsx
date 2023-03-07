@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material"
 
-export const BasicCard = ({ children, sx, onClick, fullHeight }) => {
+export const BasicCard = ({ children, sx, onClick, fullHeight, p }) => {
 
     return (
         <Paper sx={{
@@ -15,7 +15,7 @@ export const BasicCard = ({ children, sx, onClick, fullHeight }) => {
         onClick={onClick ? onClick : undefined}
         >
             <Box sx={{ 
-                p: { xs: 2, sm: 4 },
+                p: { xs: (p !== undefined ? p : 2), sm: (p !== undefined ? p : 4) },
                 ...( fullHeight && ({height: '100%'}))
                 }}>
                 {children}

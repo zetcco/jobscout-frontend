@@ -11,8 +11,9 @@ export const Video = ({ srcObject }) => {
 
     return (
         <>
-            <BasicCard>
+            <BasicCard p={0}>
                 <video ref={element} style={{
+                    borderRadius: '25px',
                     width: '100%',
                     transform: `scale(-1, 1)`,
                     WebkitTransform: `scale(-1, 1)`

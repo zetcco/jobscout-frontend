@@ -1,5 +1,5 @@
-import { AddIcCall, CallEnd, PhoneDisabled } from "@mui/icons-material";
-import { Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { AddIcCall, CallEnd, MicOff, PhoneDisabled } from "@mui/icons-material";
+import { Alert, AlertTitle, Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import axios from "axios";
 import { Video } from "components/Video";
@@ -18,6 +18,7 @@ export const Meeting = () => {
     const [ meetingData, setMeetingData ] = useState('');
     const authToken = useSelector(selectAuthUserToken)
     const [ loading, setLoading ] = useState(false);
+    const [ localStreamError, setLocalStreamError ] = useState()
 
     useEffect(() => {
         const fetchMeeting = async () => {
@@ -115,15 +116,19 @@ export const Meeting = () => {
 
     // Fires when 'Join' button is clicked
     const joinMeeting = async () => {
-        const stream = await getLocalStream() // Get the local stream
-        console.log(stream.getAudioTracks())
-        stream.getAudioTracks()[0].enabled = false // Mute the local stream audio (so it won't hear back)
-        setRemoteVideos((prevSate) => [...prevSate, { peer: 'local', stream }]) // Add the stream to video element
+        try {
+            const stream = await getLocalStream() // Get the local stream
+            console.log(stream.getAudioTracks())
+            stream.getAudioTracks()[0].enabled = false // Mute the local stream audio (so it won't hear back)
+            setRemoteVideos((prevSate) => [...prevSate, { peer: 'local', stream }]) // Add the stream to video element
 
-        subscribe(meetingData.link) // Subscribe to the video chat room signaling channel
-        subscribe(meetingData.link, user.id) // Subsribe to the video chat room private signaling channel
+            subscribe(meetingData.link) // Subscribe to the video chat room signaling channel
+            subscribe(meetingData.link, user.id) // Subsribe to the video chat room private signaling channel
 
-        sendMessage({ content: `User(id: ${user.id}) Joined` }, "JOIN") // Finally send to everyone that you have joined the chat room
+            sendMessage({ content: `User(id: ${user.id}) Joined` }, "JOIN") // Finally send to everyone that you have joined the chat room
+        } catch (e) {
+            setLocalStreamError(e)
+        }
     }
 
     const leaveMeeting = () => {
@@ -188,12 +193,10 @@ export const Meeting = () => {
     }
 
     const getLocalStream = async () => {
-        console.log(localStream)
         const constraint = {
             video: { deviceId: { exact: localStream.video.deviceId } },
             audio: { deviceId: { exact: localStream.audio.deviceId } }
         }
-        console.log(constraint)
         return await navigator.mediaDevices.getUserMedia(constraint)
     }
 
@@ -255,6 +258,17 @@ export const Meeting = () => {
         )
 
     return (
+        <>
+        <Snackbar open={!!localStreamError}
+        // anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        autoHideDuration={3000}
+        onClose={() => setLocalStreamError(null)}
+        >
+            <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                Could not get video feed. Try selecting another stream.
+            </Alert>
+        </Snackbar>
         <Stack alignItems="center" direction="column" spacing={2}>
             <Stack direction={{ sm: "column", md: "row" }} spacing={2}>
                 <FormControl sx={{ width: 200 }}>
@@ -278,8 +292,9 @@ export const Meeting = () => {
                     </Select>
                 </FormControl>
                 <Button onClick={joinMeeting} variant='contained' disabled={meetingData === ''} startIcon={ <AddIcCall/> }>Join</Button>
-                <Button onClick={leaveMeeting} variant='contained' disabled={remoteVideos.length === 0} startIcon={ <CallEnd/> } >Disconnect</Button>
-                { user.id === meetingData.hoster?.id && (<Button onClick={onEnd} variant='contained' disabled={remoteVideos.length === 0} startIcon={ <PhoneDisabled/> } >End</Button>) }
+                <Button onClick={leaveMeeting} variant='contained' disabled={remoteVideos.length === 0} startIcon={ <MicOff/> } >Mute</Button>
+                <Button onClick={leaveMeeting} variant='contained' color="error" disabled={remoteVideos.length === 0} startIcon={ <CallEnd/> } >Disconnect</Button>
+                { user.id === meetingData.hoster?.id && (<Button onClick={onEnd} variant='contained' color="error" disabled={remoteVideos.length === 0} startIcon={ <PhoneDisabled/> } >End</Button>) }
             </Stack>
             <Grid container>
                 {
@@ -291,6 +306,7 @@ export const Meeting = () => {
                 }
             </Grid>
         </Stack>
+        </>
     )
 };
 
