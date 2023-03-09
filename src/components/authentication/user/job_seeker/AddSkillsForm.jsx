@@ -57,7 +57,7 @@ export const AddSkillsForm = () => {
     fetchSkills();
   }, [authToken, category]);
 
-  const test = async () => {
+  const updateSkills = async () => {
     setSubmitSkill(true);
      await axios
       .put(
@@ -160,7 +160,7 @@ export const AddSkillsForm = () => {
           <Button
             variant='contained'
             sx={{ width: '100%' }}
-            onClick={test}
+            onClick={updateSkills}
             disabled={submitSkill || selected.length <= 0}
           >
             Continue
