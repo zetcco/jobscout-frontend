@@ -1,23 +1,33 @@
-import { Button, Chip, MenuItem, Select } from '@mui/material';
+import {
+  Button,
+  Chip,
+  MenuItem,
+  Select,
+  Alert,
+  AlertTitle,
+} from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React, { useEffect } from 'react';
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard';
-import { RouterLink } from '../../../RouterLink';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { selectAuthUserToken } from 'features/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const AddSkillsForm = () => {
   const [category, setCategory] = useState();
   const [skill, setSkill] = useState('');
   const [skills, setSkills] = useState([]);
   const [selected, setSeletected] = useState([]);
+  const [submitSkill, setSubmitSkill] = useState(false);
+  const [error, setError] = useState(null);
   const authToken = useSelector(selectAuthUserToken);
 
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -48,30 +58,37 @@ export const AddSkillsForm = () => {
   }, [authToken, category]);
 
   const test = async () => {
-    console.log('test');
-    console.log(category); 
-    console.log(selected);
-    selected.map(skill => skill.id)
-    console.log(selected.map(skill => skill.id));
+    setSubmitSkill(true);
+    const response = await axios
+      .put(
+        `/job-seeker/update/skills/${category}`,
 
-    const response = await axios.put(`/job-seeker/update/skills/${category}`, {
-      headers: { Authorization: `Bearer ${authToken}`},
-    },{ids: selected.map(skill => skill.id)});
+        { ids: selected.map((skill) => skill.id) },
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
+      .then((response) => {
+        setSubmitSkill(false);
+        navigate('/home');
+      })
+      .catch((error) => {
+        setError(error.response.data);
+        setSubmitSkill(false);
+      });
+
     console.log(response);
-  }
+  };
 
   return (
-    <CenteredHeaderCard
-      title={'Add your Skills'}
-      // footer={
-      //   <RouterLink to={'/signup/user/seeker/profile/qualification'}>
-      //     <Button variant='contained' sx={{ width: '100%' }}>
-      //       Continue
-      //     </Button>
-      //   </RouterLink>
-      // }
-    >
+    <CenteredHeaderCard title={'Add your Skills'}>
       <Stack spacing={2} sx={{ width: '100%' }}>
+        {error && (
+          <Alert severity='error'>
+            <AlertTitle>Error</AlertTitle>
+            <strong>{error.message}</strong>
+          </Alert>
+        )}
         <FormControl fullWidth>
           <InputLabel id='Org-registration-country-select-label'>
             Select your Field
@@ -142,10 +159,12 @@ export const AddSkillsForm = () => {
           ))}
         </Stack>
         <>
-          <Button 
-            variant='contained' 
-            sx={{ width: '100%' }} 
-            onClick={test}>
+          <Button
+            variant='contained'
+            sx={{ width: '100%' }}
+            onClick={test}
+            disabled={submitSkill || selected.length <= 0}
+          >
             Continue
           </Button>
         </>
