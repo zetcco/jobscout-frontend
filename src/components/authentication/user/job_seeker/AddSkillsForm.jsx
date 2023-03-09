@@ -59,7 +59,7 @@ export const AddSkillsForm = () => {
 
   const test = async () => {
     setSubmitSkill(true);
-    const response = await axios
+     await axios
       .put(
         `/job-seeker/update/skills/${category}`,
 
@@ -76,8 +76,6 @@ export const AddSkillsForm = () => {
         setError(error.response.data);
         setSubmitSkill(false);
       });
-
-    console.log(response);
   };
 
   return (
