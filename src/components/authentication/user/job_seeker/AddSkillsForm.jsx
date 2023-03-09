@@ -47,16 +47,29 @@ export const AddSkillsForm = () => {
     fetchSkills();
   }, [authToken, category]);
 
+  const test = async () => {
+    console.log('test');
+    console.log(category); 
+    console.log(selected);
+    selected.map(skill => skill.id)
+    console.log(selected.map(skill => skill.id));
+
+    const response = await axios.put(`/job-seeker/update/skills/${category}`, {
+      headers: { Authorization: `Bearer ${authToken}`},
+    },{ids: selected.map(skill => skill.id)});
+    console.log(response);
+  }
+
   return (
     <CenteredHeaderCard
       title={'Add your Skills'}
-      footer={
-        <RouterLink to={'/signup/user/seeker/profile/qualification'}>
-          <Button variant='contained' sx={{ width: '100%' }}>
-            Continue
-          </Button>
-        </RouterLink>
-      }
+      // footer={
+      //   <RouterLink to={'/signup/user/seeker/profile/qualification'}>
+      //     <Button variant='contained' sx={{ width: '100%' }}>
+      //       Continue
+      //     </Button>
+      //   </RouterLink>
+      // }
     >
       <Stack spacing={2} sx={{ width: '100%' }}>
         <FormControl fullWidth>
@@ -128,6 +141,14 @@ export const AddSkillsForm = () => {
             />
           ))}
         </Stack>
+        <>
+          <Button 
+            variant='contained' 
+            sx={{ width: '100%' }} 
+            onClick={test}>
+            Continue
+          </Button>
+        </>
       </Stack>
     </CenteredHeaderCard>
   );
