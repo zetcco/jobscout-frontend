@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from '@mui/material'
+import { Grid, Modal, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { SelectableCard } from '../cards/SelectableCard'
 import { RouterLink } from '../RouterLink'
@@ -8,12 +8,13 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import WorkIcon from '@mui/icons-material/Work';
 import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
 import { VideoChatRounded } from '@mui/icons-material'
+import { useState } from 'react'
 
 
 export const OrganizationHome = () => {
 
     const [ meetingModalOpen, setMeetingModalOpen ] = useState(false);
-    
+
   return (
     <Stack direction = {'column'} spacing = {4}>
      <Stack>
