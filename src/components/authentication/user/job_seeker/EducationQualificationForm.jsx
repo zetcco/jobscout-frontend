@@ -25,6 +25,7 @@ export const EducationQualificationForm = () => {
   const [ qualifications, setQualifications ] = useState([])
   const [ selectedQualification, setSelectedQualification ] = useState(initialState)
   const [ error, setError ] = useState(null)
+  const [ loading, setLoading ] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -44,12 +45,14 @@ export const EducationQualificationForm = () => {
 
   const updateSkills = async () => {
     try {
+      setLoading(true)
       const data = await axios.put('/job-seeker/update/qualifications', qualifications, { headers: { Authorization: `Bearer ${authToken}` } })
       if (data.status === 200)
-        navigate('/signup/user/dp')
+        navigate('/signup/user/seeker/profile/experiences')
     } catch (error) {
       setError(error.response.data)
     }
+    setLoading(false)
   }
 
   return (
@@ -63,12 +66,12 @@ export const EducationQualificationForm = () => {
                   </RouterLink>
                 </Box>
                 <Box sx={{ width: '100%' }}>
-                  <RouterLink to="/signup/user/dp">
+                  <RouterLink to="/signup/user/seeker/profile/experiences">
                     <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
                   </RouterLink>
                 </Box>
                 <Box sx={{ width: '100%' }}>
-                  <Button variant='contained' sx={{ width: '100%' }} onClick={updateSkills} disabled={qualifications.length === 0}>Continue</Button>
+                  <Button variant='contained' sx={{ width: '100%' }} onClick={updateSkills} disabled={qualifications.length === 0 || loading}>Continue</Button>
                 </Box>
             </Stack>
         }>
@@ -126,9 +129,9 @@ export const EducationQualificationForm = () => {
               qualifications.map((qualification, index) => (
                 <EducationalCard 
                   key={index}
-                  DegreeName={qualification.degree.name}
-                  Institution={qualification.institute.name}
-                  Duration={qualification.startYear + " - " + qualification.endYear}
+                  title={qualification.degree.name}
+                  subtitle={qualification.institute.name}
+                  duration={qualification.startYear + " - " + qualification.endYear}
                   onClose={() => setQualifications(qualifications.filter((val, valIndex) => index !== valIndex))}
                 />
               ))
