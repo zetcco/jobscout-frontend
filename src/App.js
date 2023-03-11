@@ -31,9 +31,9 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Messaging } from './components/profile/Message/Messaging';
 import { Meeting } from 'components/meeting/Meeting';
 import ConversationMessaging from 'components/profile/Message/ConversationMessaging';
-import { Questionaries } from 'components/authentication/user/job_seeker/Questionaries';
-import { Question } from 'components/authentication/user/job_seeker/Question';
-import { QuestionDetail } from 'components/authentication/user/job_seeker/QuestionDetail';
+import { Questionaries } from 'components/authentication/user/job_seeker/questionaries/Questionaries';
+import { Question } from 'components/authentication/user/job_seeker/questionaries/Question';
+import { QuestionDetail } from 'components/authentication/user/job_seeker/questionaries/QuestionDetail';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,7 +68,6 @@ const router = createBrowserRouter(
           <Route path='Test'>
             <Route path='hello' element={<Test />} />
             <Route path='questionaries' element={<Questionaries />} />
-            <Route path='question' element={<Question />} />
             <Route path='question-detail' element={<QuestionDetail />} />
           </Route>
         </Route>
