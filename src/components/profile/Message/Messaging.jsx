@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { BasicCard } from '../../cards/BasicCard'
 import { Stack } from '@mui/system'
 import SmallPanel from '../../SmallPanel'
-import { Button, TextField ,IconButton, Modal, Box, Typography, Divider } from '@mui/material'
+import { Button, TextField ,IconButton, Modal } from '@mui/material'
 import { ProfileSmallWithName } from '../ProfileSmallWithName'
 import { ProfileWithFullNameSubtitleSmall } from '../ProfileWithFullNameSubtitleSmall'
 import SendIcon from '@mui/icons-material/Send';

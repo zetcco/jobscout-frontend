@@ -1,21 +1,26 @@
 import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
-import { AppBar, Avatar, Badge, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, Toolbar, Typography } from "@mui/material"
 import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
+import { logout, requestUserProfile, selectAuthUser, selectAuthUserToken } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
+import axios from "axios";
+import { GenerateCV } from "components/profile/GenerateCV";
 
 export const Topbar = () => {
 
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
+    const authUserToken = useSelector(selectAuthUserToken)
     const unreadNotificationCount = useSelector(selectUnreadNotificationCount);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
+
+    const [ generateCVOpen, setGenerateCVOpen ] = useState(false)
 
     useEffect(() => {
         dispatch(requestUserProfile())
@@ -70,6 +75,22 @@ export const Topbar = () => {
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => dispatch(logout())}>Logout</Button>
+                                    { authUser.role === "ROLE_JOB_SEEKER" && (
+                                        <>
+                                        <Button onClick={() => setGenerateCVOpen(true)}>Generate CV</Button>
+                                        <Modal
+                                            open={generateCVOpen}
+                                            onClose={() => setGenerateCVOpen(false)}
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <GenerateCV/>
+                                        </Modal>
+                                        </>
+                                    ) }
                                 </Stack>
                             </BasicCard>
                         </Popover>

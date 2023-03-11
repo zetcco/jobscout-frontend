@@ -26,6 +26,8 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
 import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
+import PastExperiencesForm from "components/authentication/user/job_seeker/PastExperiencesForm";
+import { Intro } from "routes/signup/users/job_seeker/Intro";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -45,6 +47,8 @@ const router = createBrowserRouter(createRoutesFromElements(
               <Route path="profile">
                 <Route path="skills" element={ <AddSkills/> }/>
                 <Route path="qualification" element={ <AddEducationalQualifications/> }/>
+                <Route path="experiences" element={ <PastExperiencesForm/> }/>
+                <Route path="intro" element={ <Intro/> }/>
               </Route>
             </Route>
             <Route path="creator">
