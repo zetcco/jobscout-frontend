@@ -46,7 +46,7 @@ export const OrganizationHome = () => {
                         </Modal>
                     </Grid>
                     <Grid item xs={4}>
-                    <RouterLink to={"/posts/1/manage"}>
+                    <RouterLink to={"/join-requests"}>
                     <SelectableCard
                         title = { 
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
