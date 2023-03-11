@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 
 export const QuestionDetail = () => {
   return (
-    <BasicCard style={{width: 600}}>
+    <BasicCard style={{width: 600}} sx={{width: '100%'}}>
       <Stack direction={'column'} spacing={2}>
         <Stack spacing={1}>
         <img
