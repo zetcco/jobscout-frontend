@@ -74,6 +74,13 @@ const getDesignTokens = (theme) => ({
           borderRadius: '20px'
         }
       }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 30
+        }
+      }
     }
   },
 });

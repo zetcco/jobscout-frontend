@@ -66,7 +66,7 @@ export const PastExperiencesForm = () => {
         setLoading(true)
       const data = await axios.put('/job-seeker/update/experiences', experiences, { headers: { Authorization: `Bearer ${authToken}` } })
       if (data.status === 200)
-        navigate('/signup/user/dp')
+        navigate('/signup/user/seeker/profile/intro')
     } catch (error) {
       setError(error.response.data)
     }
@@ -84,7 +84,7 @@ export const PastExperiencesForm = () => {
                   </RouterLink>
                 </Box>
                 <Box sx={{ width: '100%' }}>
-                  <RouterLink to="/signup/user/dp">
+                  <RouterLink to="/signup/user/seeker/profile/intro">
                     <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
                   </RouterLink>
                 </Box>

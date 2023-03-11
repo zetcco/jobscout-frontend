@@ -3,15 +3,17 @@ import { AppBar, Avatar, Badge, Box, Button, IconButton, Popover, Stack, Toolbar
 import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
+import { logout, requestUserProfile, selectAuthUser, selectAuthUserToken } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
+import axios from "axios";
 
 export const Topbar = () => {
 
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
+    const authUserToken = useSelector(selectAuthUserToken)
     const unreadNotificationCount = useSelector(selectUnreadNotificationCount);
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -21,6 +23,10 @@ export const Topbar = () => {
         dispatch(requestUserProfile())
         dispatch(fetchNotifications(2))
     }, [dispatch])
+
+    const downloadCV = async () => {
+        await (await axios.get('job-seeker/generate-cv/1', { headers: { Authorization: `Bearer ${authUserToken}` } })).data
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -70,6 +76,7 @@ export const Topbar = () => {
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => dispatch(logout())}>Logout</Button>
+                                    <Button onClick={downloadCV}>Generate CV</Button>
                                 </Stack>
                             </BasicCard>
                         </Popover>
