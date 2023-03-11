@@ -39,7 +39,7 @@ export const Intro = () => {
                     </RouterLink>
                     </Box>
                     <Box sx={{ width: '100%' }}>
-                    <RouterLink to="/signup/user/seeker/profile/intro">
+                    <RouterLink to="/signup/user/dp">
                         <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
                     </RouterLink>
                     </Box>
