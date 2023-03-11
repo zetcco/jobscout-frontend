@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Client } from "@stomp/stompjs";
+import { setUnsubscribeToConversation, subsribeToServerPrivateMessage } from "./conversationSlice";
+import { setUnsubscribeToNotification, subscribeToNotification } from "./notificationSlice";
 
 const initialState = {
     stompClient: null,
@@ -34,12 +36,17 @@ const websocketSlice = createSlice({
         },
         webSocketFailedClear: (state, action) => {
             state.error = null
+            state.connected = false
+        },
+        webSocketClear: (state, action) => {
+            state.stompClient = null
+            state.connected = false
         }
     }
 })
 
 export default websocketSlice.reducer;
-export const { webSocketConnected, webSocketFailed, webSocketLoading, webSocketFailedClear } = websocketSlice.actions;
+export const { webSocketConnected, webSocketFailed, webSocketLoading, webSocketFailedClear, webSocketClear } = websocketSlice.actions;
 
 export const connectToWebSocket = (dispatch, getState) => {
     const state = getState();
@@ -51,12 +58,24 @@ export const connectToWebSocket = (dispatch, getState) => {
         },
         onConnect: () => {
             dispatch(webSocketConnected(stompClient))
+            dispatch(subscribeToNotification)
+            dispatch(subsribeToServerPrivateMessage)
         },
         debug: (str) => {
             console.log(str)
         },
+        onDisconnect: () => {
+            console.log("WebSocket disconnected");
+            dispatch(webSocketClear())
+            dispatch(setUnsubscribeToConversation())
+            dispatch(setUnsubscribeToNotification())
+        },
         onWebSocketError: (error) => {
+            console.log("WebSocket connection error");
             dispatch(webSocketFailed(error))
+            dispatch(webSocketClear())
+            dispatch(setUnsubscribeToConversation())
+            dispatch(setUnsubscribeToNotification())
         },
         reconnectDelay: 10000
     })

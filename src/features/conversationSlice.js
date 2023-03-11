@@ -5,13 +5,20 @@ import { sendSignal } from "./websocketSlice";
 const initialState = {
     conversations: [],
     loading: false,
-    error: null
+    error: null,
+    subscribed: false
 }
 
 const conversationsSlice = createSlice({
     name: 'conversations',
     initialState,
     reducers: {
+        setSubscribeToConversation: (state, action) => {
+            state.subscribed = true
+        },
+        setUnsubscribeToConversation: (state, action) => {
+            state.subscribed = false
+        },
         newConversation: (state, action) => {
             state.conversations = [...state.conversations, action.payload ]
         },
@@ -64,7 +71,7 @@ const conversationsSlice = createSlice({
 })
 
 export default conversationsSlice.reducer;
-export const { newConversation, newMessage, updateConversation, isTyping, stopTyping } = conversationsSlice.actions;
+export const { newConversation, newMessage, updateConversation, isTyping, stopTyping, setSubscribeToConversation, setUnsubscribeToConversation } = conversationsSlice.actions;
 export const selectConversationLoading = (state) => state.conversations.loading
 export const selectConversations = (state) => state.conversations.conversations
 export const selectMessages = (state, selectedConversationId)  => state.conversations.conversations.find((conversation) => conversation.id === selectedConversationId)?.messages
@@ -72,31 +79,35 @@ export const selectTyping = (state, selectedConversationId) => state.conversatio
 
 export const subsribeToServerPrivateMessage = (dispatch, getState) => {
     const state = getState();
-    if (state.auth.token != null) {
-        state.websocket.stompClient.subscribe(
-            `/messaging/private/${state.auth.userInfo.id}`,
-            (payload) => {
-                const body = JSON.parse(payload.body)
-                const data = JSON.parse(body.data)
-                switch (body.type) {
-                    case "MESSAGE":
-                        dispatch(newMessage(data))
-                        break;
-                    case "TYPING":
-                        dispatch(isTyping(data))
-                        break;
-                    case "CONVERSATION":
-                        dispatch(newConversation(data));
-                        break;
-                    case "CONVERSATION_UPDATE":
-                        dispatch(updateConversation(data));
-                        break;
-                    default:
-                        break;
-                }
-            },
-            {"token": state.auth.token}
-        );
+    if (!state.conversations.subscribed) {
+        console.log("Cam here twice")
+        if (state.auth.token != null) {
+            state.websocket.stompClient.subscribe(
+                `/messaging/private/${state.auth.userInfo.id}`,
+                (payload) => {
+                    const body = JSON.parse(payload.body)
+                    const data = JSON.parse(body.data)
+                    switch (body.type) {
+                        case "MESSAGE":
+                            dispatch(newMessage(data))
+                            break;
+                        case "TYPING":
+                            dispatch(isTyping(data))
+                            break;
+                        case "CONVERSATION":
+                            dispatch(newConversation(data));
+                            break;
+                        case "CONVERSATION_UPDATE":
+                            dispatch(updateConversation(data));
+                            break;
+                        default:
+                            break;
+                    }
+                },
+                {"token": state.auth.token}
+            );
+            dispatch(setSubscribeToConversation())
+        }
     }
 };
 

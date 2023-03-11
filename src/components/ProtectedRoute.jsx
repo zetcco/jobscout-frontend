@@ -9,15 +9,7 @@ import { subsribeToServerPrivateMessage } from 'features/conversationSlice';
 export const ProtectedRoute = ({ role, redirect }) => {
 
     const authUser = useSelector(selectAuthUser);
-    const websocketConnected = useSelector(selectWebSocketConnected);
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (websocketConnected) {
-            dispatch(subscribeToNotification)
-            dispatch(subsribeToServerPrivateMessage)
-        }
-    }, [dispatch, websocketConnected])
 
     useEffect(() => {
         dispatch(connectToWebSocket)
