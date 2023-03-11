@@ -13,11 +13,11 @@ export const Question = () => {
           />
           <Stack spacing={0.5} direction={'column'}>
             <h3>Python (Programming Language)</h3>
-            <h6>
+            <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque
               commodi ducimus asperiores esse cupiditate consequuntur voluptas
               quo
-            </h6>
+            </p>
           </Stack>
         </Stack>
       </BasicCard>
@@ -30,11 +30,11 @@ export const Question = () => {
           />
           <Stack spacing={0.5} direction={'column'}>
             <h3>Microsoft Word</h3>
-            <h6>
+            <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque
               commodi ducimus asperiores esse cupiditate consequuntur voluptas
               quo
-            </h6>
+            </p>
           </Stack>
         </Stack>
       </BasicCard>
