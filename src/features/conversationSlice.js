@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
+import { sendSignal } from "./websocketSlice";
 
 const initialState = {
     conversations: [],
@@ -106,34 +107,18 @@ export const fetchConversations = createAsyncThunk('conversations/fetchConversat
     }})).data;
 })
 
-export const sendNewMessage = createAsyncThunk('conversation/newMessage', async ({ conversationId, content } , { getState }) => {
+export const sendSignalToConversation = (conversation, type, message = undefined) => (dispatch, getState) => {
     const state = getState()
-    const message = JSON.stringify({
-        conversationId,
-        senderId: state.auth.userInfo.id,
-        content
-    })
-    state.websocket.stompClient.send(`/app/messaging/${conversationId}`, {}, JSON.stringify({
-        senderId: state.auth.userInfo.id,
-        conversationId,
-        type: "MESSAGE",
-        data: message
-    }))
-})
-
-export const sendTyping = createAsyncThunk('conversation/onTyping', async (conversationId, { getState }) => {
-    const state = getState()
-    const payload = JSON.stringify({
-        conversationId,
-        senderId: state.auth.userInfo.id,
-    })
-    state.websocket.stompClient.send(`/app/messaging/${conversationId}`, {}, JSON.stringify({
-        senderId: state.auth.userInfo.id,
-        conversationId,
-        type: "TYPING",
-        data: payload
-    }))
-})
+    dispatch(sendSignal(
+        `/messaging/${conversation}`, 
+        type, 
+        { 
+            conversationId: conversation,
+            senderId:  state.auth.userInfo.id,
+            content: message 
+        }
+    ))
+}
 
 export const fetchConversationMessages = createAsyncThunk('conversations/fetchMessages', async (selectedConversationId, { getState }) => {
     const state = getState()
