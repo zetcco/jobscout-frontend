@@ -6,7 +6,6 @@ import { JobCreatorHomeCards } from './JobCreatorHomeCards'
 import { SelectableCard } from '../../../../components/cards/SelectableCard'
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import WorkIcon from '@mui/icons-material/Work';
 import { RouterLink } from '../../../../components/RouterLink'
 import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
 import { VideoChatRounded } from '@mui/icons-material'

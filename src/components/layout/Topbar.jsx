@@ -25,7 +25,13 @@ export const Topbar = () => {
     }, [dispatch])
 
     const downloadCV = async () => {
-        await (await axios.get('job-seeker/generate-cv/1', { headers: { Authorization: `Bearer ${authUserToken}` } })).data
+        const response = await axios.get('job-seeker/generate-cv/1', { headers: { Authorization: `Bearer ${authUserToken}` }, responseType: 'blob' })
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', response.headers["content-disposition"]);
+        document.body.appendChild(link);
+        link.click();
     }
 
     return (
