@@ -65,14 +65,14 @@ export const connectToWebSocket = (dispatch, getState) => {
             console.log(str)
         },
         onDisconnect: () => {
-            console.log("WebSocket disconnected");
             dispatch(webSocketClear())
             dispatch(setUnsubscribeToConversation())
             dispatch(setUnsubscribeToNotification())
         },
         onWebSocketError: (error) => {
-            console.log("WebSocket connection error");
             dispatch(webSocketFailed(error))
+        },
+        onWebSocketClose: () => {
             dispatch(webSocketClear())
             dispatch(setUnsubscribeToConversation())
             dispatch(setUnsubscribeToNotification())
