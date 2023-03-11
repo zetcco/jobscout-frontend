@@ -25,7 +25,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
 import { Meeting } from "components/profile/Message/Meeting";
 import { ManageJobPost } from "components/job_postings/manage/ManageJobPost";
-import { JoinRequest } from "routes/profile/organization/JoinRequest";
+import { JoinRequestList } from "routes/profile/organization/JoinRequestList";
 
 
 
@@ -81,7 +81,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path=":organizationId" element={<OrgJobPosts/>}/>
           </Route>
 
-          <Route path="join-requests" element={<JoinRequest/>} />
+          <Route path="join-requests" element={<JoinRequestList/>} />
         </Route>
 
         <Route path="/" element={<NavigationLayout/>}>

@@ -1,18 +1,35 @@
-import { Stack } from '@mui/system'
 import React from 'react'
-import  { JoinRequestList } from './JoinRequestList'
+import { Typography , Button } from '@mui/material'
+import { Box, Stack } from '@mui/material'
+import ProfileWithHeader from 'components/profile/ProfileWithHeader'
+import { BasicCard } from 'components/cards/BasicCard'
 
-export const  JoinRequest = () => {
+export const JoinRequest = () => {
   return (
-    <Stack direction={'row'} spacing={2}>
-                <Stack spacing={2}>
-                  <JoinRequestList />
-                  <JoinRequestList />
-                  <JoinRequestList />
-                  <JoinRequestList />
-                  
-                 
-                </Stack>
-    </Stack>
+    <BasicCard>
+        <Stack  
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={2}>
+        <Box>
+        <Stack spacing={1}>
+        <ProfileWithHeader name={'Request Name'} />
+          <Typography>
+              Details..............................................................................................................................
+          </Typography>
+        </Stack>
+         </Box> 
+         <Box>
+        <Stack 
+            direction="row"
+            spacing={2}>
+                <Button variant="outlined">ACCEPT</Button>
+                <Button variant="outlined">REJECT</Button>
+            </Stack>
+         </Box> 
+        </Stack>
+    </BasicCard>
   )
 }
+export default JoinRequest
