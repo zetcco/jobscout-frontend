@@ -67,8 +67,6 @@ const router = createBrowserRouter(
           </Route>
           <Route path='Test'>
             <Route path='hello' element={<Test />} />
-            <Route path='questionaries' element={<Questionaries />} />
-            <Route path='question-detail' element={<QuestionDetail />} />
           </Route>
         </Route>
       </Route>
@@ -111,6 +109,20 @@ const router = createBrowserRouter(
           <Route path='blog' element={<Blog />} />
           <Route path='blog'>
             <Route path=':blogId' element={<BlogPost />} />
+          </Route>
+        </Route>
+
+        <Route
+          path='/'
+          element={
+            <NavigationLayout
+              sx={{ mx: { md: '100px', lg: '250px' }, mt: 4 }}
+            />
+          }
+        >
+          <Route path='questionaries' element={<Questionaries />} />
+          <Route path='questionaries'>
+            <Route path='python' element={<QuestionDetail />} />
           </Route>
         </Route>
 
