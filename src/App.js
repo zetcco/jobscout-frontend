@@ -26,6 +26,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
 import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
+import AddRecommendation from "routes/feed/AddRecommendation";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -72,12 +73,12 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="create" element={<CreateJobPost/>}/>
           </Route>
 
-          <Route path="users">
-            <Route path=":userId" element={<Recommendations/>}/>
-          </Route>
-
           <Route path="organizations">
             <Route path=":organizationId" element={<OrgJobPosts/>}/>
+          </Route>
+
+          <Route path="manage">
+          <Route path="recommendation" element={<AddRecommendation />}/>
           </Route>
         </Route>
 
