@@ -10,6 +10,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import { RouterLink } from '../../../../components/RouterLink'
 import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
 import { VideoChatRounded } from '@mui/icons-material'
+import RecommendIcon from '@mui/icons-material/Recommend';
 
 export const JobCreatorHome = () => {
 
@@ -22,7 +23,7 @@ export const JobCreatorHome = () => {
                     mainTitle = {'Actions'}
                 >
                         <Grid container spacing={4}>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                             <RouterLink to={"/posts/create"}>
                             <SelectableCard
                                 title = { 
@@ -33,7 +34,7 @@ export const JobCreatorHome = () => {
                                 />
                             </RouterLink>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                             <RouterLink to={"/posts/1/manage"}>
                             <SelectableCard
                                 title = { 
@@ -45,7 +46,7 @@ export const JobCreatorHome = () => {
                                 />
                             </RouterLink>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                             <SelectableCard
                                 title = { 
                                         <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -67,6 +68,18 @@ export const JobCreatorHome = () => {
                                 >
                                     <ScheduleMeeting/>
                                 </Modal>
+                            </Grid>
+                            <Grid item xs={3}>
+                            <RouterLink to={"/manage/recommendation"}>
+                            <SelectableCard
+                                title = { 
+                                        <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                            <RecommendIcon sx = {{height:'30px' , width:'30px'}}/>
+                                            <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMENDATION</Typography>
+                                        </Stack> 
+                                        }
+                                />
+                            </RouterLink>
                             </Grid>
                         </Grid>
                 </SmallPanel> 
