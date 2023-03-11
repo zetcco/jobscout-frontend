@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@mui/material'
+import { Button, CircularProgress, Grid, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import axios from 'axios'
 import { SelectableCard } from 'components/cards/SelectableCard'
@@ -14,6 +14,7 @@ export const GenerateCV = () => {
     const [ error, setError ] = useState(null)
     const [ loading, setLoading ] = useState(false)
     const [ selected, setSelected ] = useState(null)
+    const [ fetchingPdf, setFetchingPdf ] = useState(false)
 
     useEffect(() => {
         const fetchTemplates = async () => {
@@ -30,6 +31,7 @@ export const GenerateCV = () => {
     }, [])
 
     const downloadCV = async () => {
+        setFetchingPdf(true)
         const response = await axios.get(`/cv/generate/${selected}`, { headers: { Authorization: `Bearer ${authUserToken}` }, responseType: 'blob' })
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
@@ -37,6 +39,7 @@ export const GenerateCV = () => {
         link.setAttribute('download', response.headers["content-disposition"]);
         document.body.appendChild(link);
         link.click();
+        setFetchingPdf(false)
     }
 
     return (
@@ -60,7 +63,7 @@ export const GenerateCV = () => {
             </Grid>
             <Stack direction={"row"} spacing={2} mt={2}>
                 <Button variant='outlined' fullWidth>Cancel</Button>
-                <Button variant='contained' fullWidth onClick={downloadCV} disabled={selected === null}>Download</Button>
+                <Button variant='contained' fullWidth onClick={downloadCV} disabled={selected === null || fetchingPdf} startIcon={ fetchingPdf ? <CircularProgress sx={{ color: 'grey.400' }} size={20}/> : undefined } >Download</Button>
             </Stack>
     </SmallPanel>
   )
