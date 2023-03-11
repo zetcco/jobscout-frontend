@@ -4,7 +4,6 @@ import { Button } from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Status } from "../../components/job_postings/post/Status";
 import { Ownership } from "../../components/job_postings/post/Ownership";
-import { BasicCard } from "../../components/cards/BasicCard";
 
 
 export const JobPost = () => {
