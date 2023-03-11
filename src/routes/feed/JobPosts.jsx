@@ -48,7 +48,7 @@ export const JobPosts = () => {
                     />  
                 </Box>
                 <Box sx={{ flexShrink: 1 }}>
-                    <IconButton variant='contained' fullWidth sx={{ height: '100%', width: '100%' }} size='large'>
+                    <IconButton variant='contained' sx={{ height: '100%', width: '100%' }} size='large'>
                         <SearchIcon/>
                     </IconButton>
                 </Box>

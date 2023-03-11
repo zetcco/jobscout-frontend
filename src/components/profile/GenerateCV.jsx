@@ -5,9 +5,10 @@ import { SelectableCard } from 'components/cards/SelectableCard'
 import SmallPanel from 'components/SmallPanel'
 import { selectAuthUserToken } from 'features/authSlice'
 import React, { useEffect, useState } from 'react'
+import { forwardRef } from 'react'
 import { useSelector } from 'react-redux'
 
-export const GenerateCV = () => {
+export const GenerateCV = forwardRef((props, ref) => {
 
     const authUserToken = useSelector(selectAuthUserToken)
     const [ templates, setTemplates ] = useState([])
@@ -43,7 +44,7 @@ export const GenerateCV = () => {
     }
 
     return (
-    <SmallPanel mainTitle={"Select a Template"} sx={{ width: { xs: '95%', md: '50%' } }}>
+    <SmallPanel mainTitle={"Select a Template"} sx={{ width: { xs: '95%', md: '50%' } }} ref={ref}>
         <Grid container spacing={2} height={{ xs: '60vh', md: '50vh' }} sx={{ overflowY: 'scroll' }}>
             {
                 loading ? (
@@ -67,4 +68,4 @@ export const GenerateCV = () => {
             </Stack>
     </SmallPanel>
   )
-}
+})
