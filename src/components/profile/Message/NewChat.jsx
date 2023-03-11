@@ -67,7 +67,6 @@ export const NewChat = forwardRef(({ onClose }) => {
                 headers: { Authorization: `Bearer ${authToken}` }
             })
             setResponse(response.data)
-            setNewChatName(response.data.name ? response.data.name : response.data.participants[0].displayName)
         } catch (error) {
             setError(error)
         }
@@ -135,7 +134,7 @@ export const NewChat = forwardRef(({ onClose }) => {
                                 />
                                 <Stack direction={"row"} spacing={2}>
                                     <Button fullWidth onClick={onClose}>Close</Button>
-                                    <Button type="submit" variant="contained" fullWidth disabled={loading}>Save</Button>
+                                    <Button type="submit" variant="contained" fullWidth disabled={loading || newChatName === ''}>Save</Button>
                                 </Stack>
                             </Stack>
                         </form>
