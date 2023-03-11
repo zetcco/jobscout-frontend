@@ -1,5 +1,5 @@
 import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed } from "@mui/icons-material"
-import { AppBar, Avatar, Badge, Box, Button, IconButton, Popover, Stack, Toolbar, Typography } from "@mui/material"
+import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, Toolbar, Typography } from "@mui/material"
 import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
 import axios from "axios";
+import { GenerateCV } from "components/profile/GenerateCV";
 
 export const Topbar = () => {
 
@@ -19,20 +20,12 @@ export const Topbar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
 
+    const [ generateCVOpen, setGenerateCVOpen ] = useState(false)
+
     useEffect(() => {
         dispatch(requestUserProfile())
         dispatch(fetchNotifications(2))
     }, [dispatch])
-
-    const downloadCV = async () => {
-        const response = await axios.get('job-seeker/generate-cv/1', { headers: { Authorization: `Bearer ${authUserToken}` }, responseType: 'blob' })
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', response.headers["content-disposition"]);
-        document.body.appendChild(link);
-        link.click();
-    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -82,7 +75,22 @@ export const Topbar = () => {
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => dispatch(logout())}>Logout</Button>
-                                    <Button onClick={downloadCV}>Generate CV</Button>
+                                    { authUser.role === "ROLE_JOB_SEEKER" && (
+                                        <>
+                                        <Button onClick={() => setGenerateCVOpen(true)}>Generate CV</Button>
+                                        <Modal
+                                            open={generateCVOpen}
+                                            onClose={() => setGenerateCVOpen(false)}
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <GenerateCV/>
+                                        </Modal>
+                                        </>
+                                    ) }
                                 </Stack>
                             </BasicCard>
                         </Popover>

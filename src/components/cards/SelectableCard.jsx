@@ -3,7 +3,7 @@ import { Stack } from '@mui/system'
 import React from 'react'
 import { BasicCard } from './BasicCard'
 
-export const SelectableCard = ({ title, selected, onClick, sx }) => {
+export const SelectableCard = ({ children, selected, onClick, sx, padding }) => {
   return (
     <BasicCard sx={{
         cursor: 'pointer',
@@ -27,10 +27,11 @@ export const SelectableCard = ({ title, selected, onClick, sx }) => {
         }),
         ...sx
     }}
+    padding={padding}
     onClick={onClick}
     >
         <Stack direction={"column"} alignItems={"center"}>
-            <Typography variant={ selected ? "body3" : undefined}>{ title }</Typography>
+            { children }
         </Stack>
     </BasicCard>
   )
