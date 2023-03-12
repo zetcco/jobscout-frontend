@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState  , useEffect } from "react";
 import { Stack } from "@mui/system";
 import { TextField, Box, Popover, IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,9 +10,36 @@ import { BasicCard } from "../../components/cards/BasicCard";
 import SmallPanel from "../../components/SmallPanel";
 import SubCategories from "../../components/job_postings/posts/SubCategories";
 import { RouterLink } from "../../components/RouterLink";
+import { useSelector } from "react-redux";
+import { selectAuthUserToken } from "features/authSlice";
+import axios from "axios";
+
+
 
 
 export const JobPosts = () => {
+
+    {/*job post function*/}
+    const [jobPosts , setjobPosts] = useState([]);
+    const token = useSelector(selectAuthUserToken)
+    useEffect(() =>{
+        const fetchJobPosts = async () => {
+            try{
+                const response = await axios.get('/jobpost?page=0&size=15' , {
+                    headers:{
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                console.log(response.data);
+                setjobPosts(response.data)
+            }catch(error) {
+                console.log(error);
+            }
+        }
+        fetchJobPosts()
+    } , [token])
+
+
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -80,36 +107,16 @@ export const JobPosts = () => {
 
                     <Box sx={{ flexGrow: 9 }}>                           
                         <Stack direction={'column'} spacing={2}>
-                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                                "&:hover": {
-                                    backgroundColor: (theme) => theme.palette.grey[100],
-                                }
-                             }}/></RouterLink>
-                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                                "&:hover": {
-                                    backgroundColor: (theme) => theme.palette.grey[100],
-                                }
-                             }}/></RouterLink>
-                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                                "&:hover": {
-                                    backgroundColor: (theme) => theme.palette.grey[100],
-                                }
-                             }}/></RouterLink>
-                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                                "&:hover": {
-                                    backgroundColor: (theme) => theme.palette.grey[100],
-                                }
-                             }}/></RouterLink>
-                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                                "&:hover": {
-                                    backgroundColor: (theme) => theme.palette.grey[100],
-                                }
-                             }}/></RouterLink>
-                            <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                                "&:hover": {
-                                    backgroundColor: (theme) => theme.palette.grey[100],
-                                }
-                             }}/></RouterLink>
+                            {
+                                jobPosts.map((jobPost) =><RouterLink to={`/posts/${jobPost.id}`}><SingleJobPost 
+                                title = { jobPost.title }
+                                type = { jobPost.type }    
+                                sx={{ 
+                                    "&:hover": {
+                                        backgroundColor: (theme) => theme.palette.grey[100],
+                                    }
+                                }}>{ jobPost.description }</SingleJobPost></RouterLink>)
+                             }
                         </Stack>
                     </Box>
                 </Stack>

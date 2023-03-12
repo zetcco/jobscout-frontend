@@ -4,7 +4,8 @@ import Chip from '@mui/material/Chip';
 import { BasicCard } from "../cards/BasicCard";
 
 
-const SingleJobPost = ({ sx }) => {
+
+const SingleJobPost = ({ sx ,title , children , type }) => {
 
     const handleDelete = () => {
         console.info('You clicked the delete icon.');
@@ -18,10 +19,13 @@ const SingleJobPost = ({ sx }) => {
                     justifyContent='space-between'
                     spacing={5}
                 >
-                    <Stack>
-                        <Typography variant={'h5'} align= 'left'>React Developer</Typography>
+                    <Stack spacing = {2}>
+                        {
+
+                        }
+                        <Typography variant={'h5'} align= 'left'>{ title }</Typography>
                         <Typography>
-                            Check your proxy settings or contact your network administrator to make sure the proxy server is working. If you don't believe you should be using a proxy server: Go to the Main menu  Settings  Change Proxy Settings LAN Settings and deselect "Use a proxy server for your LAN".
+                            { children }
                         </Typography>
                     </Stack>
 
@@ -31,7 +35,15 @@ const SingleJobPost = ({ sx }) => {
                             <Chip label="Boostrap" variant="outlined" color="success" onDelete={handleDelete}/>
                         </Stack>
                         <Stack align="right">
-                            <Chip label="Freelancer" color="info" variant="outlined" />
+                            {
+                                type && type === 'TYPE_PERMANENT' && <Chip label='Full Time' color="info" variant="outlined" />
+                            } 
+                            {
+                                type && type === 'TYPE_PART_TIME' && <Chip label='Part Time' color="warning" variant="outlined" />
+                            }
+                            {
+                                type && type === 'TYPE_FREELANCE' && <Chip label='Freelance' color="error" variant="outlined" />
+                            }
                         </Stack>
                     </Stack>
                 </Stack>
