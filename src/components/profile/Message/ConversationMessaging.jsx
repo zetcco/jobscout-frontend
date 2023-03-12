@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Divider, Drawer, IconButton, MenuItem, Modal, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
 import { selectAuthUser } from "features/authSlice";
-import { fetchConversationMessages, fetchConversations, sendNewMessage, selectConversations, selectMessages, sendTyping, selectTyping, stopTyping } from "features/conversationSlice";
+import { fetchConversationMessages, fetchConversations, sendSignalToConversation, selectConversations, selectMessages, selectTyping, stopTyping } from "features/conversationSlice";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SendIcon from '@mui/icons-material/Send';
@@ -45,14 +45,14 @@ const ConversationMessaging = () => {
     }
 
     const sendMessage = () => {
-        dispatch(sendNewMessage({ conversationId: selectedConvo, content: message }))
+        dispatch(sendSignalToConversation(selectedConvo, "MESSAGE", message))
         setMessage('')
     }
 
     const onTyping = (e) => {
         if (selectedConvo) {
             setMessage(e.target.value)
-            dispatch(sendTyping(selectedConvo))
+            dispatch(sendSignalToConversation(selectedConvo, "TYPING" ))
         }
     }
 
@@ -69,7 +69,7 @@ const ConversationMessaging = () => {
 
     useEffect(() => {
         debouceClearTyping(selectedConvo)
-    }, [typing])
+    }, [typing, debouceClearTyping, selectedConvo])
 
     const conversationList = (
         <>

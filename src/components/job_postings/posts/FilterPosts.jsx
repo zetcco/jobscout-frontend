@@ -43,8 +43,8 @@ const FilterPosts = () => {
                                         label="Fileds"      
                                     >
                                         {
-                                            categories.map((category) =>
-                                            <MenuItem value = {category.id}>{category.name}</MenuItem>)
+                                            categories.map((category, index) =>
+                                            <MenuItem value = {category.id} key={index}>{category.name}</MenuItem>)
                                         }
                                     </Select>
                                 </FormControl>
@@ -54,7 +54,7 @@ const FilterPosts = () => {
                                         labelId="Org-registration-city-select-label"
                                         id="Org-registration-city-select"
                                         label="City"
-    
+                                        value={''}
                                     >
                             
                                     </Select>
@@ -65,6 +65,7 @@ const FilterPosts = () => {
                                         labelId="Org-registration-city-select-label"
                                         id="Org-registration-city-select"
                                         label="City"
+                                        value={''}
                                  >
                                        
                                     </Select>

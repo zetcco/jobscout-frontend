@@ -33,7 +33,7 @@ export const Meeting = () => {
         }
 
         fetchMeeting()
-    }, [])
+    }, [authToken, link, navigate])
 
     const stompClient = useSelector(selectWebSocketStompClient)
     const user = useSelector(selectAuthUser)
@@ -156,11 +156,19 @@ export const Meeting = () => {
     }
 
     const sendMessage = (data, type, to = null) => {
-        stompClient.send(`/room/${meetingData.link}${to ? "/" + to : ""}`, {}, JSON.stringify({
-            senderId: user.id,
-            type,
-            data: JSON.stringify(data)
-        }))
+        // stompClient.send(`/room/${meetingData.link}${to ? "/" + to : ""}`, {}, JSON.stringify({
+        //     senderId: user.id,
+        //     type,
+        //     data: JSON.stringify(data)
+        // }))
+        stompClient.publish({
+            destination: `/room/${meetingData.link}${to ? "/" + to : ""}`,
+            body: JSON.stringify({
+                    senderId: user.id,
+                    type,
+                    data: JSON.stringify(data)
+                }),
+        })
     }
 
     const subscribe = (meetindId, userId = null) => {
