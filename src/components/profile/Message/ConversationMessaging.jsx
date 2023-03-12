@@ -8,6 +8,7 @@ import { ChatBubble } from "./ChatBubble";
 import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
 import { debounce } from "lodash";
+import { Conversations } from "./Conversations";
 
 const drawerWidth = 300;
 
@@ -71,50 +72,6 @@ const ConversationMessaging = () => {
         debouceClearTyping(selectedConvo)
     }, [typing, debouceClearTyping, selectedConvo])
 
-    const conversationList = (
-        <>
-        <Stack direction={"row"} justifyContent="space-between" alignItems={"center"} m={2}>
-            <Typography variant="h5">Chats</Typography>
-            <Button startIcon={<AddIcon/>} onClick={() => setNewChatOpen(true)}>New</Button>
-        </Stack>
-        <Divider/>
-        { conversations.length > 0 ? (
-            conversations.map( (conversation, index) => {
-                let user = conversation.participants.filter((participant) => participant.id !== authUser.id)[0]
-
-                let picture;
-                if (conversation.picture)
-                    picture = conversation.picture
-                else if (conversation.participants.length === 2)
-                    picture = user?.displayPicture
-
-                let name;
-                if (conversation.name)
-                    name = conversation.name
-                else
-                    name = user?.displayName
-                
-                return (
-                    <MenuItem key={index} selected={selectedConvo === conversation.id} onClick={() => onConversationSelect(conversation.id)}>
-                        {/* <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user?.displayPicture} name={ conversation.name ? conversation.name : user?.displayName}/> */}
-                        <Stack direction={"row"} spacing={1.5} alignItems="center">
-                            <Avatar alt={name} src={picture}/>
-                            <Typography>{name}</Typography>
-                        </Stack>
-                    </MenuItem>
-                )
-        })) : (
-            <Stack direction={"column"} spacing={2} pt={3} px={4} sx={{ color: 'grey.600' }} alignItems="center">
-                <Typography align={"center"} fontSize={15}>Hey there! Want to connect with your colleagues?<br/>Start a chat now and stay in touch with your team!</Typography>
-                <Box>
-                    <Button variant="contained" onClick={() => setNewChatOpen(true)}>Start a Chat</Button>
-                </Box>
-            </Stack>
-        )
-        }
-        </>
-    )
-
     return (
         <>
         <Box display={'flex'}>
@@ -130,7 +87,7 @@ const ConversationMessaging = () => {
                     }}
                 >
                     <Toolbar/>
-                    {conversationList}
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -141,7 +98,7 @@ const ConversationMessaging = () => {
                     open
                     >
                     <Toolbar/>
-                    {conversationList}
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
                 </Drawer>
             </Box>
             <Modal
