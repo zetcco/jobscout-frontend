@@ -52,7 +52,7 @@ export const connectToWebSocket = (dispatch, getState) => {
     const state = getState();
     dispatch(webSocketLoading())
     const stompClient = new Client({
-        brokerURL: `ws://localhost:8080/ws`,
+        brokerURL: process.env.REACT_APP_WEBSOCKET_URL,
         connectHeaders: {
             token: state.auth.token
         },

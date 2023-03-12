@@ -80,7 +80,6 @@ export const selectTyping = (state, selectedConversationId) => state.conversatio
 export const subsribeToServerPrivateMessage = (dispatch, getState) => {
     const state = getState();
     if (!state.conversations.subscribed) {
-        console.log("Cam here twice")
         if (state.auth.token != null) {
             state.websocket.stompClient.subscribe(
                 `/messaging/private/${state.auth.userInfo.id}`,
