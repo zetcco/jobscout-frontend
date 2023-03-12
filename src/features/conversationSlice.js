@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
+import { messageRecieved, setNewConversation } from "./indexedConversationSlice";
 import { sendSignal } from "./websocketSlice";
 
 const initialState = {
@@ -89,12 +90,14 @@ export const subsribeToServerPrivateMessage = (dispatch, getState) => {
                     switch (body.type) {
                         case "MESSAGE":
                             dispatch(newMessage(data))
+                            dispatch(messageRecieved(data)) // From new conversation
                             break;
                         case "TYPING":
                             dispatch(isTyping(data))
                             break;
                         case "CONVERSATION":
                             dispatch(newConversation(data));
+                            dispatch(setNewConversation(data)) // From new conversation
                             break;
                         case "CONVERSATION_UPDATE":
                             dispatch(updateConversation(data));
