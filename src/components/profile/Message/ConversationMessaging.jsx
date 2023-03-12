@@ -1,6 +1,5 @@
-import { Avatar, Box, Button, Divider, Drawer, IconButton, MenuItem, Modal, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
+import { Box, Drawer, IconButton, Modal, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material";
 import { selectAuthUser } from "features/authSlice";
-import { fetchConversationMessages, fetchConversations, sendSignalToConversation, selectMessages, selectTyping, stopTyping } from "features/conversationSlice";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SendIcon from '@mui/icons-material/Send';
@@ -9,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
 import { debounce } from "lodash";
 import { Conversations } from "./Conversations";
-import { fetchConversationMessagesIndexed, fetchConversationsIndexed, selectConversationById, selectConversations, selectMessagesIndexed } from "features/indexedConversationSlice";
+import { fetchConversationMessagesIndexed, fetchConversationsIndexed, selectAllConversations, selectConversationById, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
 
 const drawerWidth = 300;
 
@@ -22,35 +21,30 @@ const ConversationMessaging = () => {
     const [ mobileOpen, setMobileOpen ] = useState(false)
 
     const conversations = useSelector(selectConversations);
+    const conversationsEntities = useSelector(selectAllConversations)
     const [ selectedConvo, setSelectedConvo ] = useState(null);
     const [ message, setMessage ] = useState('')
     const [ newChatOpen, setNewChatOpen ] = useState(false);
 
-    // const messages = useSelector((state) => selectMessages(state, selectedConvo))
-    // const messagesIndexed = useSelector((state) => selectConversationById(state, selectedConvo))
     const messages = useSelector((state) => selectMessagesIndexed(state, selectedConvo))
-    // console.log(messagesIndexed)
     const typing = useSelector((state) => selectTyping(state, selectedConvo))
+    const messagesLoading = useSelector(selectMessagesLoading)
 
     useEffect(() => {
-        dispatch(fetchConversations())
         dispatch(fetchConversationsIndexed())
     }, [dispatch])
 
     useEffect(() => {
-        if (!selectedConvo && conversations[0]) {
+        if (!selectedConvo && conversations[0] && !messagesLoading) {
             setSelectedConvo(conversations[0]?.id) 
-            dispatch(fetchConversationMessages(conversations[0]?.id))
-            console.log(selectedConvo)
-            console.log(conversations)
             dispatch(fetchConversationMessagesIndexed(conversations[0]?.id))
         }
     }, [conversations, dispatch])
 
     const onConversationSelect = (id) => {
         setSelectedConvo(id)
-        if (id && conversations.find( (conversation) => conversation.id === id ).messages === null) 
-            dispatch(fetchConversationMessages(id))
+        if (id && conversations.find( (conversation) => conversation.id === id ).messages.length === 0) 
+            dispatch(fetchConversationMessagesIndexed(id))
     }
 
     const sendMessage = () => {
@@ -61,7 +55,7 @@ const ConversationMessaging = () => {
     const onTyping = (e) => {
         if (selectedConvo) {
             setMessage(e.target.value)
-            dispatch(sendSignalToConversation(selectedConvo, "TYPING" ))
+            // dispatch(sendSignalToConversation(selectedConvo, "TYPING" ))
         }
     }
 
@@ -72,7 +66,7 @@ const ConversationMessaging = () => {
 
     const debouceClearTyping = useCallback(
         debounce((selectedConvo) => {
-            dispatch(stopTyping(selectedConvo))
+            // dispatch(stopTyping(selectedConvo))
         }, [1000]), 
     []);
 
@@ -125,8 +119,10 @@ const ConversationMessaging = () => {
                     flexGrow: 1,
                     width: { md: `calc(100% - ${drawerWidth}px)` },
                     paddingX: 2,
-                }}>
-                <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent:'flex-end', overflowY: 'auto' }}>
+                    minHeight: 'min-content'
+                }}
+                >
+                <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }}>
                     <IconButton
                         color="inherit"
                         edge="start"
@@ -137,14 +133,25 @@ const ConversationMessaging = () => {
                     </IconButton>
                     { typing && <Typography variant="body2" p={2}>{typing} is typing..</Typography> }
                     {
-                        messages?.map((message, index) => { 
-                            let topSent = messages[index-1]?.senderId === message.senderId ? true : false;
-                            let bottomSent = messages[index+1]?.senderId === message.senderId ? true : false;
-                            let sent = message.senderId === authUser.id
-                            return (
-                                <ChatBubble topSent={topSent} bottomSent={bottomSent} key={index} sent={sent} content={message.content}/>
-                            )
-                        })
+                        messages?.length === 0 ? (
+                            <>
+                                <Typography>Start by sending a message 👋</Typography>
+                            </>
+                        ) : (
+                        <>
+                            {
+                                messages?.map((message, index, arr) => { 
+                                    const absIndex = arr.length - index - 1
+                                    message = arr[absIndex]
+                                    let topSent = arr[absIndex-1]?.senderId === message.senderId ? true : false;
+                                    let bottomSent = arr[absIndex+1]?.senderId === message.senderId ? true : false;
+                                    let sent = message.senderId === authUser.id
+                                    return (
+                                        <ChatBubble topSent={topSent} bottomSent={bottomSent} key={index} sent={sent} content={message.content}/>
+                                )})
+                            }
+                        </>
+                        )
                     }
                 </Box>
                 <Stack direction = {'row'} spacing={2} ref={typeEl} py={1}>

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Client } from "@stomp/stompjs";
-import { setUnsubscribeToConversation, subsribeToServerPrivateMessage } from "./conversationSlice";
+import { setUnsubscribeToConversation, subsribeToServerPrivateMessage } from "./indexedConversationSlice";
 import { setUnsubscribeToNotification, subscribeToNotification } from "./notificationSlice";
 
 const initialState = {

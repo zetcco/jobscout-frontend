@@ -2,9 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom';
 import { selectAuthUser } from '../features/authSlice';
-import { connectToWebSocket, selectWebSocketConnected  } from "features/websocketSlice";
-import { subscribeToNotification } from 'features/notificationSlice';
-import { subsribeToServerPrivateMessage } from 'features/conversationSlice';
+import { connectToWebSocket } from "features/websocketSlice";
 
 export const ProtectedRoute = ({ role, redirect }) => {
 
