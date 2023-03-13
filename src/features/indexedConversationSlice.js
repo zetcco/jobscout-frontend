@@ -3,7 +3,9 @@ import { sendSignal } from "./websocketSlice";
 
 const { createEntityAdapter, createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
-const conversationAdapter = createEntityAdapter()
+const conversationAdapter = createEntityAdapter({
+    // sortComparer: (a, b) => b.messages[0]?.timestamp.localeCompare(a.messages[0]?.timestamp)
+})
 
 const initialState = conversationAdapter.getInitialState({
     messageError: null,
@@ -53,7 +55,10 @@ const conversationSlice = createSlice({
                 state.conversationLoading = false
             })
             .addCase(fetchConversationMessagesIndexed.fulfilled, (state, action) => {
-                state.entities[action.payload.id].messages = [ ...action.payload.data.slice().reverse(), ...state.entities[action.payload.id].messages ]
+                if (state.entities[action.payload.id].page === 0)
+                    state.entities[action.payload.id].messages = action.payload.data.slice().reverse()
+                else 
+                    state.entities[action.payload.id].messages = [ ...action.payload.data.slice().reverse(), ...state.entities[action.payload.id].messages ]
                 state.messageLoading = false
                 state.entities[action.payload.id].page += 1
             })
@@ -90,6 +95,7 @@ export const selectParticipants = (state, conversationId) => state.indexedConver
 export const selectMessagesLoading = (state) => state.indexedConversations.messageLoading;
 export const selectConversationLoading = (state) => state.indexedConversations.conversationLoading;
 export const selectConversationError = (state) => state.indexedConversations.conversationError;
+export const selectConversationPage = (state, conversationId) => state.indexedConversations.entities[conversationId]?.page
 export const selectTyping = (state, conversationId) => state.indexedConversations.entities[conversationId]?.typing
 export const selectAllConversations = (state) => state.indexedConversations.entities
 

@@ -67,7 +67,7 @@ export const Topbar = () => {
                                         <Avatar sx={{ width: 24, height: 24 }}>{ authUser?.displayName && (Array.from(authUser.displayName)[0]) }</Avatar>
                                     )
                                 }
-                                <Typography>{ authUser?.displayName }</Typography>
+                                <Typography display={{ xs: 'none', sm: 'block' }}>{ authUser?.displayName }</Typography>
                                 <KeyboardArrowDownOutlined size='small'/>
                             </Stack>
                         </IconButton>

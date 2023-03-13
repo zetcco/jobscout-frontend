@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
 import { debounce } from "lodash";
 import { Conversations } from "./Conversations";
-import { fetchConversationMessagesIndexed, fetchConversationsIndexed, selectAllConversations, selectConversationById, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
+import { fetchConversationMessagesIndexed, fetchConversationsIndexed, selectAllConversations, selectConversationById, selectConversationPage, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
 
 const drawerWidth = 300;
 
@@ -29,6 +29,7 @@ const ConversationMessaging = () => {
 
     const messages = useSelector((state) => selectMessagesIndexed(state, selectedConvo))
     const participants = useSelector((state) => selectParticipants(state, selectedConvo))
+    const page = useSelector((state) => selectConversationPage(state, selectedConvo))
     const groupChat = participants?.length > 2 ? true : false;
     const typing = useSelector((state) => selectTyping(state, selectedConvo))
     const messagesLoading = useSelector(selectMessagesLoading)
@@ -39,16 +40,15 @@ const ConversationMessaging = () => {
 
     useEffect(() => {
         if (!selectedConvo && conversations[0] && !messagesLoading) {
-            setSelectedConvo(conversations[0]?.id) 
-            dispatch(fetchConversationMessagesIndexed(conversations[0]?.id))
+            // setSelectedConvo(conversations[0]?.id) 
+            // dispatch(fetchConversationMessagesIndexed(conversations[0]?.id))
         }
     }, [conversations, dispatch])
 
-    const onConversationSelect = (id) => {
-        setSelectedConvo(id)
-        if (id && conversations.find( (conversation) => conversation.id === id ).messages.length === 0) 
-            dispatch(fetchConversationMessagesIndexed(id))
-    }
+    useEffect(() => {
+        if (page === 0)
+            dispatch(fetchConversationMessagesIndexed(selectedConvo))
+    }, [selectedConvo])
 
     const observer = useRef()
     const onScrollToTop = useCallback((elm) => {
@@ -86,7 +86,7 @@ const ConversationMessaging = () => {
     []);
 
     useEffect(() => {
-        debouceClearTyping(selectedConvo)
+        // debouceClearTyping(selectedConvo)
     }, [typing, debouceClearTyping, selectedConvo])
 
     return (
@@ -104,7 +104,7 @@ const ConversationMessaging = () => {
                     }}
                 >
                     <Toolbar/>
-                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={setSelectedConvo}/>
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -115,7 +115,7 @@ const ConversationMessaging = () => {
                     open
                     >
                     <Toolbar/>
-                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={setSelectedConvo}/>
                 </Drawer>
             </Box>
             <Modal
@@ -134,7 +134,8 @@ const ConversationMessaging = () => {
                     flexGrow: 1,
                     width: { md: `calc(100% - ${drawerWidth}px)` },
                     paddingX: 2,
-                    minHeight: 'min-content'
+                    minHeight: 'min-content',
+                    width: { xs: '100%', sm:  `calc(100vw - ${drawerWidth}px)`}
                 }}
                 >
                 <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }} ref={chatBoxEl}>

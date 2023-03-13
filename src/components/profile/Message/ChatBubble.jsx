@@ -6,7 +6,7 @@ export const ChatBubble = forwardRef(({ sent, content, topSent, bottomSent, name
   return (
     <Box sx={{
         alignSelf: sent ? 'flex-end' : 'flex-start',
-        maxWidth: '60%', 
+        maxWidth: '40%', 
         mt: ( topSent ? 0.2 : 0.6 ),
         mb: ( bottomSent ? 0.2 : 0.6 )
       }}
