@@ -53,13 +53,18 @@ export const Conversations = ({ conversations, setNewChatOpen, selectedConvo, on
                                 name = conversation.name
                             else
                                 name = user?.displayName
+
+                            let lastMessage = conversation.messages[conversation.messages.length - 1]?.content
                             
                             return (
                                 <MenuItem key={index} selected={selectedConvo === conversation.id} onClick={() => onConversationSelect(conversation.id)}>
                                     {/* <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user?.displayPicture} name={ conversation.name ? conversation.name : user?.displayName}/> */}
                                     <Stack direction={"row"} spacing={1.5} alignItems="center">
                                         <Avatar alt={name} src={picture}/>
-                                        <Typography>{name}</Typography>
+                                        <Stack direction={"column"}>
+                                            <Typography>{name}</Typography>
+                                            <Typography variant='caption'>{lastMessage}</Typography>
+                                        </Stack>
                                     </Stack>
                                 </MenuItem>
                             )

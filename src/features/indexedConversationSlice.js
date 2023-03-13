@@ -4,7 +4,11 @@ import { sendSignal } from "./websocketSlice";
 const { createEntityAdapter, createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 const conversationAdapter = createEntityAdapter({
-    // sortComparer: (a, b) => b.messages[0]?.timestamp.localeCompare(a.messages[0]?.timestamp)
+    sortComparer: (a, b) => {
+        if (a.messages.length === 0)
+            return 0
+        return b.messages[0]?.timestamp.localeCompare(a.messages[0]?.timestamp)
+    }
 })
 
 const initialState = conversationAdapter.getInitialState({
@@ -22,6 +26,9 @@ const conversationSlice = createSlice({
         setNewConversation: conversationAdapter.addOne,
         messageRecieved: (state, action) => {
             state.entities[action.payload.conversationId].messages.push(action.payload)
+            const index = state.ids.indexOf(action.payload.conversationId)
+            state.ids.splice(index, 1);
+            state.ids.unshift(action.payload.conversationId)
         },
         isTyping: (state, action) => {
             state.entities[action.payload.conversationId].typing = action.payload.name
