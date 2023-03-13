@@ -21,10 +21,11 @@ const ConversationMessaging = () => {
     const [ mobileOpen, setMobileOpen ] = useState(false)
 
     const conversations = useSelector(selectConversations);
-    const conversationsEntities = useSelector(selectAllConversations)
     const [ selectedConvo, setSelectedConvo ] = useState(null);
     const [ message, setMessage ] = useState('')
     const [ newChatOpen, setNewChatOpen ] = useState(false);
+
+    const chatBoxEl = useRef(null)
 
     const messages = useSelector((state) => selectMessagesIndexed(state, selectedConvo))
     const typing = useSelector((state) => selectTyping(state, selectedConvo))
@@ -46,6 +47,18 @@ const ConversationMessaging = () => {
         if (id && conversations.find( (conversation) => conversation.id === id ).messages.length === 0) 
             dispatch(fetchConversationMessagesIndexed(id))
     }
+
+    const observer = useRef()
+    const onScrollToTop = useCallback((elm) => {
+        if (messagesLoading) return
+        if (observer.current) observer.current.disconnect()
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+                dispatch(fetchConversationMessagesIndexed(selectedConvo))
+            }
+        })
+        if (elm) observer.current.observe(elm)
+    }, [selectedConvo, messagesLoading])
 
     const sendMessage = () => {
         dispatch(sendSignalToConversation(selectedConvo, "MESSAGE", message))
@@ -122,7 +135,7 @@ const ConversationMessaging = () => {
                     minHeight: 'min-content'
                 }}
                 >
-                <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }}>
+                <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }} ref={chatBoxEl}>
                     <IconButton
                         color="inherit"
                         edge="start"
@@ -147,7 +160,9 @@ const ConversationMessaging = () => {
                                     let bottomSent = arr[absIndex+1]?.senderId === message.senderId ? true : false;
                                     let sent = message.senderId === authUser.id
                                     return (
-                                        <ChatBubble topSent={topSent} bottomSent={bottomSent} key={index} sent={sent} content={message.content}/>
+                                    <>
+                                        <ChatBubble ref={ absIndex === 3 ? onScrollToTop : undefined } topSent={topSent} bottomSent={bottomSent} key={index} sent={sent} content={message.content}/>
+                                    </>
                                 )})
                             }
                         </>

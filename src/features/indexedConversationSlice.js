@@ -106,7 +106,7 @@ export const fetchConversationsIndexed = createAsyncThunk('indexedConversations/
 export const fetchConversationMessagesIndexed = createAsyncThunk('indexedConversations/fetchMessages', async (id, { getState, rejectWithValue }) => {
     try {
         const state = getState()
-        const response = await axios.get(`/messaging/${id}?page=${state.indexedConversations.entities[id].page}&count=10`, { headers: {
+        const response = await axios.get(`/messaging/${id}?page=${state.indexedConversations.entities[id].page}&count=25`, { headers: {
             "Authorization": `Bearer ${state.auth.token}`
         }});
         return { id: id, data: response.data }

@@ -134,7 +134,7 @@ export const NewChat = forwardRef(({ onClose }) => {
                                 />
                                 <Stack direction={"row"} spacing={2}>
                                     <Button fullWidth onClick={onClose}>Close</Button>
-                                    <Button type="submit" variant="contained" fullWidth disabled={loading || newChatName === ''}>Save</Button>
+                                    <Button type="submit" variant="contained" fullWidth disabled={loading}>Save</Button>
                                 </Stack>
                             </Stack>
                         </form>

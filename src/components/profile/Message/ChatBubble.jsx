@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import React from 'react'
+import React, { forwardRef } from 'react'
 
-export const ChatBubble = ({ sent, content, topSent, bottomSent }) => {
+export const ChatBubble = forwardRef(({ sent, content, topSent, bottomSent }, ref) => {
   return (
     <Box sx={{ 
       alignSelf: sent ? 'flex-end' : 'flex-start',
@@ -16,8 +16,10 @@ export const ChatBubble = ({ sent, content, topSent, bottomSent }) => {
       borderTopLeftRadius: !sent && topSent ? 0 : '20px',
       borderBottomLeftRadius: !sent && bottomSent ? 0 : '20px',
       wordWrap: 'break-word'
-      }}>
+      }}
+      ref={ref}
+      >
         <Typography my={1.5} mx={2} variant={"body2"} sx={{ fontWeight: 450, fontSize: 15 }}>{content}</Typography>
     </Box>
   )
-}
+})
