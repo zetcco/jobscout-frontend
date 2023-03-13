@@ -5,6 +5,7 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  Stack,
 } from '@mui/material';
 
 export const QuestionForm = () => {
@@ -16,21 +17,28 @@ export const QuestionForm = () => {
           What is the difference between list and tuples in Python?
         </FormLabel>
         <RadioGroup aria-labelledby='q1' name='radio-buttons-group'>
-          <FormControlLabel
-            value='female'
-            control={<Radio size='small' />}
-            label='Female'
-          />
-          <FormControlLabel
-            value='male'
-            control={<Radio size='small' />}
-            label='Male'
-          />
-          <FormControlLabel
-            value='other'
-            control={<Radio size='small' />}
-            label='Other'
-          />
+          <Stack direction={'row'} spacing={2}>
+            <FormControlLabel
+              value='female'
+              control={<Radio size='small' />}
+              label='Female'
+            />
+            <FormControlLabel
+              value='male'
+              control={<Radio size='small' />}
+              label='Male'
+            />
+            <FormControlLabel
+              value='other'
+              control={<Radio size='small' />}
+              label='Other'
+            />
+            <FormControlLabel
+              value='other'
+              control={<Radio size='small' />}
+              label='Other'
+            />
+          </Stack>
         </RadioGroup>
       </FormControl>
     </BasicCard>
