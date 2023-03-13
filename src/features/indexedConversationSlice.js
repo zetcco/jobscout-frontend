@@ -30,6 +30,10 @@ const conversationSlice = createSlice({
             state.ids.splice(index, 1);
             state.ids.unshift(action.payload.conversationId)
         },
+        deleteMessage: (state, action) => {
+            const index = state.entities[action.payload.conversationId].messages.findIndex(val => val.id === action.payload.messageId)
+            state.entities[action.payload.conversationId].messages.splice(index, 1);
+        },
         isTyping: (state, action) => {
             state.entities[action.payload.conversationId].typing = action.payload.name
         },
@@ -90,6 +94,7 @@ export const {
 export const { 
     setNewConversation, 
     messageRecieved,
+    deleteMessage,
     isTyping,
     stopTyping,
     updateConversation,
@@ -163,6 +168,9 @@ export const subsribeToServerPrivateMessage = (dispatch, getState) => {
                             break;
                         case "CONVERSATION_UPDATE":
                             dispatch(updateConversation(data));
+                            break;
+                        case "DELETE":
+                            dispatch(deleteMessage(data));
                             break;
                         default:
                             break;

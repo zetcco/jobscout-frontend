@@ -173,6 +173,8 @@ const ConversationMessaging = () => {
                                             key={index}
                                             sent={sent}
                                             content={message.content}
+                                            conversation={message.conversationId}
+                                            id={message.id}
                                         />
                                 )})
                             }
