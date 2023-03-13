@@ -57,6 +57,7 @@ export const connectToWebSocket = (dispatch, getState) => {
             token: state.auth.token
         },
         onConnect: () => {
+            console.warn("WEB SOCKET onConnected")
             dispatch(webSocketConnected(stompClient))
             dispatch(subscribeToNotification)
             dispatch(subsribeToServerPrivateMessage)
@@ -65,14 +66,17 @@ export const connectToWebSocket = (dispatch, getState) => {
             console.log(str)
         },
         onDisconnect: () => {
+            console.warn("WEB SOCKET onDisconnected")
             dispatch(webSocketClear())
             dispatch(setUnsubscribeToConversation())
             dispatch(setUnsubscribeToNotification())
         },
         onWebSocketError: (error) => {
+            console.warn("WEB SOCKET onError")
             dispatch(webSocketFailed(error))
         },
         onWebSocketClose: () => {
+            console.warn("WEB SOCKET onClose")
             dispatch(webSocketClear())
             dispatch(setUnsubscribeToConversation())
             dispatch(setUnsubscribeToNotification())

@@ -10,8 +10,9 @@ export const ProtectedRoute = ({ role, redirect }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(connectToWebSocket)
-    }, [dispatch])
+        if (authUser)
+            dispatch(connectToWebSocket)
+    }, [dispatch, authUser])
 
     if (!authUser)
         return ( <Navigate to={"/login"} replace/> )
