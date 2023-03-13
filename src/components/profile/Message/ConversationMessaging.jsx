@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
 import { debounce } from "lodash";
 import { Conversations } from "./Conversations";
-import { fetchConversationMessagesIndexed, fetchConversationsIndexed, selectAllConversations, selectConversationById, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
+import { fetchConversationMessagesIndexed, fetchConversationsIndexed, selectAllConversations, selectConversationById, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
 
 const drawerWidth = 300;
 
@@ -28,6 +28,8 @@ const ConversationMessaging = () => {
     const chatBoxEl = useRef(null)
 
     const messages = useSelector((state) => selectMessagesIndexed(state, selectedConvo))
+    const participants = useSelector((state) => selectParticipants(state, selectedConvo))
+    const groupChat = participants?.length > 2 ? true : false;
     const typing = useSelector((state) => selectTyping(state, selectedConvo))
     const messagesLoading = useSelector(selectMessagesLoading)
 
@@ -160,9 +162,17 @@ const ConversationMessaging = () => {
                                     let bottomSent = arr[absIndex+1]?.senderId === message.senderId ? true : false;
                                     let sent = message.senderId === authUser.id
                                     return (
-                                    <>
-                                        <ChatBubble ref={ absIndex === 3 ? onScrollToTop : undefined } topSent={topSent} bottomSent={bottomSent} key={index} sent={sent} content={message.content}/>
-                                    </>
+                                        <ChatBubble 
+                                            name={
+                                                (groupChat && !sent && !topSent) ? participants.find(participant => participant.id === message.senderId).displayName.split(" ")[0] : undefined
+                                            }
+                                            ref={ absIndex === 3 ? onScrollToTop : undefined }
+                                            topSent={topSent}
+                                            bottomSent={bottomSent}
+                                            key={index}
+                                            sent={sent}
+                                            content={message.content}
+                                        />
                                 )})
                             }
                         </>

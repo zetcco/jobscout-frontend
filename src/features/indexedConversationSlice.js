@@ -86,6 +86,7 @@ export const {
 } = conversationSlice.actions;
 
 export const selectMessagesIndexed = (state, conversationId) => state.indexedConversations.entities[conversationId]?.messages
+export const selectParticipants = (state, conversationId) => state.indexedConversations.entities[conversationId]?.participants
 export const selectMessagesLoading = (state) => state.indexedConversations.messageLoading;
 export const selectConversationLoading = (state) => state.indexedConversations.conversationLoading;
 export const selectConversationError = (state) => state.indexedConversations.conversationError;
