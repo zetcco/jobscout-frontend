@@ -40,13 +40,6 @@ const ConversationMessaging = () => {
     }, [dispatch])
 
     useEffect(() => {
-        if (!selectedConvo && conversations[0] && !messagesLoading) {
-            // setSelectedConvo(conversations[0]?.id) 
-            // dispatch(fetchConversationMessagesIndexed(conversations[0]?.id))
-        }
-    }, [conversations, dispatch])
-
-    useEffect(() => {
         if (page === 0)
             dispatch(fetchConversationMessagesIndexed(selectedConvo))
     }, [selectedConvo])
@@ -91,7 +84,6 @@ const ConversationMessaging = () => {
 
     const onConversationSelect = (id) => {
         setSelectedConvo(id)
-        console.log(read)
         if (!read)
             dispatch(requestMarkConversationAsRead(id))
     }
