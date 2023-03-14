@@ -9,6 +9,7 @@ import { NewChat } from "./NewChat";
 import { debounce } from "lodash";
 import { Conversations } from "./Conversations";
 import { fetchConversationMessagesIndexed, fetchConversationsIndexed, markAsRead, requestMarkConversationAsRead, selectAllConversations, selectConversationById, selectConversationPage, selectConversationReadState, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
+import { ArrowBackIosNewOutlined, ChatBubbleOutline, QuestionAnswerTwoTone } from "@mui/icons-material";
 
 const drawerWidth = 300;
 
@@ -18,7 +19,7 @@ const ConversationMessaging = () => {
     const { mixins: { toolbar } } = useTheme()
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
-    const [ mobileOpen, setMobileOpen ] = useState(false)
+    const [ mobileOpen, setMobileOpen ] = useState(true)
 
     const conversations = useSelector(selectConversations);
     const [ selectedConvo, setSelectedConvo ] = useState(null);
@@ -56,10 +57,8 @@ const ConversationMessaging = () => {
         if (messagesLoading) return
         if (observer.current) observer.current.disconnect()
         observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {
+            if (entries[0].isIntersecting) 
                 dispatch(fetchConversationMessagesIndexed(selectedConvo))
-                console.log("Fetching on scroll")
-            }
         })
         if (elm) observer.current.observe(elm)
     }, [selectedConvo, messagesLoading])
@@ -148,20 +147,27 @@ const ConversationMessaging = () => {
                 }}
                 >
                 <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }} ref={chatBoxEl}>
+
                     <IconButton
-                        color="inherit"
                         edge="start"
                         onClick={() => setMobileOpen(!mobileOpen)}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
+                        sx={{ 
+                            display: { sm: 'none' },
+                            position: 'absolute',
+                            zIndex: 9999,
+                            top: `${toolbar?.minHeight}px`,
+                            left: '14px'
+                        }}
                     >
-                        <AddIcon />
+                        <ArrowBackIosNewOutlined/>
                     </IconButton>
                     { typing && <Typography variant="body2" p={2}>{typing} is typing..</Typography> }
                     {
                         messages?.length === 0 ? (
-                            <>
-                                <Typography>Start by sending a message 👋</Typography>
-                            </>
+                            <Stack width={"100%"} height={"100%"} justifyContent="center" alignItems={"center"} spacing={2}>
+                                <Typography align={"center"}>Start conversation by <br/> Sending a Message</Typography>
+                                <QuestionAnswerTwoTone color="primary" fontSize="large"/>
+                            </Stack>
                         ) : (
                         <>
                             {
@@ -189,24 +195,26 @@ const ConversationMessaging = () => {
                         )
                     }
                 </Box>
-                <Stack direction = {'row'} spacing={2} ref={typeEl} py={1}>
-                    <Stack flexGrow={1}>
-                        <TextField 
-                            value={message}
-                            onChange={onTyping}
-                            onKeyDown={onKeyDown}
-                            label="Send Message" 
-                            variant="outlined"
-                            placeholder = "Type the meassage "
-                            fullWidth 
-                        />
+                { selectedConvo && (
+                    <Stack direction = {'row'} spacing={2} ref={typeEl} py={1}>
+                        <Stack flexGrow={1}>
+                            <TextField 
+                                value={message}
+                                onChange={onTyping}
+                                onKeyDown={onKeyDown}
+                                label="Send Message" 
+                                variant="outlined"
+                                placeholder = "Type the meassage "
+                                fullWidth 
+                            />
+                        </Stack>
+                        <Stack justifyContent={"center"}>
+                            <IconButton size = 'large' variant = 'contained' onClick={sendMessage}>
+                                <SendIcon color = 'success' fontSize='large'/>
+                            </IconButton>
+                        </Stack>
                     </Stack>
-                    <Stack justifyContent={"center"}>
-                        <IconButton size = 'large' variant = 'contained' onClick={sendMessage}>
-                            <SendIcon color = 'success' fontSize='large'/>
-                        </IconButton>
-                    </Stack>
-                </Stack>
+                )}
             </Box>
         </Box>
         </>

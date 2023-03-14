@@ -33,7 +33,7 @@ export const Conversations = ({ conversations, setNewChatOpen, selectedConvo, on
             ) : (
                 <>
                 <Stack direction={"row"} justifyContent="space-between" alignItems={"center"} m={2}>
-                    <Typography variant="h5">Chats</Typography>
+                    <Typography variant="h5">Conversations</Typography>
                     <Button startIcon={<AddIcon/>} onClick={() => setNewChatOpen(true)}>New</Button>
                 </Stack>
                 <Divider/>
