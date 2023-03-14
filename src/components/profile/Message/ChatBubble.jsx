@@ -1,5 +1,5 @@
 import { MoreHoriz } from '@mui/icons-material'
-import { Avatar, Button, IconButton, Popover, Stack, Typography } from '@mui/material'
+import { Button, IconButton, Popover, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { BasicCard } from 'components/cards/BasicCard'
 import { sendSignal } from 'features/websocketSlice'

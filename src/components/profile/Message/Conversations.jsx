@@ -1,6 +1,6 @@
-import { Alert, AlertTitle, Avatar, Button, Divider, MenuItem, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Avatar, Button, Divider, MenuItem, Modal, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUser } from 'features/authSlice';
@@ -12,8 +12,9 @@ import {
     selectConversations,
     selectSelectedConversation } from 'features/indexedConversationSlice';
 import CircularProgress from '@mui/material/CircularProgress';
+import { NewChat } from './NewChat';
 
-export const Conversations = ({ setNewChatOpen }) => {
+export const Conversations = () => {
 
     const authUser = useSelector(selectAuthUser)
     const conversationLoading = useSelector(selectConversationLoading)
@@ -21,6 +22,7 @@ export const Conversations = ({ setNewChatOpen }) => {
     const selectedConvo = useSelector(selectSelectedConversation)
     const conversations = useSelector(selectConversations);
     const dispatch = useDispatch()
+    const [ newChatOpen, setNewChatOpen ] = useState(false);
 
     useEffect(() => {
         dispatch(fetchConversationsIndexed())
@@ -29,14 +31,6 @@ export const Conversations = ({ setNewChatOpen }) => {
     const onConversationSelect = (id) => {
         dispatch(selectConversation(id))
     }
-
-    // useEffect(() => {
-    //     if (page === 0 && !messagesLoading) {
-    //         dispatch(fetchConversationMessagesIndexed(selectedConvo?.id))
-    //     }
-    //     if (!read)
-    //         dispatch(requestMarkConversationAsRead(selectedConvo?.id))
-    // }, [selectedConvo])
 
     if (conversationError)
         return (
@@ -102,6 +96,17 @@ export const Conversations = ({ setNewChatOpen }) => {
                     </Stack>
                     )
                 }
+                <Modal
+                    open={newChatOpen}
+                    onClose={() => setNewChatOpen(!newChatOpen)}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <NewChat onClose={() => setNewChatOpen(!newChatOpen)}/>
+                </Modal>
                 </>
             )
         }

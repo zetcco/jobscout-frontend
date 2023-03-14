@@ -1,6 +1,5 @@
-import { Box, Drawer, IconButton, Modal, Toolbar, useTheme } from "@mui/material";
+import { Box, Drawer, IconButton, Toolbar, useTheme } from "@mui/material";
 import React, { useState } from "react";
-import { NewChat } from "./NewChat";
 import { Conversations } from "./Conversations";
 import Conversation from "./Conversation";
 import { ArrowBackIosNewOutlined } from "@mui/icons-material";
@@ -10,8 +9,6 @@ const drawerWidth = 300;
 const ConversationMessaging = () => {
 
     const [ mobileOpen, setMobileOpen ] = useState(true)
-
-    const [ newChatOpen, setNewChatOpen ] = useState(false);
 
     const { mixins: { toolbar } } = useTheme()
 
@@ -44,17 +41,6 @@ const ConversationMessaging = () => {
                     <Conversations/>
                 </Drawer>
             </Box>
-            <Modal
-                open={newChatOpen}
-                onClose={() => setNewChatOpen(false)}
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <NewChat onClose={() => setNewChatOpen(false)}/>
-            </Modal>
             <IconButton
                 edge="start"
                 onClick={() => setMobileOpen(true)}
