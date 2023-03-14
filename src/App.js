@@ -32,9 +32,10 @@ import { Messaging } from './components/profile/Message/Messaging';
 import { Meeting } from 'components/meeting/Meeting';
 import ConversationMessaging from 'components/profile/Message/ConversationMessaging';
 import { Questionaries } from 'components/authentication/user/job_seeker/questionaries/Questionaries';
-import { QuestionDetail } from 'components/authentication/user/job_seeker/questionaries/QuestionDetail';
+import { QuestionDetailPython } from 'components/authentication/user/job_seeker/questionaries/pythonQuestion/QuestionDetailPython';
 import { QuestionFormSetPython } from 'components/authentication/user/job_seeker/questionaries/pythonQuestion/QuestionFormSetPython';
 import { QuestionFormSetWord } from 'components/authentication/user/job_seeker/questionaries/mswordQuestion/QuestionFormSetWord';
+import { QuestionDetailMsword } from 'components/authentication/user/job_seeker/questionaries/mswordQuestion/QuestionDetailMsword';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -123,9 +124,14 @@ const router = createBrowserRouter(
         >
           <Route path='questionaries' element={<Questionaries />} />
           <Route path='questionaries'>
-            <Route path='detail' element={<QuestionDetail />} />
-            <Route path='python-Q' element={<QuestionFormSetPython />} />
-            <Route path='msword-Q' element={<QuestionFormSetWord />} />
+            <Route path='python'>
+              <Route path='detail' element={<QuestionDetailPython />} />
+              <Route path='python-Q' element={<QuestionFormSetPython />} />
+            </Route>
+            <Route path='msword'>
+              <Route path='detail' element={<QuestionDetailMsword />} />
+              <Route path='msword-Q' element={<QuestionFormSetWord />} />
+            </Route>
           </Route>
         </Route>
 
