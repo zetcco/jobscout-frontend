@@ -1,17 +1,49 @@
 import { Alert, AlertTitle, Avatar, Button, Divider, MenuItem, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box } from '@mui/system';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUser } from 'features/authSlice';
-import { selectConversationError, selectConversationLoading } from 'features/indexedConversationSlice';
+import { 
+    fetchConversationMessagesIndexed,
+    fetchConversationsIndexed,
+    requestMarkConversationAsRead,
+    selectConversation,
+    selectConversationError,
+    selectConversationLoading,
+    selectConversationPage,
+    selectConversationReadState,
+    selectConversations,
+    selectMessagesLoading,
+    selectSelectedConversation } from 'features/indexedConversationSlice';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export const Conversations = ({ conversations, setNewChatOpen, selectedConvo, onConversationSelect }) => {
+export const Conversations = ({ setNewChatOpen }) => {
 
     const authUser = useSelector(selectAuthUser)
     const conversationLoading = useSelector(selectConversationLoading)
+    const messagesLoading = useSelector(selectMessagesLoading)
+    const read = useSelector(selectConversationReadState)
     const conversationError = useSelector(selectConversationError)
+    const selectedConvo = useSelector(selectSelectedConversation)
+    const conversations = useSelector(selectConversations);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchConversationsIndexed())
+    }, [dispatch])
+
+    const onConversationSelect = (id) => {
+        dispatch(selectConversation(id))
+    }
+
+    // useEffect(() => {
+    //     if (page === 0 && !messagesLoading) {
+    //         dispatch(fetchConversationMessagesIndexed(selectedConvo?.id))
+    //     }
+    //     if (!read)
+    //         dispatch(requestMarkConversationAsRead(selectedConvo?.id))
+    // }, [selectedConvo])
 
     if (conversationError)
         return (

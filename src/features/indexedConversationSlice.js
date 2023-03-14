@@ -4,6 +4,11 @@ import { sendSignal } from "./websocketSlice";
 const { createEntityAdapter, createSlice, createAsyncThunk, createSelector } = require("@reduxjs/toolkit");
 
 const conversationAdapter = createEntityAdapter({
+    sortComparer: (a, b) => {
+        if (a.messages.length === 0)
+            return 1
+        return b.messages[0]?.timestamp.localeCompare(a.messages[0]?.timestamp)
+    }
 })
 
 const initialState = conversationAdapter.getInitialState({
@@ -20,6 +25,9 @@ const conversationSlice = createSlice({
     initialState,
     reducers: {
         setNewConversation: conversationAdapter.addOne,
+        selectConversation: (state, action) => {
+            state.selectedConversation = action.payload
+        },
         messageRecieved: (state, action) => {
             state.entities[action.payload.data.conversationId].messages.push(action.payload.data)
             state.entities[action.payload.data.conversationId].read = action.payload.read
@@ -97,6 +105,7 @@ export const {
 } = conversationAdapter.getSelectors(state => state.indexedConversations)
 
 export const { 
+    selectConversation,
     setNewConversation, 
     messageRecieved,
     deleteMessage,
@@ -108,14 +117,15 @@ export const {
     markAsRead
 } = conversationSlice.actions;
 
-export const selectMessagesIndexed = (state, conversationId) => state.indexedConversations.entities[conversationId]?.messages
-export const selectConversationReadState = (state, conversationId) => state.indexedConversations.entities[conversationId]?.read
-export const selectParticipants = (state, conversationId) => state.indexedConversations.entities[conversationId]?.participants
+export const selectSelectedConversation = (state) => state.indexedConversations.entities[state.indexedConversations.selectedConversation]
+export const selectMessagesIndexed = (state) => state.indexedConversations.entities[state.indexedConversations.selectedConversation]?.messages
+export const selectConversationReadState = (state) => state.indexedConversations.entities[state.indexedConversations.selectedConversation]?.read
+export const selectParticipants = (state) => state.indexedConversations.entities[state.indexedConversations.selectedConversation]?.participants
 export const selectMessagesLoading = (state) => state.indexedConversations.messageLoading;
 export const selectConversationLoading = (state) => state.indexedConversations.conversationLoading;
 export const selectConversationError = (state) => state.indexedConversations.conversationError;
-export const selectConversationPage = (state, conversationId) => state.indexedConversations.entities[conversationId]?.page
-export const selectTyping = (state, conversationId) => state.indexedConversations.entities[conversationId]?.typing
+export const selectConversationPage = (state) => state.indexedConversations.entities[state.indexedConversations.selectedConversation]?.page
+export const selectTyping = (state) => state.indexedConversations.entities[state.indexedConversations.selectedConversation]?.typing
 export const selectAllConversations = (state) => state.indexedConversations.entities
 export const selectUnreadConversationCount = createSelector(
     [selectConversations],
