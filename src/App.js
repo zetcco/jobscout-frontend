@@ -32,12 +32,8 @@ import { Messaging } from './components/profile/Message/Messaging';
 import { Meeting } from 'components/meeting/Meeting';
 import ConversationMessaging from 'components/profile/Message/ConversationMessaging';
 import { Questionaries } from 'components/authentication/user/job_seeker/questionaries/Questionaries';
-import { Question } from 'components/authentication/user/job_seeker/questionaries/Question';
 import { QuestionDetail } from 'components/authentication/user/job_seeker/questionaries/QuestionDetail';
-import {
-  QuestionFormPython,
-  QuestionFormSetPython,
-} from 'components/authentication/user/job_seeker/questionaries/pythonQuestion/QuestionFormSetPython';
+import { QuestionFormSetPython } from 'components/authentication/user/job_seeker/questionaries/pythonQuestion/QuestionFormSetPython';
 import { QuestionFormSetWord } from 'components/authentication/user/job_seeker/questionaries/mswordQuestion/QuestionFormSetWord';
 
 const router = createBrowserRouter(
