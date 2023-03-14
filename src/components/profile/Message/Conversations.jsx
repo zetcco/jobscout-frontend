@@ -5,16 +5,11 @@ import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUser } from 'features/authSlice';
 import { 
-    fetchConversationMessagesIndexed,
     fetchConversationsIndexed,
-    requestMarkConversationAsRead,
     selectConversation,
     selectConversationError,
     selectConversationLoading,
-    selectConversationPage,
-    selectConversationReadState,
     selectConversations,
-    selectMessagesLoading,
     selectSelectedConversation } from 'features/indexedConversationSlice';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -22,8 +17,6 @@ export const Conversations = ({ setNewChatOpen }) => {
 
     const authUser = useSelector(selectAuthUser)
     const conversationLoading = useSelector(selectConversationLoading)
-    const messagesLoading = useSelector(selectMessagesLoading)
-    const read = useSelector(selectConversationReadState)
     const conversationError = useSelector(selectConversationError)
     const selectedConvo = useSelector(selectSelectedConversation)
     const conversations = useSelector(selectConversations);
@@ -89,7 +82,7 @@ export const Conversations = ({ setNewChatOpen }) => {
                             let lastMessage = conversation.messages[conversation.messages.length - 1]?.content
                             
                             return (
-                                <MenuItem key={index} selected={selectedConvo === conversation.id} onClick={() => onConversationSelect(conversation.id)}>
+                                <MenuItem key={index} selected={selectedConvo?.id === conversation.id} onClick={() => onConversationSelect(conversation.id)}>
                                     {/* <ProfileSmallWithName dpSize={30} sx={{ margin: 1 }} avatar={user?.displayPicture} name={ conversation.name ? conversation.name : user?.displayName}/> */}
                                     <Stack direction={"row"} spacing={1.5} alignItems="center">
                                         <Avatar alt={name} src={picture}/>

@@ -1,9 +1,9 @@
-import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
+import React, { useCallback, useEffect, useRef } from "react";
 import { ChatBubble } from "./ChatBubble";
-import { ArrowBackIosNewOutlined, QuestionAnswerTwoTone } from "@mui/icons-material";
+import { QuestionAnswerTwoTone } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchConversationMessagesIndexed, requestMarkConversationAsRead, selectConversationPage, selectConversationReadState, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectSelectedConversation, sendSignalToConversation } from "features/indexedConversationSlice";
+import { fetchConversationMessagesIndexed, requestMarkConversationAsRead, selectConversationPage, selectConversationReadState, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectSelectedConversation } from "features/indexedConversationSlice";
 import { selectAuthUser } from "features/authSlice";
 import { ConversationTypeBox } from "./ConversationTypeBox";
 
@@ -52,19 +52,6 @@ const Conversation = ({ setMobileOpen }) => {
         }}
         >
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column-reverse', overflowY: 'auto' }}>
-            <IconButton
-                edge="start"
-                onClick={() => setMobileOpen(true)}
-                sx={{ 
-                    display: { sm: 'none' },
-                    position: 'absolute',
-                    zIndex: 9999,
-                    top: `${toolbar?.minHeight}px`,
-                    left: '14px'
-                }}
-            >
-                <ArrowBackIosNewOutlined/>
-            </IconButton>
             {
                 messages?.length === 0 ? (
                     <Stack width={"100%"} height={"100%"} justifyContent="center" alignItems={"center"} spacing={2}>
