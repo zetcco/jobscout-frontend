@@ -8,7 +8,7 @@ import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
 import { GenerateCV } from "components/profile/GenerateCV";
-import { selectUnreadConversationCount } from "features/indexedConversationSlice";
+import { fetchConversationsIndexed, selectUnreadConversationCount } from "features/indexedConversationSlice";
 
 export const Topbar = () => {
 
@@ -25,6 +25,7 @@ export const Topbar = () => {
     useEffect(() => {
         dispatch(requestUserProfile())
         dispatch(fetchNotifications(2))
+        dispatch(fetchConversationsIndexed())
     }, [dispatch])
 
     return (

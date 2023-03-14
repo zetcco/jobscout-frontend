@@ -1,11 +1,10 @@
 import { Alert, AlertTitle, Avatar, Button, Divider, MenuItem, Modal, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUser } from 'features/authSlice';
 import { 
-    fetchConversationsIndexed,
     selectConversation,
     selectConversationError,
     selectConversationLoading,
@@ -23,10 +22,6 @@ export const Conversations = () => {
     const conversations = useSelector(selectConversations);
     const dispatch = useDispatch()
     const [ newChatOpen, setNewChatOpen ] = useState(false);
-
-    useEffect(() => {
-        dispatch(fetchConversationsIndexed())
-    }, [dispatch])
 
     const onConversationSelect = (id) => {
         dispatch(selectConversation(id))
