@@ -34,7 +34,11 @@ import ConversationMessaging from 'components/profile/Message/ConversationMessag
 import { Questionaries } from 'components/authentication/user/job_seeker/questionaries/Questionaries';
 import { Question } from 'components/authentication/user/job_seeker/questionaries/Question';
 import { QuestionDetail } from 'components/authentication/user/job_seeker/questionaries/QuestionDetail';
-import { QuestionForm, QuestionFormSet } from 'components/authentication/user/job_seeker/questionaries/QuestionFormSet';
+import {
+  QuestionFormPython,
+  QuestionFormSetPython,
+} from 'components/authentication/user/job_seeker/questionaries/pythonQuestion/QuestionFormSetPython';
+import { QuestionFormSetWord } from 'components/authentication/user/job_seeker/questionaries/mswordQuestion/QuestionFormSetWord';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -123,8 +127,9 @@ const router = createBrowserRouter(
         >
           <Route path='questionaries' element={<Questionaries />} />
           <Route path='questionaries'>
-            <Route path='python' element={<QuestionDetail />} />
-            <Route path='python-Q' element={<QuestionFormSet/>}/>
+            <Route path='detail' element={<QuestionDetail />} />
+            <Route path='python-Q' element={<QuestionFormSetPython />} />
+            <Route path='msword-Q' element={<QuestionFormSetWord />} />
           </Route>
         </Route>
 
