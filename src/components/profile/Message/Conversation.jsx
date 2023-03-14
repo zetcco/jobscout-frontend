@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Stack, Typography, useTheme } from "@mui/material";
 import React, { useCallback, useEffect, useRef } from "react";
 import { ChatBubble } from "./ChatBubble";
 import { QuestionAnswerTwoTone } from "@mui/icons-material";
@@ -67,16 +67,27 @@ const Conversation = ({ setMobileOpen }) => {
                             let topSent = arr[absIndex-1]?.senderId === message.senderId ? true : false;
                             let bottomSent = arr[absIndex+1]?.senderId === message.senderId ? true : false;
                             let sent = message.senderId === authUser.id
+
+                            let picture = null;
+                            let name = null;
+                            if (groupChat && !sent) {
+                                picture = <Box sx={{ width: 26, height: 26, flexShrink: 0 }}></Box>
+                                if (!topSent) {
+                                    let sender = participants.find(participant => participant.id === message.senderId)
+                                    picture = <Avatar src={sender.displayPicture} sx={{ width: 26, height: 26 }}/>
+                                    name = sender.displayName.split(" ")[0]
+                                }
+                            }
+
                             return (
                                 <ChatBubble 
-                                    name={
-                                        (groupChat && !sent && !topSent) ? participants.find(participant => participant.id === message.senderId).displayName.split(" ")[0] : undefined
-                                    }
                                     ref={ absIndex === 3 ? onScrollToTop : undefined }
                                     topSent={topSent}
                                     bottomSent={bottomSent}
                                     key={index}
                                     sent={sent}
+                                    picture={picture}
+                                    name={name}
                                     message={message}
                                 />
                         )})

@@ -1,12 +1,12 @@
 import { MoreHoriz } from '@mui/icons-material'
-import { Button, IconButton, Popover, Stack, Typography } from '@mui/material'
+import { Avatar, Button, IconButton, Popover, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { BasicCard } from 'components/cards/BasicCard'
 import { sendSignal } from 'features/websocketSlice'
 import React, { forwardRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-export const ChatBubble = forwardRef(({ sent, topSent, bottomSent, name, message }, ref) => {
+export const ChatBubble = forwardRef(({ sent, topSent, bottomSent, name, message, picture }, ref) => {
 
   const [showHover, setShowHover] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
@@ -30,7 +30,8 @@ export const ChatBubble = forwardRef(({ sent, topSent, bottomSent, name, message
     >
       <Stack direction={"column"}>
       { name && <Typography variant='caption'>{name}</Typography> }
-      <Stack direction={"row-reverse"} alignItems="center" gap={1}>
+      <Stack direction={ sent ? "row-reverse" : "row" } alignItems="center" spacing={1}>
+        { picture }
         <Box sx={{ 
           backgroundColor: sent ? 'grey.300' : 'primary.main',
           color: sent ? undefined : 'white',
