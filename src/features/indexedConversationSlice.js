@@ -4,11 +4,6 @@ import { sendSignal } from "./websocketSlice";
 const { createEntityAdapter, createSlice, createAsyncThunk, createSelector } = require("@reduxjs/toolkit");
 
 const conversationAdapter = createEntityAdapter({
-    sortComparer: (a, b) => {
-        if (a.messages.length === 0)
-            return 0
-        return b.messages[0]?.timestamp.localeCompare(a.messages[0]?.timestamp)
-    }
 })
 
 const initialState = conversationAdapter.getInitialState({
@@ -16,6 +11,7 @@ const initialState = conversationAdapter.getInitialState({
     messageLoading: false,
     conversationLoading: false,
     conversationError: null,
+    selectedConversation: null,
     subscribed: false
 })
 

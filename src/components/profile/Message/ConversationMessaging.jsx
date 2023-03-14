@@ -42,6 +42,8 @@ const ConversationMessaging = () => {
     useEffect(() => {
         if (page === 0)
             dispatch(fetchConversationMessagesIndexed(selectedConvo))
+        if (!read)
+            dispatch(requestMarkConversationAsRead(selectedConvo))
     }, [selectedConvo])
 
     const observer = useRef()
@@ -82,12 +84,6 @@ const ConversationMessaging = () => {
         // debouceClearTyping(selectedConvo)
     }, [typing, debouceClearTyping, selectedConvo])
 
-    const onConversationSelect = (id) => {
-        setSelectedConvo(id)
-        if (!read)
-            dispatch(requestMarkConversationAsRead(id))
-    }
-
     return (
         <>
         <Box display={'flex'}>
@@ -103,7 +99,7 @@ const ConversationMessaging = () => {
                     }}
                 >
                     <Toolbar/>
-                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={setSelectedConvo}/>
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -114,7 +110,7 @@ const ConversationMessaging = () => {
                     open
                     >
                     <Toolbar/>
-                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={setSelectedConvo}/>
                 </Drawer>
             </Box>
             <Modal
