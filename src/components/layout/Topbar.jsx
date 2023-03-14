@@ -9,13 +9,14 @@ import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
 import axios from "axios";
 import { GenerateCV } from "components/profile/GenerateCV";
+import { selectUnreadConversationCount } from "features/indexedConversationSlice";
 
 export const Topbar = () => {
 
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
-    const authUserToken = useSelector(selectAuthUserToken)
     const unreadNotificationCount = useSelector(selectUnreadNotificationCount);
+    const unreadMessageCount = useSelector(selectUnreadConversationCount)
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
@@ -46,7 +47,9 @@ export const Topbar = () => {
                         </RouterLink>
                         <RouterLink to={"/messages"}>
                             <IconButton size='large' color='inherit'>
-                                <ChatBubbleOutlineOutlined />
+                                <Badge badgeContent={unreadMessageCount} color="error">
+                                    <ChatBubbleOutlineOutlined />
+                                </Badge>
                             </IconButton>
                         </RouterLink>
                         <IconButton size='large' color='inherit'>

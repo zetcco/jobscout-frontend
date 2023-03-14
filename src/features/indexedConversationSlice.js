@@ -1,7 +1,7 @@
 import axios from "axios";
 import { sendSignal } from "./websocketSlice";
 
-const { createEntityAdapter, createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
+const { createEntityAdapter, createSlice, createAsyncThunk, createSelector } = require("@reduxjs/toolkit");
 
 const conversationAdapter = createEntityAdapter({
     sortComparer: (a, b) => {
@@ -121,6 +121,10 @@ export const selectConversationError = (state) => state.indexedConversations.con
 export const selectConversationPage = (state, conversationId) => state.indexedConversations.entities[conversationId]?.page
 export const selectTyping = (state, conversationId) => state.indexedConversations.entities[conversationId]?.typing
 export const selectAllConversations = (state) => state.indexedConversations.entities
+export const selectUnreadConversationCount = createSelector(
+    [selectConversations],
+    (conversations) => conversations.filter((conversation) => conversation.read ===  false).length
+)
 
 export const fetchConversationsIndexed = createAsyncThunk('indexedConversations/fetchConversations', async (_, { getState, rejectWithValue }) => {
     try {
