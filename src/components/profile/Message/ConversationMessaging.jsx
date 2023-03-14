@@ -4,12 +4,11 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SendIcon from '@mui/icons-material/Send';
 import { ChatBubble } from "./ChatBubble";
-import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
 import { debounce } from "lodash";
 import { Conversations } from "./Conversations";
-import { fetchConversationMessagesIndexed, fetchConversationsIndexed, markAsRead, requestMarkConversationAsRead, selectAllConversations, selectConversationById, selectConversationPage, selectConversationReadState, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
-import { ArrowBackIosNewOutlined, ChatBubbleOutline, QuestionAnswerTwoTone } from "@mui/icons-material";
+import { fetchConversationMessagesIndexed, fetchConversationsIndexed, requestMarkConversationAsRead, selectConversationPage, selectConversationReadState, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
+import { ArrowBackIosNewOutlined, QuestionAnswerTwoTone } from "@mui/icons-material";
 
 const drawerWidth = 300;
 
@@ -140,7 +139,6 @@ const ConversationMessaging = () => {
             <Box height={`calc(100vh - (${toolbar?.minHeight}px + ${8}px + ${typeEl.current?.clientHeight}px ))`}
                 sx={{ 
                     flexGrow: 1,
-                    width: { md: `calc(100% - ${drawerWidth}px)` },
                     paddingX: 2,
                     minHeight: 'min-content',
                     width: { xs: '100%', sm:  `calc(100vw - ${drawerWidth}px)`}

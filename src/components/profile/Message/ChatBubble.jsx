@@ -1,11 +1,9 @@
 import { MoreHoriz } from '@mui/icons-material'
-import { Button, IconButton, Popover, Popper, Stack, Typography } from '@mui/material'
+import { Button, IconButton, Popover, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { BasicCard } from 'components/cards/BasicCard'
-import { selectAuthUserId } from 'features/authSlice'
-import { markAsRead, selectConversationReadState } from 'features/indexedConversationSlice'
 import { sendSignal } from 'features/websocketSlice'
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 export const ChatBubble = forwardRef(({ sent, topSent, bottomSent, name, message }, ref) => {

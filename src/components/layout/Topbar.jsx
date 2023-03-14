@@ -3,11 +3,10 @@ import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, 
 import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, requestUserProfile, selectAuthUser, selectAuthUserToken } from '../../features/authSlice'
+import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
-import axios from "axios";
 import { GenerateCV } from "components/profile/GenerateCV";
 import { selectUnreadConversationCount } from "features/indexedConversationSlice";
 
