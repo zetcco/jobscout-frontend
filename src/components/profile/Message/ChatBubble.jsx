@@ -2,19 +2,20 @@ import { MoreHoriz } from '@mui/icons-material'
 import { Button, IconButton, Popover, Popper, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { BasicCard } from 'components/cards/BasicCard'
-import { sendSignalToConversation } from 'features/indexedConversationSlice'
+import { selectAuthUserId } from 'features/authSlice'
+import { markAsRead, selectConversationReadState } from 'features/indexedConversationSlice'
 import { sendSignal } from 'features/websocketSlice'
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-export const ChatBubble = forwardRef(({ sent, content, topSent, bottomSent, name, conversation, id }, ref) => {
+export const ChatBubble = forwardRef(({ sent, topSent, bottomSent, name, message }, ref) => {
 
   const [showHover, setShowHover] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch()
 
   const sendDelete = () => {
-      dispatch(sendSignal(`/messaging/${conversation}`, "DELETE", { messageId: id }))
+      dispatch(sendSignal(`/messaging/${message.conversationId}`, "DELETE", { messageId: message.id }))
   }
 
   return (
@@ -45,7 +46,7 @@ export const ChatBubble = forwardRef(({ sent, content, topSent, bottomSent, name
           py: 1.2, px: 2
           }}
           >
-            <Typography variant={"body2"} sx={{ fontWeight: 450, fontSize: 15 }}>{content}</Typography>
+            <Typography variant={"body2"} sx={{ fontWeight: 450, fontSize: 15 }}>{message.content}</Typography>
         </Box>
         { showHover && sent && (
           <IconButton onClick={(e) => { setAnchorEl(e.target) }}>

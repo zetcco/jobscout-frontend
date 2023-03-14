@@ -62,8 +62,8 @@ export const Conversations = ({ conversations, setNewChatOpen, selectedConvo, on
                                     <Stack direction={"row"} spacing={1.5} alignItems="center">
                                         <Avatar alt={name} src={picture}/>
                                         <Stack direction={"column"}>
-                                            <Typography>{name}</Typography>
-                                            <Typography variant='caption'>{lastMessage}</Typography>
+                                            <Typography fontWeight={!conversation.read && 'bold'}>{name}</Typography>
+                                            <Typography variant='caption' fontWeight={!conversation.read && 'bold'}>{lastMessage}</Typography>
                                         </Stack>
                                     </Stack>
                                 </MenuItem>

@@ -25,10 +25,11 @@ const conversationSlice = createSlice({
     reducers: {
         setNewConversation: conversationAdapter.addOne,
         messageRecieved: (state, action) => {
-            state.entities[action.payload.conversationId].messages.push(action.payload)
-            const index = state.ids.indexOf(action.payload.conversationId)
+            state.entities[action.payload.data.conversationId].messages.push(action.payload.data)
+            state.entities[action.payload.data.conversationId].read = action.payload.read
+            const index = state.ids.indexOf(action.payload.data.conversationId)
             state.ids.splice(index, 1);
-            state.ids.unshift(action.payload.conversationId)
+            state.ids.unshift(action.payload.data.conversationId)
         },
         deleteMessage: (state, action) => {
             const index = state.entities[action.payload.conversationId].messages.findIndex(val => val.id === action.payload.messageId)
@@ -51,6 +52,9 @@ const conversationSlice = createSlice({
         setUnsubscribeToConversation: (state, action) => {
             state.subscribed = false
         },
+        markAsRead: (state, action) => {
+            state.entities[action.payload].read = true
+        }
     },
     extraReducers (builder) {
         builder
@@ -66,12 +70,14 @@ const conversationSlice = createSlice({
                 state.conversationLoading = false
             })
             .addCase(fetchConversationMessagesIndexed.fulfilled, (state, action) => {
-                if (state.entities[action.payload.id].page === 0)
-                    state.entities[action.payload.id].messages = action.payload.data.slice().reverse()
-                else 
-                    state.entities[action.payload.id].messages = [ ...action.payload.data.slice().reverse(), ...state.entities[action.payload.id].messages ]
-                state.messageLoading = false
-                state.entities[action.payload.id].page += 1
+                if (action.payload.data.length !== 0) {
+                    if (state.entities[action.payload.id].page === 0)
+                        state.entities[action.payload.id].messages = action.payload.data.slice().reverse()
+                    else 
+                        state.entities[action.payload.id].messages = [ ...action.payload.data.slice().reverse(), ...state.entities[action.payload.id].messages ]
+                    state.messageLoading = false
+                    state.entities[action.payload.id].page += 1
+                }
             })
             .addCase(fetchConversationMessagesIndexed.pending, (state, action) => {
                 state.messageLoading = true
@@ -79,6 +85,9 @@ const conversationSlice = createSlice({
             .addCase(fetchConversationMessagesIndexed.rejected, (state, action) => {
                 state.messageError = action.payload
                 state.messageLoading = false
+            })
+            .addCase(requestMarkConversationAsRead.fulfilled, (state, action) => {
+                state.entities[action.payload.id].read = true
             })
     }
 })
@@ -99,10 +108,12 @@ export const {
     stopTyping,
     updateConversation,
     setSubscribeToConversation,
-    setUnsubscribeToConversation
+    setUnsubscribeToConversation,
+    markAsRead
 } = conversationSlice.actions;
 
 export const selectMessagesIndexed = (state, conversationId) => state.indexedConversations.entities[conversationId]?.messages
+export const selectConversationReadState = (state, conversationId) => state.indexedConversations.entities[conversationId]?.read
 export const selectParticipants = (state, conversationId) => state.indexedConversations.entities[conversationId]?.participants
 export const selectMessagesLoading = (state) => state.indexedConversations.messageLoading;
 export const selectConversationLoading = (state) => state.indexedConversations.conversationLoading;
@@ -134,6 +145,21 @@ export const fetchConversationMessagesIndexed = createAsyncThunk('indexedConvers
     }
 })
 
+export const requestMarkConversationAsRead = createAsyncThunk('indexedConversations/requestMarkConversationAsRead', async (id, { getState, rejectWithValue }) => {
+    const state = getState()
+    if (state.indexedConversations.entities[id].read)
+        return rejectWithValue()
+    try {
+        await axios.put(`/messaging/conversation/${id}/read`, {}, { headers: {
+            "Authorization": `Bearer ${state.auth.token}`
+        }});
+        return { id };
+    } catch (error) {
+        console.error(error)
+        return rejectWithValue(error.response.data)
+    }
+})
+
 export const sendSignalToConversation = (conversation, type, message = undefined) => (dispatch, getState) => {
     const state = getState()
     dispatch(sendSignal(
@@ -158,7 +184,8 @@ export const subsribeToServerPrivateMessage = (dispatch, getState) => {
                     const data = JSON.parse(body.data)
                     switch (body.type) {
                         case "MESSAGE":
-                            dispatch(messageRecieved(data)) // From new conversation
+                            const read = state.auth.userInfo.id === data.senderId
+                            dispatch(messageRecieved({ data, read })) // From new conversation
                             break;
                         case "TYPING":
                             dispatch(isTyping(data))

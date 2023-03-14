@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { NewChat } from "./NewChat";
 import { debounce } from "lodash";
 import { Conversations } from "./Conversations";
-import { fetchConversationMessagesIndexed, fetchConversationsIndexed, selectAllConversations, selectConversationById, selectConversationPage, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
+import { fetchConversationMessagesIndexed, fetchConversationsIndexed, markAsRead, requestMarkConversationAsRead, selectAllConversations, selectConversationById, selectConversationPage, selectConversationReadState, selectConversations, selectMessagesIndexed, selectMessagesLoading, selectParticipants, selectTyping, sendSignalToConversation, stopTyping } from "features/indexedConversationSlice";
 
 const drawerWidth = 300;
 
@@ -33,6 +33,7 @@ const ConversationMessaging = () => {
     const groupChat = participants?.length > 2 ? true : false;
     const typing = useSelector((state) => selectTyping(state, selectedConvo))
     const messagesLoading = useSelector(selectMessagesLoading)
+    const read = useSelector((state) => selectConversationReadState(state, selectedConvo))
 
     useEffect(() => {
         dispatch(fetchConversationsIndexed())
@@ -57,6 +58,7 @@ const ConversationMessaging = () => {
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting) {
                 dispatch(fetchConversationMessagesIndexed(selectedConvo))
+                console.log("Fetching on scroll")
             }
         })
         if (elm) observer.current.observe(elm)
@@ -89,6 +91,13 @@ const ConversationMessaging = () => {
         // debouceClearTyping(selectedConvo)
     }, [typing, debouceClearTyping, selectedConvo])
 
+    const onConversationSelect = (id) => {
+        setSelectedConvo(id)
+        console.log(read)
+        if (!read)
+            dispatch(requestMarkConversationAsRead(id))
+    }
+
     return (
         <>
         <Box display={'flex'}>
@@ -104,7 +113,7 @@ const ConversationMessaging = () => {
                     }}
                 >
                     <Toolbar/>
-                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={setSelectedConvo}/>
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
                 </Drawer>
                 <Drawer
                     variant="permanent"
@@ -115,7 +124,7 @@ const ConversationMessaging = () => {
                     open
                     >
                     <Toolbar/>
-                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={setSelectedConvo}/>
+                    <Conversations conversations={conversations} setNewChatOpen={setNewChatOpen} selectedConvo={selectedConvo} onConversationSelect={onConversationSelect}/>
                 </Drawer>
             </Box>
             <Modal
@@ -172,9 +181,7 @@ const ConversationMessaging = () => {
                                             bottomSent={bottomSent}
                                             key={index}
                                             sent={sent}
-                                            content={message.content}
-                                            conversation={message.conversationId}
-                                            id={message.id}
+                                            message={message}
                                         />
                                 )})
                             }
