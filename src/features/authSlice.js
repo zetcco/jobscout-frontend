@@ -10,6 +10,7 @@ const initialState = {
 }
 
 export const selectAuthUser = (state) => state.auth.userInfo;
+export const selectAuthUserId = (state) => state.auth.userInfo.id;
 export const selectAuthUserToken = (state) => state.auth.token;
 export const selectAuthError = (state) => state.auth.error;
 export const selectAuthLoading = (state) => state.auth.loading;

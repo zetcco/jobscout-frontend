@@ -3,19 +3,19 @@ import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, 
 import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, requestUserProfile, selectAuthUser, selectAuthUserToken } from '../../features/authSlice'
+import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
-import axios from "axios";
 import { GenerateCV } from "components/profile/GenerateCV";
+import { fetchConversationsIndexed, selectUnreadConversationCount } from "features/indexedConversationSlice";
 
 export const Topbar = () => {
 
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
-    const authUserToken = useSelector(selectAuthUserToken)
     const unreadNotificationCount = useSelector(selectUnreadNotificationCount);
+    const unreadMessageCount = useSelector(selectUnreadConversationCount)
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
@@ -25,6 +25,7 @@ export const Topbar = () => {
     useEffect(() => {
         dispatch(requestUserProfile())
         dispatch(fetchNotifications(2))
+        dispatch(fetchConversationsIndexed())
     }, [dispatch])
 
     return (
@@ -46,7 +47,9 @@ export const Topbar = () => {
                         </RouterLink>
                         <RouterLink to={"/messages"}>
                             <IconButton size='large' color='inherit'>
-                                <ChatBubbleOutlineOutlined />
+                                <Badge badgeContent={unreadMessageCount} color="error">
+                                    <ChatBubbleOutlineOutlined />
+                                </Badge>
                             </IconButton>
                         </RouterLink>
                         <IconButton size='large' color='inherit'>
@@ -67,7 +70,7 @@ export const Topbar = () => {
                                         <Avatar sx={{ width: 24, height: 24 }}>{ authUser?.displayName && (Array.from(authUser.displayName)[0]) }</Avatar>
                                     )
                                 }
-                                <Typography>{ authUser?.displayName }</Typography>
+                                <Typography display={{ xs: 'none', sm: 'block' }}>{ authUser?.displayName }</Typography>
                                 <KeyboardArrowDownOutlined size='small'/>
                             </Stack>
                         </IconButton>

@@ -23,8 +23,6 @@ export const NewChat = forwardRef(({ onClose }) => {
     const [ options, setOptions ] = useState([])
     const [ selectedParticipants, setSelectedParticipants ] = useState([])
 
-    const [ newChatName, setNewChatName ] = useState('')
-
     const { register, control, handleSubmit, watch }= useForm();
 
     const authToken = useSelector(selectAuthUserToken);
@@ -114,7 +112,7 @@ export const NewChat = forwardRef(({ onClose }) => {
                                 <Controller
                                     name="chatname"
                                     control={control}
-                                    defaultValue={newChatName}
+                                    defaultValue={""}
                                     render={ ({ field }) => (
                                         <TextField 
                                             {...field}
@@ -134,7 +132,7 @@ export const NewChat = forwardRef(({ onClose }) => {
                                 />
                                 <Stack direction={"row"} spacing={2}>
                                     <Button fullWidth onClick={onClose}>Close</Button>
-                                    <Button type="submit" variant="contained" fullWidth disabled={loading || newChatName === ''}>Save</Button>
+                                    <Button type="submit" variant="contained" fullWidth disabled={loading || watch("chatname") === ''}>Save</Button>
                                 </Stack>
                             </Stack>
                         </form>
