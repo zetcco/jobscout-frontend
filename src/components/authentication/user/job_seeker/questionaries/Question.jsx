@@ -1,15 +1,17 @@
 import { BasicCard } from 'components/cards/BasicCard';
 import { Stack } from '@mui/material';
+import { RouterLink } from 'components/RouterLink';
 
 export const Question = () => {
   return (
     <>
-      <BasicCard>
+      <BasicCard onClick={() => <RouterLink to={'/questionaries/python/detail'}/>}>
         <Stack spacing={2} direction={'row'}>
           <img
             style={{ width: 60, height: 60, margin: 'auto', padding: 0 }}
             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT70qUCUgVzIgb_3Gt0AbED0GuWieZz-pcJLw&usqp=CAU'
             alt='python-logo'
+            
           />
           <Stack spacing={0.5} direction={'column'}>
             <h3>Python (Programming Language)</h3>
