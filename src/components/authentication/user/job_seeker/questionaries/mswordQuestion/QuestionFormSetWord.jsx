@@ -6,30 +6,48 @@ export const QuestionFormSetWord = () => {
   const question = [
     {
       id: '1',
-      question: 'What is the maximum length of a Python identifier?',
-      answers: ['32', '16', '128', 'No fixed length is specified.'],
+      question: 'Microsoft word is ____ software?',
+      answers: ['Application', 'Compiler', 'System', 'Programming'],
     },
     {
       id: '2',
       question:
-        'What will be the output of the following code snippet? print(2**3 + (5 + 6)**(1 + 1))',
-      answers: ['129', '8', '121', 'None of the above.'],
+        'Which is not in MS word?',
+      answers: ['Italic', 'Magic tool', 'Bold', 'Font'],
     },
     {
       id: '3',
-      question: 'How is a code block indicated in Python?',
-      answers: ['Brackets', 'Indentation', 'Key', 'Non of above'],
+      question: '____ cannot be used to work in MS Office?',
+      answers: ['Joystick', 'Scanner', 'Light Pen', 'Mouse'],
     },
     {
       id: '4',
-      question: 'Which of the following concepts is not a part of Python?',
-      answers: ['Pointers', 'Loop', 'Dynamic Typing', 'All of the above'],
+      question: 'Which is not an edition of MS Word?',
+      answers: ['MS Word 2003', 'MS Word 2007', 'MS Word 2010', 'MS Word 1020'],
     },
     {
       id: '5',
       question:
-        'Which of the following statements are used in Exception Handling in Python?',
-      answers: ['try', 'except', 'finally', 'All of the above'],
+        'The ___ works with the standard Copy and Paste commands?',
+      answers: ['View tab', 'Paragraph dialog box', 'Office Clipboard', 'All of these'],
+    },
+    {
+      id: '6',
+      question:
+        'What is the blank space outside the printing area on a page?',
+      answers: ['Clipart', 'Margins', 'Header', 'Footer'],
+    },
+    {
+      id: '7',
+      question:
+        'Which of the following is an example of page orientation?',
+      answers: ['Landscape', 'Subscript', 'Superscript', 'A4'],
+    },
+    {
+      id: '8',
+      question:
+        'Formatting is performed on?',
+      answers: ['Text', 'Table', 'Menu', 'Both (a) and (b)'],
     },
   ];
   return (
