@@ -32,6 +32,33 @@ export const QuestionFormSetPython = () => {
         'Which of the following statements are used in Exception Handling in Python?',
       answers: ['try', 'except', 'finally', 'All of the above'],
     },
+    {
+      id: '6',
+      question: 'Python is a ___object-oriented programming language?',
+      answers: [
+        'Special purpose',
+        'General purpose',
+        'Medium level programming language',
+        'All of the mentioned above',
+      ],
+    },
+    {
+      id: '7',
+      question:
+        'Amongst which of the following is / are the application areas of Python programming?',
+      answers: [
+        'Web Development',
+        'Game Development',
+        'Artificial Intelligence and Machine Learning',
+        'All of the mentioned above',
+      ],
+    },
+    {
+      id: '8',
+      question:
+        'Amongst which of the following is / are the Numeric Types of Data Types?',
+      answers: ['int', 'float', 'complex', 'All of the mentioned above'],
+    },
   ];
 
   return (
