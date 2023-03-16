@@ -1,8 +1,6 @@
 import { BasicCard } from 'components/cards/BasicCard';
 import { IconButton, Stack } from '@mui/material';
-import { RouterLink } from 'components/RouterLink';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
-import { FormatAlignJustify } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 export const Question = () => {
