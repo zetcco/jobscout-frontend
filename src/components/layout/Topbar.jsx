@@ -9,6 +9,7 @@ import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
 import { GenerateCV } from "components/profile/GenerateCV";
 import { fetchConversationsIndexed, selectUnreadConversationCount } from "features/indexedConversationSlice";
+import { useNavigate } from "react-router-dom";
 
 export const Topbar = () => {
 
@@ -21,6 +22,8 @@ export const Topbar = () => {
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
 
     const [ generateCVOpen, setGenerateCVOpen ] = useState(false)
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(requestUserProfile())
@@ -77,6 +80,7 @@ export const Topbar = () => {
                         <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => { setAnchorEl(null) }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
+                                    <Button onClick={() => navigate(`/users/${authUser.id}`)}>My Profile</Button>
                                     <Button onClick={() => dispatch(logout())}>Logout</Button>
                                     { authUser.role === "ROLE_JOB_SEEKER" && (
                                         <>

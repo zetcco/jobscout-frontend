@@ -7,7 +7,7 @@ import { JobPosts } from "./routes/feed/JobPosts";
 import { Home } from "./routes/Home";
 import { Login } from "./routes/Login";
 import { CreateJobPost } from "./routes/feed/CreateJobPost";
-import { Recommendations } from "./routes/profile/job_seeker/Recommendations";
+import { UserProfile } from "./routes/profile/job_seeker/UserProfile";
 import { OrgJobPosts } from "./routes/profile/organization/OrgJobPosts";
 import { OrganizationProfileCreation } from "./routes/signup/organization/OrganizationProfileCreation";
 import { OrganizationSignup } from "./routes/signup/organization/OrganizationSignup";
@@ -77,7 +77,7 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
 
           <Route path="users">
-            <Route path=":userId" element={<Recommendations/>}/>
+            <Route path=":userId" element={<UserProfile/>}/>
           </Route>
 
           <Route path="organizations">
