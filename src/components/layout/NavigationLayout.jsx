@@ -11,6 +11,8 @@ export const NavigationLayout = ({ sx }) => {
   const webSocketError = useSelector(selectWebSocketError);
   const dispatch = useDispatch()
 
+  console.log("rendered!!")
+
   return (
     <>
       <Topbar />

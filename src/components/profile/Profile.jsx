@@ -6,10 +6,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
-import { useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
 import { ChatBubble, ChatBubbleRounded, EditRounded, StarBorder, StarRounded } from '@mui/icons-material';
+import { RouterLink } from 'components/RouterLink';
 
 export const Profile = ({profile , content}) => {
 
@@ -17,6 +18,7 @@ export const Profile = ({profile , content}) => {
     const authToken = useSelector(selectAuthUserToken)
     const authUser = useSelector(selectAuthUser)
     const [ profileData, setProfileData ] = useState()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getProfileData = async () => {
@@ -45,9 +47,10 @@ export const Profile = ({profile , content}) => {
     
     if (profileData?.role === "ROLE_JOB_SEEKER") {
         profileRouteButtons = [ 
-            <Button variant = {'outlined'}>Recommendations</Button> , 
-            <Button variant = {'outlined'}>Posts</Button>,
-            <Button variant = {'outlined'}>Qualification</Button> , 
+            <RouterLink to={`/users/${userId}/recommendations`}><Button variant = {'outlined'}>Recommendations</Button></RouterLink>, 
+            <RouterLink to={`/users/${userId}/qualifications`}><Button variant = {'outlined'}>Qualifications</Button></RouterLink>, 
+            <Button variant = {'outlined'} onClick={() => navigate(`./recommendations`, { replace: false })}>Recommendations N</Button>, 
+            <Button variant = {'outlined'} onClick={() => navigate(`./qualifications`, { replace: false })}>Qualifications N</Button>, 
             <Button variant = {'outlined'}>Portfolio</Button>
         ]
         role = "Job Seeker"
@@ -69,6 +72,7 @@ export const Profile = ({profile , content}) => {
     }
 
     return (
+        <>
         <BasicCard>
             <Stack direction={'column'} spacing={4}>
                 <Stack direction={{ ...( profileActionButtons.length !== 0 ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !profileActionButtons ? "center" : undefined } spacing={2}>
@@ -109,9 +113,15 @@ export const Profile = ({profile , content}) => {
                 </Stack>
                 <Box display={{ xs: "none", md: "block" }}><Stack direction = {'row'} spacing={1}>
                     {profileRouteButtons ? profileRouteButtons : []} 
-                </Stack></Box>
-                <Stack direction = {'column'} spacing = {4}>{ content }</Stack>
+                </Stack>
+                </Box>
             </Stack>
         </BasicCard>
+        <BasicCard>
+            <Stack direction = {'column'} spacing = {4}>
+                <Outlet/>
+            </Stack>
+        </BasicCard>
+        </>
   )
 } 

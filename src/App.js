@@ -28,6 +28,8 @@ import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 import PastExperiencesForm from "components/authentication/user/job_seeker/PastExperiencesForm";
 import { Intro } from "routes/signup/users/job_seeker/Intro";
+import { Profile } from "components/profile/Profile";
+import { Typography } from "@mui/material";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -77,7 +79,11 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
 
           <Route path="users">
-            <Route path=":userId" element={<UserProfile/>}/>
+            <Route path=":userId" element={<Profile/>}>
+              <Route path="" element={<Typography>Home</Typography>}/>
+              <Route path="recommendations" element={<Typography>Recommendations</Typography>}/>
+              <Route path="qualifications" element={<Typography>Qualifications</Typography>}/>
+            </Route>
           </Route>
 
           <Route path="organizations">
