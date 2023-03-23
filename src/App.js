@@ -7,7 +7,6 @@ import { JobPosts } from "./routes/feed/JobPosts";
 import { Home } from "./routes/Home";
 import { Login } from "./routes/Login";
 import { CreateJobPost } from "./routes/feed/CreateJobPost";
-import { UserProfile } from "./routes/profile/job_seeker/UserProfile";
 import { OrgJobPosts } from "./routes/profile/organization/OrgJobPosts";
 import { OrganizationProfileCreation } from "./routes/signup/organization/OrganizationProfileCreation";
 import { OrganizationSignup } from "./routes/signup/organization/OrganizationSignup";
@@ -30,6 +29,10 @@ import PastExperiencesForm from "components/authentication/user/job_seeker/PastE
 import { Intro } from "routes/signup/users/job_seeker/Intro";
 import { Profile } from "components/profile/Profile";
 import { Typography } from "@mui/material";
+import { ProfileRecommendations } from "routes/profile/job_seeker/ProfileRecommendations";
+import { ProfileQualifications } from "routes/profile/job_seeker/ProfileQualifications";
+import { ProfileAbout } from "routes/profile/job_seeker/ProfileAbout";
+import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -94,9 +97,12 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/" element={<NavigationLayout noRouteAnimation/>}>
           <Route path="users">
             <Route path=":userId" element={<Profile/>}>
-              <Route index element={<Typography>Home</Typography>}/>
-              <Route path="recommendations" element={<Typography>Recommendations</Typography>}/>
-              <Route path="qualifications" element={<Typography>Qualifications</Typography>}/>
+              <Route index element={<ProfileAbout/>}/>
+              <Route path="recommendations" element={<ProfileRecommendations/>}/>
+              <Route path="qualifications" element={<ProfileQualifications/>}/>
+              <Route path="experiences" element={<ProfileExperiences/>}/>
+              <Route path="posts" element={<Typography>Posts</Typography>}/>
+              <Route path="gallery" element={<Typography>Gallery</Typography>}/>
             </Route>
           </Route>
         </Route>

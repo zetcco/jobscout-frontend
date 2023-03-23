@@ -15,12 +15,13 @@ export const JobCreatorHome = () => {
     const [ meetingModalOpen, setMeetingModalOpen ] = useState(false);
 
     return (
-        <Stack direction = {'column'} spacing = {4}>
+        <Stack direction = {'column'}>
             <Stack>
                 <SmallPanel
                     mainTitle = {'Actions'}
+                    noElevation
                 >
-                        <Grid container spacing={4}>
+                        <Grid container spacing={2}>
                             <Grid item xs={4}>
                             <RouterLink to={"/posts/create"}>
                             <SelectableCard>
@@ -64,6 +65,7 @@ export const JobCreatorHome = () => {
                 </SmallPanel> 
             </Stack>
             
+            <SmallPanel mainTitle={"Stats"} noElevation>
             <Stack direction = {'row'} spacing = {2}>
                 <Grid container spacing={2} sx = {{alignItems:'stretch'}}>
                     <Grid item xs = {12} md = {4}>
@@ -95,6 +97,7 @@ export const JobCreatorHome = () => {
                     </Grid>
                 </Grid>           
             </Stack>
+            </SmallPanel>
 
         </Stack>
         

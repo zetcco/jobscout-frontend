@@ -1,77 +1,54 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import { Stack } from '@mui/system'
-import { Box, Button, IconButton, Popover } from '@mui/material'
+import { Box, Button, IconButton, Popover, Tab, Tabs } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
 import { ChatBubbleRounded, EditRounded, StarRounded } from '@mui/icons-material';
-import { RouterLink } from 'components/RouterLink';
 
-export const Profile = ({profile , content}) => {
+export const Profile = () => {
 
     const { userId } = useParams()
     const authToken = useSelector(selectAuthUserToken)
     const authUser = useSelector(selectAuthUser)
-    const [ profileData, setProfileData ] = useState()
+    const [ profileData, setProfileData ] = useState(null)
     const navigate = useNavigate()
+
+    const location = useLocation()
+    let rel_location = location.pathname.split("/")
+    rel_location = rel_location.length === 3 ? "" : rel_location.at(-1)
+    const [ selectedTab, setSelectedTab ] = useState('./' + rel_location)
 
     useEffect(() => {
         const getProfileData = async () => {
             const res = await axios.get(`/user/${userId}`, { headers: {
                 Authorization: `Bearer ${authToken}`
              } })
-            console.log(res.data)
             setProfileData(res.data)
         }
         getProfileData()
     }, [authToken, userId])
 
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    let profileRouteButtons = [];
-    let profileActionButtons = [];
-    let role = null
-    if (profileData?.id === authUser.id)
-        profileActionButtons.push(
-            <Button variant = {'outlined'} startIcon = {<EditRounded/>}>Edit Profile</Button> , 
-        )
-    else
-        profileActionButtons.push(
-            <Button variant = {'outlined'} startIcon = {<ChatBubbleRounded/>}>Message</Button> , 
-        )
-
-    if (profileData?.role === "ROLE_JOB_SEEKER") {
-        profileRouteButtons = [ 
-            <Button variant = {'outlined'} onClick={() => navigate(`./recommendations`, { replace: false })}>Recommendations</Button>, 
-            <Button variant = {'outlined'} onClick={() => navigate(`./qualifications`, { replace: false })}>Qualifications</Button>, 
-            <Button variant = {'outlined'}>Portfolio</Button>
-        ]
-        role = "Job Seeker"
-        if (authUser.role === "ROLE_JOB_CREATOR")
-            profileActionButtons.push( 
-                <Button variant = {'outlined'} startIcon = {<StarRounded/>}>Recommend</Button>
-            )
-    } else if (profileData?.role === "ROLE_JOB_CREATOR") {
-        profileRouteButtons = [ 
-            <Button variant = {'outlined'}>Posts</Button>,
-        ]
-        role = "Job Creator"
-    } else if (profileData?.role === "ROLE_ORGANIZATION") {
-        profileRouteButtons = [ 
-            <Button variant = {'outlined'}>Posts</Button>, 
-            <Button variant = {'outlined'}>Gallery</Button>
-        ]
-        role = "Organization"
-    }
+    const { profileRouteButtons, profileActionButtons, role } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
 
     return (
-        <>
-        <BasicCard>
+        <Stack spacing={2}>
+        <BasicCard
+            inner_sx={{
+                p: (theme) => { 
+                    let spacing = [theme.spacing(2), theme.spacing(4)]
+                    return { 
+                        xs: `${spacing[0]} ${spacing[0]} 0 ${spacing[0]}`,
+                        xs: `${spacing[1]} ${spacing[1]} 0 ${spacing[1]}`
+                    } 
+                }
+            }}
+        >
             <Stack direction={'column'} spacing={4}>
                 <Stack direction={{ ...( profileActionButtons.length !== 0 ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !profileActionButtons ? "center" : undefined } spacing={2}>
                     <ProfileWithFullNameSubtitle name={profileData?.displayName} subtitle={role} src={profileData?.displayPicture}/>
@@ -79,47 +56,67 @@ export const Profile = ({profile , content}) => {
                         profileActionButtons.length !== 0 && 
                         <Stack direction={"row"} alignItems="center" justifyContent={"space-between"}>
                             <Stack spacing={2} direction="row">
-                                {profileActionButtons} 
+                                {profileActionButtons.map((button, index) => (
+                                    <Button onClick={button.callback} key={index}>{button.text}</Button>
+                                ))} 
                             </Stack>
-                            <Box display={{ xs: 'block', md: 'none' }}>
-                                <IconButton variant="contained" size="large" onClick={(e) => {setAnchorEl(e.target)}}>
-                                    <MenuIcon/>
-                                </IconButton>
-                            </Box>
                         </Stack>
                     }
 
-                    {
-                        profileActionButtons.length === 0 && (
-                            <Box display={{ xs: 'block', md: 'none' }}>
-                                <IconButton variant="contained" size="large" onClick={(e) => {setAnchorEl(e.target)}}>
-                                    <MenuIcon/>
-                                </IconButton>
-                            </Box>
-                        )
-                    }
-
-                    {/* This is the Popover component of the filters on smaller screens  */}
-                    <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => {setAnchorEl(null)}} anchorOrigin={{ vertical: 'bottom', horizontal: 'left', }}>
-                        <BasicCard>
-                            <Stack direction={"column"} spacing={2}>                           
-                                {profileRouteButtons ? profileRouteButtons : []} 
-                            </Stack>
-                        </BasicCard>
-                    </Popover>
-
                 </Stack>
-                <Box display={{ xs: "none", md: "block" }}><Stack direction = {'row'} spacing={1}>
-                    {profileRouteButtons ? profileRouteButtons : []} 
-                </Stack>
-                </Box>
+                <Tabs value={selectedTab} variant='scrollable' allowScrollButtonsMobile onChange={(e, v) => { 
+                    setSelectedTab(v)
+                    navigate(v)
+                }}>
+                    {profileRouteButtons.map((button, index) => (
+                        <Tab value={button.location} key={index} label={button.text}/>
+                    ))} 
+                </Tabs>
             </Stack>
         </BasicCard>
         <BasicCard>
-            <Stack direction = {'column'} spacing = {4}>
-                <Outlet/>
-            </Stack>
+            <Outlet/>
         </BasicCard>
-        </>
+        </Stack>
   )
 } 
+
+const getButtons = (profileData, authUser) => {
+
+    let profileRouteButtons = [
+        { text: "About", location: './' },
+    ];
+    let profileActionButtons = [];
+    let role = null
+
+    if (profileData?.id !== authUser.id)
+        profileActionButtons.push(
+            { text: "Message", callback: () => {} }
+        )
+
+    if (profileData?.role === "ROLE_JOB_SEEKER") {
+        profileRouteButtons.push( 
+            { text: "Qualifications", location: './qualifications' },
+            { text: "Experiences", location: './experiences' },
+            { text: "Recommendations", location: './recommendations' }
+        )
+        role = "Job Seeker"
+        if (authUser.role === "ROLE_JOB_CREATOR")
+            profileActionButtons.push( 
+                { text: "Recommend", callback: () => {} }
+            )
+    } else if (profileData?.role === "ROLE_JOB_CREATOR") {
+        profileRouteButtons.push( 
+            { text: "Posts", location: './posts' },
+        )
+        role = "Job Creator"
+    } else if (profileData?.role === "ROLE_ORGANIZATION") {
+        profileRouteButtons.push( 
+            { text: "Posts", location: './posts' },
+            { text: "Gallery", location: './gallery' }
+        )
+        role = "Organization"
+    }
+
+    return { profileRouteButtons, profileActionButtons, role }
+}
