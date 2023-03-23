@@ -1,4 +1,4 @@
-import { CallRounded, SchoolRounded } from '@mui/icons-material'
+import { SchoolRounded } from '@mui/icons-material'
 import { Alert, AlertTitle, CircularProgress, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import axios from 'axios'

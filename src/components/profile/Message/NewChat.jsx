@@ -11,7 +11,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { UploadArea } from "components/input/UploadArea";
 import { Controller, useForm } from "react-hook-form";
 
-export const NewChat = forwardRef(({ onClose }) => {
+export const NewChat = forwardRef(({ onClose }, ref) => {
     const [ response, setResponse ] = useState(null)
 
     const [error, setError] = useState(null);

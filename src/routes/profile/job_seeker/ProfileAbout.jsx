@@ -1,12 +1,15 @@
 import { CallRounded, EmailRounded } from '@mui/icons-material'
-import { Alert, AlertTitle, Box, CircularProgress, Typography } from '@mui/material'
+import { Alert, AlertTitle, CircularProgress, Modal, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import axios from 'axios'
+import { ProfileContext } from 'components/profile/Profile'
 import SmallPanel from 'components/SmallPanel'
 import { selectAuthUserToken } from 'features/authSlice'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { Intro } from 'routes/signup/users/job_seeker/Intro'
+import { EditIcon } from '../EditIcon'
 
 export const ProfileAbout = () => {
 
@@ -19,6 +22,10 @@ export const ProfileAbout = () => {
     })
     const [ loading, setLoading ] = useState(false)
     const [ error, setError ] = useState(null)
+
+    const [ updateIntroModal, setUpdateIntroModal ] = useState(false)
+
+    const profileData = useContext(ProfileContext);
 
     useEffect(() => {
         const fetchQualifications = async () => {
@@ -64,7 +71,30 @@ export const ProfileAbout = () => {
     return (
         <Stack spacing={3}>
             {   about.intro && (
-                <SmallPanel mainTitle={"Introduction"} noElevation padding={{ xs: 1 }}>
+                <SmallPanel mainTitle={
+                    <>
+                        Introduction
+                        { profileData.editable && (
+                        <>
+                            <EditIcon onClick={() => {setUpdateIntroModal(true)}}/>
+                            <Modal
+                                open={updateIntroModal}
+                                onClose={() => setUpdateIntroModal(!updateIntroModal)}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Intro onUpdate={(data) => {
+                                    setAbout((prevState) => ({ ...prevState, intro: data }))
+                                    setUpdateIntroModal(false)
+                                }}/>
+                            </Modal>
+                        </>
+                        )}
+                    </>
+                } noElevation padding={{ xs: 1 }}>
                     <Typography>{about.intro}</Typography>
                 </SmallPanel>
             )}

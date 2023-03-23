@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { createContext, useEffect, useMemo } from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import { Stack } from '@mui/system'
-import { Box, Button, IconButton, Popover, Tab, Tabs } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu';
+import { Button, Tab, Tabs } from '@mui/material'
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
-import { ChatBubbleRounded, EditRounded, StarRounded } from '@mui/icons-material';
+
+export const ProfileContext = createContext()
 
 export const Profile = () => {
 
@@ -34,7 +34,7 @@ export const Profile = () => {
         getProfileData()
     }, [authToken, userId])
 
-    const { profileRouteButtons, profileActionButtons, role } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
+    const { profileRouteButtons, profileActionButtons, role, editable } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
 
     return (
         <Stack spacing={2}>
@@ -44,7 +44,7 @@ export const Profile = () => {
                     let spacing = [theme.spacing(2), theme.spacing(4)]
                     return { 
                         xs: `${spacing[0]} ${spacing[0]} 0 ${spacing[0]}`,
-                        xs: `${spacing[1]} ${spacing[1]} 0 ${spacing[1]}`
+                        sm: `${spacing[1]} ${spacing[1]} 0 ${spacing[1]}`
                     } 
                 }
             }}
@@ -75,7 +75,9 @@ export const Profile = () => {
             </Stack>
         </BasicCard>
         <BasicCard>
-            <Outlet/>
+            <ProfileContext.Provider value={{...profileData, editable }}>
+                <Outlet/>
+            </ProfileContext.Provider>
         </BasicCard>
         </Stack>
   )
@@ -88,8 +90,9 @@ const getButtons = (profileData, authUser) => {
     ];
     let profileActionButtons = [];
     let role = null
+    let editable = profileData?.id === authUser.id
 
-    if (profileData?.id !== authUser.id)
+    if (!editable)
         profileActionButtons.push(
             { text: "Message", callback: () => {} }
         )
@@ -118,5 +121,5 @@ const getButtons = (profileData, authUser) => {
         role = "Organization"
     }
 
-    return { profileRouteButtons, profileActionButtons, role }
+    return { profileRouteButtons, profileActionButtons, role, editable }
 }
