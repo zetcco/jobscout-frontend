@@ -68,7 +68,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
       <Route path="/" element={<ProtectedRoute/>}>
 
-        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
+        <Route path="/" element={<NavigationLayout/>}>
           <Route path="home" element={<Home/>}/>
 
           <Route path="posts" element={<JobPosts/>}/>
@@ -78,27 +78,30 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="create" element={<CreateJobPost/>}/>
           </Route>
 
-          <Route path="users">
-            <Route path=":userId" element={<Profile/>}>
-              <Route path="" element={<Typography>Home</Typography>}/>
-              <Route path="recommendations" element={<Typography>Recommendations</Typography>}/>
-              <Route path="qualifications" element={<Typography>Qualifications</Typography>}/>
-            </Route>
-          </Route>
 
           <Route path="organizations">
             <Route path=":organizationId" element={<OrgJobPosts/>}/>
           </Route>
         </Route>
 
-        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
+        <Route path="/" element={<NavigationLayout/>}>
           <Route path="blog" element={<Blog/>}/>
           <Route path="blog">
             <Route path=":blogId" element={<BlogPost/>}/>
           </Route>
         </Route>
 
-        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
+        <Route path="/" element={<NavigationLayout noRouteAnimation/>}>
+          <Route path="users">
+            <Route path=":userId" element={<Profile/>}>
+              <Route index element={<Typography>Home</Typography>}/>
+              <Route path="recommendations" element={<Typography>Recommendations</Typography>}/>
+              <Route path="qualifications" element={<Typography>Qualifications</Typography>}/>
+            </Route>
+          </Route>
+        </Route>
+
+        <Route path="/" element={<NavigationLayout/>}>
           <Route path="messages-meet" element={<Messaging/>}/>
           <Route path="meet/:link" element={<Meeting/>}/>
         </Route>

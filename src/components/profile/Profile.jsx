@@ -9,7 +9,7 @@ import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
-import { ChatBubble, ChatBubbleRounded, EditRounded, StarBorder, StarRounded } from '@mui/icons-material';
+import { ChatBubbleRounded, EditRounded, StarRounded } from '@mui/icons-material';
 import { RouterLink } from 'components/RouterLink';
 
 export const Profile = ({profile , content}) => {
@@ -29,7 +29,7 @@ export const Profile = ({profile , content}) => {
             setProfileData(res.data)
         }
         getProfileData()
-    }, [userId])
+    }, [authToken, userId])
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -44,13 +44,11 @@ export const Profile = ({profile , content}) => {
         profileActionButtons.push(
             <Button variant = {'outlined'} startIcon = {<ChatBubbleRounded/>}>Message</Button> , 
         )
-    
+
     if (profileData?.role === "ROLE_JOB_SEEKER") {
         profileRouteButtons = [ 
-            <RouterLink to={`/users/${userId}/recommendations`}><Button variant = {'outlined'}>Recommendations</Button></RouterLink>, 
-            <RouterLink to={`/users/${userId}/qualifications`}><Button variant = {'outlined'}>Qualifications</Button></RouterLink>, 
-            <Button variant = {'outlined'} onClick={() => navigate(`./recommendations`, { replace: false })}>Recommendations N</Button>, 
-            <Button variant = {'outlined'} onClick={() => navigate(`./qualifications`, { replace: false })}>Qualifications N</Button>, 
+            <Button variant = {'outlined'} onClick={() => navigate(`./recommendations`, { replace: false })}>Recommendations</Button>, 
+            <Button variant = {'outlined'} onClick={() => navigate(`./qualifications`, { replace: false })}>Qualifications</Button>, 
             <Button variant = {'outlined'}>Portfolio</Button>
         ]
         role = "Job Seeker"

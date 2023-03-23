@@ -29,7 +29,6 @@ export const Topbar = () => {
         dispatch(requestUserProfile())
         dispatch(fetchNotifications(2))
         dispatch(fetchConversationsIndexed())
-        console.log("Rendered bitch")
     }, [dispatch])
 
     return (
