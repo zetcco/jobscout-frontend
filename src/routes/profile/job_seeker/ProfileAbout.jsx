@@ -1,5 +1,5 @@
 import { CallRounded, EmailRounded } from '@mui/icons-material'
-import { Alert, AlertTitle, CircularProgress, Modal, Typography } from '@mui/material'
+import { Alert, AlertTitle, Box, Button, CircularProgress, Modal, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import axios from 'axios'
 import { ProfileContext } from 'components/profile/Profile'
@@ -70,7 +70,6 @@ export const ProfileAbout = () => {
 
     return (
         <Stack spacing={3}>
-            {   about.intro && (
                 <SmallPanel mainTitle={
                     <>
                         Introduction
@@ -97,9 +96,15 @@ export const ProfileAbout = () => {
                         )}
                     </>
                 } noElevation padding={{ xs: 1 }}>
-                    <Typography>{about.intro}</Typography>
+                    {about.intro ? (
+                        <Typography>{about.intro}</Typography>
+                    ) : ( 
+                        profileData.editable ? (
+                            <Box><Button onClick={() => {setUpdateIntroModal(true)}} >Add a Introduction</Button></Box>
+                            ) : (
+                                <Typography variant='body2'>No introduction</Typography>
+                            ) )}
                 </SmallPanel>
-            )}
             <SmallPanel mainTitle={"Contact"} noElevation padding={{ xs: 1 }}>
                 <Stack spacing={2}>
                     {

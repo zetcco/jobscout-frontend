@@ -101,7 +101,7 @@ export const ProfileQualifications = () => {
                                 </Stack>
                             </Stack>
                         )) : (
-                            <Typography>Nothing to show here</Typography>
+                            <Typography variant='body2'>Nothing to show here</Typography>
                         )
                     }
                 </Stack>
