@@ -1,12 +1,15 @@
-import { Alert, AlertTitle, CircularProgress, Typography } from '@mui/material'
+import { Alert, AlertTitle, Box, CircularProgress, Modal, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import axios from 'axios'
+import PastExperiencesForm from 'components/authentication/user/job_seeker/PastExperiencesForm'
 import { AvatarWithInitials } from 'components/AvatarWithInitials'
+import { ProfileContext } from 'components/profile/Profile'
 import SmallPanel from 'components/SmallPanel'
 import { selectAuthUserToken } from 'features/authSlice'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { EditIcon } from '../EditIcon'
 
 export const ProfileExperiences = () => {
 
@@ -15,6 +18,9 @@ export const ProfileExperiences = () => {
     const [ experiences, setExperiences ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ error, setError ] = useState(null)
+
+    const [ updateExperiencesModal, setUpdateExperiencesModal ] = useState(false)
+    const profileData = useContext(ProfileContext)
 
     useEffect(() => {
         const fetchQualifications = async () => {
@@ -51,7 +57,36 @@ export const ProfileExperiences = () => {
 
     return (
         <Stack spacing={3}>
-            <SmallPanel mainTitle={"Experiences"} noElevation padding={{ xs: 1 }}>
+            <SmallPanel mainTitle={
+                <>
+                    Experiences
+                    { profileData.editable && (
+                    <>
+                        <EditIcon onClick={() => {setUpdateExperiencesModal(true)}}/>
+                        <Modal
+                            open={updateExperiencesModal}
+                            onClose={() => setUpdateExperiencesModal(!updateExperiencesModal)}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <Box sx={{
+                                width: { xs: '95%', md: '75%', lg: '60%' }
+                            }}>
+                            <PastExperiencesForm onUpdate={(data) => {
+                                setExperiences(data)
+                                setUpdateExperiencesModal(false)
+                            }}
+                            onCancel={() => setUpdateExperiencesModal(false)}
+                            />
+                            </Box>
+                        </Modal>
+                    </>
+                    )}
+                </>
+            } noElevation padding={{ xs: 1 }}>
                 <Stack spacing={2}>
                     {
                         experiences.length !== 0 ? experiences.map( (experience, key) => (

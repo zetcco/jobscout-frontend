@@ -7,7 +7,7 @@ import { RouterLink } from '../../../RouterLink'
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios'
 import { useSelector } from 'react-redux'
-import { selectAuthUser, selectAuthUserToken } from 'features/authSlice'
+import { selectAuthUserId, selectAuthUserToken } from 'features/authSlice'
 import { useNavigate } from 'react-router'
 
 const initialState = {
@@ -19,7 +19,7 @@ const initialState = {
 export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, ref) => {
 
   const authToken = useSelector(selectAuthUserToken)
-  const authUser = useSelector(selectAuthUser)
+  const authUserId = useSelector(selectAuthUserId)
   const [ degrees, setDegrees ] = useState([])
   const [ institutes, setInstitues ] = useState([])
   const [ qualifications, setQualifications ] = useState([])
@@ -36,7 +36,7 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
       const institutes = await (await axios.get('/qualifications/institutes', { headers: { Authorization: `Bearer ${authToken}` } })).data
       setInstitues(institutes)
       setExistingLoading(true)
-      const existingQualifications = await (await axios.get(`/job-seeker/${authUser.id}/qualifications`, { headers: { Authorization: `Bearer ${authToken}` } })).data
+      const existingQualifications = await (await axios.get(`/job-seeker/${authUserId}/qualifications`, { headers: { Authorization: `Bearer ${authToken}` } })).data
       setQualifications(existingQualifications)
       setExistingLoading(false)
     }
@@ -52,7 +52,7 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
     try {
       setLoading(true)
       const data = await axios.put('/job-seeker/update/qualifications', qualifications, { headers: { Authorization: `Bearer ${authToken}` } })
-      console.log(data.data)
+      console.log(data)
       if (data.status === 200)
         if (onUpdate) onUpdate(data.data) 
         else navigate('/signup/user/seeker/profile/experiences')
