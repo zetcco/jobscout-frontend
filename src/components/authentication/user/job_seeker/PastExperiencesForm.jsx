@@ -80,7 +80,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
     setLoading(false)
   }
 
-  const durationError = selectedExperience.startYear && selectedExperience.endYear && ( selectedExperience.startYear <= 1930 || selectedExperience.endYear <= 1930 || selectedExperience.endYear - selectedExperience.startYear > 8 || selectedExperience.endYear - selectedExperience.startYear <= 0 )
+  const durationError = selectedExperience.startYear !== '' && selectedExperience.endYear !== '' && ( selectedExperience.startYear <= 1930 || selectedExperience.endYear <= 1930 || selectedExperience.endYear - selectedExperience.startYear > 8 || selectedExperience.endYear - selectedExperience.startYear <= 0 )
 
   return (
     <CenteredHeaderCard

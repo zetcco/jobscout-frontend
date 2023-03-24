@@ -62,7 +62,7 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
     setLoading(false)
   }
 
-  const durationError = selectedQualification.startYear && selectedQualification.endYear && ( selectedQualification.startYear <= 1930 || selectedQualification.endYear <= 1930 || selectedQualification.endYear - selectedQualification.startYear > 8 || selectedQualification.endYear - selectedQualification.startYear <= 0 )
+  const durationError = selectedQualification.startYear !== '' && selectedQualification.endYear !== '' && ( selectedQualification.startYear <= 1930 || selectedQualification.endYear <= 1930 || selectedQualification.endYear - selectedQualification.startYear > 8 || selectedQualification.endYear - selectedQualification.startYear <= 0 )
 
   return (
     <CenteredHeaderCard
