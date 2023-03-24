@@ -89,7 +89,9 @@ export const ProfileAbout = () => {
                                 <Intro onUpdate={(data) => {
                                     setAbout((prevState) => ({ ...prevState, intro: data }))
                                     setUpdateIntroModal(false)
-                                }}/>
+                                }}
+                                onCancel={() => setUpdateIntroModal(false)}
+                                />
                             </Modal>
                         </>
                         )}

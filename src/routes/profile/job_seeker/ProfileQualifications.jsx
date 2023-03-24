@@ -1,12 +1,15 @@
 import { SchoolRounded } from '@mui/icons-material'
-import { Alert, AlertTitle, CircularProgress, Typography } from '@mui/material'
+import { Alert, AlertTitle, Box, CircularProgress, Modal, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import axios from 'axios'
+import EducationQualificationForm from 'components/authentication/user/job_seeker/EducationQualificationForm'
+import { ProfileContext } from 'components/profile/Profile'
 import SmallPanel from 'components/SmallPanel'
 import { selectAuthUserToken } from 'features/authSlice'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { EditIcon } from '../EditIcon'
 
 export const ProfileQualifications = () => {
 
@@ -15,6 +18,9 @@ export const ProfileQualifications = () => {
     const [ qualifications, setQualifications ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ error, setError ] = useState(null)
+    const [ updateQualificationsModal, setUpdateQualificationsModal ] = useState(false)
+
+    const profileData = useContext(ProfileContext);
 
     useEffect(() => {
         const fetchQualifications = async () => {
@@ -51,7 +57,36 @@ export const ProfileQualifications = () => {
 
     return (
         <Stack spacing={3}>
-            <SmallPanel mainTitle={"Qualifications"} noElevation padding={{ xs: 1 }}>
+            <SmallPanel mainTitle={
+                <>
+                    Qualifications
+                    { profileData.editable && (
+                    <>
+                        <EditIcon onClick={() => {setUpdateQualificationsModal(true)}}/>
+                        <Modal
+                            open={updateQualificationsModal}
+                            onClose={() => setUpdateQualificationsModal(!updateQualificationsModal)}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <Box sx={{
+                                width: { xs: '95%', md: '75%', lg: '60%' }
+                            }}>
+                            <EducationQualificationForm onUpdate={(data) => {
+                                setQualifications(data)
+                                setUpdateQualificationsModal(false)
+                            }}
+                            onCancel={() => setUpdateQualificationsModal(false)}
+                            />
+                            </Box>
+                        </Modal>
+                    </>
+                    )}
+                </>
+            } noElevation padding={{ xs: 1 }}>
                 <Stack spacing={2}>
                     {
                         qualifications.length !== 0 ? qualifications.map( (qualification, index) => (

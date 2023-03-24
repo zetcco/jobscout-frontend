@@ -8,7 +8,7 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 
-export const Intro = forwardRef(({ onUpdate }, ref) => {
+export const Intro = forwardRef(({ onUpdate, onCancel }, ref) => {
 
     const [ intro, setIntro ] = useState('');
     const [ loading, setLoading ] = useState(false)
@@ -50,7 +50,7 @@ export const Intro = forwardRef(({ onUpdate }, ref) => {
             footer={
                 <Stack direction="row" spacing={2}>
                     {
-                        !onUpdate && (
+                        !onUpdate ? (
                             <>
                                 <Box sx={{ width: '100%' }}>
                                 <RouterLink to="/signup/user/seeker/profile/qualification">
@@ -58,15 +58,21 @@ export const Intro = forwardRef(({ onUpdate }, ref) => {
                                 </RouterLink>
                                 </Box>
                                 <Box sx={{ width: '100%' }}>
-                                <RouterLink to="/signup/user/dp">
-                                    <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
-                                </RouterLink>
+                                    <RouterLink to="/signup/user/dp">
+                                        <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
+                                    </RouterLink>
+                                </Box>
+                            </>
+                        ) : (
+                            <>
+                                <Box sx={{ width: '100%' }}>
+                                    <Button variant='outlined' sx={{ width: '100%' }} onClick={onCancel}>Cancel</Button>
                                 </Box>
                             </>
                         )
                     }
                     <Box sx={{ width: '100%' }}>
-                    <Button variant='contained' sx={{ width: '100%' }} onClick={updateIntro} disabled={intro === '' || loading}>Continue</Button>
+                        <Button variant='contained' sx={{ width: '100%' }} onClick={updateIntro} disabled={intro === '' || loading}>Continue</Button>
                     </Box>
                 </Stack>
             }
