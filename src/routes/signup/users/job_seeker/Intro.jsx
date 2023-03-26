@@ -89,7 +89,7 @@ export const Intro = forwardRef(({ onUpdate, onCancel }, ref) => {
         }
         <TextField
             sx={{ width: { xs: '90vw', md: '40vw' } }}
-            label='Introduction'
+            label='Introduction (Optional)'
             multiline
             value={intro}
             onChange={(e) => { setIntro(e.target.value) }}
