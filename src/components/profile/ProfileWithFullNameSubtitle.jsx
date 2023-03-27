@@ -1,6 +1,5 @@
 import { Stack } from "@mui/system";
 import { FormHelperText ,Typography} from "@mui/material";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AvatarWithInitials } from "components/AvatarWithInitials";
 
 export const ProfileWithFullNameSubtitle = ({title , name , subtitle, src}) => {

@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Button, Chip, CircularProgress, Divider, MenuItem, Select } from "@mui/material"
+import { Alert, AlertTitle, Autocomplete, Button, Chip, CircularProgress, createFilterOptions, Divider, MenuItem, Select, TextField } from "@mui/material"
 import { Box, Stack } from "@mui/system"
 import React, { useEffect } from "react"
 import { CenteredHeaderCard } from "../../../cards/CenteredHeaderCard"
@@ -9,13 +9,15 @@ import { useState } from "react"
 import { useSelector } from "react-redux"
 import axios from "axios"
 import { selectAuthUserId, selectAuthUserToken } from 'features/authSlice';
-import { Add } from "@mui/icons-material"
 import { OptionCard } from "components/profile/education/OptionCard"
 import { useNavigate } from "react-router-dom"
+
+const filter = createFilterOptions()
 
 export const AddSkillsForm = ({ onUpdate, onCancel }) => {
     const [category, setCategory] = useState('');
     const [skill, setSkill] = useState('');
+    const [skillInputValue, setSkillInputValue] = useState('')
     const [skills, setSkills] = useState([]);
     const [selected, setSeletected] = useState([]);
     const [categorySkillLists, setCategorySkillLists] = useState([]);
@@ -90,11 +92,6 @@ export const AddSkillsForm = ({ onUpdate, onCancel }) => {
                 ) : (
                   <>
                     <Box sx={{ width: '100%' }}>
-                      <RouterLink to="/signup/user/seeker/profile/intro">
-                        <Button variant='outlined' sx={{ width: '100%' }}>Go Back</Button>
-                      </RouterLink>
-                    </Box>
-                    <Box sx={{ width: '100%' }}>
                       <RouterLink to="/signup/user/seeker/profile/qualification">
                         <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
                       </RouterLink>
@@ -118,58 +115,68 @@ export const AddSkillsForm = ({ onUpdate, onCancel }) => {
               </Alert>
           )
       }
-        <FormControl fullWidth>
-          <InputLabel id='categories-select'>
-            Select your Field
-          </InputLabel>
-          <Select
-            labelId='categories-select'
-            value={category}
-            onChange={fetchSkills}
-            label='Select your Field'
-          >
-            {
-                categories.map((category) => 
-                <MenuItem key={category.id} value={category}>{category.name}</MenuItem>)
-            }
-          </Select>
-        </FormControl>
-        <Stack direction={'row'} spacing={2}>
-          <Box sx={{ flexGrow: 10 }}>
-            <FormControl fullWidth>
-              <InputLabel id='skill-select'>
-                Select your Skills
-              </InputLabel>
-              <Select
-                labelId='skill-select'
-                value={''}
-                disabled={!!!category}
-                onChange={(e) => {
-                  setSeletected([...selected, e.target.value]);
-                  setSkill('')
-                  setSkills(skills.filter((item) => item !== e.target.value))
-                }}
-                label='Select your Field'
-              >
-                {skills.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <Button
-              variant='contained'
-              fullWidth
-              sx={{ height: '100%' }}
-              onClick={addCategorySkillList}
-              disabled={selected.length === 0}
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <FormControl fullWidth>
+            <InputLabel id='categories-select'>
+              Select your Field
+            </InputLabel>
+            <Select
+              labelId='categories-select'
+              value={category}
+              onChange={fetchSkills}
+              label='Select your Field'
             >
-              Add Skill List
-            </Button>
-          </Box>
+              {
+                  categories.map((category) => 
+                  <MenuItem key={category.id} value={category}>{category.name}</MenuItem>)
+              }
+            </Select>
+          </FormControl>
+          <Autocomplete
+            fullWidth
+            disabled={!category}
+            value={skill}
+            inputValue={skillInputValue}
+            blurOnSelect
+            onInputChange={(e, value) => { setSkillInputValue(value) }}
+            onChange={(e, newValue) => {
+              let skill = newValue;
+              if (newValue && newValue.inputValue) skill = { id: null, name: newValue.inputValue }
+              if (skill) setSeletected([...selected, skill]);
+              setSkills(skills.filter((item) => item !== skill))
+              setSkillInputValue('')
+            }}
+            options={skills}
+            renderOption={(props, option) => <li {...props} key={option.id}>{option.name}</li>}
+            renderInput={(params) => ( <TextField {...params} label="Select your skills" />)}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
+              const { inputValue } = params;
+              // Suggest the creation of a new value
+              const isExisting = options.some(
+                (option) => inputValue === option.name
+              );
+              if (inputValue !== "" && !isExisting) {
+                filtered.push({
+                  id: null,
+                  inputValue,
+                  name: `Add "${inputValue}"`
+                });
+              }
+              return filtered;
+            }}
+            freeSolo
+            getOptionLabel={ (option) => {
+              if (typeof option === "string") {
+                return option;
+              }
+              if (option.inputValue) {
+                return option.inputValue;
+              }
+              // Regular option
+              return option.name;
+            }}
+          />
         </Stack>
         <Stack direction='row' spacing={1}>
           {selected.map((skill) => (
@@ -185,6 +192,15 @@ export const AddSkillsForm = ({ onUpdate, onCancel }) => {
             />
           ))}
         </Stack>
+        <Button
+          variant='contained'
+          fullWidth
+          sx={{ height: '100%' }}
+          onClick={addCategorySkillList}
+          disabled={selected.length === 0}
+        >
+          Add Skill List
+        </Button>
         { categorySkillLists.length !== 0 && <Divider/> }
         <Stack spacing={1}>
           { existingLoading ? 
