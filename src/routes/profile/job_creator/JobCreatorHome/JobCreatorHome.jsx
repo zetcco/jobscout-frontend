@@ -20,6 +20,7 @@ export const JobCreatorHome = () => {
                 <SmallPanel
                     mainTitle = {'Actions'}
                     noElevation
+                    sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
                 >
                         <Grid container spacing={2}>
                             <Grid item xs={4}>
@@ -65,7 +66,11 @@ export const JobCreatorHome = () => {
                 </SmallPanel> 
             </Stack>
             
-            <SmallPanel mainTitle={"Stats"} noElevation>
+            <SmallPanel
+                mainTitle={"Stats"}
+                noElevation
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+            >
             <Stack direction = {'row'} spacing = {2}>
                 <Grid container spacing={2} sx = {{alignItems:'stretch'}}>
                     <Grid item xs = {12} md = {4}>
