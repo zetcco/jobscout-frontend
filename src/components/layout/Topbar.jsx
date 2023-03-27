@@ -3,7 +3,7 @@ import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, 
 import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, requestUserProfile, selectAuthUser } from '../../features/authSlice'
+import { logout, requestUserProfile, resetSuccess, selectAuthSuccess, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
@@ -15,6 +15,7 @@ export const Topbar = () => {
 
     const dispatch = useDispatch()
     const authUser = useSelector(selectAuthUser);
+    const authSuccess = useSelector(selectAuthSuccess)
     const unreadNotificationCount = useSelector(selectUnreadNotificationCount);
     const unreadMessageCount = useSelector(selectUnreadConversationCount)
 
@@ -24,6 +25,10 @@ export const Topbar = () => {
     const [ generateCVOpen, setGenerateCVOpen ] = useState(false)
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (authSuccess) dispatch(resetSuccess())
+    }, [authSuccess])
 
     useEffect(() => {
         dispatch(requestUserProfile())

@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useMemo } from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import { Stack } from '@mui/system'
-import { Button, Modal, Tab, Tabs } from '@mui/material'
+import { Box, Button, Modal, Tab, Tabs } from '@mui/material'
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
@@ -9,6 +9,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
 import { NewChat } from './Message/NewChat';
+import { UploadProfilePictureForm } from 'components/authentication/user/UploadProfilePictureForm';
 
 export const ProfileContext = createContext()
 
@@ -20,6 +21,7 @@ export const Profile = () => {
     const [ profileData, setProfileData ] = useState(null)
     const navigate = useNavigate()
     const [ newChatOpen, setNewChatOpen ] = useState(false);
+    const [ updateProfilePictureModal, setUpdateProfilePictureModal ] = useState(false)
 
     const location = useLocation()
     let rel_location = location.pathname.split("/")
@@ -37,7 +39,6 @@ export const Profile = () => {
     }, [authToken, userId])
 
     const { profileRouteButtons, role, editable } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
-    const showMessageBtn = profileData?.id !== authUser.id
     const showRecommendBtn = profileData?.role === "ROLE_JOB_SEEKER" && authUser.role === "ROLE_JOB_CREATOR"
 
     return (
@@ -54,11 +55,20 @@ export const Profile = () => {
             }}
         >
             <Stack direction={'column'} spacing={4}>
-                <Stack direction={{ ...( showMessageBtn || showRecommendBtn ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !(showMessageBtn && showRecommendBtn) ? "center" : undefined } spacing={2}>
-                    <ProfileWithFullNameSubtitle name={profileData?.displayName} subtitle={role} src={profileData?.displayPicture}/>
+                <Stack direction={{ ...( !editable || showRecommendBtn ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !(!editable && showRecommendBtn) ? "center" : undefined } spacing={2}>
+                    <ProfileWithFullNameSubtitle
+                        name={profileData?.displayName}
+                        subtitle={role}
+                        src={profileData?.displayPicture}
+                        onHover={ editable && (
+                            <Box m={1}>
+                                <Button onClick={() => {setUpdateProfilePictureModal(true)}}>Change</Button>
+                            </Box>
+                        )}
+                    />
                         <Stack direction={"row"} alignItems="center" justifyContent={"space-between"}>
                             <Stack spacing={2} direction="row">
-                                { (showMessageBtn) && <Button onClick={() => setNewChatOpen(true)}>Message</Button> }
+                                { (!editable) && <Button onClick={() => setNewChatOpen(true)}>Message</Button> }
                                 { (showRecommendBtn) && <Button>Recommend</Button> }
                             </Stack>
                         </Stack>
@@ -88,6 +98,20 @@ export const Profile = () => {
             }}
         >
             <NewChat initialParticipants={[profileData]} onClose={() => setNewChatOpen(!newChatOpen)}/>
+        </Modal>
+        <Modal
+            open={updateProfilePictureModal}
+            onClose={() => setUpdateProfilePictureModal(false)}
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+            <Box sx={{ width: { xs: '95%', md: '75%', lg: '60%' } }}>
+            <UploadProfilePictureForm onUpdate={(data) => {
+                // setExperiences(data)
+                setUpdateProfilePictureModal(false)
+            }}
+            onCancel={() => setUpdateProfilePictureModal(false)}
+            />
+            </Box>
         </Modal>
         </Stack>
   )
