@@ -33,6 +33,7 @@ import { ProfileRecommendations } from "routes/profile/job_seeker/ProfileRecomme
 import { ProfileQualifications } from "routes/profile/job_seeker/ProfileQualifications";
 import { ProfileAbout } from "routes/profile/job_seeker/ProfileAbout";
 import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences";
+import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -98,6 +99,7 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="users">
             <Route path=":userId" element={<Profile/>}>
               <Route index element={<ProfileAbout/>}/>
+              <Route path="skills" element={<ProfileSkills/>}/>
               <Route path="recommendations" element={<ProfileRecommendations/>}/>
               <Route path="qualifications" element={<ProfileQualifications/>}/>
               <Route path="experiences" element={<ProfileExperiences/>}/>

@@ -101,7 +101,8 @@ const getButtons = (profileData, authUser) => {
         profileRouteButtons.push( 
             { text: "Qualifications", location: './qualifications' },
             { text: "Experiences", location: './experiences' },
-            { text: "Recommendations", location: './recommendations' }
+            { text: "Recommendations", location: './recommendations' },
+            { text: "Skills", location: './skills' }
         )
         role = "Job Seeker"
         if (authUser.role === "ROLE_JOB_CREATOR")
