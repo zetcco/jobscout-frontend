@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Box, Button, CircularProgress, Divider, FormControl,
 import { Stack } from '@mui/system'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
-import { EducationalCard } from '../../../profile/education/EducationalCard'
+import { OptionCard } from '../../../profile/education/OptionCard'
 import { RouterLink } from '../../../RouterLink'
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios'
@@ -155,7 +155,7 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
               </Stack>
             ) : (
               qualifications.map((qualification, index) => (
-                <EducationalCard 
+                <OptionCard 
                   key={index}
                   title={qualification.degree.name}
                   subtitle={qualification.institute.name}
