@@ -6,7 +6,7 @@ export const BasicCard = ({ children, sx, onClick, fullHeight, padding, noElevat
         <Paper sx={{
             ...(   !noElevation && 
                 ({
-                    boxShadow: '0px 5px 14px 2px rgba(0,0,0,0.13)',
+                    boxShadow: 25,
                     borderRadius: (theme) => theme.shape.borderRadius / 500
                 })
             ),
