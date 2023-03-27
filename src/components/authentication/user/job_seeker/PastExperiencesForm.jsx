@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, CircularProgress, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, CircularProgress, createFilterOptions, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
@@ -13,9 +13,10 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const initialState = {
     startYear: '', endYear: '',
-    jobTitle: { id: '' },
     organization: { id: '' }
 }
+
+const filter = createFilterOptions()
 
 export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
 
@@ -27,6 +28,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
   const [ error, setError ] = useState(null)
   const [ loading, setLoading ] = useState(false)
   const [ existingLoading, setExistingLoading ] = useState(false)
+  const [jobTitleInputValue, setJobTitleInputValue] = useState('')
   const navigate = useNavigate()
 
   // Search Orgs
@@ -179,23 +181,55 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
                     />
               </Grid>
               <Grid item xs={10} md={4}>
-                <FormControl fullWidth>
-                  <InputLabel>Job Title</InputLabel>
-                  <Select label="Job Title" fullWidth value={selectedExperience.jobTitle.id} onChange={(e) => { setSelectedExperience({...selectedExperience, jobTitle: titles[e.target.value] }) }}>
-                    {
-                      titles.map((title, index) => (
-                        <MenuItem key={index} value={index}>{title.name}</MenuItem>
-                      ))
+                <Autocomplete
+                  disabled={selectedExperience.organization.id === ''}
+                  value={''}
+                  inputValue={jobTitleInputValue}
+                  blurOnSelect
+                  onInputChange={(e, value) => { setJobTitleInputValue(value) }}
+                  onChange={(e, newValue) => {
+                    let jobTitle = newValue;
+                    if (newValue && newValue.inputValue) jobTitle = { id: null, name: newValue.inputValue }
+                    setSelectedExperience({...selectedExperience, jobTitle })
+                  }}
+                  options={titles}
+                  renderOption={(props, option) => <li {...props} key={option.id}>{option.name}</li>}
+                  renderInput={(params) => ( <TextField {...params} label="Select Job Title" />)}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some(
+                      (option) => inputValue === option.name
+                    );
+                    if (inputValue !== "" && !isExisting) {
+                      filtered.push({
+                        id: null,
+                        inputValue,
+                        name: `Add "${inputValue}"`
+                      });
                     }
-                  </Select>
-                </FormControl>
+                    return filtered;
+                  }}
+                  freeSolo
+                  getOptionLabel={ (option) => {
+                    if (typeof option === "string") {
+                      return option;
+                    }
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.name;
+                  }}
+                />
               </Grid>
               <Grid item xs={2} md={1}>
-                <Button variant='contained' sx={{ height: '100%' }} onClick={addExperience} disabled={ 
+                <Button variant='contained' fullWidth sx={{ height: '100%' }} onClick={addExperience} disabled={ 
                   durationError ||
                   selectedExperience.startYear === '' ||  
                   selectedExperience.endYear === '' ||
-                  selectedExperience.jobTitle.id === '' ||
+                  selectedExperience.jobTitle === null ||
                   selectedExperience.organization.id === ''
                 }><AddIcon/></Button>
               </Grid>
