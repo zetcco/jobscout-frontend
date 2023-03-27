@@ -94,7 +94,7 @@ export const Topbar = () => {
                                                 justifyContent: 'center'
                                             }}
                                         >
-                                            <GenerateCV/>
+                                            <GenerateCV onClose={() => setGenerateCVOpen(false)}/>
                                         </Modal>
                                         </>
                                     ) }
