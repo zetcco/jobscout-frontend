@@ -11,7 +11,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { UploadArea } from "components/input/UploadArea";
 import { Controller, useForm } from "react-hook-form";
 
-export const NewChat = forwardRef(({ onClose }, ref) => {
+export const NewChat = forwardRef(({ onClose, initialParticipants }, ref) => {
     const [ response, setResponse ] = useState(null)
 
     const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ export const NewChat = forwardRef(({ onClose }, ref) => {
     const [ responseLoading, setResponseLoading ] = useState(false);
     const [ popupOpen, setPopupOpen ] = useState(false)
     const [ options, setOptions ] = useState([])
-    const [ selectedParticipants, setSelectedParticipants ] = useState([])
+    const [ selectedParticipants, setSelectedParticipants ] = useState(initialParticipants)
 
     const { register, control, handleSubmit, watch }= useForm();
 
@@ -204,3 +204,6 @@ export const NewChat = forwardRef(({ onClose }, ref) => {
     );
 });
 
+NewChat.defaultProps = {
+    initialParticipants: []
+}

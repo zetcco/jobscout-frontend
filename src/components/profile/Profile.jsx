@@ -1,13 +1,14 @@
 import React, { createContext, useEffect, useMemo } from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import { Stack } from '@mui/system'
-import { Button, Tab, Tabs } from '@mui/material'
+import { Button, Modal, Tab, Tabs } from '@mui/material'
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
+import { NewChat } from './Message/NewChat';
 
 export const ProfileContext = createContext()
 
@@ -18,6 +19,7 @@ export const Profile = () => {
     const authUser = useSelector(selectAuthUser)
     const [ profileData, setProfileData ] = useState(null)
     const navigate = useNavigate()
+    const [ newChatOpen, setNewChatOpen ] = useState(false);
 
     const location = useLocation()
     let rel_location = location.pathname.split("/")
@@ -34,7 +36,9 @@ export const Profile = () => {
         getProfileData()
     }, [authToken, userId])
 
-    const { profileRouteButtons, profileActionButtons, role, editable } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
+    const { profileRouteButtons, role, editable } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
+    const showMessageBtn = profileData?.id !== authUser.id
+    const showRecommendBtn = profileData?.role === "ROLE_JOB_SEEKER" && authUser.role === "ROLE_JOB_CREATOR"
 
     return (
         <Stack spacing={2}>
@@ -50,19 +54,14 @@ export const Profile = () => {
             }}
         >
             <Stack direction={'column'} spacing={4}>
-                <Stack direction={{ ...( profileActionButtons.length !== 0 ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !profileActionButtons ? "center" : undefined } spacing={2}>
+                <Stack direction={{ ...( showMessageBtn || showRecommendBtn ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !(showMessageBtn && showRecommendBtn) ? "center" : undefined } spacing={2}>
                     <ProfileWithFullNameSubtitle name={profileData?.displayName} subtitle={role} src={profileData?.displayPicture}/>
-                    {
-                        profileActionButtons.length !== 0 && 
                         <Stack direction={"row"} alignItems="center" justifyContent={"space-between"}>
                             <Stack spacing={2} direction="row">
-                                {profileActionButtons.map((button, index) => (
-                                    <Button onClick={button.callback} key={index}>{button.text}</Button>
-                                ))} 
+                                { (showMessageBtn) && <Button onClick={() => setNewChatOpen(true)}>Message</Button> }
+                                { (showRecommendBtn) && <Button>Recommend</Button> }
                             </Stack>
                         </Stack>
-                    }
-
                 </Stack>
                 <Tabs value={selectedTab} variant='scrollable' allowScrollButtonsMobile onChange={(e, v) => { 
                     setSelectedTab(v)
@@ -79,6 +78,17 @@ export const Profile = () => {
                 <Outlet/>
             </ProfileContext.Provider>
         </BasicCard>
+        <Modal
+            open={newChatOpen}
+            onClose={() => setNewChatOpen(!newChatOpen)}
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}
+        >
+            <NewChat initialParticipants={[profileData]} onClose={() => setNewChatOpen(!newChatOpen)}/>
+        </Modal>
         </Stack>
   )
 } 
@@ -88,14 +98,8 @@ const getButtons = (profileData, authUser) => {
     let profileRouteButtons = [
         { text: "About", location: './' },
     ];
-    let profileActionButtons = [];
     let role = null
     let editable = profileData?.id === authUser.id
-
-    if (!editable)
-        profileActionButtons.push(
-            { text: "Message", callback: () => {} }
-        )
 
     if (profileData?.role === "ROLE_JOB_SEEKER") {
         profileRouteButtons.push( 
@@ -105,10 +109,6 @@ const getButtons = (profileData, authUser) => {
             { text: "Skills", location: './skills' }
         )
         role = "Job Seeker"
-        if (authUser.role === "ROLE_JOB_CREATOR")
-            profileActionButtons.push( 
-                { text: "Recommend", callback: () => {} }
-            )
     } else if (profileData?.role === "ROLE_JOB_CREATOR") {
         profileRouteButtons.push( 
             { text: "Posts", location: './posts' },
@@ -122,5 +122,5 @@ const getButtons = (profileData, authUser) => {
         role = "Organization"
     }
 
-    return { profileRouteButtons, profileActionButtons, role, editable }
+    return { profileRouteButtons, role, editable }
 }
