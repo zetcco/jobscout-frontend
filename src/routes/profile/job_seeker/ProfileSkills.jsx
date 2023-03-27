@@ -1,4 +1,4 @@
-import { LightbulbRounded } from '@mui/icons-material'
+import { LightbulbCircleRounded } from '@mui/icons-material'
 import { Alert, AlertTitle, Box, Chip, CircularProgress, Modal, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import axios from 'axios'
@@ -51,7 +51,7 @@ export const ProfileSkills = () => {
         )
 
     return (
-        <Stack spacing={3}>
+        <Stack spacing={4}>
             <SmallPanel mainTitle={
                 <>
                     Skills
@@ -86,12 +86,12 @@ export const ProfileSkills = () => {
                     {
                         skillSets.length !== 0 ? skillSets.map( (skillSet, index) => (
                             <Stack direction={"row"} alignItems={'center'} spacing={2} color={"grey.800"} key={index}>
-                                <LightbulbRounded/>
-                                <Stack>
+                                <LightbulbCircleRounded/>
+                                <Stack spacing={1}>
                                     <Typography fontWeight={600}>{ skillSet.category.name }</Typography>
                                     <Stack direction={"row"} spacing={1}>
                                         {skillSet.skills.map( (skill) => (
-                                            <Chip label={skill.name} color='primary' variant='outlined' key={skill.id}/>
+                                            <Chip size='small' label={skill.name} color='primary' variant='outlined' key={skill.id}/>
                                         ))}
                                     </Stack>
                                 </Stack>
