@@ -35,7 +35,7 @@ const AddCompanyForm = () => {
         { headers: { "Authorization": `Bearer ${authToken}` }}
       ).then((response) => {
         setSubmitOrgsLoading(false);
-        navigate("/home")
+        navigate("/signup/user/dp")
       }).catch((error) => {
         setError(error.response.data)
         setSubmitOrgsLoading(false);

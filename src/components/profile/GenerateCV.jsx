@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { forwardRef } from 'react'
 import { useSelector } from 'react-redux'
 
-export const GenerateCV = forwardRef((props, ref) => {
+export const GenerateCV = forwardRef(({ onClose }, ref) => {
 
     const authUserToken = useSelector(selectAuthUserToken)
     const [ templates, setTemplates ] = useState([])
@@ -44,7 +44,7 @@ export const GenerateCV = forwardRef((props, ref) => {
     }
 
     return (
-    <SmallPanel mainTitle={"Select a Template"} sx={{ width: { xs: '95%', md: '50%' } }} ref={ref}>
+    <SmallPanel mainTitle={"Select a Template"} sx={{ width: { xs: '95%', md: '50%' } }}>
         <Grid container spacing={2} height={{ xs: '60vh', md: '50vh' }} sx={{ overflowY: 'scroll' }}>
             {
                 loading ? (
@@ -63,7 +63,7 @@ export const GenerateCV = forwardRef((props, ref) => {
             }
             </Grid>
             <Stack direction={"row"} spacing={2} mt={2}>
-                <Button variant='outlined' fullWidth>Cancel</Button>
+                <Button variant='outlined' fullWidth onClick={onClose}>Cancel</Button>
                 <Button variant='contained' fullWidth onClick={downloadCV} disabled={selected === null || fetchingPdf} startIcon={ fetchingPdf ? <CircularProgress sx={{ color: 'grey.400' }} size={20}/> : undefined } >Download</Button>
             </Stack>
     </SmallPanel>

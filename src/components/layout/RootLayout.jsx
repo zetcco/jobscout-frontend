@@ -13,12 +13,13 @@ const getDesignTokens = (theme) => ({
       light: "#adf75a",
       dark: "#006E17",
       fade: "#d5eaba",
+      fader: "#edf7df",
     },
     success: {
       main: primary
     },
     background: {
-      default: "#fff",
+      default: "#f9f9f9",
       paper: "#fff",
     },
     text: {
@@ -29,7 +30,10 @@ const getDesignTokens = (theme) => ({
   shape: {
     borderRadius: 100,
   },
-  // shadows: Array.from({ length: 24 }, (_, i) => "none"),
+  shadows: [ 
+    ...theme.shadows, 
+    '0px 5px 14px 2px rgba(0,0,0,0.13)'
+  ],
   typography: {
     fontFamily: "\"Inter\", \"Roboto\", \"sans-serif\"",
     h5: {
@@ -69,6 +73,13 @@ const getDesignTokens = (theme) => ({
       }
     },
     MuiPopover: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '20px'
+        }
+      }
+    },
+    MuiAutocomplete: {
       styleOverrides: {
         paper: {
           borderRadius: '20px'

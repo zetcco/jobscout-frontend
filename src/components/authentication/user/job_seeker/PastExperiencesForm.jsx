@@ -1,30 +1,34 @@
-import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, CircularProgress, createFilterOptions, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
-import { EducationalCard as DurationCard } from '../../../profile/education/EducationalCard'
+import { OptionCard as DurationCard } from '../../../profile/education/OptionCard'
 import { RouterLink } from '../../../RouterLink'
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios'
 import { useSelector } from 'react-redux'
-import { selectAuthUserToken } from 'features/authSlice'
+import { selectAuthUserId, selectAuthUserToken } from 'features/authSlice'
 import { useNavigate } from 'react-router'
 import SearchIcon from '@mui/icons-material/Search';
 
 const initialState = {
     startYear: '', endYear: '',
-    jobTitle: { id: '' },
     organization: { id: '' }
 }
 
-export const PastExperiencesForm = () => {
+const filter = createFilterOptions()
+
+export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
 
   const authToken = useSelector(selectAuthUserToken)
+  const authUserId = useSelector(selectAuthUserId)
   const [ titles, setTitles ] = useState([])
   const [ experiences, setExperiences ] = useState([])
   const [ selectedExperience, setSelectedExperience ] = useState(initialState)
   const [ error, setError ] = useState(null)
   const [ loading, setLoading ] = useState(false)
+  const [ existingLoading, setExistingLoading ] = useState(false)
+  const [jobTitleInputValue, setJobTitleInputValue] = useState('')
   const navigate = useNavigate()
 
   // Search Orgs
@@ -37,11 +41,15 @@ export const PastExperiencesForm = () => {
     const fetchJobTitles = async () => {
       const titles = await (await axios.get('/experience/titles', { headers: { Authorization: `Bearer ${authToken}` } })).data
       setTitles(titles)
+      setExistingLoading(true)
+      const existingExperiences = await (await axios.get(`/job-seeker/${authUserId}/experiences`, { headers: { Authorization: `Bearer ${authToken}` } })).data
+      setExperiences(existingExperiences)
+      setExistingLoading(false)
     }
     fetchJobTitles()
   }, [])
 
-  const addQualification = () => {
+  const addExperience = () => {
     setExperiences([...experiences, selectedExperience])
     setSelectedExperience(initialState)
     setValue(null)
@@ -66,28 +74,43 @@ export const PastExperiencesForm = () => {
         setLoading(true)
       const data = await axios.put('/job-seeker/update/experiences', experiences, { headers: { Authorization: `Bearer ${authToken}` } })
       if (data.status === 200)
-        navigate('/signup/user/seeker/profile/intro')
+        if (onUpdate) onUpdate(data.data) 
+        else navigate('/signup/user/seeker/profile/intro')
     } catch (error) {
       setError(error.response.data)
     }
     setLoading(false)
   }
 
+  const durationError = selectedExperience.startYear !== '' && selectedExperience.endYear !== '' && ( selectedExperience.startYear <= 1930 || selectedExperience.endYear <= 1930 || selectedExperience.endYear - selectedExperience.startYear > 8 || selectedExperience.endYear - selectedExperience.startYear <= 0 )
+
   return (
     <CenteredHeaderCard
         title={"Add Past Experiences"} 
         footer={
             <Stack direction="row" spacing={2}>
-                <Box sx={{ width: '100%' }}>
-                  <RouterLink to="/signup/user/seeker/profile/qualification">
-                    <Button variant='outlined' sx={{ width: '100%' }}>Go Back</Button>
-                  </RouterLink>
-                </Box>
-                <Box sx={{ width: '100%' }}>
-                  <RouterLink to="/signup/user/seeker/profile/intro">
-                    <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
-                  </RouterLink>
-                </Box>
+              {
+                onUpdate ? (
+                  <>
+                    <Box sx={{ width: '100%' }}>
+                      <Button onClick={onCancel} variant='outlined' sx={{ width: '100%' }}>Cancel</Button>
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <Box sx={{ width: '100%' }}>
+                      <RouterLink to="/signup/user/seeker/profile/qualification">
+                        <Button variant='outlined' sx={{ width: '100%' }}>Go Back</Button>
+                      </RouterLink>
+                    </Box>
+                    <Box sx={{ width: '100%' }}>
+                      <RouterLink to="/signup/user/seeker/profile/intro">
+                        <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
+                      </RouterLink>
+                    </Box>
+                  </>
+                )
+              }
                 <Box sx={{ width: '100%' }}>
                   <Button variant='contained' sx={{ width: '100%' }} onClick={updateExperiences} disabled={experiences.length === 0 || loading}>Continue</Button>
                 </Box>
@@ -103,14 +126,14 @@ export const PastExperiencesForm = () => {
                     </Alert>
                 )
             }
-            <Grid container gap={1} justifyContent={"center"}>
-              <Grid item xs={1.5}>
-                <TextField type={"number"} label="Start Year" value={selectedExperience.startYear} onChange={(e) => { setSelectedExperience({...selectedExperience, startYear: e.target.value}) }}/>
+            <Grid container spacing={1}>
+              <Grid item xs={3} md={1.5}>
+                <TextField type={"number"} label="Start Year" error={durationError} value={selectedExperience.startYear} onChange={(e) => { setSelectedExperience({...selectedExperience, startYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={1.5}>
-                <TextField type={"number"} label="End Year" value={selectedExperience.endYear} onChange={(e) => { setSelectedExperience({...selectedExperience, endYear: e.target.value}) }}/>
+              <Grid item xs={3} md={1.5}>
+                <TextField type={"number"} label="End Year" error={durationError} value={selectedExperience.endYear} onChange={(e) => { setSelectedExperience({...selectedExperience, endYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={3.5}>
+              <Grid item xs={6} md={4}>
                     <Autocomplete
                     value={value}
                     inputValue={inputValue}
@@ -157,28 +180,67 @@ export const PastExperiencesForm = () => {
                     }}
                     />
               </Grid>
-              <Grid item xs={3.5}>
-                <FormControl fullWidth>
-                  <InputLabel>Job Title</InputLabel>
-                  <Select label="Job Title" fullWidth value={selectedExperience.jobTitle.id} onChange={(e) => { setSelectedExperience({...selectedExperience, jobTitle: titles[e.target.value] }) }}>
-                    {
-                      titles.map((title, index) => (
-                        <MenuItem key={index} value={index}>{title.name}</MenuItem>
-                      ))
+              <Grid item xs={10} md={4}>
+                <Autocomplete
+                  disabled={selectedExperience.organization.id === ''}
+                  value={''}
+                  inputValue={jobTitleInputValue}
+                  blurOnSelect
+                  onInputChange={(e, value) => { setJobTitleInputValue(value) }}
+                  onChange={(e, newValue) => {
+                    let jobTitle = newValue;
+                    if (newValue && newValue.inputValue) jobTitle = { id: null, name: newValue.inputValue }
+                    setSelectedExperience({...selectedExperience, jobTitle })
+                  }}
+                  options={titles}
+                  renderOption={(props, option) => <li {...props} key={option.id}>{option.name}</li>}
+                  renderInput={(params) => ( <TextField {...params} label="Select Job Title" />)}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some(
+                      (option) => inputValue === option.name
+                    );
+                    if (inputValue !== "" && !isExisting) {
+                      filtered.push({
+                        id: null,
+                        inputValue,
+                        name: `Add "${inputValue}"`
+                      });
                     }
-                  </Select>
-                </FormControl>
+                    return filtered;
+                  }}
+                  freeSolo
+                  getOptionLabel={ (option) => {
+                    if (typeof option === "string") {
+                      return option;
+                    }
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.name;
+                  }}
+                />
               </Grid>
-              <Grid item xs={1}>
-                <Button variant='contained' sx={{ height: '100%' }} onClick={addQualification} disabled={ 
+              <Grid item xs={2} md={1}>
+                <Button variant='contained' fullWidth sx={{ height: '100%' }} onClick={addExperience} disabled={ 
+                  durationError ||
                   selectedExperience.startYear === '' ||  
                   selectedExperience.endYear === '' ||
-                  selectedExperience.jobTitle.id === '' ||
+                  selectedExperience.jobTitle === null ||
                   selectedExperience.organization.id === ''
                 }><AddIcon/></Button>
               </Grid>
             </Grid>
-            {
+            { experiences.length !== 0 && <Divider/> }
+            { existingLoading ? 
+            (
+              <Stack width={"100%"} alignItems='center'>
+                <CircularProgress/>
+              </Stack>
+            ) : (
               experiences.map((qualification, index) => (
                 <DurationCard 
                   key={index}
@@ -188,10 +250,10 @@ export const PastExperiencesForm = () => {
                   onClose={() => setExperiences(experiences.filter((val, valIndex) => index !== valIndex))}
                 />
               ))
-            }
+            )}
         </Stack>
     </CenteredHeaderCard>
   )
-}
+})
 
-export default PastExperiencesForm
+export default PastExperiencesForm;

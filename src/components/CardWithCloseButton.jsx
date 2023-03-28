@@ -1,4 +1,4 @@
-import { Grid, IconButton } from '@mui/material'
+import { Box, Grid, IconButton } from '@mui/material'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { BasicCard } from './cards/BasicCard';
 
@@ -11,14 +11,14 @@ export const CardWithCloseButton = ({children, onClose}) => {
             justifyContent="space-between"
             alignItems="center"
             >
-                <Grid item>
+                <Box sx={{ width: '80%' }} >
                     {children}
-                </Grid>
-                <Grid item>
+                </Box>
+                <Box>
                   <IconButton onClick={onClose} sx={{ color: (theme) => theme.palette.common.black  }}>
                     <HighlightOffIcon fontSize="large"/>
                   </IconButton>
-                </Grid>
+                </Box>
         </Grid>
     </BasicCard>
   )
