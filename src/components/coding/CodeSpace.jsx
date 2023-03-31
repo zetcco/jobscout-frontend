@@ -1,5 +1,5 @@
 import Editor from '@monaco-editor/react'
-import { PlayCircleFilledRounded, RestoreRounded } from '@mui/icons-material'
+import { PlayCircleFilledRounded } from '@mui/icons-material'
 import { Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { BasicCard } from 'components/cards/BasicCard'
@@ -115,9 +115,3 @@ const languages = [
     { id: 68, name: "PHP", value: "php" },
     { id: 71, name: "Python (3.8.1)", value: "python" }
 ]
-
-const fetchLanguages = async () => {
-    const response = await serverClient.get('/code/languages')
-    console.log(response.data)
-    return response.data
-}
