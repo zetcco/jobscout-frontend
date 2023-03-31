@@ -34,6 +34,7 @@ import { ProfileQualifications } from "routes/profile/job_seeker/ProfileQualific
 import { ProfileAbout } from "routes/profile/job_seeker/ProfileAbout";
 import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences";
 import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
+import { CodingInterview } from "routes/CodingInterview";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -120,6 +121,10 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>
           <Route path="/protected" element={<CreateJobPost/>}/>
+        </Route>
+
+        <Route path="/" element={<NavigationLayout sx={{ widht: '100%' }}/>}>
+          <Route path="/code" element={<CodingInterview/>}/>
         </Route>
 
       </Route>

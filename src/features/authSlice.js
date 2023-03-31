@@ -17,6 +17,14 @@ export const selectAuthError = (state) => state.auth.error;
 export const selectAuthLoading = (state) => state.auth.loading;
 export const selectAuthSuccess = (state) => state.auth.success;
 
+const getServerClient = (token) => axios.create({
+    baseURL: '',
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+})
+export let serverClient = getServerClient(JSON.parse(localStorage.getItem('token')))
+
 const authenticationSlice = createSlice({
     name: 'auth',
     initialState,
@@ -26,6 +34,7 @@ const authenticationSlice = createSlice({
             state.userInfo = ""
             localStorage.removeItem('userInfo')
             localStorage.removeItem('token')
+            serverClient = null
         },
         resetSuccess(state, _) {
             state.success = false
@@ -67,6 +76,7 @@ const authenticationSlice = createSlice({
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
                     state.loading = false
+                    serverClient = getServerClient(state.token)
                 }
             )
             .addMatcher(
