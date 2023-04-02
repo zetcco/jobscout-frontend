@@ -4,6 +4,7 @@ import { sendSignal } from "./websocketSlice";
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit")
 
 const peerConnections = {}
+const subscriptions = []
 
 const initialState = {
     meetingInfo: null,
@@ -208,6 +209,7 @@ export const leaveMeeting = () => (dispatch, getState) => {
         dispatch(removeRemoteVideo(video.peer))
     })
 
+    unsubscribeFromMeeting()
 }
 
 const meetingSignalingResolver = (payload) => (dispatch, getState) => {
@@ -254,16 +256,24 @@ const getLocalStreamMedia = async (localStream) => {
 
 const subscribeToMeeting = () => (dispatch, getState) => {
     const state = getState()
-    state.websocket.stompClient.subscribe(
+    let subscription = state.websocket.stompClient.subscribe(
         `/meeting/${state.meet.meetingInfo.link}`,
         (payload) => { dispatch(meetingSignalingResolver(payload)) },
         {"token": state.auth.token}
     )
-    state.websocket.stompClient.subscribe(
+    subscriptions.push(subscription)
+    subscription = state.websocket.stompClient.subscribe(
         `/meeting/${state.meet.meetingInfo.link}/${state.auth.userInfo.id}`,
         (payload) => { dispatch(meetingSignalingResolver(payload)) },
         {"token": state.auth.token}
     )
+    subscriptions.push(subscription)
+}
+
+const unsubscribeFromMeeting = () => {
+    subscriptions.forEach(subscription => {
+        subscription.unsubscribe();
+    });
 }
 
 const sendSignalToMeeting = (data, type, to = undefined) => (dispatch, getState) => {
@@ -273,14 +283,6 @@ const sendSignalToMeeting = (data, type, to = undefined) => (dispatch, getState)
         type, 
         data
     ))
-}
-
-const logPeerConnection = (obj) => {
-    console.log("CanTrickleIceCandidates: " + obj.canTrickleIceCandidates)
-    console.log("ConnectionState: " + obj.connectionState)
-    console.log("IceConnectionState: " + obj.iceConnectionState)
-    console.log("IceGatheringState: " + obj.iceGatheringState)
-    console.log("SignalingState: " + obj.signalingState)
 }
 
 const getNewPeerConnection = (senderId, onTrack, onIceCandidate, onDisconnect) => {
@@ -317,6 +319,7 @@ const addPeerConnection = (connection) => {
 
 const removePeerConnection = (peerId) => {
     peerConnections[peerId].connection.close()
+    peerConnections[peerId] = null
     delete peerConnections[peerId]
 }
 
@@ -325,16 +328,7 @@ const getPeerConnection = (peerId) => {
 }
 
 const closePeerConnections = () => {
-    Object.values(peerConnections).forEach( (peerConnection) => {
-        peerConnection.connection.close()
-        delete peerConnections[peerConnection.peer]
+    Object.keys(peerConnections).forEach( (peerId) => {
+        removePeerConnection(peerId)
     })
 }
-
-// addPeerConnection: (state, action) => {
-//     console.log(action.payload)
-//     state.peerConnections[action.payload.peer] = action.payload
-// },
-// remotePeerConnection: (state, action) => {
-//     state.peerConnections = __.omit(state.peerConnections, action.payload)
-// }
