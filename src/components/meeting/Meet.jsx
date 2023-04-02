@@ -1,7 +1,8 @@
 import { AddIcCall, CallEnd, PhoneDisabled } from "@mui/icons-material";
-import { Button, FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material'
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack } from '@mui/material'
+import { Video } from "components/Video";
 import { selectAuthUser } from "features/authSlice";
-import { fetchMediaDevices, fetchMeeting, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStreams, selectMeetingMediaDevices, selectMeetingRemoteVideos, setLocalStream } from 'features/meetSlice'
+import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveMeeting, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingRemoteVideos, setLocalStream } from 'features/meetSlice'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
@@ -16,7 +17,7 @@ export const Meet = () => {
     const meetingInfo = useSelector(selectMeetingInfo)
     const mediaDevices = useSelector(selectMeetingMediaDevices)
     const remoteVideos = useSelector(selectMeetingRemoteVideos)
-    const localStream = useSelector(selectMeetingLocalStreams)
+    const localStream = useSelector(selectMeetingLocalStream)
     const error = useSelector(selectMeetingError)
     const loading = useSelector(selectMeetingLoading)
 
@@ -51,10 +52,19 @@ export const Meet = () => {
                         } 
                     </Select>
                 </FormControl>
-                <Button onClick={() => {}} variant='contained' disabled={meetingInfo === null} startIcon={ <AddIcCall/> }>Join</Button>
-                <Button onClick={() => {}} variant='contained' disabled={remoteVideos.length === 0} startIcon={ <CallEnd/> } >Disconnect</Button>
-                { user.id === meetingInfo?.hoster.id && (<Button onClick={() => {}} variant='contained' disabled={remoteVideos.length === 0} startIcon={ <PhoneDisabled/> } >End</Button>) }
+                <Button onClick={() => { dispatch(joinMeeting()) }} variant='contained' disabled={meetingInfo === null || remoteVideos.ids.length !== 0} startIcon={ <AddIcCall/> }>Join</Button>
+                <Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" disabled={remoteVideos.ids.length === 0} startIcon={ <CallEnd/> } >Disconnect</Button>
+                { user.id === meetingInfo?.hoster.id && (<Button onClick={() => {}} variant='contained' disabled={remoteVideos.ids.length === 0} startIcon={ <PhoneDisabled/> } >End</Button>) }
             </Stack>
+            <Grid container>
+                {
+                    remoteVideos.ids.map((id, index) => (
+                        <Grid item xs={ remoteVideos.ids.length === 1 ? 12 : 6} md={remoteVideos.ids.length === 1 ? 12 : 4} key={index}>
+                            <Video srcObject={remoteVideos.videos[id].stream}/>
+                        </Grid>
+                    ))
+                }
+            </Grid>
         </Stack>
     )
 }

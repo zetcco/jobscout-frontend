@@ -63,7 +63,7 @@ export const connectToWebSocket = (dispatch, getState) => {
             dispatch(subsribeToServerPrivateMessage)
         },
         debug: (str) => {
-            console.log(str)
+            // console.log(str)
         },
         onDisconnect: () => {
             console.warn("WEB SOCKET onDisconnected")

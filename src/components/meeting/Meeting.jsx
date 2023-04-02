@@ -137,6 +137,7 @@ export const Meeting = () => {
 
     // Fires when a JOIN signal have been recived by a new user
     const onCandidateJoin = async (data) => {
+        console.log(data)
         const rtcPeerConnection = getNewPeerConnection(data.senderId).connection // Create a new RTCPeerConnection object for the new user
 
         // const stream = await setLocalStreamVideo()
