@@ -16,6 +16,8 @@ const initialState = {
         audio: '',
         video: ''
     },
+    isMicMuted: false,
+    isCameraMuted: true,
     mediaDevices: {},
     loading: false,
     error: null
@@ -28,6 +30,8 @@ export const selectMeetingMediaDevices = (state) => state.meet.mediaDevices;
 export const selectMeetingLocalStream = (state) => state.meet.localStream;
 export const selectMeetingError = (state) => state.meet.error;
 export const selectMeetingLoading = (state) => state.meet.loading;
+export const selectMeetingMicMute = (state) => state.meet.isMicMuted
+export const selectMeetingCameraMute = (state) => state.meet.isCameraMuted
 
 const meetSlice = createSlice({
     name: 'meet',
@@ -47,7 +51,12 @@ const meetSlice = createSlice({
             delete state.remoteVideos.videos[action.payload]
             state.remoteVideos.ids = state.remoteVideos.ids.filter( id => id !== action.payload )
         },
-
+        toggleMicMuteState: (state, action) => {
+            state.isMicMuted = !state.isMicMuted
+        },
+        toggleCameraMuteState: (state, action) => {
+            state.isCameraMuted = !state.isCameraMuted
+        }
     },
     extraReducers(builder) {
         builder
@@ -72,7 +81,9 @@ export default meetSlice.reducer;
 export const { 
     setLocalStream,
     addRemoteVideo,
-    removeRemoteVideo
+    removeRemoteVideo,
+    toggleMicMuteState,
+    toggleCameraMuteState
 } = meetSlice.actions;
 
 export const fetchMeeting = createAsyncThunk('meet/fetchMeeting', async ({ link }, { rejectWithValue }) => {
@@ -106,7 +117,8 @@ export const joinMeeting = createAsyncThunk('meet/joinMeeting', async (_, { getS
     const state = getState()
 
     const stream = await getLocalStreamMedia(state.meet.localStream)
-    stream.getAudioTracks()[0].enabled = false
+    stream.getVideoTracks()[0].enabled = !state.meet.isCameraMuted
+    stream.getAudioTracks()[0].enabled = !state.meet.isMicMuted
 
     dispatch(addRemoteVideo({ peer: 'local', stream }))
 
@@ -114,6 +126,18 @@ export const joinMeeting = createAsyncThunk('meet/joinMeeting', async (_, { getS
     dispatch(sendSignalToMeeting({ content: `User(id: ${state.auth.userInfo.id}) Joined` }, "MEETING_JOIN"))
 
 })
+
+export const toggleMicMute = () => (dispatch, getState) => {
+    const state = getState()
+    state.meet.remoteVideos.videos['local'].stream.getAudioTracks()[0].enabled = !(state.meet.remoteVideos.videos['local'].stream.getAudioTracks()[0].enabled)
+    dispatch(toggleMicMuteState())
+}
+
+export const toggleCameraMute = () => (dispatch, getState) => {
+    const state = getState()
+    state.meet.remoteVideos.videos['local'].stream.getVideoTracks()[0].enabled = !(state.meet.remoteVideos.videos['local'].stream.getVideoTracks()[0].enabled)
+    dispatch(toggleCameraMuteState())
+}
 
 const onCandidateJoin = createAsyncThunk('meet/onCandidateJoin', async ( senderId, { getState, dispatch } ) => {
 
@@ -126,10 +150,7 @@ const onCandidateJoin = createAsyncThunk('meet/onCandidateJoin', async ( senderI
         senderId,
         (stream) => { dispatch(addRemoteVideo(stream)) },
         (ice_candidate) => { dispatch(sendSignalToMeeting(ice_candidate, "MEETING_ICE_CANDIDATE")) },
-        (peerId) => { 
-            removePeerConnection(peerId) 
-            dispatch(removeRemoteVideo(peerId))
-        }
+        (peerId) => { dispatch(onUserLeave(peerId)) }
     )
     addPeerConnection(peerConnection)
 
@@ -158,10 +179,7 @@ const onOfferRecieved = createAsyncThunk('meet/onOfferRecieved', async ({ sender
         senderId,
         (stream) => { dispatch(addRemoteVideo(stream)) },
         (ice_candidate) => { dispatch(sendSignalToMeeting(ice_candidate, "MEETING_ICE_CANDIDATE")) },
-        (peerId) => { 
-            removePeerConnection(peerId) 
-            dispatch(removeRemoteVideo(peerId))
-        }
+        (peerId) => { dispatch(onUserLeave(peerId)) }
     )
     addPeerConnection(peerConnection)
 

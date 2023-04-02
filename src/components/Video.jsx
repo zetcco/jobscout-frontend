@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { BasicCard } from './cards/BasicCard';
 
-export const Video = ({ srcObject }) => {
+export const Video = ({ srcObject, muted }) => {
 
     const element = useRef(null);
 
@@ -16,7 +16,7 @@ export const Video = ({ srcObject }) => {
                     width: '100%',
                     transform: `scale(-1, 1)`,
                     WebkitTransform: `scale(-1, 1)`
-                }} autoPlay/>
+                }} autoPlay muted={muted}/>
             </BasicCard>
         </>
     )

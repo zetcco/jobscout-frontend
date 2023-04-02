@@ -1,8 +1,8 @@
-import { AddIcCall, CallEnd, MicOff, Mic, PhoneDisabled } from "@mui/icons-material";
+import { AddIcCall, CallEnd, MicOff, Mic, PhoneDisabled, Videocam, VideocamOff } from "@mui/icons-material";
 import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Stack } from '@mui/material'
 import { Video } from "components/Video";
 import { selectAuthUser } from "features/authSlice";
-import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveMeeting, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalStream, toggleMicMute } from 'features/meetSlice'
+import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveMeeting, selectMeetingCameraMute, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalStream, toggleCameraMute, toggleMicMute } from 'features/meetSlice'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
@@ -20,6 +20,7 @@ export const Meet = () => {
     const localStream = useSelector(selectMeetingLocalStream)
     const error = useSelector(selectMeetingError)
     const isMicMuted = useSelector(selectMeetingMicMute)
+    const isCameraMuted = useSelector(selectMeetingCameraMute)
     const loading = useSelector(selectMeetingLoading)
 
     useEffect(() => {
@@ -56,9 +57,10 @@ export const Meet = () => {
                         } 
                     </Select>
                 </FormControl>
-                <Button onClick={() => { dispatch(joinMeeting()) }} variant='contained' disabled={meetingInfo === null || remoteVideos.ids.length !== 0} startIcon={ <AddIcCall/> }>Join</Button>
-                <Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" disabled={remoteVideos.ids.length === 0} startIcon={ <CallEnd/> } >Disconnect</Button>
-                <Button onClick={() => { dispatch(toggleMicMute()) }} variant={ isMicMuted ? "contained" : "outlined" } color="error" startIcon={ isMicMuted ? <Mic/> : <MicOff/> } disabled={remoteVideos.ids.length === 0}>{ isMicMuted ? "Unmute" : "Mute" }</Button>
+                { (remoteVideos.ids.length === 0) && (<Button onClick={() => { dispatch(joinMeeting()) }} variant='contained' startIcon={ <AddIcCall/> }>Join</Button>) }
+                { !(remoteVideos.ids.length === 0) && (<Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" startIcon={ <CallEnd/> } >Disconnect</Button>) }
+                { !(remoteVideos.ids.length === 0) && (<Button onClick={() => { dispatch(toggleMicMute()) }} variant={ isMicMuted ? "contained" : "outlined" } color="error" startIcon={ isMicMuted ? <Mic/> : <MicOff/> }>{ isMicMuted ? "Unmute" : "Mute" }</Button>) }
+                { !(remoteVideos.ids.length === 0) && (<Button onClick={() => { dispatch(toggleCameraMute()) }} variant={ isCameraMuted ? "outlined" : "contained" } color="error" startIcon={ isCameraMuted ? <Videocam/> : <VideocamOff/> }>{ isCameraMuted ? "Camera On" : "Camera Off" }</Button>) }
                 { user.id === meetingInfo?.hoster.id && (<Button onClick={() => {}} variant='contained' disabled={remoteVideos.ids.length === 0} startIcon={ <PhoneDisabled/> } >End</Button>) }
             </Stack>
             <Grid container>
