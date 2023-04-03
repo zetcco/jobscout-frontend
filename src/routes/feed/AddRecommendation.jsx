@@ -10,8 +10,6 @@ function AddRecommendation() {
       <Stack direction="row" justifyContent="space-around" alignItems="flex-start" spacing={5}>
           <Stack spacing={3}>
             <AddRecommendationFrom />
-            <AddRecommendationFrom />
-            <AddRecommendationFrom />
           </Stack>
         </Stack>
     </div>

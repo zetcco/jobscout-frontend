@@ -1,32 +1,47 @@
-import {Typography ,Button} from '@mui/material'
-import { Stack } from '@mui/system'
-import { ProfileWithFullNameSubtitleSmall } from 'components/profile/ProfileWithFullNameSubtitleSmall'
-import React from 'react'
-import { BasicCard } from '../cards/BasicCard'
-import ProfileHeaderCard from '../profile/ProfileHeaderCard'
+import { Stack } from '@mui/material';
+import axios from 'axios';
+import ProfileHeaderCard from 'components/profile/ProfileHeaderCard';
+import { ProfileHeaderWithNameEmail } from 'components/profile/ProfileHeaderWithNameEmail';
+import { ProfileWithFullNameSubtitleSmall } from 'components/profile/ProfileWithFullNameSubtitleSmall';
+import { selectAuthUserToken } from 'features/authSlice';
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 
-function AddRecommendationFrom() {
+export default function AddRecommendationFrom() {
+
+    const [ requester, setRequester ] = useState(null);
+    const [ requesters, setRequesters ] = useState([]);
+
+    const authToken = useSelector(selectAuthUserToken);
+
+    // console.log(authToken);
+
+    useEffect(() => {
+        // console.log("opend")
+        loadPage();
+    }, []);
+
+    const loadPage = async () => {
+        const response = await axios.get(
+            '/recommendations/requests',
+            { headers : {
+                Authorization: `Bearer ${authToken}`
+            }}
+        ); 
+        setRequesters(response.data)
+    }
+
   return (
-    <>
-        <BasicCard>
-            <Stack direction="row" alignItems="flex-start" spacing={2}>
-                <ProfileHeaderCard name={'Bindu putha'} subtitle={'Software Engineer'} dpSize={'m'} /> 
-            </Stack>
-            <Stack alignItems={'flex-start'}>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sodales rhoncus hendrerit. 
-                    In tincidunt consectetur auctor. Sed tincidunt fringilla tortor ut hendrerit. Nulla lobortis 
-                    metus vel libero maximus laoreet. Vestibulum sed ligula eget leo aliquam volutpat vel eu quam. 
-                    Donec fringilla elit a interdum cursus. Fusce finibus ante erat, quis ultricies augue tristique vel.  
-                    Nulla venenatis maximus lacus et pulvinar. Fusce interdum finibus ipsum, a pellentesque quam feugiat 
-                    non. Mauris imperdiet libero id nisl vulputate, quis venenatis lectus pulvinar. Vestibulum sed eros 
-                    nec orci lacinia pretium laoreet vitae nunc. Nullam tincidunt arcu at sagittis efficitur. Morbi eget 
-                    leo imperdiet, tempus neque at, euismod risus. Fusce nec ullamcorper lacus.    
-                </Typography>
-            </Stack>
-        </BasicCard>
-    </>
-  )
-}
+    <Stack direction={'column'} spacing={2}>
+        {
+            requesters.map(
+                (requester, index) => (
+                    <ProfileHeaderWithNameEmail key={requester.id} name={requester.displayName} email={requester.email} src={requester.displayPicture} />
+                ))
+        }
+    </Stack>
+        
 
-export default AddRecommendationFrom
+  )
+
+}
