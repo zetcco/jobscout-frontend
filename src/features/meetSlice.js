@@ -74,6 +74,11 @@ const meetSlice = createSlice({
         },
         setMeetingConnected: (state, action) => {
             state.connected = action.payload
+        },
+        clearMeetingInfo: (state, action) => {
+            Object.keys(state).forEach(key => {
+                state[key] = initialState[key]
+            })
         }
     },
     extraReducers(builder) {
@@ -102,7 +107,8 @@ export const {
     removeRemoteVideo,
     toggleMicMuteState,
     toggleCameraMuteState,
-    setMeetingConnected
+    setMeetingConnected,
+    clearMeetingInfo
 } = meetSlice.actions;
 
 export const fetchMeeting = createAsyncThunk('meet/fetchMeeting', async ({ link }, { rejectWithValue }) => {
@@ -260,6 +266,14 @@ export const leaveMeeting = () => (dispatch, getState) => {
 
     unsubscribeFromMeeting()
     dispatch(setMeetingConnected(false))
+}
+
+export const leaveFromJoin = () => (dispatch, getState) => {
+    const state = getState()
+    Object.values(state.meet.remoteVideos.videos).forEach( (video) => {
+        dispatch(removeRemoteVideo(video.peer))
+    })
+    dispatch(clearMeetingInfo())
 }
 
 const meetingSignalingResolver = (payload) => (dispatch, getState) => {

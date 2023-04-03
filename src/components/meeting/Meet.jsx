@@ -1,9 +1,9 @@
 import { AddIcCall, CallEnd, MicOff, Mic, PhoneDisabled, Videocam, VideocamOff } from "@mui/icons-material";
-import { Box, Button, CircularProgress, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
 import { Video } from "components/Video";
 import { selectAuthUser } from "features/authSlice";
-import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveMeeting, selectMeetingCameraMute, selectMeetingConnected, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalPlaybackStream, toggleCameraMute, toggleMicMute } from 'features/meetSlice'
-import React, { useEffect } from 'react'
+import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveFromJoin, leaveMeeting, selectMeetingCameraMute, selectMeetingConnected, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalPlaybackStream, toggleCameraMute, toggleMicMute } from 'features/meetSlice'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 
@@ -28,13 +28,15 @@ export const Meet = () => {
         dispatch(fetchMeeting({ link }))
         dispatch(fetchMediaDevices())
         dispatch(setLocalPlaybackStream())
+
+        return () => { dispatch(leaveFromJoin()) }
     }, [dispatch, link])
 
     if (loading)
         return <CircularProgress/>
 
     if (error?.status === 404)
-        navigate('/home')
+        return <Typography>Meeting has ended or Invalid meeting link</Typography>
 
     if (!meetingConnected) {
         return (
@@ -60,7 +62,7 @@ export const Meet = () => {
                         <Typography variant="h4">Ready to join?</Typography>
                         <Stack direction={"row"} spacing={2}>
                             <Button onClick={() => { dispatch(joinMeeting()) }} variant='contained' size="large" startIcon={ <AddIcCall/> }>Join</Button>
-                            <Button onClick={() => { dispatch(joinMeeting()) }} variant='outlined' size="large" startIcon={ <AddIcCall/> }>Leave</Button>
+                            <Button onClick={() => { navigate('/home') }} variant='outlined' size="large" startIcon={ <AddIcCall/> }>Leave</Button>
                         </Stack>
                     </Stack>
                 </Stack>
