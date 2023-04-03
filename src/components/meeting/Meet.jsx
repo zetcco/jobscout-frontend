@@ -1,11 +1,12 @@
-import { AddIcCall, CallEnd, MicOff, Mic, PhoneDisabled, Videocam, VideocamOff } from "@mui/icons-material";
-import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
+import { AddIcCall, CallEnd, MicOff, Mic, PhoneDisabled, Videocam, VideocamOff, Code, CodeOff } from "@mui/icons-material";
+import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Stack, Tooltip, Typography } from '@mui/material'
 import { Video } from "components/Video";
 import { selectAuthUser } from "features/authSlice";
 import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveFromJoin, leaveMeeting, selectMeetingCameraMute, selectMeetingConnected, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalPlaybackStream, toggleCameraMute, toggleMicMute } from 'features/meetSlice'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
+import { CodingInterview } from "routes/CodingInterview";
 
 export const Meet = () => {
 
@@ -23,6 +24,8 @@ export const Meet = () => {
     const isMicMuted = useSelector(selectMeetingMicMute)
     const isCameraMuted = useSelector(selectMeetingCameraMute)
     const loading = useSelector(selectMeetingLoading)
+
+    const [ codeOpened, setCodeOpened ] = useState(false)
 
     useEffect(() => {
         dispatch(fetchMeeting({ link }))
@@ -72,31 +75,45 @@ export const Meet = () => {
     }
 
     return (
-        <Stack alignItems="center" direction="column" spacing={2} mt={3}>
-            <Stack direction={{ sm: "column", md: "row" }} spacing={2} alignItems={'center'} justifyContent={'center'}>
-                <Stack direction={"row"} spacing={1}>
-                    <DeviceSelect size="medium" width={150} label={"Select Video"} value={localStream.video} onChange={(e) => { dispatch(setLocalPlaybackStream({ video: e.target.value })) }} options={mediaDevices.videoDevices}/>
-                    <DeviceSelect size="medium" width={150} label={"Select Audio"} value={localStream.audio} onChange={(e) => { dispatch(setLocalPlaybackStream({ audio: e.target.value })) }} options={mediaDevices.audioDevices}/>
+        <Stack direction="row" sx={{ width: '100%' }}>
+            { codeOpened && (
+                <Box sx={{ width: '80%' }}>
+                    <CodingInterview/>
+                </Box>
+            ) }
+            <Stack alignItems="center" direction="column" spacing={2} mt={3} sx={{ flexGrow: 1, width: codeOpened ? "20%" : undefined }}>
+                <Stack direction={{ sm: "column", md: "row" }} spacing={2} alignItems={'center'} justifyContent={'center'}>
+                    <Stack direction={"row"} spacing={1}>
+                        { !codeOpened && (<>
+                            <DeviceSelect size="medium" width={150} label={"Select Video"} value={localStream.video} onChange={(e) => { dispatch(setLocalPlaybackStream({ video: e.target.value })) }} options={mediaDevices.videoDevices}/>
+                            <DeviceSelect size="medium" width={150} label={"Select Audio"} value={localStream.audio} onChange={(e) => { dispatch(setLocalPlaybackStream({ audio: e.target.value })) }} options={mediaDevices.audioDevices}/>
+                        </>)}
+                    </Stack>
+                    <Stack direction={"row"} spacing={1}>
+                        <Button onClick={() => { dispatch(toggleMicMute()) }} variant={ isMicMuted ? "contained" : "outlined" } color="error" size="small" sx={{ aspectRatio: '1/1' }}>{ isMicMuted ? <Mic fontSize="small"/> : <MicOff fontSize="small"/> }</Button>
+                        <Button onClick={() => { dispatch(toggleCameraMute()) }} variant={ isCameraMuted ? "contained" : "outlined" } color="error" size="small" sx={{ aspectRatio: '1/1' }}>{ isCameraMuted ? <Videocam fontSize="small"/> : <VideocamOff fontSize="small"/> }</Button>
+                        { user.role === "ROLE_JOB_SEEKER" && (
+                            <Tooltip title={ codeOpened ? "Close code editor and stop Screen sharing" : "Open code editor and Share your screen" }>
+                                <Button onClick={() => { setCodeOpened((prevState) => !prevState) }} variant='contained' >{ codeOpened ? <CodeOff/> : <Code/> }</Button>
+                            </Tooltip>
+                        ) }
+                        <Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" sx={{ aspectRatio: '1/1' }}><CallEnd/></Button>
+                        { user.id === meetingInfo?.hoster.id && (<Button onClick={() => {}} variant='contained' startIcon={ <PhoneDisabled/> } >End</Button>) }
+                    </Stack>
                 </Stack>
-                <Stack direction={"row"} spacing={1}>
-                    <Button onClick={() => { dispatch(toggleMicMute()) }} variant={ isMicMuted ? "contained" : "outlined" } color="error" sx={{ aspectRatio: '1/1' }}>{ isMicMuted ? <Mic/> : <MicOff/> }</Button>
-                    <Button onClick={() => { dispatch(toggleCameraMute()) }} variant={ isCameraMuted ? "contained" : "outlined" } color="error" sx={{ aspectRatio: '1/1' }}>{ isCameraMuted ? <Videocam/> : <VideocamOff/> }</Button>
-                    <Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" sx={{ aspectRatio: '1/1' }}><CallEnd/></Button>
-                    { user.id === meetingInfo?.hoster.id && (<Button onClick={() => {}} variant='contained' disabled={remoteVideos.ids.length === 1} startIcon={ <PhoneDisabled/> } >End</Button>) }
-                </Stack>
+                <div style={{
+                    display: 'grid',
+                    gap: '1rem',
+                    width: '100%',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+                }}>
+                    {
+                        remoteVideos.ids.map((id, index) => (
+                            <Video srcObject={remoteVideos.videos[id].stream} muted={id === 'local'} key={index}/>
+                        ))
+                    }
+                </div>
             </Stack>
-            <div style={{
-                display: 'grid',
-                gap: '1rem',
-                width: '100%',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
-            }}>
-                {
-                    remoteVideos.ids.map((id, index) => (
-                        <Video srcObject={remoteVideos.videos[id].stream} muted={id === 'local'} key={index}/>
-                    ))
-                }
-            </div>
         </Stack>
     )
 }
