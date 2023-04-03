@@ -1,9 +1,9 @@
 import { AddIcCall, CallEnd, MicOff, Mic, PhoneDisabled, Videocam, VideocamOff } from "@mui/icons-material";
-import { Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
 import { Video } from "components/Video";
 import { selectAuthUser } from "features/authSlice";
 import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveFromJoin, leaveMeeting, selectMeetingCameraMute, selectMeetingConnected, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalPlaybackStream, toggleCameraMute, toggleMicMute } from 'features/meetSlice'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 
@@ -72,41 +72,38 @@ export const Meet = () => {
     }
 
     return (
-        <Stack alignItems="center" direction="column" spacing={2}>
-            <Stack direction={{ sm: "column", md: "row" }} spacing={2}>
-                <DeviceSelect width={200} label={"Select Video"} value={localStream.video} onChange={(e) => { dispatch(setLocalPlaybackStream({ video: e.target.value })) }} options={mediaDevices.videoDevices}/>
-                <FormControl sx={{ width: 200 }}>
-                    <InputLabel id="audio-selector-label">Select Audio</InputLabel>
-                    <Select label="Select Audio" labelId="audio-selector-label" value={localStream.audio} onChange={ (e) => { dispatch(setLocalPlaybackStream({ audio: e.target.value })) }}>
-                        {
-                            mediaDevices.audioDevices?.ids.map((deviceId, index) => (
-                                <MenuItem key={index} value={mediaDevices.audioDevices.devices[deviceId]}>{mediaDevices.audioDevices.devices[deviceId].label}</MenuItem>
-                            ))
-                        } 
-                    </Select>
-                </FormControl>
-                { !(meetingConnected) && (<Button onClick={() => { dispatch(joinMeeting()) }} variant='contained' startIcon={ <AddIcCall/> }>Join</Button>) }
-                { (meetingConnected) && (<Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" startIcon={ <CallEnd/> } >Disconnect</Button>) }
-                <Button onClick={() => { dispatch(toggleMicMute()) }} variant={ isMicMuted ? "contained" : "outlined" } color="error" startIcon={ isMicMuted ? <Mic/> : <MicOff/> }>{ isMicMuted ? "Unmute" : "Mute" }</Button>
-                <Button onClick={() => { dispatch(toggleCameraMute()) }} variant={ isCameraMuted ? "outlined" : "contained" } color="error" startIcon={ isCameraMuted ? <Videocam/> : <VideocamOff/> }>{ isCameraMuted ? "Camera On" : "Camera Off" }</Button>
-                { user.id === meetingInfo?.hoster.id && (<Button onClick={() => {}} variant='contained' disabled={remoteVideos.ids.length === 1} startIcon={ <PhoneDisabled/> } >End</Button>) }
+        <Stack alignItems="center" direction="column" spacing={2} mt={3}>
+            <Stack direction={{ sm: "column", md: "row" }} spacing={2} alignItems={'center'} justifyContent={'center'}>
+                <Stack direction={"row"} spacing={1}>
+                    <DeviceSelect size="medium" width={150} label={"Select Video"} value={localStream.video} onChange={(e) => { dispatch(setLocalPlaybackStream({ video: e.target.value })) }} options={mediaDevices.videoDevices}/>
+                    <DeviceSelect size="medium" width={150} label={"Select Audio"} value={localStream.audio} onChange={(e) => { dispatch(setLocalPlaybackStream({ audio: e.target.value })) }} options={mediaDevices.audioDevices}/>
+                </Stack>
+                <Stack direction={"row"} spacing={1}>
+                    <Button onClick={() => { dispatch(toggleMicMute()) }} variant={ isMicMuted ? "contained" : "outlined" } color="error" sx={{ aspectRatio: '1/1' }}>{ isMicMuted ? <Mic/> : <MicOff/> }</Button>
+                    <Button onClick={() => { dispatch(toggleCameraMute()) }} variant={ isCameraMuted ? "contained" : "outlined" } color="error" sx={{ aspectRatio: '1/1' }}>{ isCameraMuted ? <Videocam/> : <VideocamOff/> }</Button>
+                    <Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" sx={{ aspectRatio: '1/1' }}><CallEnd/></Button>
+                    { user.id === meetingInfo?.hoster.id && (<Button onClick={() => {}} variant='contained' disabled={remoteVideos.ids.length === 1} startIcon={ <PhoneDisabled/> } >End</Button>) }
+                </Stack>
             </Stack>
-            <Grid container justifyContent={'center'} spacing={1}>
+            <div style={{
+                display: 'grid',
+                gap: '1rem',
+                width: '100%',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+            }}>
                 {
                     remoteVideos.ids.map((id, index) => (
-                        <Grid item xs={ remoteVideos.ids.length === 1 ? 12 : 6} md={remoteVideos.ids.length === 1 ? 12 : 4} key={index}>
-                            <Video srcObject={remoteVideos.videos[id].stream} muted={id === 'local'}/>
-                        </Grid>
+                        <Video srcObject={remoteVideos.videos[id].stream} muted={id === 'local'} key={index}/>
                     ))
                 }
-            </Grid>
+            </div>
         </Stack>
     )
 }
 
-const DeviceSelect = ({ width, label, value, onChange, options }) => {
+const DeviceSelect = ({ width, size, label, value, onChange, options }) => {
     return (
-        <FormControl sx={{ width }} size={"small"}>
+        <FormControl sx={{ width }} size={size ? size : "small"}>
             <InputLabel id="selector-label">{label}</InputLabel>
             <Select label={label} labelId="selector-label" value={value} onChange={onChange}>
                 {
