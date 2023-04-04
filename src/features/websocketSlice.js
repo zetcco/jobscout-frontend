@@ -81,6 +81,7 @@ export const connectToWebSocket = (dispatch, getState) => {
             dispatch(setUnsubscribeToConversation())
             dispatch(setUnsubscribeToNotification())
         },
+        splitLargeFrames: true,
         reconnectDelay: 10000
     })
     stompClient.activate()

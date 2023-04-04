@@ -10,7 +10,8 @@ const initialState = {
     meetingInfo: null,
     remoteVideos: {
         videos: {},
-        ids: []
+        ids: [],
+        screenShare: {}
     },
     localStream: {
         audio: '',
@@ -34,6 +35,8 @@ export const selectMeetingLoading = (state) => state.meet.loading;
 export const selectMeetingMicMute = (state) => state.meet.isMicMuted
 export const selectMeetingCameraMute = (state) => state.meet.isCameraMuted
 export const selectMeetingConnected = (state) => state.meet.connected
+export const selectMeetingIsLocalScreenShared = (state) => state.meet.remoteVideos.videos.local && 'screen' in state.meet.remoteVideos.videos.local;
+export const selectMeetingCanShareScreen = (state) => Object.keys(state.meet.remoteVideos.screenShare).length === 0;
 
 const meetSlice = createSlice({
     name: 'meet',
@@ -43,28 +46,54 @@ const meetSlice = createSlice({
             state.localStream = {...state.localStream, ...action.payload}
         },
         addRemoteVideo: (state, action) => {
-            if (!(action.payload.peer in state.remoteVideos.videos)) {
-                state.remoteVideos.videos[action.payload.peer] = action.payload
-                state.remoteVideos.ids = [ ...state.remoteVideos.ids, action.payload.peer ]
-            } else if (action.payload.peer === 'local') {
-                state.remoteVideos.videos[action.payload.peer].stream.getTracks().forEach( track => { track.stop() } )
-                state.remoteVideos.videos[action.payload.peer] = action.payload
-                const tracks = action.payload.stream.getTracks()
-                Object.values(peerConnections).forEach( peerConnection => {
-                    const senders = peerConnection.connection.getSenders()
-                    senders.forEach(sender => {
-                        tracks.forEach(track => {
-                            if (sender.track.kind === track.kind)
-                                sender.replaceTrack(track)
+            if (action.payload.peer === 'local') {
+
+                if (!(action.payload.peer in state.remoteVideos.videos))
+                    state.remoteVideos.ids = [ ...state.remoteVideos.ids, action.payload.peer ]
+
+                // Called when the user changes the camera stream
+                if (state.remoteVideos.videos.local && action.payload.key === 'localStream' && action.payload.key in state.remoteVideos.videos.local) {
+                    state.remoteVideos.videos.local[action.payload.key].getTracks().forEach( track => { track.stop() } )
+                    
+                    // Add newly selected tracks to the existing track of each peerConnection
+                    const stream = action.payload.stream
+                    const tracks = stream.getTracks()
+
+                    if (stream.getAudioTracks().length !== 0)
+                        stream.getAudioTracks()[0].enabled = state.isMicMuted
+                    if (stream.getVideoTracks().length !== 0)
+                        stream.getVideoTracks()[0].enabled = state.isCameraMuted
+
+                    Object.values(peerConnections).forEach( peerConnection => {
+                        const senders = peerConnection.connection.getSenders()
+                        senders.forEach(sender => {
+                            tracks.forEach(track => {
+                                if (sender.track?.kind === track.kind)
+                                    sender.replaceTrack(track)
+                            });
                         });
-                    });
-                })
+                    })
+                } 
+
+                state.remoteVideos.videos['local'] = { ...state.remoteVideos.videos['local'], [action.payload.key]: action.payload.stream }
+            } 
+            else {
+                if (!(action.payload.peer in state.remoteVideos.videos))
+                    state.remoteVideos.ids = [ ...state.remoteVideos.ids, action.payload.peer ]
+
+                state.remoteVideos.videos[action.payload.peer] = { ...state.remoteVideos.videos[action.payload.peer], [action.payload.stream.id]: action.payload.stream }
             }
         },
         removeRemoteVideo: (state, action) => {
-            state.remoteVideos.videos[action.payload].stream.getTracks().forEach( track => { track.stop() } )
+            Object.values(state.remoteVideos.videos[action.payload]).forEach(stream => {
+                stream.getTracks().forEach( track => { track.stop() } )
+            })
             delete state.remoteVideos.videos[action.payload]
             state.remoteVideos.ids = state.remoteVideos.ids.filter( id => id !== action.payload )
+        },
+        clearScreenShareLocalStream: (state, action) => {
+            state.remoteVideos.videos.local.screen.getTracks().forEach( track => { track.stop() } )
+            delete state.remoteVideos.videos.local.screen
         },
         toggleMicMuteState: (state, action) => {
             state.isMicMuted = !state.isMicMuted
@@ -79,6 +108,16 @@ const meetSlice = createSlice({
             Object.keys(state).forEach(key => {
                 state[key] = initialState[key]
             })
+        },
+        addScreenShareInfo: (state, action) => {
+            state.remoteVideos.screenShare = action.payload
+        },
+        removeScreenShareInfo: (state, action) => {
+            if (state.remoteVideos.screenShare.peer === action.payload.peer && state.remoteVideos.screenShare.streamId === action.payload.streamId) {
+                state.remoteVideos.screenShare = {}
+                state.remoteVideos.videos[action.payload.peer][action.payload.streamId].getTracks().forEach( track => { track.stop() } )
+                delete state.remoteVideos.videos[action.payload.peer][action.payload.streamId]
+            }
         }
     },
     extraReducers(builder) {
@@ -108,7 +147,10 @@ export const {
     toggleMicMuteState,
     toggleCameraMuteState,
     setMeetingConnected,
-    clearMeetingInfo
+    clearMeetingInfo,
+    addScreenShareInfo,
+    removeScreenShareInfo,
+    clearScreenShareLocalStream
 } = meetSlice.actions;
 
 export const fetchMeeting = createAsyncThunk('meet/fetchMeeting', async ({ link }, { rejectWithValue }) => {
@@ -140,14 +182,6 @@ export const fetchMediaDevices = createAsyncThunk('meet/fetchMediaDevices', asyn
 export const joinMeeting = createAsyncThunk('meet/joinMeeting', async (_, { getState, dispatch }) => {
 
     const state = getState()
-
-    // const stream = state.meet.remoteVideos.videos['local'].stream
-    // const stream = await getLocalStreamMedia(state.meet.localStream)
-    // stream.getVideoTracks()[0].enabled = !state.meet.isCameraMuted
-    // stream.getAudioTracks()[0].enabled = !state.meet.isMicMuted
-
-    // dispatch(addRemoteVideo({ peer: 'local', stream }))
-
     dispatch(subscribeToMeeting())
     dispatch(sendSignalToMeeting({ content: `User(id: ${state.auth.userInfo.id}) Joined` }, "MEETING_JOIN"))
     dispatch(setMeetingConnected(true))
@@ -160,18 +194,18 @@ export const setLocalPlaybackStream = createAsyncThunk('meet/setLocalPlaybackStr
     dispatch(setLocalStream(selectedStream))
     const selectedStreamCombination = {...state.meet.localStream, ...selectedStream}
     const stream = await getLocalStreamMedia(selectedStreamCombination)
-    dispatch(addRemoteVideo({ peer: 'local', stream }))
+    dispatch(addRemoteVideo({ peer: 'local', stream, key: 'localStream' } ))
 })
 
 export const toggleMicMute = () => (dispatch, getState) => {
     const state = getState()
-    state.meet.remoteVideos.videos['local'].stream.getAudioTracks()[0].enabled = !(state.meet.remoteVideos.videos['local'].stream.getAudioTracks()[0].enabled)
+    state.meet.remoteVideos.videos.local.localStream.getAudioTracks()[0].enabled = !(state.meet.remoteVideos.videos.local.localStream.getAudioTracks()[0].enabled)
     dispatch(toggleMicMuteState())
 }
 
 export const toggleCameraMute = () => (dispatch, getState) => {
     const state = getState()
-    state.meet.remoteVideos.videos['local'].stream.getVideoTracks()[0].enabled = !(state.meet.remoteVideos.videos['local'].stream.getVideoTracks()[0].enabled)
+    state.meet.remoteVideos.videos.local.localStream.getVideoTracks()[0].enabled = !(state.meet.remoteVideos.videos.local.localStream.getVideoTracks()[0].enabled)
     dispatch(toggleCameraMuteState())
 }
 
@@ -186,11 +220,12 @@ const onCandidateJoin = createAsyncThunk('meet/onCandidateJoin', async ( senderI
         senderId,
         (stream) => { dispatch(addRemoteVideo(stream)) },
         (ice_candidate) => { dispatch(sendSignalToMeeting(ice_candidate, "MEETING_ICE_CANDIDATE")) },
-        (peerId) => { dispatch(onUserLeave(peerId)) }
+        (peerId) => { dispatch(onUserLeave(peerId)) },
+        (localDescription) => { dispatch(sendSignalToMeeting(localDescription, "MEETING_RENEGOTIATE", senderId)) }
     )
     addPeerConnection(peerConnection)
 
-    const localStream = state.meet.remoteVideos.videos['local'].stream
+    const localStream = state.meet.remoteVideos.videos.local.localStream
 
     localStream.getTracks().forEach(track => {
         peerConnection.connection.addTrack(track, localStream)
@@ -215,13 +250,14 @@ const onOfferRecieved = createAsyncThunk('meet/onOfferRecieved', async ({ sender
         senderId,
         (stream) => { dispatch(addRemoteVideo(stream)) },
         (ice_candidate) => { dispatch(sendSignalToMeeting(ice_candidate, "MEETING_ICE_CANDIDATE")) },
-        (peerId) => { dispatch(onUserLeave(peerId)) }
+        (peerId) => { dispatch(onUserLeave(peerId)) },
+        (localDescription) => { dispatch(sendSignalToMeeting(localDescription, "MEETING_RENEGOTIATE", senderId)) }
     )
     addPeerConnection(peerConnection)
 
     await peerConnection.connection.setRemoteDescription(sessionDescription)
 
-    const localStream = state.meet.remoteVideos.videos['local'].stream
+    const localStream = state.meet.remoteVideos.videos.local.localStream
 
     localStream.getTracks().forEach(track => {
         peerConnection.connection.addTrack(track, localStream)
@@ -245,6 +281,13 @@ const acceptAnswer = (senderId, sessionDescription) => {
     peerConnection.connection.setRemoteDescription(sessionDescription)
 }
 
+const onRenegotiate = createAsyncThunk('meet/onRenegotiate', async ({ senderId, sessionDescription }, { getState, dispatch }) => {
+    const peerConnection = getPeerConnection(senderId)
+    await peerConnection.connection.setRemoteDescription(sessionDescription)
+    await peerConnection.connection.setLocalDescription(peerConnection.connection.createAnswer())
+    dispatch(sendSignalToMeeting(peerConnection.connection.localDescription.toJSON(), "MEETING_ANSWER", senderId))
+})
+
 const onUserLeave = (senderId) => (dispatch) => {
     if (senderId in peerConnections) {
         removePeerConnection(senderId) 
@@ -259,9 +302,9 @@ export const leaveMeeting = () => (dispatch, getState) => {
 
     closePeerConnections()
 
-    Object.values(state.meet.remoteVideos.videos).forEach( (video) => {
-        if (video.peer !== 'local')
-            dispatch(removeRemoteVideo(video.peer))
+    Object.values(state.meet.remoteVideos.ids).forEach( (id) => {
+        if (id !== 'local')
+            dispatch(removeRemoteVideo(id))
     })
 
     unsubscribeFromMeeting()
@@ -270,8 +313,8 @@ export const leaveMeeting = () => (dispatch, getState) => {
 
 export const leaveFromJoin = () => (dispatch, getState) => {
     const state = getState()
-    Object.values(state.meet.remoteVideos.videos).forEach( (video) => {
-        dispatch(removeRemoteVideo(video.peer))
+    Object.keys(state.meet.remoteVideos.videos).forEach((peer) => {
+        dispatch(removeRemoteVideo(peer))
     })
     dispatch(clearMeetingInfo())
 }
@@ -298,6 +341,15 @@ const meetingSignalingResolver = (payload) => (dispatch, getState) => {
             case "MEETING_LEFT":
                 dispatch(onUserLeave(senderId))
                 break;
+            case "MEETING_RENEGOTIATE":
+                dispatch(onRenegotiate({ senderId, sessionDescription: new RTCSessionDescription(data) }))
+                break;
+            case "MEETING_SCREENSHARE_START":
+                dispatch(addScreenShareInfo({ peer: senderId, ...data }))
+                break;
+            case "MEETING_SCREENSHARE_STOP":
+                dispatch(removeScreenShareInfo({ peer: senderId, ...data }))
+                break;
             case "MEETING_END":
                 break;
             default:
@@ -316,6 +368,54 @@ const getLocalStreamMedia = async (localStream) => {
     } catch (error) {
         console.error(error)
     }
+}
+
+export const toggleScreenShare = () => (dispatch, getState) => {
+    const state = getState()
+    if ( 'screen' in state.meet.remoteVideos.videos.local) {
+        dispatch(stopScreenShare())
+    } else {
+        dispatch(startScreenShare())
+    }
+}
+
+export const startScreenShare = createAsyncThunk('meet/getScreenShare', async (_, { getState, dispatch }) => {
+    
+    const stream = await navigator.mediaDevices.getDisplayMedia()
+
+    dispatch(addRemoteVideo({ peer: 'local', stream, key: 'screen' } ))
+
+    stream.getTracks().forEach(track => {
+        track.onended = () => {
+            dispatch(stopScreenShare())
+        }
+    })
+
+    dispatch(sendSignalToMeeting({ streamId: stream.id }, "MEETING_SCREENSHARE_START"))
+
+    Object.values(peerConnections).forEach( peerConnection => {
+        stream.getTracks().forEach(track => {
+            peerConnection.connection.addTrack(track, stream)
+        })
+    })
+
+})
+
+export const stopScreenShare = () => (dispatch, getState) => {
+    const state = getState()
+    const screen_tracks = state.meet.remoteVideos.videos.local.screen.getTracks()
+    Object.values(peerConnections).forEach( peerConnection => {
+        peerConnection.connection.getSenders().forEach( sender => {
+            screen_tracks.forEach( track => {
+                if (track.id === sender.track?.id) {
+                    track.stop()
+                    peerConnection.connection.removeTrack(sender)
+                }
+            } )
+        })
+    })
+    dispatch(sendSignalToMeeting({ streamId: state.meet.remoteVideos.videos.local.screen.id }, "MEETING_SCREENSHARE_STOP"))
+    dispatch(clearScreenShareLocalStream())
 }
 
 const subscribeToMeeting = () => (dispatch, getState) => {
@@ -349,7 +449,7 @@ const sendSignalToMeeting = (data, type, to = undefined) => (dispatch, getState)
     ))
 }
 
-const getNewPeerConnection = (senderId, onTrack, onIceCandidate, onDisconnect) => {
+const getNewPeerConnection = (senderId, onTrack, onIceCandidate, onDisconnect, sendSignalOnNegotiate) => {
 
     const newRTCPeerConnection = new RTCPeerConnection();
     
@@ -361,6 +461,11 @@ const getNewPeerConnection = (senderId, onTrack, onIceCandidate, onDisconnect) =
     newRTCPeerConnection.onicecandidate = async (event) => {
         if (event.candidate) 
             onIceCandidate(event.candidate)
+    }
+
+    newRTCPeerConnection.onnegotiationneeded = async () => {
+        await newRTCPeerConnection.setLocalDescription(await newRTCPeerConnection.createOffer())
+        sendSignalOnNegotiate(newRTCPeerConnection.localDescription.toJSON())
     }
 
     newRTCPeerConnection.onconnectionstatechange = (event) => {
