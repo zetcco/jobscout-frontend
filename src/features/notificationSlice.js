@@ -8,6 +8,7 @@ const initialState = notificationAdapter.getInitialState({
     page: 0,
     loading: false,
     error: null,
+    subscribed: false
 })
 
 const notificationSlice = createSlice({
@@ -17,6 +18,12 @@ const notificationSlice = createSlice({
         setNewNotification: notificationAdapter.addOne,
         setError: (state, action) => {
             state.error = action.payload;
+        },
+        setSubscribeToNotification: (state, action) => {
+            state.subscribed = true
+        },
+        setUnsubscribeToNotification: (state, action) => {
+            state.subscribed = false
         },
     },
     extraReducers(builder) {
@@ -43,7 +50,7 @@ export const {
     selectByIds: selectNotificationIds
 } = notificationAdapter.getSelectors(state => state.notification)
 export const selectNotificationsLoading = (state) => state.notification.loading;
-export const { setNewNotification, setError } = notificationSlice.actions;
+export const { setNewNotification, setError, setSubscribeToNotification, setUnsubscribeToNotification } = notificationSlice.actions;
 export const selectUnreadNotificationCount = createSelector(
     [selectNotifications],
     (notifications) => notifications.filter((notification) => notification.status ===  "UNREAD").length
@@ -51,19 +58,22 @@ export const selectUnreadNotificationCount = createSelector(
 
 export const subscribeToNotification = (dispatch, getState) => {
     const state = getState();
-    if (state.auth.token != null) {
-        state.websocket.stompClient.subscribe("/all/notify", (payload) => {
-            dispatch(setNewNotification(JSON.parse(payload.body)));
-        },
-        {"token": state.auth.token}
-        );
-        state.websocket.stompClient.subscribe(
-            `/user/${state.auth.userInfo.id}/notify`,
-            (payload) => {
-                dispatch(setNewNotification(JSON.parse( payload.body )));
+    if (!state.notification.subscribed) {
+        if (state.auth.token != null) {
+            state.websocket.stompClient.subscribe("/all/notify", (payload) => {
+                dispatch(setNewNotification(JSON.parse(payload.body)));
             },
             {"token": state.auth.token}
-        );
+            );
+            state.websocket.stompClient.subscribe(
+                `/user/${state.auth.userInfo.id}/notify`,
+                (payload) => {
+                    dispatch(setNewNotification(JSON.parse( payload.body )));
+                },
+                {"token": state.auth.token}
+            );
+            dispatch(setSubscribeToNotification())
+        }
     }
 };
 
