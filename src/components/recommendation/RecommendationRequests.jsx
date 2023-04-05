@@ -7,7 +7,7 @@ import { selectAuthUserToken } from 'features/authSlice';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 
-export default function AddRecommendationFrom() {
+export default function RecommendationRequests() {
 
     const [ requester, setRequester ] = useState(null);
     const [ requesters, setRequesters ] = useState([]);
