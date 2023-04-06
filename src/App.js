@@ -35,6 +35,7 @@ import { ProfileAbout } from "routes/profile/job_seeker/ProfileAbout";
 import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences";
 import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
 import { CodingInterview } from "routes/CodingInterview";
+import { Meet } from "components/meeting/Meet";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -110,9 +111,9 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
         </Route>
 
-        <Route path="/" element={<NavigationLayout/>}>
+        <Route path="/" element={<NavigationLayout sx={{ widht: '100%' }}/>}>
           <Route path="messages-meet" element={<Messaging/>}/>
-          <Route path="meet/:link" element={<Meeting/>}/>
+          <Route path="meet/:link" element={<Meet/>}/>
         </Route>
 
         <Route path="/" element={<NavigationLayout sx={{ widht: '100%' }}/>}>
