@@ -113,7 +113,6 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path="/" element={<NavigationLayout sx={{ widht: '100%' }}/>}>
           <Route path="messages-meet" element={<Messaging/>}/>
-          <Route path="meeting/:link" element={<Meeting/>}/>
           <Route path="meet/:link" element={<Meet/>}/>
         </Route>
 
