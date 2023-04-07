@@ -10,6 +10,14 @@ const StyledLink = styled(Link)(({ theme }) => ({
     },
 }));
 
+export const A = styled('a')(({ theme }) => ({
+    textDecoration: "none",
+    color: "inherit",
+    "&:active, &:visited": {
+        color: "inherit",
+    }
+}));
+
 export const RouterLink = ({ to, children }) => {
     return <StyledLink to={to}>{children}</StyledLink>;
 };
