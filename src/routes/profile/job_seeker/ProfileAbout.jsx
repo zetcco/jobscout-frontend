@@ -1,7 +1,6 @@
-import { CallRounded, EmailRounded, FacebookRounded, GitHub, LinkedIn, Public, Web } from '@mui/icons-material'
+import { CallRounded, EmailRounded, FacebookRounded, GitHub, LinkedIn, Public } from '@mui/icons-material'
 import { Alert, AlertTitle, Box, Button, CircularProgress, Modal, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import axios from 'axios'
 import { ProfileContext } from 'components/profile/Profile'
 import SmallPanel from 'components/SmallPanel'
 import { selectAuthUserToken, serverClient } from 'features/authSlice'
@@ -10,8 +9,9 @@ import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { Intro } from 'routes/signup/users/job_seeker/Intro'
 import { EditIcon } from '../EditIcon'
-import { A, RouterLink } from 'components/RouterLink'
+import { A } from 'components/RouterLink'
 import AddSocialsForm from 'components/authentication/user/job_seeker/AddSocialsForm'
+import { UploadIntroVideoForm } from 'components/authentication/user/UploadIntroVideoForm'
 
 export const ProfileAbout = () => {
 
@@ -19,6 +19,7 @@ export const ProfileAbout = () => {
     const authToken = useSelector(selectAuthUserToken)
     const [ about, setAbout ] = useState({
         intro: null,
+        introVideo: null,
         email: null,
         phone: null,
         socials: []
@@ -28,6 +29,7 @@ export const ProfileAbout = () => {
 
     const [ updateIntroModal, setUpdateIntroModal ] = useState(false)
     const [ updateSocialModal, setUpdateSocialModal ] = useState(false)
+    const [ updateIntroVideoModal, setUpdateIntroVideoModal ] = useState(false)
 
     const profileData = useContext(ProfileContext);
 
@@ -36,25 +38,17 @@ export const ProfileAbout = () => {
             setLoading(true)
             try {
                 
-                // Fetch contacts
-                let response = await axios.get(`/user/${userId}/contacts`, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                })
+                let response = await serverClient.get(`/user/${userId}/contacts`)
                 setAbout(response.data)
 
-                // Set Job Seeker Introduction paragraph
                 if (response.data.role === "ROLE_JOB_SEEKER") {
-                    const response = await axios.get(`/job-seeker/${userId}/intro`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`
-                        }
-                    })
+                    response = await serverClient.get(`/job-seeker/${userId}/intro`)
                     setAbout((prevState) => ({ ...prevState, intro: response.data }))
+
+                    response = await serverClient.get(`/job-seeker/${userId}/intro-video`)
+                    setAbout((prevState) => ({ ...prevState, introVideo: response.data }))
                 }
 
-                // Fetch Social links
                 response = await serverClient.get(`/user/${userId}/socials`)
                 setAbout((prevState) => ({ ...prevState, socials: response.data }))
 
@@ -118,6 +112,46 @@ export const ProfileAbout = () => {
                                 <Typography variant='body2'>No introduction</Typography>
                             ) )}
                 </SmallPanel>
+                { about.introVideo && (
+                    <SmallPanel mainTitle={
+                        <>
+                            Introduction Video
+                            { profileData.editable && (
+                            <>
+                                <EditIcon onClick={() => {setUpdateIntroVideoModal(true)}}/>
+                                <Modal
+                                    open={updateIntroVideoModal}
+                                    onClose={() => setUpdateIntroVideoModal(!updateIntroModal)}
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                >
+                                    <UploadIntroVideoForm
+                                        onUpdate={(data) => {
+                                            setAbout((prevState) => ({ ...prevState, introVideo: data }))
+                                            setUpdateIntroVideoModal(false)
+                                        }}
+                                        onCancel={() => setUpdateIntroVideoModal(false)}
+                                    />
+                                </Modal>
+                            </>
+                            )}
+                        </>
+                    } noElevation padding={{ xs: 1 }}>
+                        {about.introVideo ? (
+                            <Box width={{ xs: '100%', md: '50%' }}>
+                                <video src={about.introVideo} controls width={'100%'}/>
+                            </Box>
+                        ) : ( 
+                            profileData.editable ? (
+                                <Box><Button onClick={() => {setUpdateIntroModal(true)}} >Add a Introduction Video</Button></Box>
+                                ) : (
+                                    <Typography variant='body2'>No introduction Video</Typography>
+                                ) )}
+                    </SmallPanel>
+                )}
             <SmallPanel mainTitle={"Contact"} noElevation padding={{ xs: 1 }}>
                 <Stack spacing={2}>
                     {
