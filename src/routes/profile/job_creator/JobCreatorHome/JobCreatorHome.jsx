@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState , useEffect} from 'react'
 import { Stack } from '@mui/system'
 import SmallPanel from '../../../../components/SmallPanel'
 import {Grid, Typography } from '@mui/material'
@@ -8,8 +8,31 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import WorkIcon from '@mui/icons-material/Work';
 import { RouterLink } from '../../../../components/RouterLink'
+import { useSelector } from 'react-redux'
+import { selectAuthUserToken } from 'features/authSlice'
+import axios from 'axios'
 
 export const JobCreatorHome = () => {
+
+    const [jobPostsCount , setJobPostsCount] = useState([]);
+    const token  = useSelector(selectAuthUserToken);
+
+    useEffect(()=>{
+        const fetchJobPosts = async () =>{
+            try {
+                const response = await axios.get('/jobpost/count' , {
+                    headers:{Authorization: `Bearer ${token}`}
+                })
+                setJobPostsCount(response.data)
+                console.log(response.data);
+              
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchJobPosts()
+    } , [token])
+
   return (
         
             <Stack direction = {'column'} spacing = {4}>
@@ -55,30 +78,39 @@ export const JobCreatorHome = () => {
                
                 <Stack direction = {'row'} spacing = {2}>
                     <Grid container spacing={2} sx = {{alignItems:'stretch'}}>
-                        <Grid item xs = {12} md = {4}>
+                        <Grid item xs = {12} md = {6}>
                             <Stack flexGrow={1}>
                                 <JobCreatorHomeCards
                                     title = {'POSTS'}
                                     subtitle = {'No of job posts'}
-                                    count = {6}
+                                    count = {12}
                                 />
                             </Stack>
                         </Grid>
-                        <Grid item xs = {12} md = {4}>
+                        <Grid item xs = {12} md = {6}>
                             <Stack flexGrow={1}>
                                 <JobCreatorHomeCards
                                     title = {'ACTIVATED POSTS'}
                                     subtitle = {'No of activated posts'}
-                                    count = {10}
+                                    count = {8}
                                 />
                             </Stack>
                         </Grid>
-                        <Grid item xs = {12} md = {4}>
+                        <Grid item xs = {12} md = {6}>
+                            <Stack flexGrow={1}>
+                                <JobCreatorHomeCards
+                                    title = {'HOLDED POSTS'}
+                                    subtitle = {'No of holded posts'}
+                                    count = {1}
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs = {12} md = {6}>
                             <Stack flexGrow={1}>
                                 <JobCreatorHomeCards
                                     title = {'DEACTIVATED POSTS'}
                                     subtitle = {'No of deactivated posts'}
-                                    count = {2}
+                                    count = {3}
                                 />
                             </Stack>
                         </Grid>
