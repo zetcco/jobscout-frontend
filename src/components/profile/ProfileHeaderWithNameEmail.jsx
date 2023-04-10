@@ -17,9 +17,10 @@ export const ProfileHeaderWithNameEmail = ({id, name, email, src}) => {
 
     const onClick = async () => {
         const response = await axios.delete(
-            '/recommendations/deleterequest',
-            { "requesterId": id },
-            { headers: { Authorization: `Bearer ${authToken}` } }
+            '/recommendations/deleterequest', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data:{ "requesterId": id }
+            }
         );
         console.log(response)
     }
