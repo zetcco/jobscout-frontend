@@ -8,22 +8,7 @@ import { selectAuthUserToken } from 'features/authSlice'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-export const ProfileHeaderWithNameEmail = ({id, name, email, src}) => {
-
-    const [ deleteRequest, setDeleteRequest ] = useState(null);
-    const authToken = useSelector(selectAuthUserToken);
-
-    console.log(authToken)
-
-    const onClick = async () => {
-        const response = await axios.delete(
-            '/recommendations/deleterequest', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data:{ "requesterId": id }
-            }
-        );
-        console.log(response)
-    }
+export const ProfileHeaderWithNameEmail = ({id, name, email, src, onDelete}) => {
 
   return (
     <BasicCard>
@@ -43,7 +28,7 @@ export const ProfileHeaderWithNameEmail = ({id, name, email, src}) => {
             <RouterLink to={"/manage/recommendation/" +id}>
                 <Button variant = "outlined">Recommendation</Button>
             </RouterLink>
-            <Button variant = "outlined" onClick={() => onClick(id)}>Delete</Button>
+            <Button variant = "outlined" onClick={onDelete}>Delete</Button>
         </Stack> 
         </Stack>
     </BasicCard>

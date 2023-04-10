@@ -33,6 +33,16 @@ export default function RecommendationRequests() {
         setRequesters(response.data)
     }
     
+    const onDelete = async (id) => {
+        const response = await axios.delete(
+            '/recommendations/deleterequest', {
+                headers: { Authorization: `Bearer ${authToken}` },
+                data: { "requesterId": id }
+            }
+        );
+        if (response.status === 200)
+            setRequesters(requesters.filter(request => request.id !== id))
+    }
 
   return (
     <Stack>
@@ -42,6 +52,7 @@ export default function RecommendationRequests() {
                     (requester, index) => (
                         <ProfileHeaderWithNameEmail key={requester.id} 
                             id={requester.id} name={requester.displayName} email={requester.email} src={requester.displayPicture} 
+                            onDelete={() => { onDelete(requester.id) }}
                         />
                     ))
             }
