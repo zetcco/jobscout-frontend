@@ -36,6 +36,7 @@ import { ProfileAbout } from "routes/profile/job_seeker/ProfileAbout";
 import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences";
 import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
 import { CodingInterview } from "routes/CodingInterview";
+import RecommendationForm from "routes/recommendations/RecommendationForm";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -89,7 +90,10 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
 
           <Route path="manage">
-            <Route path="recommendation" element={<RecommendationRequestsPage />}/>
+            <Route path="recommendation" element={<RecommendationRequestsPage />} />
+            <Route path="recommendation">
+              <Route path=":requesterId" element={<RecommendationForm/>}/>
+            </Route>
           </Route>
         </Route>
 
