@@ -26,6 +26,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
 import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
+import CreateBlogPostForm from "components/blog/CreateBlogPostForm";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -85,6 +86,13 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="blog" element={<Blog/>}/>
           <Route path="blog">
             <Route path=":blogId" element={<BlogPost/>}/>
+          </Route>
+        </Route>
+
+        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
+          <Route path="blog" element={<Blog/>}/>
+          <Route path="blog">
+            <Route path="form" element={<CreateBlogPostForm/>}/>
           </Route>
         </Route>
 
