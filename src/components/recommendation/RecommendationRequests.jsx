@@ -14,7 +14,6 @@ export default function RecommendationRequests() {
 
     let navigate = useNavigate();
 
-    const [ requester, setRequester ] = useState(null);
     const [ requesters, setRequesters ] = useState([]);
 
     const authToken = useSelector(selectAuthUserToken);
