@@ -8,8 +8,11 @@ import { RouterLink } from 'components/RouterLink'
 
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function RecommendationRequests() {
+
+    let navigate = useNavigate();
 
     const [ requester, setRequester ] = useState(null);
     const [ requesters, setRequesters ] = useState([]);
@@ -38,7 +41,8 @@ export default function RecommendationRequests() {
             '/recommendations/deleterequest', {
                 headers: { Authorization: `Bearer ${authToken}` },
                 data: { "requesterId": id }
-            }
+            },
+            navigate()
         );
         if (response.status === 200)
             setRequesters(requesters.filter(request => request.id !== id))
@@ -57,12 +61,6 @@ export default function RecommendationRequests() {
                     ))
             }
         </Stack>
-        {/* <Stack direction={'column'} spacing = {0.5}  justifyContent={'center'}>
-            <RouterLink to={"/recommendation/9"}>
-                <Button>Recommendation</Button>
-            </RouterLink>
-            <Button>Delete</Button>
-        </Stack> */}
     </Stack>
   )
 
