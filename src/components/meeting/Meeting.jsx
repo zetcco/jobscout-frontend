@@ -1,5 +1,5 @@
 import { AddIcCall, CallEnd, PhoneDisabled } from "@mui/icons-material";
-import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { Stack } from "@mui/system";
 import axios from "axios";
 import { Video } from "components/Video";
@@ -33,7 +33,7 @@ export const Meeting = () => {
         }
 
         fetchMeeting()
-    }, [])
+    }, [authToken, link, navigate])
 
     const stompClient = useSelector(selectWebSocketStompClient)
     const user = useSelector(selectAuthUser)
@@ -137,6 +137,7 @@ export const Meeting = () => {
 
     // Fires when a JOIN signal have been recived by a new user
     const onCandidateJoin = async (data) => {
+        console.log(data)
         const rtcPeerConnection = getNewPeerConnection(data.senderId).connection // Create a new RTCPeerConnection object for the new user
 
         // const stream = await setLocalStreamVideo()
@@ -156,11 +157,19 @@ export const Meeting = () => {
     }
 
     const sendMessage = (data, type, to = null) => {
-        stompClient.send(`/room/${meetingData.link}${to ? "/" + to : ""}`, {}, JSON.stringify({
-            senderId: user.id,
-            type,
-            data: JSON.stringify(data)
-        }))
+        // stompClient.send(`/room/${meetingData.link}${to ? "/" + to : ""}`, {}, JSON.stringify({
+        //     senderId: user.id,
+        //     type,
+        //     data: JSON.stringify(data)
+        // }))
+        stompClient.publish({
+            destination: `/room/${meetingData.link}${to ? "/" + to : ""}`,
+            body: JSON.stringify({
+                    senderId: user.id,
+                    type,
+                    data: JSON.stringify(data)
+                }),
+        })
     }
 
     const subscribe = (meetindId, userId = null) => {

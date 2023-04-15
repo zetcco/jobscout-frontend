@@ -5,7 +5,6 @@ import SmallPanel from "../../components/SmallPanel";
 import { Status } from "../../components/job_postings/post/Status";
 import { Ownership } from "../../components/job_postings/post/Ownership";
 
-
 export const JobPost = () => {
     return ( 
         <Stack spacing={3} sx={{ width: '100%' }}>
