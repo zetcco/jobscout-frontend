@@ -37,16 +37,16 @@ import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
 import { CodingInterview } from "routes/CodingInterview";
 import { Meet } from "components/meeting/Meet";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path='/' element={<RootLayout />}>
-      <Route path='/' element={<GridLayout />}>
-        <Route path='login' element={<Login />} />
-        <Route path='signup'>
-          <Route path='type' element={<SelectAccountType />} />
-          <Route path='organization'>
-            <Route path='account' element={<OrganizationSignup />} />
-            <Route path='profile' element={<OrganizationProfileCreation />} />
+const router = createBrowserRouter(createRoutesFromElements(
+    <Route path="/" element={<RootLayout/>}>
+
+      <Route path="/" element={ <GridLayout/> }>
+        <Route path="login" element={<Login/>}/>
+        <Route path="signup">
+          <Route path="type" element={ <SelectAccountType/> }/>
+          <Route path="organization">
+            <Route path="account" element={ <OrganizationSignup/> }/>
+            <Route path="profile" element={ <OrganizationProfileCreation/> }/>
           </Route>
           <Route path="user">
             <Route path="dp" element={ <UploadProfilePicture/> }/>
@@ -59,29 +59,20 @@ const router = createBrowserRouter(
                 <Route path="intro" element={ <Intro/> }/>
               </Route>
             </Route>
-            <Route path='creator'>
-              <Route path='account' element={<CreatorSignup />} />
-              <Route path='profile'>
-                <Route path='company' element={<AddCompany />} />
+            <Route path="creator">
+              <Route path="account" element={ <CreatorSignup/> }/>
+              <Route path="profile">
+                <Route path="company" element={ <AddCompany/> }/>
               </Route>
             </Route>
           </Route>
-          <Route path='Test'>
-            <Route path='hello' element={<Test />} />
+          <Route path="Test">
+            <Route path="hello" element={ <Test/> }/>
           </Route>
         </Route>
       </Route>
 
-      <Route path='/' element={<ProtectedRoute />}>
-        <Route
-          path='/'
-          element={
-            <NavigationLayout
-              sx={{ mx: { md: '100px', lg: '250px' }, mt: 4 }}
-            />
-          }
-        >
-          <Route path='home' element={<Home />} />
+      <Route path="/" element={<ProtectedRoute/>}>
 
         <Route path="/" element={<NavigationLayout/>}>
           <Route path="home" element={<Home/>}/>
@@ -94,8 +85,8 @@ const router = createBrowserRouter(
           </Route>
 
 
-          <Route path='organizations'>
-            <Route path=':organizationId' element={<OrgJobPosts />} />
+          <Route path="organizations">
+            <Route path=":organizationId" element={<OrgJobPosts/>}/>
           </Route>
         </Route>
 
@@ -129,8 +120,8 @@ const router = createBrowserRouter(
           <Route path="messages" element={<ConversationMessaging/>}/>
         </Route>
 
-        <Route path='/' element={<NavigationLayout />}>
-          <Route path='messages' element={<ConversationMessaging />} />
+        <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>
+          <Route path="/protected" element={<CreateJobPost/>}/>
         </Route>
 
         <Route path="/" element={<NavigationLayout sx={{ widht: '100%' }}/>}>
@@ -138,17 +129,17 @@ const router = createBrowserRouter(
         </Route>
 
       </Route>
-      </Route>
+
     </Route>
-  )
-);
+))
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}/>
     </>
   );
 }
 
 export default App;
+
