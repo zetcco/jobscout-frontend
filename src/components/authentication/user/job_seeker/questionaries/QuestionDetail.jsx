@@ -1,13 +1,71 @@
-import { Button, Stack } from '@mui/material';
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { BasicCard } from 'components/cards/BasicCard';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Divider from '@mui/material/Divider';
+import { useEffect, useState } from 'react';
+import { serverClient } from 'features/authSlice';
+import { useParams, useNavigate } from 'react-router';
+import { QuestionaryAttempt } from './QuestionaryAttempt';
+import { QuestionaryResults } from './QuestionaryResults';
 
 export const QuestionDetail = () => {
+
+  const { questionaryId } = useParams()
+  const navigate = useNavigate()
+
+  const [ details, setDetails ] = useState(null)
+  const [ loading, setLoading ] = useState(true)
+  const [ error, setError ] = useState(null)
+  
+  const [ started, setStarted ] = useState(false)
+  const [ results, setResults ] = useState(null)
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await fetchDetails(questionaryId)
+        setDetails(data)
+      } catch (error) {
+        setError(error)
+      }
+      setLoading(false)
+    }
+    getData()
+  }, [])
+
+  const onSubmit = (answers) => {
+    const submitData = async () => {
+      setStarted(false)
+      setLoading(true)
+      try {
+        const data = await submitAnswers(questionaryId, answers)
+        setResults(data)
+      } catch (error) {
+        setError(error)
+      }
+      setLoading(false)
+    }
+    submitData()
+  }
+
+  if (loading)
+    return (
+      <BasicCard>
+        <CircularProgress/>
+      </BasicCard>
+    )
+  if (started === false && results !== null) {
+    return ( <QuestionaryResults results={results} id={questionaryId}/> )
+  }
+  
+  if (started) {
+    return (<QuestionaryAttempt timePerQuestion={details.timePerQuestion} questions={details.questions} onSubmit={onSubmit}/>)
+  }
+
   return (
-    <BasicCard style={{width: 600}} sx={{width: '100%'}}>
+    <BasicCard sx={{width: '100%'}}>
       <Stack direction={'column'} spacing={2}>
         <Stack spacing={1}>
         <img
@@ -15,35 +73,44 @@ export const QuestionDetail = () => {
           src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT70qUCUgVzIgb_3Gt0AbED0GuWieZz-pcJLw&usqp=CAU'
           alt='python-logo'
         />
-        <h3>Python Programming Language Assesment</h3>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos,
-        aperiam illum. Qui odit eaque corporis quibusdam doloremque quis numquam</p>
+        <Typography variant='h6_bold'>{ details.name }</Typography>
+        <Typography>{ details.description }</Typography>
         </Stack>
         <Stack direction={'row'} spacing={2}>
             <FormatListBulletedIcon />
-            <p><b>15</b> multiple choice question</p>
+            <p><b>{ details.questions.length }</b> multiple choice question</p>
         </Stack>
         <Stack direction={'row'} spacing={2}>
             <ScheduleIcon />
-            <p><b>1.5 min</b> per question</p>
+            <p><b>{details.timePerQuestion / 1000 / 60 } min</b> per question</p>
         </Stack>
         <Stack direction={'row'} spacing={2}>
             <EventAvailableIcon />
-            <p>score in the top <b>30%</b> to earn a badge</p>
+            <p>Score at least <b>70%</b> to earn a badge</p>
         </Stack>
         <Divider variant="middle" />
       </Stack>
       <Stack spacing={1}>
-        <h4>Before you start</h4>
+        <Typography fontWeight={'bold'} mt={2}>Before you start</Typography>
         <ul>
             <li>You must complete this assesment in one session-make sure your internet is reliable.</li>
-            <li>You can retake this assesment once if you dont't earn a badge.</li>
+            <li>You can retake this assesment only <b>{ details.attemptCount } times</b>.</li>
             <li>We won't show your result to anyone without your permission.</li>
         </ul>
         <Divider variant="middle" />
       </Stack>
       <p>Language: <b>English</b></p>
-      <Button variant='contained' fullWidth>Start</Button>
+      <Button variant='contained' fullWidth onClick={() => { setStarted(true) }}>Continue</Button>
     </BasicCard>
   );
 };
+
+const fetchDetails = async (id) => {
+  const response = await serverClient.get(`/questionary/${id}`)
+  return response.data
+}
+
+const submitAnswers = async (id, answers) => {
+  const response = await serverClient.post(`/questionary/${id}/check`, { answers })
+  return response.data
+}

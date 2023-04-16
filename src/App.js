@@ -36,6 +36,9 @@ import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences
 import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
 import { CodingInterview } from "routes/CodingInterview";
 import { Meet } from "components/meeting/Meet";
+import { Questionaries } from "components/authentication/user/job_seeker/questionaries/Questionaries";
+import { QuestionForm } from "components/authentication/user/job_seeker/questionaries/QuestionForm";
+import { QuestionDetail } from "components/authentication/user/job_seeker/questionaries/QuestionDetail";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -118,6 +121,13 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path="/" element={<NavigationLayout sx={{ widht: '100%' }}/>}>
           <Route path="messages" element={<ConversationMessaging/>}/>
+        </Route>
+
+        <Route path="/questionaries" element={ <ProtectedRoute role={"ROLE_JOB_SEEKER"} redirect={"/home"} /> }>
+          <Route element={<NavigationLayout/>}>
+            <Route index element={<Questionaries/>}/>
+            <Route path=":questionaryId" element={<QuestionDetail/>}/>
+          </Route>
         </Route>
 
         <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>

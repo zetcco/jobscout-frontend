@@ -1,45 +1,32 @@
 import { BasicCard } from 'components/cards/BasicCard';
-import {
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  Stack,
-} from '@mui/material';
+import { FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Stack, Typography, } from '@mui/material';
+import { useEffect } from 'react';
 
-export const QuestionForm = () => {
+export const QuestionForm = ({ question, index, disabled, answers, setAnswers }) => {
   return (
     <BasicCard>
-      <FormControl>
-        <FormLabel id='q1'>
-          {' '}
-          What is the difference between list and tuples in Python?
-        </FormLabel>
-        <RadioGroup aria-labelledby='q1' name='radio-buttons-group'>
-          <Stack direction={'row'} spacing={2}>
-            <FormControlLabel
-              value='female'
-              control={<Radio size='small' />}
-              label='Female'
-            />
-            <FormControlLabel
-              value='male'
-              control={<Radio size='small' />}
-              label='Male'
-            />
-            <FormControlLabel
-              value='other'
-              control={<Radio size='small' />}
-              label='Other'
-            />
-            <FormControlLabel
-              value='other'
-              control={<Radio size='small' />}
-              label='Other'
-            />
-          </Stack>
-        </RadioGroup>
+      <FormControl fullWidth disabled={disabled}>
+        <Stack direction={'column'} spacing={1}>
+          <Typography fontWeight={'bold'} color={ disabled && answers[index] === -1 && 'error' }>{question.question}</Typography>
+            <RadioGroup value={answers[index]} onChange={(e) => { setAnswers(prevState => {
+              const arr = prevState.slice()
+              arr[index] = parseInt(e.target.value)
+              return arr
+            }) }}>
+              <Stack direction={'column'}>
+              {
+                question.answers.map((answer, index) => (
+                      <FormControlLabel
+                        key={index}
+                        value={index}
+                        control={<Radio size='small' />}
+                        label={answer}
+                      />
+                ))
+              }
+              </Stack>
+            </RadioGroup>
+        </Stack>
       </FormControl>
     </BasicCard>
   );

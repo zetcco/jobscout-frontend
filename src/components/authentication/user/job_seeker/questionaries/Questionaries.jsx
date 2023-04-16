@@ -1,15 +1,35 @@
-import { Stack, TextField } from '@mui/material';
+import { IconButton, Stack, TextField, Typography } from '@mui/material';
 import { BasicCard } from 'components/cards/BasicCard';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { Question } from './Question';
+import { Box } from '@mui/system';
+import { SelectableCard } from 'components/cards/SelectableCard';
+import { ArrowForwardIosOutlined } from '@mui/icons-material';
+import { QuestionCard } from './QuestionCard';
+import { useEffect, useState } from 'react';
+import { serverClient } from 'features/authSlice';
 
 export const Questionaries = () => {
+
+  const [ loading, setLoading ] = useState()
+  const [ posts, setPosts ] = useState([])
+
+  useEffect(() => {
+    const fetch = async () => {
+      setLoading(true)
+      setPosts(await fetchQuestionaries())
+      setLoading(false)
+    }
+    fetch()
+  }, [])
+
   return (
-    <BasicCard>
-      <h2>Skill Assessment</h2>
+    <Box>
+      <Typography variant='h5'>Skill Assessment</Typography>
       <Stack spacing={2} sx={{ width: '100%' }} direction={'column'}>
         <TextField
+          sx={{ mt: 3, mb: 2 }}
           id='outlined-basic'
           label='search-assesment'
           variant='outlined'
@@ -23,8 +43,17 @@ export const Questionaries = () => {
             ),
           }}
         />
-        <Question />
+        {
+          posts.map((questionary, index) => (
+            <QuestionCard key={index} id={questionary.id} name={questionary.name} description={questionary.description}/>
+          ))
+        }
       </Stack>
-    </BasicCard>
+    </Box>
   );
 };
+
+const fetchQuestionaries = async () => {
+  const response = await serverClient.get('/questionary');
+  return response.data;
+}
