@@ -58,14 +58,14 @@ export const QuestionaryAttempt = ({ questions, timePerQuestion, onSubmit }) => 
         <Stack direction={'column'} spacing={2}>
             <Stack direction={'row'} spacing={1} justifyContent={'center'}>
                 { questions.map((_, index) => ( 
-                    <Box key={index} sx={{ width: '100%', height: '100%' }}>
+                    <Box key={index} sx={{ width: 40, height: 40 }}>
                         <Box
                             sx= {{ position: 'relative' }}
                         >
                             <CircularProgress variant='determinate' value={( ( timePerQuestion - timeLeft[index] ) / timePerQuestion) * 100} sx={{ top: 0, left: 0, position: 'absolute' }}/>
                             <Button 
                             sx={{ width: 40, height: 40, aspectRatio: '1/1', minWidth: 0, position: 'absolute', top: 0, left: 0 }}
-                            variant={ 'outlined' }
+                            variant={ selectedQuestion === index ? 'contained' : 'outlined' }
                             onClick={() => { setSelectedQuestion(index) }}
                             color={ disabledAnswers.includes(index) && answers[index] === -1 ? 'error' : 'primary' }
                             >
