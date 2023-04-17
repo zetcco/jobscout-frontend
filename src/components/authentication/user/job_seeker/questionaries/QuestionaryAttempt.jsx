@@ -24,8 +24,16 @@ export const QuestionaryAttempt = ({ questions, timePerQuestion, onSubmit }) => 
     }, [])
 
     if (!openedQuestions.includes(selectedQuestion) && selectedQuestion !== null) {
+        const interval = setInterval(() => {
+            setTimeLeft(prevState => {
+                const arr = prevState.slice()
+                arr[selectedQuestion] -= 1000
+                return arr
+            })
+        }, 1000)
         setTimeout(() => { 
-            setDisabledAnswers(prevState => [...prevState, selectedQuestion]) 
+            // setDisabledAnswers(prevState => [...prevState, selectedQuestion]) 
+            clearInterval(interval)
             setAnswers(prevState => {
                 const arr = prevState.slice()
                 if (arr[selectedQuestion] === null)
@@ -33,15 +41,10 @@ export const QuestionaryAttempt = ({ questions, timePerQuestion, onSubmit }) => 
                 return arr
             })
         }, timePerQuestion)
-        setInterval(() => {
-            setTimeLeft(prevState => {
-            const arr = prevState.slice()
-            arr[selectedQuestion] -= 1000
-            return arr
-            })
-        }, 1000)
         openedQuestions.push(selectedQuestion)
     }
+
+    console.log(timeLeft)
 
     if (selectedQuestion === null)
         return (
@@ -62,12 +65,12 @@ export const QuestionaryAttempt = ({ questions, timePerQuestion, onSubmit }) => 
                         <Box
                             sx= {{ position: 'relative' }}
                         >
-                            <CircularProgress variant='determinate' value={( ( timePerQuestion - timeLeft[index] ) / timePerQuestion) * 100} sx={{ top: 0, left: 0, position: 'absolute' }}/>
+                            <CircularProgress variant='determinate' value={( ( timePerQuestion - timeLeft[index] ) / timePerQuestion) * 100} sx={{ top: 0, left: 0, position: 'absolute' }} color={  timeLeft[index] === 0 && answers[index] === -1 ? 'error' : 'primary'  }/>
                             <Button 
                             sx={{ width: 40, height: 40, aspectRatio: '1/1', minWidth: 0, position: 'absolute', top: 0, left: 0 }}
                             variant={ selectedQuestion === index ? 'contained' : 'outlined' }
                             onClick={() => { setSelectedQuestion(index) }}
-                            color={ disabledAnswers.includes(index) && answers[index] === -1 ? 'error' : 'primary' }
+                            color={ timeLeft[index] === 0 && answers[index] === -1 ? 'error' : 'primary' }
                             >
                                 <Typography sx={{ m: 2 }}>{index+1}</Typography>
                             </Button>
@@ -75,7 +78,7 @@ export const QuestionaryAttempt = ({ questions, timePerQuestion, onSubmit }) => 
                     </Box>
                 ))}
             </Stack>
-            <QuestionForm question={questions[selectedQuestion]} index={selectedQuestion} answers={answers} setAnswers={setAnswers} disabled={ disabledAnswers.includes(selectedQuestion) }  />
+            <QuestionForm question={questions[selectedQuestion]} index={selectedQuestion} answers={answers} setAnswers={setAnswers} time={ timeLeft[selectedQuestion] }  />
             <Stack direction={'row'} sx={{ width: '100%' }} justifyContent={'space-between'}>
                 <Button startIcon={ <ArrowBackIosNewSharp/> } onClick={() => { setSelectedQuestion(prevState => prevState-1) }} disabled={ selectedQuestion === 0 }>
                     Previous

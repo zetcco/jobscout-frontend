@@ -1,13 +1,17 @@
 import { BasicCard } from 'components/cards/BasicCard';
 import { FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Stack, Typography, } from '@mui/material';
 import { useEffect } from 'react';
+import { getReadableTime } from 'features/notificationSlice';
 
-export const QuestionForm = ({ question, index, disabled, answers, setAnswers }) => {
+export const QuestionForm = ({ question, index, time, answers, setAnswers }) => {
+
+  const disabled = time === 0
+
   return (
     <BasicCard>
       <FormControl fullWidth disabled={disabled}>
         <Stack direction={'column'} spacing={1}>
-          <Typography fontWeight={'bold'} color={ disabled && answers[index] === -1 && 'error' }>{question.question}</Typography>
+          <Typography fontWeight={'bold'} color={ disabled && answers[index] === -1 && 'error' }>{question.question} ({ getReadableTime(time) })</Typography>
             <RadioGroup value={answers[index]} onChange={(e) => { setAnswers(prevState => {
               const arr = prevState.slice()
               arr[index] = parseInt(e.target.value)
