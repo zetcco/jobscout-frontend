@@ -1,4 +1,4 @@
-import { IconButton, Stack, TextField, Typography } from '@mui/material';
+import { CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
 import { BasicCard } from 'components/cards/BasicCard';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
@@ -44,9 +44,10 @@ export const Questionaries = () => {
           }}
         />
         {
+          loading ? <CircularProgress/> : (
           posts.map((questionary, index) => (
-            <QuestionCard key={index} id={questionary.id} name={questionary.name} description={questionary.description}/>
-          ))
+            <QuestionCard key={index} id={questionary.id} name={questionary.name} description={questionary.description} badge={questionary.badge}/>
+          )))
         }
       </Stack>
     </Box>

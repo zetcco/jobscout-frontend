@@ -132,6 +132,7 @@ export const Topbar = () => {
                                         >
                                             <GenerateCV onClose={() => setGenerateCVOpen(false)}/>
                                         </Modal>
+                                        <Button onClick={() => navigate('/questionaries')}>Questionaries</Button>
                                         </>
                                     ) }
                                 </Stack>
