@@ -79,11 +79,11 @@ export const QuestionDetail = () => {
           <>
           <Stack direction={'column'} spacing={2}>
             <Stack spacing={1}>
-            <img
-              style={{ width: 60, height: 60, margin: 'auto', padding: 0, marginLeft: 0}}
-              src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT70qUCUgVzIgb_3Gt0AbED0GuWieZz-pcJLw&usqp=CAU'
-              alt='python-logo'
-            />
+              {
+                details.badge !== null && (
+                  <img style={{ width: 60, height: 60 }} src={details.badge} />
+                )
+              }
             <Typography variant='h6_bold'>{ details.name }</Typography>
             <Typography>{ details.description }</Typography>
             </Stack>
