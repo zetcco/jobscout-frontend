@@ -1,12 +1,7 @@
-import { Subtitles } from '@mui/icons-material'
-import { Button, FormHelperText, Stack, Typography } from '@mui/material'
-import axios from 'axios'
+import { Button, Stack, Typography } from '@mui/material'
 import { AvatarWithInitials } from 'components/AvatarWithInitials'
 import { RouterLink } from 'components/RouterLink'
 import { BasicCard } from 'components/cards/BasicCard'
-import { selectAuthUserToken } from 'features/authSlice'
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 export const ProfileHeaderWithNameEmail = ({id, name, email, src, onDelete}) => {
 

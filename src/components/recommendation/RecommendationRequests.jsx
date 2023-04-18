@@ -1,24 +1,17 @@
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import axios from 'axios';
-import ProfileHeaderCard from 'components/profile/ProfileHeaderCard';
 import { ProfileHeaderWithNameEmail } from 'components/profile/ProfileHeaderWithNameEmail';
-import { ProfileWithFullNameSubtitleSmall } from 'components/profile/ProfileWithFullNameSubtitleSmall';
 import { selectAuthUserToken } from 'features/authSlice';
-import { RouterLink } from 'components/RouterLink'
-
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 export default function RecommendationRequests() {
-
     let navigate = useNavigate();
 
-    const [ requester, setRequester ] = useState(null);
     const [ requesters, setRequesters ] = useState([]);
 
     const authToken = useSelector(selectAuthUserToken);
-
     // console.log(authToken);
 
     useEffect(() => {
