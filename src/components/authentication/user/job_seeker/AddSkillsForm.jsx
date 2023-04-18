@@ -77,7 +77,7 @@ export const AddSkillsForm = ({ onUpdate, onCancel }) => {
       setLoading(false)
     }
 
-    return (
+  return (
     <CenteredHeaderCard
       title={'Add your Skills'}
       footer={
@@ -185,8 +185,10 @@ export const AddSkillsForm = ({ onUpdate, onCancel }) => {
               color='primary'
               variant='outlined'
               onDelete={() => {
-                setSeletected(selected.filter((skillItem) => skillItem.id !== skill.id))
-                setSkills([...skills, skill])
+                setSeletected(
+                  selected.filter((skillItem) => skillItem.id !== skill.id)
+                );
+                setSkills([...skills, skill]);
               }}
               key={skill.id}
             />
