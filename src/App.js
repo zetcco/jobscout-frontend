@@ -39,6 +39,7 @@ import { Meet } from "components/meeting/Meet";
 import { Questionaries } from "components/authentication/user/job_seeker/questionaries/Questionaries";
 import { QuestionForm } from "components/authentication/user/job_seeker/questionaries/QuestionForm";
 import { QuestionDetail } from "components/authentication/user/job_seeker/questionaries/QuestionDetail";
+import { AddQuestionary } from "components/authentication/user/job_seeker/questionaries/AddQuestionary";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -126,6 +127,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/questionaries" element={ <ProtectedRoute role={"ROLE_JOB_SEEKER"} redirect={"/home"} /> }>
           <Route element={<NavigationLayout/>}>
             <Route index element={<Questionaries/>}/>
+            <Route path="add" element={<AddQuestionary/>}/>
             <Route path=":questionaryId" element={<QuestionDetail/>}/>
           </Route>
         </Route>

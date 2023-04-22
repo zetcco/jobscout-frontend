@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material"
 
-export const BasicCard = ({ children, sx, onClick, fullHeight, padding, noElevation, inner_sx }) => {
+export const BasicCard = ({ children, sx, onClick, fullHeight, padding, noElevation, inner_sx, error }) => {
 
     return (
         <Paper sx={{
@@ -10,6 +10,13 @@ export const BasicCard = ({ children, sx, onClick, fullHeight, padding, noElevat
                     borderRadius: (theme) => theme.shape.borderRadius / 500
                 })
             ),
+            ...(error && (
+                {
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    borderColor: (theme) => theme.palette.error.main,
+                }
+            )),
             ...( fullHeight && ({height: '100vh'}) ),
             ...sx
         }}

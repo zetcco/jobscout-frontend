@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
+import { Button, CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
 import { BasicCard } from 'components/cards/BasicCard';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
@@ -8,12 +8,15 @@ import { SelectableCard } from 'components/cards/SelectableCard';
 import { ArrowForwardIosOutlined } from '@mui/icons-material';
 import { QuestionCard } from './QuestionCard';
 import { useEffect, useState } from 'react';
-import { serverClient } from 'features/authSlice';
+import { selectAuthUser, serverClient } from 'features/authSlice';
+import { useSelector } from 'react-redux';
+import { RouterLink } from 'components/RouterLink';
 
 export const Questionaries = () => {
 
   const [ loading, setLoading ] = useState()
   const [ posts, setPosts ] = useState([])
+  const user = useSelector(selectAuthUser)
 
   useEffect(() => {
     const fetch = async () => {
@@ -43,6 +46,13 @@ export const Questionaries = () => {
             ),
           }}
         />
+        {
+          user.role === "ROLE_ADMIN" && (
+            <RouterLink to={'/questionaries/add'}>
+              <Button>Add</Button>
+            </RouterLink>
+          )
+        }
         {
           loading ? <CircularProgress/> : (
           posts.map((questionary, index) => (
