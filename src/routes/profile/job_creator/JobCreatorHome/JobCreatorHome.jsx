@@ -14,7 +14,10 @@ import axios from 'axios'
 
 export const JobCreatorHome = () => {
 
-    const [jobPostsCount , setJobPostsCount] = useState([]);
+    const [jobPostCount , setJobPostCount] = useState(0);
+    const [activatedJobPostCount , setActivatedJobPostCount] = useState(0);
+    const [deactivatedJobPostCount , setDeactivatedJobPostCount] = useState(0);
+    const [holdedJobPostCount , setHoldedJobPostCount] = useState(0);
     const token  = useSelector(selectAuthUserToken);
 
     useEffect(()=>{
@@ -23,11 +26,29 @@ export const JobCreatorHome = () => {
                 const response = await axios.get('/jobpost/count' , {
                     headers:{Authorization: `Bearer ${token}`}
                 })
-                setJobPostsCount(response.data)
+                const responseActivated = await axios.get('/jobpost/count/activated' , {
+                    headers:{Authorization: `Bearer ${token}`}
+                })
+                const responseDeactivated = await axios.get('/jobpost/count/deactivated' , {
+                    headers:{Authorization: `Bearer ${token}`}
+                })
+                const responseHolded = await axios.get('/jobpost/count/holded' , {
+                    headers:{Authorization: `Bearer ${token}`}
+                })
+                
+                setJobPostCount(response.data)
+                setActivatedJobPostCount(responseActivated.data)
+                setDeactivatedJobPostCount(responseDeactivated.data)
+                setHoldedJobPostCount(responseHolded.data)
+
+
                 console.log(response.data);
+                console.log(responseActivated.data);
+                console.log(responseDeactivated.data);
+                console.log(responseHolded.data);
               
             } catch (error) {
-                console.error(error)
+                console.log(error)
             }
         }
         fetchJobPosts()
@@ -83,7 +104,7 @@ export const JobCreatorHome = () => {
                                 <JobCreatorHomeCards
                                     title = {'POSTS'}
                                     subtitle = {'No of job posts'}
-                                    count = {12}
+                                    count = { jobPostCount }
                                 />
                             </Stack>
                         </Grid>
@@ -92,7 +113,7 @@ export const JobCreatorHome = () => {
                                 <JobCreatorHomeCards
                                     title = {'ACTIVATED POSTS'}
                                     subtitle = {'No of activated posts'}
-                                    count = {8}
+                                    count = { activatedJobPostCount }
                                 />
                             </Stack>
                         </Grid>
@@ -101,7 +122,7 @@ export const JobCreatorHome = () => {
                                 <JobCreatorHomeCards
                                     title = {'HOLDED POSTS'}
                                     subtitle = {'No of holded posts'}
-                                    count = {1}
+                                    count = { holdedJobPostCount }
                                 />
                             </Stack>
                         </Grid>
@@ -110,7 +131,7 @@ export const JobCreatorHome = () => {
                                 <JobCreatorHomeCards
                                     title = {'DEACTIVATED POSTS'}
                                     subtitle = {'No of deactivated posts'}
-                                    count = {3}
+                                    count = { deactivatedJobPostCount }
                                 />
                             </Stack>
                         </Grid>
