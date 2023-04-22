@@ -25,6 +25,8 @@ const [data , setData] = useState({
   }
 })
 
+const [loading, setLoading] = useState(false)
+
 const handle= (e) => {
   if (e.target.name === "category")
     setData((prev) => ({ ...prev , [e.target.name] : { id: e.target.value}}))
@@ -33,11 +35,13 @@ const handle= (e) => {
 }
 
 const handleSubmit = async () => {
+  setLoading(true)
   const resdata = await axios.post('/jobpost', data, {
     headers: {
       Authorization: `Bearer ${token}`
     }
   })
+  setLoading(false)
   if (resdata.status === 200)
     navigate(`/posts/${resdata.data.id}`)
   console.log(resdata)
@@ -69,7 +73,7 @@ useEffect(()=>{
           footer={
             <Stack direction={'row'} spacing={2} md={6}>
               <Button variant='outlined' fullWidth>Cancel</Button>
-              <Button variant='contained' fullWidth onClick={handleSubmit}>Submit</Button>
+              <Button variant='contained' fullWidth onClick={handleSubmit} disabled={loading}>Submit</Button>
             </Stack>
           }
         >
