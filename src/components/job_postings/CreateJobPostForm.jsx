@@ -29,13 +29,13 @@ const handle= (e) => {
     setData((prev) => ({...prev , [e.target.name] : e.target.value}))
 }
 
-const handleSubmit = (e) =>{
-   e.preventDefault();
-   axios.post('/jobpost' , data , {
-    header:{Authorization:`Bearer ${token}`}
-   })
-   .then((response)=>console.log(response))
-   .catch((err) => console.log(err))
+const handleSubmit = async () => {
+  const resdata = await axios.post('/jobpost', data, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  console.log(resdata)
 }
 
 const token = useSelector(selectAuthUserToken);
@@ -58,18 +58,13 @@ useEffect(()=>{
 
   return (
     <>
-    <form onSubmit={handleSubmit}>
       <Stack>
         <CenteredHeaderCard
           title={'Create Job Post'}
           footer={
             <Stack direction={'row'} spacing={2} md={6}>
-              <Button variant='outlined' fullWidth>
-                Cancel
-              </Button>
-              <Button variant='contained' fullWidth type='submit'>
-                Submit
-              </Button>
+              <Button variant='outlined' fullWidth>Cancel</Button>
+              <Button variant='contained' fullWidth onClick={handleSubmit}>Submit</Button>
             </Stack>
           }
         >
@@ -178,7 +173,6 @@ useEffect(()=>{
           </Grid>
         </CenteredHeaderCard>
       </Stack>
-      </form>
     </>
   );
 };
