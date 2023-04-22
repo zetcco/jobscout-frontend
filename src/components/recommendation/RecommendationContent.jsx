@@ -12,11 +12,14 @@ export default function RecommendationContent() {
   // console.log(requesterId);
   const [ content, setContent ] = useState('');
   const responderId = useSelector(selectAuthUserId);
-  const [ error, setError ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
   
 
   const onSubmit = async (e) => {
-   const response = await serverClient.post(
+    setLoading(current => current)
+    // console.log(loading)  
+
+    const response = await serverClient.post(
           '/recommendations/add', 
           {
             content,
@@ -24,15 +27,15 @@ export default function RecommendationContent() {
             requester: { id: requesterId }
             }
     )
-    if(response.status === 200 || content.length != 0) {
+    if(response.status === 200 ) {
       navigate(-1)
     }
+    setLoading(current => !current)
   }
 
-  // const navigate = useNavigate();
-	// const goBack = () => {
-	// 	navigate(-1);
-	// }
+  const onCancel =  () => {
+    navigate(-1);
+  }
 
 
   return (
@@ -42,10 +45,10 @@ export default function RecommendationContent() {
           title={'Create Recommendation'}
           footer={
             <Stack direction={'row'} spacing={2} md={6}>
-              <Button variant='outlined' fullWidth>
+              <Button onClick={onCancel} variant='outlined' fullWidth>
                 Cancel
               </Button>
-              <Button onClick={onSubmit} variant='contained' fullWidth >
+              <Button onClick={onSubmit} variant='contained' fullWidth disabled = {content === '' || loading === 'true'}>
                 Submit
               </Button>
             </Stack>
