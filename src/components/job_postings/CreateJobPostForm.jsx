@@ -4,8 +4,11 @@ import { Grid, Stack, TextField, Button, FormControl, InputLabel, Select, MenuIt
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard';
 import { selectAuthUserToken } from 'features/authSlice';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateJobPostForm = () => {
+
+  const navigate = useNavigate()
 
 const [categories , setCategories] = useState([]);
 const [data , setData] = useState({
@@ -35,6 +38,8 @@ const handleSubmit = async () => {
       Authorization: `Bearer ${token}`
     }
   })
+  if (resdata.status === 200)
+    navigate(`/posts/${resdata.data.id}`)
   console.log(resdata)
 }
 
