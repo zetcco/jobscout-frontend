@@ -1,5 +1,5 @@
 import { AddBoxOutlined, ManageAccountsOutlined, VideoChatRounded } from "@mui/icons-material"
-import { Grid, Modal, Stack, Typography } from "@mui/material"
+import { Grid, Stack, Typography } from "@mui/material"
 import { RouterLink } from "components/RouterLink"
 import SmallPanel from "components/SmallPanel"
 import { SelectableCard } from "components/cards/SelectableCard"

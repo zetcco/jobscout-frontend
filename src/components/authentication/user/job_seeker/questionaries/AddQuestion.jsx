@@ -1,33 +1,55 @@
 import { Alert, AlertTitle, Button, FormControlLabel, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material'
 import { BasicCard } from 'components/cards/BasicCard'
-import React from 'react'
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
-export const AddQuestion = ({ question, setQuestion, index }) => {
+export const AddQuestion = forwardRef(({}, ref) => {
+
+    const [ question, setQuestion ] = useState({ question: '', answers: [], correctAnswer: '' })
+    const [ errors, setErrors ] = useState([])
+    const [ removed, setRemoved ] = useState(false)
+    const elRef = useRef(null)
+
+    useImperativeHandle(ref, () => ({
+        isRemoved: () => {
+            return removed
+        },
+        getQuestion: () => {
+            return question
+        },
+        setErrors: (errors) => {
+            setErrors(errors)
+        },
+        getRef: () => {
+            return elRef
+        }
+    }))
+
+    if (removed)
+        return null
+
     return (
-        <div id={"question-" + index}>
         <BasicCard error={
-            question.errors.length !== 0 && (
+            errors.length !== 0 && (
             question.question === '' ||
             question.answers.some(answer => answer === '') ||
             question.correctAnswer === ''
-            )
-            }>
+            ) }
+            ref={elRef}>
             <Stack spacing={1}>
                 {
-                    question.errors.includes('correctAnswer') && question.correctAnswer === '' && (
+                    errors.includes('correctAnswer') && question.correctAnswer === '' && (
                         <Alert severity='error'>
                             <Typography><strong>Please select a correct answer</strong></Typography>
                         </Alert>
                     )
                 }
                 <Stack direction={'row'} alignItems={'center'} spacing={3}>
-                    <Typography variant='h6'>{ index + 1 }.</Typography>
                     <TextField 
                         fullWidth
                         value={question.question}
                         onChange={e => { setQuestion({...question, question: e.target.value}) }}
                         size='small'
-                        error={question.question === '' && question.errors.includes('question')}
+                        error={question.question === '' && errors.includes('question')}
                         required
                     />
                 </Stack>
@@ -43,7 +65,7 @@ export const AddQuestion = ({ question, setQuestion, index }) => {
                             <FormControlLabel value={index} control={ <Radio  />}/>
                             <TextField fullWidth value={question.answers[index]}
                             size='small'
-                            error={ question.answers[index] === '' && question.errors.includes(index)}
+                            error={ question.answers[index] === '' && errors.includes(index)}
                             onChange={e => { 
                                 const answers = [...question.answers]
                                 answers[index] = e.target.value
@@ -54,9 +76,9 @@ export const AddQuestion = ({ question, setQuestion, index }) => {
                     </Stack>
                     </RadioGroup>
                     <Button onClick={() => { setQuestion({...question, answers: [...question.answers, '']}) }} >Add Answer</Button>
+                    <Button onClick={() => { setRemoved(true) }} >Remove Question</Button>
                 </Stack>
             </Stack>
         </BasicCard>
-        </div>
     )
-}
+})

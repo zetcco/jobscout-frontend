@@ -1,6 +1,7 @@
 import { Box, Paper } from "@mui/material"
+import { forwardRef } from "react"
 
-export const BasicCard = ({ children, sx, onClick, fullHeight, padding, noElevation, inner_sx, error }) => {
+export const BasicCard = forwardRef(({ children, sx, onClick, fullHeight, padding, noElevation, inner_sx, error }, ref ) => {
 
     return (
         <Paper sx={{
@@ -23,7 +24,7 @@ export const BasicCard = ({ children, sx, onClick, fullHeight, padding, noElevat
         onClick={onClick ? onClick : undefined}
         elevation={noElevation ? 0 : undefined}
         >
-            <Box sx={{ 
+            <Box ref={ref} sx={{ 
                 p: ( padding ? padding : { xs: 2, sm: 4 }),
                 ...( fullHeight && ({height: '100%'})),
                 ...inner_sx,
@@ -32,4 +33,4 @@ export const BasicCard = ({ children, sx, onClick, fullHeight, padding, noElevat
             </Box>
         </Paper>
     )
-}
+})

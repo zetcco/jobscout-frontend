@@ -84,31 +84,6 @@ export const JobPosts = () => {
                                 backgroundColor: (theme) => theme.palette.grey[100],
                             }
                             }}/></RouterLink>
-                        <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.grey[100],
-                            }
-                            }}/></RouterLink>
-                        <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.grey[100],
-                            }
-                            }}/></RouterLink>
-                        <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.grey[100],
-                            }
-                            }}/></RouterLink>
-                        <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.grey[100],
-                            }
-                            }}/></RouterLink>
-                        <RouterLink to="/posts/1"><SingleJobPost sx={{ 
-                            "&:hover": {
-                                backgroundColor: (theme) => theme.palette.grey[100],
-                            }
-                            }}/></RouterLink>
                     </Stack>
                 </Box>
             </Stack>

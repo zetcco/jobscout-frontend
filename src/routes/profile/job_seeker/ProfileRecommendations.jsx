@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { selectAuthUserToken } from 'features/authSlice'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
@@ -10,8 +9,6 @@ export const ProfileRecommendations = () => {
     const authToken = useSelector(selectAuthUserToken)
 
     useEffect(() => {
-        const fetchRecommendations = async () => {
-        }
     }, [userId, authToken])
 
     return (
