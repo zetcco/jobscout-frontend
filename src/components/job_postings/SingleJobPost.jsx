@@ -5,7 +5,7 @@ import { BasicCard } from "../cards/BasicCard";
 
 
 
-const SingleJobPost = ({ sx ,title , children , type }) => {
+const SingleJobPost = ({ sx ,title , children , type  , skills}) => {
 
     const handleDelete = () => {
         console.info('You clicked the delete icon.');
@@ -31,8 +31,7 @@ const SingleJobPost = ({ sx ,title , children , type }) => {
 
                     <Stack direction={{sm:'row', xs: 'column'}} spacing={{ xs: 2, md: 0 }} justifyContent='space-between'>
                         <Stack direction='row' spacing={1}>
-                            <Chip label="React" variant="outlined" color="success" onDelete={handleDelete}/>
-                            <Chip label="Boostrap" variant="outlined" color="success" onDelete={handleDelete}/>
+                            {skills && <Chip label="React" variant="outlined" color="success" onDelete={handleDelete}/>}
                         </Stack>
                         <Stack align="right">
                             {
