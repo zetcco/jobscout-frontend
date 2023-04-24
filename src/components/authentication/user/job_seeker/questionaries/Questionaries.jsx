@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Question } from './Question';
 import { Box } from '@mui/system';
 import { SelectableCard } from 'components/cards/SelectableCard';
-import { ArrowForwardIosOutlined } from '@mui/icons-material';
+import { AddCircleOutline, ArrowForwardIosOutlined } from '@mui/icons-material';
 import { QuestionCard } from './QuestionCard';
 import { useEffect, useState } from 'react';
 import { selectAuthUser, serverClient } from 'features/authSlice';
@@ -27,10 +27,18 @@ export const Questionaries = () => {
     fetch()
   }, [])
 
+  const deleteQuestionary = async (id) => {
+    const response = await serverClient.delete(`/questionary/${id}`)
+    if (response.status === 200) {
+      setPosts(posts => posts.filter(post => post.id !== id))
+    }
+  }
+
   return (
     <Box>
       <Typography variant='h5'>Skill Assessment</Typography>
       <Stack spacing={2} sx={{ width: '100%' }} direction={'column'}>
+        <Stack direction={'row'} alignItems={'center'} spacing={2}>
         <TextField
           sx={{ mt: 3, mb: 2 }}
           id='outlined-basic'
@@ -49,14 +57,15 @@ export const Questionaries = () => {
         {
           user.role === "ROLE_ADMIN" && (
             <RouterLink to={'/questionaries/add'}>
-              <Button>Add</Button>
+              <Button startIcon={<AddCircleOutline/>} variant='outlined'>Create</Button>
             </RouterLink>
           )
         }
+        </Stack>
         {
           loading ? <CircularProgress/> : (
           posts.map((questionary, index) => (
-            <QuestionCard key={index} id={questionary.id} name={questionary.name} description={questionary.description} badge={questionary.badge}/>
+            <QuestionCard key={index} id={questionary.id} name={questionary.name} description={questionary.description} badge={questionary.badge} onDelete={user.role === "ROLE_ADMIN" && ( () =>  { deleteQuestionary(questionary.id) } )}/>
           )))
         }
       </Stack>

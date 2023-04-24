@@ -1,10 +1,11 @@
-import { Alert, AlertTitle, Button, FormControlLabel, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material'
+import { AddCircleOutline, RemoveCircleOutline } from '@mui/icons-material'
+import { Alert, AlertTitle, Button, FormControlLabel, IconButton, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material'
 import { BasicCard } from 'components/cards/BasicCard'
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
-export const AddQuestion = forwardRef(({}, ref) => {
+export const AddQuestion = forwardRef(({ initQuesiton }, ref) => {
 
-    const [ question, setQuestion ] = useState({ question: '', answers: [], correctAnswer: '' })
+    const [ question, setQuestion ] = useState(initQuesiton)
     const [ errors, setErrors ] = useState([])
     const [ removed, setRemoved ] = useState(false)
     const elRef = useRef(null)
@@ -34,7 +35,9 @@ export const AddQuestion = forwardRef(({}, ref) => {
             question.answers.some(answer => answer === '') ||
             question.correctAnswer === ''
             ) }
-            ref={elRef}>
+            ref={elRef}
+            onClose={() => { setRemoved(true) }}
+            >
             <Stack spacing={1}>
                 {
                     errors.includes('correctAnswer') && question.correctAnswer === '' && (
@@ -71,13 +74,17 @@ export const AddQuestion = forwardRef(({}, ref) => {
                                 answers[index] = e.target.value
                                 setQuestion({...question, answers })
                             }}/>
+                            <IconButton onClick={() => { setQuestion(q => ({...q, answers: q.answers.filter((_, i) => i !== index)})) }}>
+                                <RemoveCircleOutline color='error'/>
+                            </IconButton>
                         </Stack>
                     ))}
                     </Stack>
                     </RadioGroup>
-                    <Button onClick={() => { setQuestion({...question, answers: [...question.answers, '']}) }} >Add Answer</Button>
-                    <Button onClick={() => { setRemoved(true) }} >Remove Question</Button>
                 </Stack>
+                <Button onClick={() => { setQuestion({...question, answers: [...question.answers, '']}) }} >
+                    <AddCircleOutline/>
+                </Button>
             </Stack>
         </BasicCard>
     )

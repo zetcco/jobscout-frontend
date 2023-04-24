@@ -10,7 +10,8 @@ export const DashedArea = ({ text, icon, onClick, error, disabled }) => {
             borderWidth: 2,
             borderRadius: (theme) => theme.shape.borderRadius / 500,
             borderColor: (error ? ((theme) => theme.palette.error.main) : ( disabled ? ((theme) => theme.palette.grey[500]) : ((theme) => theme.palette.primary.main))),
-            padding: 5
+            padding: 5,
+            width: '100%'
         }}
 
         onClick={onClick}

@@ -1,9 +1,11 @@
-import { Box, Paper } from "@mui/material"
+import { Close } from "@mui/icons-material"
+import { Box, IconButton, Paper } from "@mui/material"
 import { forwardRef } from "react"
 
-export const BasicCard = forwardRef(({ children, sx, onClick, fullHeight, padding, noElevation, inner_sx, error }, ref ) => {
+export const BasicCard = forwardRef(({ children, sx, onClick, fullHeight, padding, noElevation, inner_sx, error, onClose, onMouseEnter, onMouseLeave }, ref ) => {
 
     return (
+        <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         <Paper sx={{
             ...(   !noElevation && 
                 ({
@@ -28,9 +30,16 @@ export const BasicCard = forwardRef(({ children, sx, onClick, fullHeight, paddin
                 p: ( padding ? padding : { xs: 2, sm: 4 }),
                 ...( fullHeight && ({height: '100%'})),
                 ...inner_sx,
+                position: 'relative'
                 }}>
+                { onClose && (
+                    <Box sx={{ position: 'absolute', top: 5, right: 5 }}>
+                    <IconButton onClick={onClose}><Close fontSize="small"/></IconButton>
+                    </Box>
+                )}
                 {children}
             </Box>
         </Paper>
+        </div>
     )
 })

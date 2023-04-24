@@ -5,10 +5,11 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Divider from '@mui/material/Divider';
 import { useEffect, useState } from 'react';
-import { serverClient } from 'features/authSlice';
+import { selectAuthUser, serverClient } from 'features/authSlice';
 import { useParams, useNavigate } from 'react-router';
 import { QuestionaryAttempt } from './QuestionaryAttempt';
 import { QuestionaryResults } from './QuestionaryResults';
+import { useSelector } from 'react-redux';
 
 export const QuestionDetail = () => {
 
@@ -21,6 +22,8 @@ export const QuestionDetail = () => {
   
   const [ started, setStarted ] = useState(false)
   const [ results, setResults ] = useState(null)
+
+  const authUser = useSelector(selectAuthUser)
 
   useEffect(() => {
     const getData = async () => {
@@ -78,14 +81,19 @@ export const QuestionDetail = () => {
         ) : (
           <>
           <Stack direction={'column'} spacing={2}>
-            <Stack spacing={1}>
-              {
-                details.badge !== null && (
-                  <img style={{ width: 60, height: 60 }} src={details.badge} />
-                )
-              }
-            <Typography variant='h6_bold'>{ details.name }</Typography>
-            <Typography>{ details.description }</Typography>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Stack spacing={1}>
+                  {
+                    details.badge !== null && (
+                      <img style={{ width: 60, height: 60 }} src={details.badge} />
+                    )
+                  }
+                <Typography variant='h6_bold'>{ details.name }</Typography>
+                <Typography>{ details.description }</Typography>
+              </Stack>
+              <Box>
+                <Button onClick={() => { navigate(`/questionaries/${questionaryId}/edit`) }}>Edit</Button>
+              </Box>
             </Stack>
             <Stack direction={'row'} spacing={2}>
                 <FormatListBulletedIcon />
