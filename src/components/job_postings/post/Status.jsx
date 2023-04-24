@@ -1,9 +1,23 @@
+import React from "react";
 import { Box, Stack } from "@mui/system";
 import { Typography } from "@mui/material";
 import Chip from '@mui/material/Chip';
+import { useState ,useEffect} from "react";
 
-export const Status = () => {
+export const Status = ({status , dueDate}) => {
+    const [days , setDays] = useState(null);
+    useEffect(() =>{
+        const remDays = Math.round(((new Date(dueDate) - new Date())/ (1000 * 3600 * 24)));
+        if(remDays >= 0){
+            setDays(remDays);
+        }else{
+            setDays("Expired!");
+        }
+    } , [])
+    
+    
     return ( 
+        
             <Stack direction={'column'} spacing={3}>
                 <Stack direction={'row'} justifyContent='space-between'>                   
                     <Box>
@@ -18,7 +32,7 @@ export const Status = () => {
                         <Typography>Closing date</Typography>
                     </Box>
                     <Box>
-                        <Chip label="2 days remaining" variant="outlined" color='error'/>
+                        <Chip label={days} variant="outlined" color='error'/>
                     </Box>
                 </Stack>
                 <Stack direction={'row'} justifyContent='space-between'>
@@ -26,7 +40,15 @@ export const Status = () => {
                         <Typography>Status</Typography>
                     </Box>
                     <Box>
-                        <Chip label="Opened" variant="outlined" color='success'/>
+                        {
+                            status && status === "STATUS_ACTIVE" && <Chip label="Activated" variant="outlined" color='success'/>
+                        }
+                        {
+                            status && status === 'STATUS_HOLD' && <Chip label='Hold' color="warning" variant="outlined" />
+                        }
+                        {
+                            status && status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
+                        }
                     </Box>
                 </Stack>
             </Stack>
