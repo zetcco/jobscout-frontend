@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Stack, TextField, Button, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import { Grid, Stack, TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Alert, AlertTitle} from '@mui/material';
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard';
 import { selectAuthUserToken } from 'features/authSlice';
 import axios from 'axios';
@@ -8,9 +8,10 @@ import { useNavigate } from 'react-router-dom';
 
 export const CreateJobPostForm = () => {
 
-  const navigate = useNavigate()
+const navigate = useNavigate()
 
 const [categories , setCategories] = useState([]);
+const [error , setError] = useState(null);
 const [data , setData] = useState({
   dueDate:"",
   title: "",
@@ -65,6 +66,19 @@ useEffect(()=>{
 
   },[token])
 
+
+  //check wheather Due date is valid or not!
+// const isDateValid = (date) => {
+//   if (date < new Date()){
+//     setError(true);
+//   }else{
+//     setSelectedDate(date);
+//    // handle(date);
+//     setError(false);
+//   }
+    
+// }
+
   return (
     <>
       <Stack>
@@ -79,6 +93,14 @@ useEffect(()=>{
         >
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
+              {/* { error && (
+                  <Alert severity="error">
+                    <AlertTitle>Invalid Entry!</AlertTitle>
+                    <strong>Please select a future date.</strong>
+                  </Alert>
+              )} */}
+            </Grid>
+            <Grid item xs={12} md={12}>
               <TextField
                 name = "title"
                 label = 'Title'
@@ -87,6 +109,7 @@ useEffect(()=>{
                 variant = 'outlined'
                 onChange = {handle}
                 fullWidth
+                rules = {{required : true}} 
               />
             </Grid>
             <Grid item xs={12} md={12}>
@@ -100,6 +123,7 @@ useEffect(()=>{
                 minRows={3}
                 maxRows={6}
                 fullWidth
+                rules = {{required : true}} 
               />
             </Grid>
             <Grid item xs={12} md={12}>
@@ -110,7 +134,8 @@ useEffect(()=>{
                       name = "category"
                       value = {data.category.id}
                       onChange = {handle}
-                      label = "Category"   
+                      label = "Category"
+                      rules = {{required : true}}    
                       >
                        {
                         categories.map((category) =>
@@ -127,7 +152,8 @@ useEffect(()=>{
                       name="type"
                       value = {data.type}
                       onChange = {handle}
-                      label="Type"   
+                      label="Type"
+                      rules = {{required : true}}    
                       >  
                         <MenuItem value = {"TYPE_PERMANENT"}>Full Time</MenuItem> 
                         <MenuItem value = {"TYPE_PART_TIME"}>Part Time</MenuItem> 
@@ -143,7 +169,8 @@ useEffect(()=>{
                       name = "status"
                       value = {data.status}  
                       onChange = {handle}
-                      label = "City"   
+                      label = "Status"
+                      rules = {{required : true}}    
                       >
                         <MenuItem value = {'STATUS_ACTIVE'}>Active</MenuItem> 
                         <MenuItem value = {'STATUS_HOLD'}>Hold</MenuItem> 
@@ -161,9 +188,10 @@ useEffect(()=>{
                 placeholder = 'Enter due date'
                 InputLabelProps = {{ shrink: true }}
                 fullWidth
-                required
+                rules = {{required : true}}
               />
             </Grid>
+                       
             <Grid item xs={12} md={6}>
             <FormControl fullWidth>
                   <InputLabel id="JobPost-Creation-Urgent-select-label">Select Urgent</InputLabel>
@@ -172,7 +200,8 @@ useEffect(()=>{
                       name = "urgent"
                       value = {data.urgent}
                       onChange = {handle}
-                      label = "City"   
+                      label = "Urgent" 
+                      rules = {{required : true}}  
                       >
                         <MenuItem value = {true}>Urgent</MenuItem> 
                         <MenuItem value = {false}>Not urgent</MenuItem>    
