@@ -41,7 +41,6 @@ export const JobCreatorHome = () => {
                 setDeactivatedJobPostCount(responseDeactivated.data)
                 setHoldedJobPostCount(responseHolded.data)
 
-
                 console.log(response.data);
                 console.log(responseActivated.data);
                 console.log(responseDeactivated.data);
