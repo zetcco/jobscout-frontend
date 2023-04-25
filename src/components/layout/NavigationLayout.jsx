@@ -14,7 +14,7 @@ export const NavigationLayout = ({ sx, noRouteAnimation }) => {
   return (
     <>
       <Topbar />
-      <Box>
+      <Box sx={{ mx: 'auto', mb: 5 }}>
         <Toolbar />
         <Box sx={sx ? sx : undefined}>
           <motion.div

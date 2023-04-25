@@ -1,15 +1,16 @@
-import { ArrowForwardIosOutlined } from '@mui/icons-material'
+import { ArrowForwardIosOutlined, DeleteOutline, EditRounded } from '@mui/icons-material'
 import { IconButton, Stack, Typography } from '@mui/material'
 import { SelectableCard } from 'components/cards/SelectableCard'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 
-export const QuestionCard = ({ id, name, description, badge }) => {
+export const QuestionCard = ({ id, name, description, badge, onDelete }) => {
 
+    const [ toggleDelete, setToggleDelete ] = useState(false)
     const navigate = useNavigate()
 
     return (
-        <SelectableCard onClick={() => { navigate(`/questionaries/${id}`) }}>
+        <SelectableCard onClick={() => { navigate(`/questionaries/${id}`) }} onMouseEnter={onDelete && (() => { setToggleDelete(true) })} onMouseLeave={onDelete && (() => { setToggleDelete(false) })}>
           <Stack direction={'row'} justifyContent={'space-between'} sx={{ width: '100%' }}>
             <Stack direction={'row'} spacing={3}>
               <img style={{ width: 60, height: 60 }} src={badge} />
@@ -19,9 +20,28 @@ export const QuestionCard = ({ id, name, description, badge }) => {
               </Stack>
             </Stack>
             <Stack justifyContent={'center'}>
-              <IconButton size='large' color='success' >
-                <ArrowForwardIosOutlined />
-              </IconButton>
+              {
+                toggleDelete ? (
+                  <Stack direction={'row'} alignItems={'center'}>
+                    <IconButton size='large' color='error' onClick={(e) => {
+                      e.stopPropagation()
+                      onDelete()
+                    }}>
+                      <DeleteOutline/>
+                    </IconButton>
+                    <IconButton size='large' color='success' onClick={(e) => { 
+                      e.stopPropagation()
+                      navigate(`/questionaries/${id}/edit`) 
+                    }}>
+                      <EditRounded/>
+                    </IconButton>
+                  </Stack>
+                ) : (
+                  <IconButton size='large' color='success' >
+                    <ArrowForwardIosOutlined />
+                  </IconButton>
+                )
+              }
             </Stack>
           </Stack>
         </SelectableCard>

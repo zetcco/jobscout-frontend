@@ -57,7 +57,7 @@ export const UploadProfilePictureForm = forwardRef(({ onUpdate, onCancel }, ref 
                 onUpdate ? (
                   <Button variant='outlined' sx={{ width: '100%' }} onClick={onCancel}>Close</Button>
                 ) : (
-                  <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
+                  <Button variant='outlined' sx={{ width: '100%' }} onClick={() => { navigate('/home') }}>Skip</Button>
                 )
               }
               <Button type="submit" variant="contained" fullWidth disabled={loading}>Continue</Button>
