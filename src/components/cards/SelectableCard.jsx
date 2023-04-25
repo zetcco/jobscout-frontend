@@ -2,7 +2,7 @@ import { Stack } from '@mui/system'
 import React from 'react'
 import { BasicCard } from './BasicCard'
 
-export const SelectableCard = ({ children, selected, onClick, sx, padding, onMouseEnter, onMouseLeave }) => {
+export const SelectableCard = ({ children, selected, onClick, sx, padding, onMouseEnter, onMouseLeave, divsx }) => {
   return (
     <BasicCard sx={{
         cursor: 'pointer',
@@ -26,6 +26,7 @@ export const SelectableCard = ({ children, selected, onClick, sx, padding, onMou
         }),
         ...sx
     }}
+    divsx={{ ...divsx }}
     padding={padding}
     onClick={onClick}
     onMouseEnter={onMouseEnter}
