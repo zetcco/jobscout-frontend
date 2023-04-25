@@ -91,9 +91,11 @@ export const QuestionDetail = () => {
                 <Typography variant='h6_bold'>{ details.name }</Typography>
                 <Typography>{ details.description }</Typography>
               </Stack>
-              <Box>
-                <Button onClick={() => { navigate(`/questionaries/${questionaryId}/edit`) }}>Edit</Button>
-              </Box>
+              { authUser.role === "ROLE_ADMIN" && (
+                <Box>
+                  <Button onClick={() => { navigate(`/questionaries/${questionaryId}/edit`) }}>Edit</Button>
+                </Box>
+              )}
             </Stack>
             <Stack direction={'row'} spacing={2}>
                 <FormatListBulletedIcon />
