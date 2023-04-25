@@ -52,14 +52,15 @@ export const AddQuestionary = ({ initRequest, initQuestionRefs, initEdit }) => {
             console.log(data)
             const formData = new FormData()
             formData.append('data', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
+            if (data.file)
+                formData.append('file', data.file[0]);
             let response;
-            // if (Object.keys(initRequest).length === 0) {
-            //     formData.append('file', data.file[0]);
-            //     response = await serverClient.post('/questionary/create', formData)
-            // } else 
-            //     response = await serverClient.put(`/questionary/${initRequest.request.id}/update`, formData)
-            // if (response.status === 200)
-            //     navigate(`/questionaries/${response.data.id}`)
+            if (Object.keys(initRequest).length === 0) {
+                response = await serverClient.post('/questionary/create', formData)
+            } else 
+                response = await serverClient.put(`/questionary/${initRequest.request.id}/update`, formData)
+            if (response.status === 200)
+                navigate(`/questionaries/${response.data.id}`)
         } else
             questions[errorIndex].ref.current.getRef().current.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
