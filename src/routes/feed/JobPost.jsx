@@ -38,7 +38,7 @@ useEffect(()=>{
 
 
     return ( 
-        <BasicCard>
+        <Box>
             <Stack spacing={2} sx={{ width: '100%' }}>
                         <Box> 
                             <SingleJobPost
@@ -65,7 +65,7 @@ useEffect(()=>{
                         </Stack>
                         <Button variant="contained" color='success' fullWidth size='large'>Apply now</Button>
             </Stack>                   
-        </BasicCard>
+        </Box>
      );
 }
  

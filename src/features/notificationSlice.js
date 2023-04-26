@@ -8,6 +8,7 @@ const initialState = notificationAdapter.getInitialState({
     page: 0,
     loading: false,
     error: null,
+    subscribed: false
 })
 
 const notificationSlice = createSlice({
@@ -17,6 +18,12 @@ const notificationSlice = createSlice({
         setNewNotification: notificationAdapter.addOne,
         setError: (state, action) => {
             state.error = action.payload;
+        },
+        setSubscribeToNotification: (state, action) => {
+            state.subscribed = true
+        },
+        setUnsubscribeToNotification: (state, action) => {
+            state.subscribed = false
         },
     },
     extraReducers(builder) {
@@ -43,7 +50,7 @@ export const {
     selectByIds: selectNotificationIds
 } = notificationAdapter.getSelectors(state => state.notification)
 export const selectNotificationsLoading = (state) => state.notification.loading;
-export const { setNewNotification, setError } = notificationSlice.actions;
+export const { setNewNotification, setError, setSubscribeToNotification, setUnsubscribeToNotification } = notificationSlice.actions;
 export const selectUnreadNotificationCount = createSelector(
     [selectNotifications],
     (notifications) => notifications.filter((notification) => notification.status ===  "UNREAD").length
@@ -51,19 +58,22 @@ export const selectUnreadNotificationCount = createSelector(
 
 export const subscribeToNotification = (dispatch, getState) => {
     const state = getState();
-    if (state.auth.token != null) {
-        state.websocket.stompClient.subscribe("/all/notify", (payload) => {
-            dispatch(setNewNotification(JSON.parse(payload.body)));
-        },
-        {"token": state.auth.token}
-        );
-        state.websocket.stompClient.subscribe(
-            `/user/${state.auth.userInfo.id}/notify`,
-            (payload) => {
-                dispatch(setNewNotification(JSON.parse( payload.body )));
+    if (!state.notification.subscribed) {
+        if (state.auth.token != null) {
+            state.websocket.stompClient.subscribe("/all/notify", (payload) => {
+                dispatch(setNewNotification(JSON.parse(payload.body)));
             },
             {"token": state.auth.token}
-        );
+            );
+            state.websocket.stompClient.subscribe(
+                `/user/${state.auth.userInfo.id}/notify`,
+                (payload) => {
+                    dispatch(setNewNotification(JSON.parse( payload.body )));
+                },
+                {"token": state.auth.token}
+            );
+            dispatch(setSubscribeToNotification())
+        }
     }
 };
 
@@ -75,24 +85,27 @@ export const fetchNotifications = createAsyncThunk('notification/fetchNotificati
 })
 
 export const timeDifference = (current, previous) => {
+    let elapsed = current - previous;
+    return getReadableTime(elapsed)
+}
+
+export const getReadableTime = (time) => {
     let msPerMinute = 60 * 1000;
     let msPerHour = msPerMinute * 60;
     let msPerDay = msPerHour * 24;
     let msPerMonth = msPerDay * 30;
     let msPerYear = msPerDay * 365;
 
-    let elapsed = current - previous;
-
-    if (elapsed < msPerMinute) 
-         return Math.round(elapsed/1000) + 's';   
-    else if (elapsed < msPerHour) 
-         return Math.round(elapsed/msPerMinute) + 'm';   
-    else if (elapsed < msPerDay ) 
-         return Math.round(elapsed/msPerHour ) + 'h';   
-    else if (elapsed < msPerMonth) 
-        return Math.round(elapsed/msPerDay) + 'd';   
-    else if (elapsed < msPerYear) 
-        return Math.round(elapsed/msPerMonth) + 'mo';   
+    if (time < msPerMinute) 
+         return Math.round(time/1000) + 's';   
+    else if (time < msPerHour) 
+         return Math.round(time/msPerMinute) + 'm';   
+    else if (time < msPerDay ) 
+         return Math.round(time/msPerHour ) + 'h';   
+    else if (time < msPerMonth) 
+        return Math.round(time/msPerDay) + 'd';   
+    else if (time < msPerYear) 
+        return Math.round(time/msPerMonth) + 'mo';   
     else 
-        return Math.round(elapsed/msPerYear ) + 'y';   
+        return Math.round(time/msPerYear ) + 'y';   
 }

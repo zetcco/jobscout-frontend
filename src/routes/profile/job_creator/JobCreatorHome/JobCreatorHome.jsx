@@ -5,8 +5,8 @@ import {Grid, Typography } from '@mui/material'
 import { JobCreatorHomeCards } from './JobCreatorHomeCards'
 import { SelectableCard } from '../../../../components/cards/SelectableCard'
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import WorkIcon from '@mui/icons-material/Work';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { RouterLink } from '../../../../components/RouterLink'
 import { useSelector } from 'react-redux'
 import { selectAuthUserToken } from 'features/authSlice'
@@ -62,35 +62,32 @@ export const JobCreatorHome = () => {
                     >
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
-                                <RouterLink to={"/posts/create"}>
-                                <SelectableCard
-                                    title = { 
-                                            <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                                <AddBoxIcon sx = {{height:'30px' , width:'30px'}}/>
-                                                <Typography variant = 'h6'>CREATE</Typography>
-                                             </Stack> }
-                                    />
+                                    <RouterLink to={"/posts/create"}>
+                                        <SelectableCard>
+                                                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                                        <AddBoxIcon sx = {{height:'30px' , width:'30px'}}/>
+                                                        <Typography variant = 'h6'>CREATE</Typography>
+                                                    </Stack> 
+                                        </SelectableCard>
+                                    </RouterLink>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <RouterLink to={"/posts/1/manage"}>
+                                        <SelectableCard>
+                                                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                                        <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>
+                                                        <Typography variant = 'h6'>MANAGE</Typography>
+                                                    </Stack> 
+                                        </SelectableCard>
                                 </RouterLink>
                                 </Grid>
                                 <Grid item xs={4}>
-                                <RouterLink to={"/posts/1/manage"}>
-                                <SelectableCard
-                                    title = { 
-                                            <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                                <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>
-                                                <Typography variant = 'h6'>MANAGE</Typography>
-                                             </Stack> }
-                                    />
-                                </RouterLink>
-                                </Grid>
-                                <Grid item xs={4}>
-                                <SelectableCard
-                                    title = { 
-                                            <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                                <WorkIcon sx = {{height:'30px' , width:'30px'}}/>
-                                                <Typography variant = 'h6'>VACCANCIES</Typography>
-                                             </Stack> }
-                                    />
+                                        <SelectableCard>
+                                                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                                        <WorkIcon sx = {{height:'30px' , width:'30px'}}/>
+                                                        <Typography variant = 'h6'>VACCANCIES</Typography>
+                                                    </Stack>
+                                        </SelectableCard>
                                 </Grid>
                             </Grid>
                     </SmallPanel> 
@@ -134,10 +131,9 @@ export const JobCreatorHome = () => {
                                 />
                             </Stack>
                         </Grid>
-                    </Grid>           
-                </Stack>
-
-            </Stack>
+                    </Grid>
+                </Stack> 
+        </Stack>
         
   )
 }
