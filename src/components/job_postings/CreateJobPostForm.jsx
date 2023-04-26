@@ -5,6 +5,10 @@ import { CenteredHeaderCard } from '../cards/CenteredHeaderCard';
 import { selectAuthUserToken } from 'features/authSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { DatePicker} from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { RouterLink } from 'components/RouterLink';
 
 export const CreateJobPostForm = () => {
 
@@ -35,17 +39,31 @@ const handle= (e) => {
     setData((prev) => ({...prev , [e.target.name] : e.target.value}))
 }
 
+// function for handle the submiting
 const handleSubmit = async () => {
-  setLoading(true)
-  const resdata = await axios.post('/jobpost', data, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
+  try{
+    setLoading(true)
+    const resdata = await axios.post('/jobpost', data, { headers: { Authorization: `Bearer ${token}`}}) 
+    if (resdata.status === 200)
+      navigate(`/posts/${resdata.data.id}`)
+    console.log(resdata);
+  }catch(error){
+    setError(error.response.data);
+    console.log(error);
+  }
   setLoading(false)
-  if (resdata.status === 200)
-    navigate(`/posts/${resdata.data.id}`)
-  console.log(resdata)
+}
+
+// function to handle the canceling
+const handleCancel = async () => {
+  try{
+    setLoading(true)
+    navigate(`/home`)
+  }catch(error){
+    setError(error.response.data)
+    console.log(error);
+  }
+  setLoading(false)
 }
 
 const token = useSelector(selectAuthUserToken);
@@ -59,25 +77,14 @@ useEffect(()=>{
           setCategories(response.data)
         
       } catch (error) {
-          console.error(error)
+          setError(error.response.data);
+          console.error(error);
       }
   }
   fetchCategories()
 
   },[token])
 
-
-  //check wheather Due date is valid or not!
-// const isDateValid = (date) => {
-//   if (date < new Date()){
-//     setError(true);
-//   }else{
-//     setSelectedDate(date);
-//    // handle(date);
-//     setError(false);
-//   }
-    
-// }
 
   return (
     <>
@@ -86,19 +93,19 @@ useEffect(()=>{
           title={'Create Job Post'}
           footer={
             <Stack direction={'row'} spacing={2} md={6}>
-              <Button variant='outlined' fullWidth>Cancel</Button>
+              <Button variant='outlined' fullWidth onClick={handleCancel}>Cancel</Button >         
               <Button variant='contained' fullWidth onClick={handleSubmit} disabled={loading}>Submit</Button>
             </Stack>
           }
         >
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
-              {/* { error && (
+              { error && (
                   <Alert severity="error">
-                    <AlertTitle>Invalid Entry!</AlertTitle>
-                    <strong>Please select a future date.</strong>
+                    <AlertTitle>Error!</AlertTitle>
+                    <strong>{error.message}</strong>
                   </Alert>
-              )} */}
+              )}
             </Grid>
             <Grid item xs={12} md={12}>
               <TextField
@@ -126,7 +133,7 @@ useEffect(()=>{
                 rules = {{required : true}} 
               />
             </Grid>
-            <Grid item xs={12} md={12}>
+            <Grid item xs={12} md={6}>
               <FormControl fullWidth>
                   <InputLabel id="JobPost-Creation-Category-select-label">Select Category</InputLabel>
                   <Select
@@ -135,6 +142,24 @@ useEffect(()=>{
                       value = {data.category.id}
                       onChange = {handle}
                       label = "Category"
+                      rules = {{required : true}}    
+                      >
+                       {
+                        categories.map((category) =>
+                        <MenuItem value = { category.id }>{ category.name }</MenuItem>)
+                       }     
+                    </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth>
+                  <InputLabel id="JobPost-Creation-Skill-select-label">Select Skills</InputLabel>
+                  <Select
+                      labelId = "JobPost-Creation-Skill-select-label"
+                      name = "skills"
+                      value = {data.category.id}
+                      onChange = {handle}
+                      label = "Skills"
                       rules = {{required : true}}    
                       >
                        {
@@ -179,17 +204,18 @@ useEffect(()=>{
                 </FormControl>
             </Grid>
             <Grid item xs={12} md={6}>
-              <TextField
-                label = 'Due Date'
-                type = 'date'
-                name = "dueDate"
-                value = {data.dueDate}
-                onChange = {handle}
-                placeholder = 'Enter due date'
-                InputLabelProps = {{ shrink: true }}
-                fullWidth
-                rules = {{required : true}}
-              />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Stack fullWidth>
+                  <DatePicker 
+                    name = "dueDate"
+                    label="Due Date"
+                    disablePast
+                    onChange={handle}
+                    value={data.dueDate}
+                    rules = {{required : true}} 
+                    />
+                    </Stack>
+                </LocalizationProvider>     
             </Grid>
                        
             <Grid item xs={12} md={6}>
