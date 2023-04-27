@@ -201,6 +201,7 @@ export const subsribeToServerPrivateMessage = (dispatch, getState) => {
                             dispatch(isTyping(data))
                             break;
                         case "CONVERSATION":
+                            console.log("New conversation occured")
                             dispatch(setNewConversation(data)) // From new conversation
                             break;
                         case "CONVERSATION_UPDATE":

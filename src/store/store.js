@@ -6,6 +6,7 @@ import websocketReducer from "features/websocketSlice";
 import notificationReducer from "features/notificationSlice";
 import indexedConversationReducer from "features/indexedConversationSlice";
 import toastReducer from 'features/toastSlice';
+import meetReducer from "features/meetSlice";
 
 export default configureStore({
     reducer: {
@@ -15,7 +16,8 @@ export default configureStore({
         users: userReducer,
         address: addressReducer,
         indexedConversations: indexedConversationReducer,
-        toast: toastReducer
+        toast: toastReducer,
+        meet: meetReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }) // Not recommended, maybe use Context to hold the 'stompClient' object
 })

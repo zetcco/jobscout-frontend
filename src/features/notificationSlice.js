@@ -90,24 +90,27 @@ export const fetchNotifications = createAsyncThunk('notification/fetchNotificati
 })
 
 export const timeDifference = (current, previous) => {
+    let elapsed = current - previous;
+    return getReadableTime(elapsed)
+}
+
+export const getReadableTime = (time) => {
     let msPerMinute = 60 * 1000;
     let msPerHour = msPerMinute * 60;
     let msPerDay = msPerHour * 24;
     let msPerMonth = msPerDay * 30;
     let msPerYear = msPerDay * 365;
 
-    let elapsed = current - previous;
-
-    if (elapsed < msPerMinute) 
-         return Math.round(elapsed/1000) + 's';   
-    else if (elapsed < msPerHour) 
-         return Math.round(elapsed/msPerMinute) + 'm';   
-    else if (elapsed < msPerDay ) 
-         return Math.round(elapsed/msPerHour ) + 'h';   
-    else if (elapsed < msPerMonth) 
-        return Math.round(elapsed/msPerDay) + 'd';   
-    else if (elapsed < msPerYear) 
-        return Math.round(elapsed/msPerMonth) + 'mo';   
+    if (time < msPerMinute) 
+         return Math.round(time/1000) + 's';   
+    else if (time < msPerHour) 
+         return Math.round(time/msPerMinute) + 'm';   
+    else if (time < msPerDay ) 
+         return Math.round(time/msPerHour ) + 'h';   
+    else if (time < msPerMonth) 
+        return Math.round(time/msPerDay) + 'd';   
+    else if (time < msPerYear) 
+        return Math.round(time/msPerMonth) + 'mo';   
     else 
-        return Math.round(elapsed/msPerYear ) + 'y';   
+        return Math.round(time/msPerYear ) + 'y';   
 }
