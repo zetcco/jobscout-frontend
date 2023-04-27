@@ -1,18 +1,15 @@
-import { Alert, AlertTitle, Box, Button, CircularProgress, Divider, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Alert, AlertTitle, Box, Button, CircularProgress, Divider, Grid, TextField } from '@mui/material'
 import { Stack } from '@mui/system'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
 import { OptionCard } from '../../../profile/education/OptionCard'
 import { RouterLink } from '../../../RouterLink'
-import AddIcon from '@mui/icons-material/Add';
-import axios from 'axios'
 import { useSelector } from 'react-redux'
-import { selectAuthUserId, selectAuthUserToken, serverClient } from 'features/authSlice'
+import { selectAuthUserId, serverClient } from 'features/authSlice'
 import { useNavigate } from 'react-router'
 
 export const AddSocialsForm = forwardRef(({ onUpdate, onCancel }, ref) => {
 
-  const authToken = useSelector(selectAuthUserToken)
   const authUserId = useSelector(selectAuthUserId)
   const [ links, setLinks ] = useState([])
   const [ newLink, setNewLink ] = useState('')

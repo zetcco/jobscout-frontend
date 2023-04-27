@@ -4,12 +4,16 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import { Topbar } from "./Topbar";
+import { clearToast, selectToast } from "features/toastSlice";
+import { useTheme } from "@emotion/react";
 
 export const NavigationLayout = ({ sx, noRouteAnimation }) => {
   const { pathname } = useLocation();
 
   const webSocketError = useSelector(selectWebSocketError);
+  const toast = useSelector(selectToast);
   const dispatch = useDispatch()
+  const { mixins: { toolbar } } = useTheme()
 
   return (
     <>
@@ -24,6 +28,15 @@ export const NavigationLayout = ({ sx, noRouteAnimation }) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
           >
+            <Snackbar open={ toast.isOpen } anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }} sx={{ top: { xs: toolbar?.minHeight + 14 } }} autoHideDuration={3500} onClose={() => { dispatch(clearToast()) }}>
+              <Alert severity={toast.severity}>
+                <strong>{toast.message}</strong>
+              </Alert>
+            </Snackbar>
+
             { webSocketError && (
               <Snackbar
                 open={webSocketError}

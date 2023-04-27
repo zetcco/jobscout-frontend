@@ -1,10 +1,9 @@
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import React, { createRef, useState } from 'react'
 import { AddQuestionaryDetails } from './AddQuestionaryDetails'
-import { Alert, Box, Button, Radio, Stack, TextField, Tooltip, Typography } from '@mui/material'
-import { BasicCard } from 'components/cards/BasicCard'
+import { Alert, Box, Button, Stack, Tooltip } from '@mui/material'
 import { AddQuestion } from './AddQuestion'
 import { serverClient } from 'features/authSlice'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export const AddQuestionary = ({ initRequest, initQuestionRefs, initEdit }) => {
     const [ request, setRequest ] = useState(initRequest)

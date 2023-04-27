@@ -1,6 +1,5 @@
 import { BasicCard } from 'components/cards/BasicCard';
-import { FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Stack, Typography, } from '@mui/material';
-import { useEffect } from 'react';
+import { FormControl, RadioGroup, Radio, FormControlLabel, Stack, Typography, } from '@mui/material';
 import { getReadableTime } from 'features/notificationSlice';
 
 export const QuestionForm = ({ question, index, time, answers, setAnswers }) => {

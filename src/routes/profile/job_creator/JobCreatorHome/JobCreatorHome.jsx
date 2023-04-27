@@ -9,6 +9,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { RouterLink } from '../../../../components/RouterLink'
 import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
 import { VideoChatRounded } from '@mui/icons-material'
+import RecommendIcon from '@mui/icons-material/Recommend';
 
 export const JobCreatorHome = () => {
 
@@ -23,7 +24,7 @@ export const JobCreatorHome = () => {
                     sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
                 >
                         <Grid container spacing={2}>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                             <RouterLink to={"/posts/create"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -33,7 +34,7 @@ export const JobCreatorHome = () => {
                             </SelectableCard>
                             </RouterLink>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                             <RouterLink to={"/posts/1/manage"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -43,8 +44,8 @@ export const JobCreatorHome = () => {
                             </SelectableCard>
                             </RouterLink>
                             </Grid>
-                            <Grid item xs={4}>
-                            <SelectableCard onClick={() => setMeetingModalOpen(true)}>
+                            <Grid item xs={3}>
+                                <SelectableCard onClick={() => setMeetingModalOpen(true)}>
                                     <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                         <VideoChatRounded sx={{ height: 30, width: 30 }}/>
                                         <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MEET</Typography>
@@ -61,6 +62,16 @@ export const JobCreatorHome = () => {
                                 >
                                     <ScheduleMeeting/>
                                 </Modal>
+                            </Grid>
+                            <Grid item xs={3}>
+                            <RouterLink to={"/manage/recommendation"}>
+                                <SelectableCard onClick={() => setMeetingModalOpen(true)}>
+                                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                        <RecommendIcon sx = {{ height:30, width:30 }}/>
+                                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMEND</Typography>
+                                    </Stack> 
+                                </SelectableCard>
+                            </RouterLink>
                             </Grid>
                         </Grid>
                 </SmallPanel> 

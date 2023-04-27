@@ -3,7 +3,7 @@ import React, { forwardRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { resetSuccess, selectAuthError, selectAuthLoading, selectAuthSuccess, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
+import { selectAuthError, selectAuthLoading, selectAuthSuccess, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
 import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard'
 import { UploadArea } from '../../input/UploadArea'
 

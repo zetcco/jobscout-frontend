@@ -1,7 +1,6 @@
 import { Button, Stack, TextField, Typography } from '@mui/material'
 import { BasicCard } from 'components/cards/BasicCard'
 import { UploadArea } from 'components/input/UploadArea'
-import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 export const AddQuestionaryDetails = ({ edit, setEdit, setDetails, initDetails }) => {

@@ -2,14 +2,17 @@ import { Menu, MenuItem, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import {
   fetchNotifications,
+  markNotificationAsRead,
   selectNotifications,
   selectNotificationsLoading,
   timeDifference,
 } from 'features/notificationSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotificationMarkAsRead } from './NotificationMarkAsRead';
+import { useFetch } from 'hooks/useFetch';
 
 export const NotificationPanel = ({ anchorEl, setAnchorEl }) => {
+  const fetch = useFetch()
   const dispatch = useDispatch();
   const notifications = useSelector(selectNotifications);
   const notificationsLoading = useSelector(selectNotificationsLoading);
@@ -55,7 +58,11 @@ export const NotificationPanel = ({ anchorEl, setAnchorEl }) => {
               </Typography>
             </Stack>
             <Stack direction={'row'} spacing={1} alignItems='center'>
-              {notification.status === 'UNREAD' && <NotificationMarkAsRead />}
+              {notification.status === 'UNREAD' && (
+                <NotificationMarkAsRead onClick={() => { 
+                fetch('/notification', "POST", { data: { id: notification.id }, onSuccess: () => { dispatch(markNotificationAsRead({ id: notification.id, value: true })) } })
+               }}/>
+              )}
               <Typography variant='caption'>
                 {timeDifference(new Date(), new Date(notification.timestamp))}
               </Typography>

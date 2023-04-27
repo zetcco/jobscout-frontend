@@ -1,11 +1,8 @@
-import { Button, CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
-import { BasicCard } from 'components/cards/BasicCard';
+import { Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import { Question } from './Question';
 import { Box } from '@mui/system';
-import { SelectableCard } from 'components/cards/SelectableCard';
-import { AddCircleOutline, ArrowForwardIosOutlined } from '@mui/icons-material';
+import { AddCircleOutline } from '@mui/icons-material';
 import { QuestionCard } from './QuestionCard';
 import { useEffect, useState } from 'react';
 import { selectAuthUser, serverClient } from 'features/authSlice';

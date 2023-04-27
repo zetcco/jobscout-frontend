@@ -1,9 +1,8 @@
-import { Box, Button, CircularProgress, IconButton, Stack, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { QuestionForm } from './QuestionForm'
 import { ArrowBackIosNewSharp, ArrowForwardIosOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router'
-import { serverClient } from 'features/authSlice'
 
 const openedQuestions = []
 
@@ -11,8 +10,6 @@ export const QuestionaryAttempt = ({ questions, timePerQuestion, onSubmit }) => 
 
     const [ selectedQuestion, setSelectedQuestion ] = useState(null)
     const [ answers, setAnswers ] = useState(Array.from({length: questions.length}, (_) => null))
-    const [ disabledAnswers, setDisabledAnswers ] = useState([])
-    const [ results, setResults ] = useState(null)
     const [ timeLeft, setTimeLeft ] = useState(Array.from({length: questions.length}, (_) => timePerQuestion))
 
     const navigate = useNavigate()
