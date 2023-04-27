@@ -59,11 +59,10 @@ export const NotificationPanel = ({ anchorEl, setAnchorEl }) => {
             </Stack>
             <Stack direction={'row'} spacing={1} alignItems='center'>
               {notification.status === 'UNREAD' && (
-              <IconButton onClick={() => { 
+                <NotificationMarkAsRead onClick={() => { 
                 fetch('/notification', "POST", { data: { id: notification.id }, onSuccess: () => { dispatch(markNotificationAsRead({ id: notification.id, value: true })) } })
-               }}>
-                <NotificationMarkAsRead />
-              </IconButton> )}
+               }}/>
+              )}
               <Typography variant='caption'>
                 {timeDifference(new Date(), new Date(notification.timestamp))}
               </Typography>

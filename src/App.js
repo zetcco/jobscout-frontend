@@ -25,7 +25,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
 import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
-import RecommendationRequestsPage from "routes/recommendations/AddRecommendation";
+import RecommendationRequestsPage from "routes/recommendations/RecommendationRequests";
 import PastExperiencesForm from "components/authentication/user/job_seeker/PastExperiencesForm";
 import { Intro } from "routes/signup/users/job_seeker/Intro";
 import { Profile } from "components/profile/Profile";
@@ -36,7 +36,7 @@ import { ProfileAbout } from "routes/profile/job_seeker/ProfileAbout";
 import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences";
 import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
 import { CodingInterview } from "routes/CodingInterview";
-import RecommendationForm from "routes/recommendations/RecommendationForm";
+import AddRecommendationForm from "components/recommendation/AddRecommendationForm";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -92,7 +92,7 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="manage">
             <Route path="recommendation" element={<RecommendationRequestsPage />} />
             <Route path="recommendation">
-              <Route path=":requesterId" element={<RecommendationForm/>}/>
+              <Route path=":requesterId" element={<AddRecommendationForm/>}/>
             </Route>
           </Route>
         </Route>

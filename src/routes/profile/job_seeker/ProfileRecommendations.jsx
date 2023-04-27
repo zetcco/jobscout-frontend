@@ -1,13 +1,11 @@
 import { RemoveCircleOutline } from '@mui/icons-material'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Stack, Typography } from '@mui/material'
-import axios from 'axios'
 import { RouterLink } from 'components/RouterLink'
 import { ProfileSmallWithName } from 'components/profile/ProfileSmallWithName'
-import { selectAuthUserId, selectAuthUserToken, serverClient } from 'features/authSlice'
-import { setToastMessage } from 'features/toastSlice'
+import { selectAuthUserId } from 'features/authSlice'
 import { useFetch } from 'hooks/useFetch'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 export const ProfileRecommendations = () => {

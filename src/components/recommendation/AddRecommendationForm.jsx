@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { setToastMessage } from 'features/toastSlice';
 import { useFetch } from 'hooks/useFetch';
 
-export default function RecommendationContent() {
+export default function AddRecommendationForm() {
   const navigate = useNavigate();
   
   const { requesterId } = useParams();
