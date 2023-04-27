@@ -25,6 +25,9 @@ const notificationSlice = createSlice({
         setUnsubscribeToNotification: (state, action) => {
             state.subscribed = false
         },
+        markNotificationAsRead: (state, action) => {
+            state.entities[action.payload.id].status = action.payload.value
+        }
     },
     extraReducers(builder) {
         builder
@@ -50,7 +53,7 @@ export const {
     selectByIds: selectNotificationIds
 } = notificationAdapter.getSelectors(state => state.notification)
 export const selectNotificationsLoading = (state) => state.notification.loading;
-export const { setNewNotification, setError, setSubscribeToNotification, setUnsubscribeToNotification } = notificationSlice.actions;
+export const { setNewNotification, setError, setSubscribeToNotification, setUnsubscribeToNotification, markNotificationAsRead } = notificationSlice.actions;
 export const selectUnreadNotificationCount = createSelector(
     [selectNotifications],
     (notifications) => notifications.filter((notification) => notification.status ===  "UNREAD").length
@@ -60,15 +63,17 @@ export const subscribeToNotification = (dispatch, getState) => {
     const state = getState();
     if (!state.notification.subscribed) {
         if (state.auth.token != null) {
-            state.websocket.stompClient.subscribe("/all/notify", (payload) => {
+            state.websocket.stompClient.subscribe("/notification", (payload) => {
                 dispatch(setNewNotification(JSON.parse(payload.body)));
             },
             {"token": state.auth.token}
             );
             state.websocket.stompClient.subscribe(
-                `/user/${state.auth.userInfo.id}/notify`,
+                `/notification/${state.auth.userInfo.id}`,
                 (payload) => {
-                    dispatch(setNewNotification(JSON.parse( payload.body )));
+                    const body = JSON.parse(payload.body)
+                    const notification = JSON.parse(body.data)
+                    dispatch(setNewNotification(notification));
                 },
                 {"token": state.auth.token}
             );

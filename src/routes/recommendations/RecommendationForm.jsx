@@ -5,9 +5,7 @@ import React from 'react'
 function RecommendationForm() {
   return (
     <>
-      <Stack>
-        <RecommendationContent />
-      </Stack>
+      <RecommendationContent />
     </>
   )
 }

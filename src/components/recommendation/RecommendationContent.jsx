@@ -1,75 +1,69 @@
-import { Grid, Stack, TextField, Button } from '@mui/material';
+import { Grid, Stack, TextField, Button, Snackbar, SnackbarContent, Typography } from '@mui/material';
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard';
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUserId, serverClient } from 'features/authSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { setToastMessage } from 'features/toastSlice';
+import { useFetch } from 'hooks/useFetch';
 
 export default function RecommendationContent() {
   const navigate = useNavigate();
   
   const { requesterId } = useParams();
-  // console.log(requesterId);
   const [ content, setContent ] = useState('');
   const responderId = useSelector(selectAuthUserId);
   const [ loading, setLoading ] = useState(false);
-  
+  const fetch = useFetch()
 
   const onSubmit = async (e) => {
-    setLoading(current => current)
-    // console.log(loading)  
-
-    const response = await serverClient.post(
-          '/recommendations/add', 
-          {
-            content,
-            responder: { id: responderId },
-            requester: { id: requesterId }
-            }
+    setLoading(true)
+    await fetch(
+      '/recommendations/add', "POST",
+      { data: {
+          content,
+          responder: { id: responderId },
+          requester: { id: requesterId }
+        },
+        successMsg: "Recommendation added",
+        errorMsg: "Failed to add recommendation",
+        onSuccess: () => { navigate(-1) },
+      }
     )
-    if(response.status === 200 ) {
-      navigate(-1)
-    }
-    setLoading(current => !current)
+    setLoading(false)
   }
 
   const onCancel =  () => {
     navigate(-1);
   }
 
-
   return (
     <>
-      <Stack>
-        <CenteredHeaderCard
-          title={'Create Recommendation'}
-          footer={
-            <Stack direction={'row'} spacing={2} md={6}>
-              <Button onClick={onCancel} variant='outlined' fullWidth>
-                Cancel
-              </Button>
-              <Button onClick={onSubmit} variant='contained' fullWidth disabled = {content === '' || loading === 'true'}>
-                Submit
-              </Button>
-            </Stack>
-          }
-        >
-            <Grid item xs={12} md={12}>
-              <TextField
-                id='outlined-multiline-static'
-                label='Recommendation'
-                placeholder='Enter the Recommendation'
-                multiline
-                minRows={3}
-                maxRows={6}
-                fullWidth
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-            </Grid>
-          {/* </Grid> */}
-        </CenteredHeaderCard>
-      </Stack>
+      <CenteredHeaderCard
+        title={'Create Recommendation'}
+        footer={
+          <Stack direction={'row'} spacing={2} md={6}>
+            <Button onClick={onCancel} variant='outlined' fullWidth>
+              Cancel
+            </Button>
+            <Button onClick={onSubmit} variant='contained' fullWidth disabled = {content === '' || loading}>
+              Submit
+            </Button>
+          </Stack>
+        }
+      >
+      <TextField
+        label='Recommendation'
+        placeholder='Enter the Recommendation'
+        multiline
+        minRows={3}
+        maxRows={6}
+        fullWidth
+        inputProps={{ maxLength: 256 }}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      </CenteredHeaderCard>
     </>
   );
 };

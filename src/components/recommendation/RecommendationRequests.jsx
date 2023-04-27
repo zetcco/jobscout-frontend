@@ -1,60 +1,53 @@
-import { Stack } from '@mui/material';
-import axios from 'axios';
-import { ProfileHeaderWithNameEmail } from 'components/profile/ProfileHeaderWithNameEmail';
-import { selectAuthUserToken } from 'features/authSlice';
+import { AddCircleOutline, DeleteOutline } from '@mui/icons-material';
+import { Stack, Typography } from '@mui/material';
+import { AvatarWithInitials } from 'components/AvatarWithInitials';
+import { ResponsiveIconButton } from 'components/ResponsiveIconButton';
+import { BasicCard } from 'components/cards/BasicCard';
+import { serverClient } from 'features/authSlice';
+import { useFetch } from 'hooks/useFetch';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 export default function RecommendationRequests() {
-    let navigate = useNavigate();
-
     const [ requesters, setRequesters ] = useState([]);
-
-    const authToken = useSelector(selectAuthUserToken);
-    // console.log(authToken);
+    const navigate = useNavigate()
+    const fetch = useFetch()
 
     useEffect(() => {
-        // console.log("opend")
-        loadPage();
+        fetch('/recommendations/requests', "GET", { errorMsg: "Failed to get requests", onSuccess: (data) => { setRequesters(data) } })
     }, []);
-
-    const loadPage = async () => {
-        const response = await axios.get(
-            '/recommendations/requests',
-            { headers : {
-                Authorization: `Bearer ${authToken}`
-            }}
-        ); 
-        setRequesters(response.data)
-    }
     
     const onDelete = async (id) => {
-        const response = await axios.delete(
-            '/recommendations/deleterequest', {
-                headers: { Authorization: `Bearer ${authToken}` },
-                data: { "requesterId": id }
-            },
-            navigate()
-        );
-        if (response.status === 200)
-            setRequesters(requesters.filter(request => request.id !== id))
+        fetch(`/recommendations/delete?requester=${id}`, "DELETE", { successMsg: "Request deleted", onSuccess: () => { setRequesters(requesters.filter(request => request.id !== id)) } })
     }
 
-  return (
-    <Stack>
+    return (
         <Stack direction={'column'} spacing={2}>
             {
-                requesters.map(
-                    (requester, index) => (
-                        <ProfileHeaderWithNameEmail key={requester.id} 
-                            id={requester.id} name={requester.displayName} email={requester.email} src={requester.displayPicture} 
-                            onDelete={() => { onDelete(requester.id) }}
-                        />
-                    ))
+                requesters.length === 0 ? (
+                    <Typography variant='h6'>No requests yet..</Typography>
+                ): (
+                    requesters.map(
+                        (requester, index) => (
+                            <BasicCard sx={{ width: '100%' }} key={index}>
+                                <Stack direction={'row'} spacing={{ xs: 2, md: 10 }}>
+                                    <Stack direction={'row'} spacing = {2} alignItems={'center'}>
+                                        <AvatarWithInitials size={{ xs: 60, md: 70 }} src={requester.displayPicture} name={requester.displayName}/>
+                                        <Stack direction={'column'} spacing={0.2}>
+                                            <Typography variant='h5' fontWeight={600}>{ requester.displayName }</Typography>
+                                            <Typography fontSize={16}>{ requester.email }</Typography> 
+                                        </Stack>                      
+                                    </Stack>
+                                    <Stack direction={'row'} spacing={1}>
+                                        <ResponsiveIconButton color={'error'} startIcon={<DeleteOutline/>} onClick={() => { onDelete(requester.id) }}>Delete</ResponsiveIconButton>
+                                        <ResponsiveIconButton onClick={() => { navigate(`/manage/recommendation/${requester.id}`) }} startIcon={<AddCircleOutline/>}>Recommend</ResponsiveIconButton>
+                                    </Stack>
+                                </Stack>
+                            </BasicCard>
+                        ))
+                )
             }
         </Stack>
-    </Stack>
   )
 
 }
