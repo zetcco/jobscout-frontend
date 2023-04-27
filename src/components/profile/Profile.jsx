@@ -4,9 +4,8 @@ import { Stack } from '@mui/system'
 import { Box, Button, Modal, Tab, Tabs } from '@mui/material'
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectAuthUser, selectAuthUserToken, serverClient } from 'features/authSlice';
+import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
 import { NewChat } from './Message/NewChat';
 import { UploadProfilePictureForm } from 'components/authentication/user/UploadProfilePictureForm';
@@ -17,7 +16,6 @@ export const ProfileContext = createContext()
 export const Profile = () => {
 
     const { userId } = useParams()
-    const authToken = useSelector(selectAuthUserToken)
     const authUser = useSelector(selectAuthUser)
     const [ profileData, setProfileData ] = useState(null)
     const navigate = useNavigate()

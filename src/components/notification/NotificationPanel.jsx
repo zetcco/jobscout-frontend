@@ -1,4 +1,4 @@
-import { IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Menu, MenuItem, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import {
   fetchNotifications,

@@ -17,7 +17,7 @@ export const ProtectedRoute = ({ role, redirect }) => {
     if (!authUser)
         return ( <Navigate to={"/login"} replace/> )
     
-    if (role && authUser.role !== role)
+    if (role && authUser.role !== "ROLE_ADMIN" && authUser.role !== role)
         return ( <Navigate to={redirect} replace/> )
     
     return <Outlet/>

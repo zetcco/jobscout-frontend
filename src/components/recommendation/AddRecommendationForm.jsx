@@ -1,10 +1,9 @@
-import { Grid, Stack, TextField, Button, Snackbar, SnackbarContent, Typography } from '@mui/material';
+import { Stack, TextField, Button } from '@mui/material';
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard';
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthUserId, serverClient } from 'features/authSlice';
+import { useSelector } from 'react-redux';
+import { selectAuthUserId } from 'features/authSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import { setToastMessage } from 'features/toastSlice';
 import { useFetch } from 'hooks/useFetch';
 
 export default function AddRecommendationForm() {

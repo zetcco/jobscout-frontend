@@ -3,7 +3,6 @@ import { Stack, Typography } from '@mui/material';
 import { AvatarWithInitials } from 'components/AvatarWithInitials';
 import { ResponsiveIconButton } from 'components/ResponsiveIconButton';
 import { BasicCard } from 'components/cards/BasicCard';
-import { serverClient } from 'features/authSlice';
 import { useFetch } from 'hooks/useFetch';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';

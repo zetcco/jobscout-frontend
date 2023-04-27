@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, CircularProgress, createFilterOptions, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, CircularProgress, createFilterOptions, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
@@ -82,7 +82,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
     setLoading(false)
   }
 
-  const durationError = selectedExperience.startYear !== '' && selectedExperience.endYear !== '' && ( selectedExperience.startYear <= 1930 || selectedExperience.endYear <= 1930 || selectedExperience.endYear - selectedExperience.startYear > 8 || selectedExperience.endYear - selectedExperience.startYear <= 0 )
+  const durationError = selectedExperience.startYear !== '' && selectedExperience.endYear !== '' && ( selectedExperience.startYear <= 1930 || selectedExperience.endYear <= 1930 || selectedExperience.endYear - selectedExperience.startYear > 60 || selectedExperience.endYear - selectedExperience.startYear <= 0 )
 
   return (
     <CenteredHeaderCard

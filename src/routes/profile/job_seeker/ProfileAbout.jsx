@@ -103,16 +103,16 @@ export const ProfileAbout = () => {
                         )}
                     </>
                 } noElevation padding={{ xs: 1 }}>
-                    {about.intro ? (
-                        <Typography>{about.intro}</Typography>
-                    ) : ( 
-                        profileData.editable ? (
-                            <Box><Button onClick={() => {setUpdateIntroModal(true)}} >Add a Introduction</Button></Box>
-                            ) : (
-                                <Typography variant='body2'>No introduction</Typography>
-                            ) )}
+                {about.intro ? (
+                    <Typography>{about.intro}</Typography>
+                ) : ( 
+                    profileData.editable ? (
+                        <Box><Button onClick={() => {setUpdateIntroModal(true)}} >Add a Introduction</Button></Box>
+                        ) : (
+                            <Typography variant='body2'>No introduction</Typography>
+                        ) )}
                 </SmallPanel>
-                { about.introVideo && (
+                { profileData.role === "ROLE_JOB_SEEKER" && (
                     <SmallPanel mainTitle={
                         <>
                             Introduction Video
@@ -146,7 +146,7 @@ export const ProfileAbout = () => {
                             </Box>
                         ) : ( 
                             profileData.editable ? (
-                                <Box><Button onClick={() => {setUpdateIntroModal(true)}} >Add a Introduction Video</Button></Box>
+                                <Box><Button onClick={() => {setUpdateIntroVideoModal(true)}} >Add a Introduction Video</Button></Box>
                                 ) : (
                                     <Typography variant='body2'>No introduction Video</Typography>
                                 ) )}

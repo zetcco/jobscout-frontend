@@ -1,7 +1,6 @@
 import { SchoolRounded } from '@mui/icons-material'
 import { Alert, AlertTitle, Box, CircularProgress, LinearProgress, Modal, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import axios from 'axios'
 import EducationQualificationForm from 'components/authentication/user/job_seeker/EducationQualificationForm'
 import { ProfileContext } from 'components/profile/Profile'
 import SmallPanel from 'components/SmallPanel'

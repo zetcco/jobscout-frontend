@@ -23,7 +23,6 @@ import BlogPost from "./routes/blog/BlogPost";
 import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
-import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 import RecommendationRequestsPage from "routes/recommendations/RecommendationRequests";
 import PastExperiencesForm from "components/authentication/user/job_seeker/PastExperiencesForm";
@@ -39,8 +38,9 @@ import { CodingInterview } from "routes/CodingInterview";
 import AddRecommendationForm from "components/recommendation/AddRecommendationForm";
 import { Meet } from "components/meeting/Meet";
 import { Questionaries } from "components/authentication/user/job_seeker/questionaries/Questionaries";
-import { QuestionForm } from "components/authentication/user/job_seeker/questionaries/QuestionForm";
 import { QuestionDetail } from "components/authentication/user/job_seeker/questionaries/QuestionDetail";
+import { AddQuestionary } from "components/authentication/user/job_seeker/questionaries/AddQuestionary";
+import { EditQuestionary } from "components/authentication/user/job_seeker/questionaries/EditQuestionary";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -132,8 +132,10 @@ const router = createBrowserRouter(createRoutesFromElements(
         </Route>
 
         <Route path="/questionaries" element={ <ProtectedRoute role={"ROLE_JOB_SEEKER"} redirect={"/home"} /> }>
-          <Route element={<NavigationLayout/>}>
+          <Route element={<NavigationLayout />}>
             <Route index element={<Questionaries/>}/>
+            <Route path="add" element={<AddQuestionary/>}/>
+            <Route path=":questionaryId/edit" element={<EditQuestionary/>}/>
             <Route path=":questionaryId" element={<QuestionDetail/>}/>
           </Route>
         </Route>
