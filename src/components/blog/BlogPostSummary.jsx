@@ -8,23 +8,51 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import { RouterLink } from '../RouterLink'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { selectAuthUserToken } from 'features/authSlice'
+import { useParams } from 'react-router-dom'
  
 
-function BlogPostSummary({name,timeStamp,content}) {
+function BlogPostSummary() {
+  const { postId } = useParams();
+  const [blogPostContent,setBlogPostContent] = useState();
+  const authToken = useSelector(selectAuthUserToken);
+  const [profileName,setProfileName] = useState();
+  
+
+  
+
+  
+
+  const loadPage = async () => {
+    const response = await axios.get(
+      '/posts?pageno=1&size=2',
+      { headers : {
+          Authorization : `Bearer ${authToken}`
+      }}
+    );
+      setBlogPostContent(response.data);
+      console.log(response.data)
+      console.log(postId);
+  }
+
+
   return (
     <>
         <BasicCard>
          <Stack spacing = {2}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                 <Stack direction="row" alignItems="center" spacing={2}>
-                        <ProfileHeaderCard name={name} /> 
-                        <tr>{timeStamp}</tr>
+                        <ProfileHeaderCard name={'Gimhana Mahela'} /> 
+                        <tr>{22015}</tr>
                 </Stack>
                 <MoreVertIcon />
             </Stack>
             <Stack alignItems={'flex-start'}>
                <Typography>
-                    {content}
+                    {'this is the content of the post'}
+                    
                </Typography>
             </Stack>
 

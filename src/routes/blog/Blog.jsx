@@ -1,7 +1,5 @@
 import { Stack } from "@mui/system"
-import {Button } from '@mui/material'
 import BlogPostSummary from "../../components/blog/BlogPostSummary"
-import SmallPanel from "../../components/SmallPanel"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectAuthUserToken } from "features/authSlice";
@@ -40,8 +38,7 @@ function Blog() {
                 <BlogPostSummary name={blogPost.user.displayName} timestamp={blogPost.timestamp} content={blogPost.content}/>
               ) )
             }
-          </Stack>
-          
+          </Stack>          
         </Stack>
     </>
   )

@@ -27,6 +27,8 @@ import { Messaging } from "./components/profile/Message/Messaging";
 import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 import CreateBlogPostForm from "components/blog/CreateBlogPostForm";
+import BlogPostContent from "components/blog/BlogPostContent";
+import BlogPostSummary from "components/blog/BlogPostSummary";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -90,9 +92,12 @@ const router = createBrowserRouter(createRoutesFromElements(
         </Route>
 
         <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
-          <Route path="blog" element={<Blog/>}/>
+          <Route path="blo  g" element={<Blog/>}/>
           <Route path="blog">
-            <Route path="form" element={<CreateBlogPostForm/>}/>
+            <Route path="add" element={<CreateBlogPostForm/>}/>
+            <Route path="post" element={<BlogPostSummary/>}>
+              <Route path=":postId" element={<BlogPostContent/>}/>
+            </Route>
           </Route>
         </Route>
 
