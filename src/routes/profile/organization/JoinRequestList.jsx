@@ -8,11 +8,6 @@ export const  JoinRequestList = () => {
     <Stack direction={'row'} spacing={2}>
                 <Stack spacing={2}>
                   <JoinRequest />
-                  <JoinRequest />
-                  <JoinRequest />
-                  <JoinRequest />
-                  
-                 
                 </Stack>
     </Stack>
   )
