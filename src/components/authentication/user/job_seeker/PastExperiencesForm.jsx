@@ -127,13 +127,13 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
                 )
             }
             <Grid container spacing={1}>
-              <Grid item xs={3} md={1.5}>
+              <Grid item xs={3}>
                 <TextField type={"number"} label="Start Year" error={durationError} value={selectedExperience.startYear} onChange={(e) => { setSelectedExperience({...selectedExperience, startYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={3} md={1.5}>
+              <Grid item xs={3}>
                 <TextField type={"number"} label="End Year" error={durationError} value={selectedExperience.endYear} onChange={(e) => { setSelectedExperience({...selectedExperience, endYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={6} md={4}>
+              <Grid item xs={6}>
                     <Autocomplete
                     value={value}
                     inputValue={inputValue}
@@ -180,7 +180,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
                     }}
                     />
               </Grid>
-              <Grid item xs={10} md={4}>
+              <Grid item xs={10}>
                 <Autocomplete
                   disabled={selectedExperience.organization.id === ''}
                   value={''}
@@ -224,7 +224,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
                   }}
                 />
               </Grid>
-              <Grid item xs={2} md={1}>
+              <Grid item xs={2}>
                 <Button variant='contained' fullWidth sx={{ height: '100%' }} onClick={addExperience} disabled={ 
                   durationError ||
                   selectedExperience.startYear === '' ||  
