@@ -1,8 +1,9 @@
 import { AddIcCall, CallEnd, MicOff, Mic, PhoneDisabled, Videocam, VideocamOff, Code, CodeOff, ScreenShare, StopCircle, ExitToApp } from "@mui/icons-material";
-import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, Stack, Tooltip, Typography } from '@mui/material'
 import { Video } from "components/Video";
 import { selectAuthUser } from "features/authSlice";
-import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveFromJoin, leaveMeeting, selectMeetingCameraMute, selectMeetingConnected, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalPlaybackStream, toggleCameraMute, toggleMicMute, toggleScreenShare, selectMeetingIsLocalScreenShared, selectMeetingCanShareScreen } from 'features/meetSlice'
+import { fetchMediaDevices, fetchMeeting, joinMeeting, leaveFromJoin, leaveMeeting, selectMeetingCameraMute, selectMeetingConnected, selectMeetingError, selectMeetingInfo, selectMeetingLoading, selectMeetingLocalStream, selectMeetingMediaDevices, selectMeetingMicMute, selectMeetingRemoteVideos, setLocalPlaybackStream, toggleCameraMute, toggleMicMute, toggleScreenShare, selectMeetingIsLocalScreenShared, selectMeetingCanShareScreen, endMeeting } from 'features/meetSlice'
+import { useFetch } from "hooks/useFetch";
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
@@ -13,6 +14,8 @@ export const Meet = () => {
     const { link } = useParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [ endMeetingConfirm, setEndMeetingConfirm ] = useState(false)
+    const fetch = useFetch()
 
     const user = useSelector(selectAuthUser)
     const meetingInfo = useSelector(selectMeetingInfo)
@@ -38,10 +41,20 @@ export const Meet = () => {
     }, [dispatch, link])
 
     if (loading)
-        return <CircularProgress/>
+        return (
+        <Box sx={{ height: { md: 'calc(100vh - 100px)' } }}>
+            <Stack direction={{ xs: "column", md: "row" }} height={'100%'} alignItems={'center'} justifyContent={'center'} mx={{ xs: 2, md: 20 }}>
+                <CircularProgress/>
+            </Stack>
+        </Box> )
 
     if (error?.status === 404)
-        return <Typography>Meeting has ended or Invalid meeting link</Typography>
+        return (
+        <Box sx={{ height: { md: 'calc(100vh - 100px)' } }}>
+            <Stack direction={{ xs: "column", md: "row" }} height={'100%'} alignItems={'center'} justifyContent={'center'} mx={{ xs: 2, md: 20 }}>
+                <Typography variant="h5">Meeting has ended or Invalid meeting link</Typography>
+            </Stack>
+        </Box> )
 
     if (!meetingConnected) {
         return (
@@ -66,7 +79,14 @@ export const Meet = () => {
                         <Typography align={'center'}>Here, You can setup your Camera and Mic and test everything works before joining</Typography>
                         <Typography variant="h4">Ready to join?</Typography>
                         <Stack direction={"row"} spacing={2}>
-                            <Button onClick={() => { dispatch(joinMeeting()) }} variant='contained' size="large" startIcon={ <AddIcCall/> }>Join</Button>
+                            <Button onClick={() => { 
+                                fetch(`/meeting/${link}`, "GET", { successMsg: "Joined Meeting", errorMsg: "Failed to join. Meeting not found.", onSuccess: () => {
+                                    dispatch(joinMeeting()) 
+                                }, onError: (error) => {
+                                    if (error.response.data.status === 404)
+                                        navigate('/home')
+                                }})
+                                }} variant='contained' size="large" startIcon={ <AddIcCall/> }>Join</Button>
                             <Button onClick={() => { navigate('/home') }} variant='outlined' size="large" startIcon={ <ExitToApp/> }>Leave</Button>
                         </Stack>
                     </Stack>
@@ -110,9 +130,26 @@ export const Meet = () => {
                             <Button onClick={() => { dispatch(leaveMeeting()) }} variant='contained' color="error" sx={{ aspectRatio: '1/1' }}><CallEnd/></Button>
                         </Tooltip>
                         { user.id === meetingInfo?.hoster.id && (
+                            <>
                             <Tooltip title="End the Meeting">
-                                <Button onClick={() => {}} variant='contained' startIcon={ <PhoneDisabled/> } >End</Button>
+                                <Button onClick={() => { setEndMeetingConfirm(true) }} variant='contained' startIcon={ <PhoneDisabled/> } >End</Button>
                             </Tooltip>
+                            <Dialog
+                                open={endMeetingConfirm}
+                                onClose={() => { setEndMeetingConfirm(false) }}
+                            >
+                                <DialogTitle>Are you sure you want to end?</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Are you sure you want to end the meeting? This will disconnect every user and delete the meeting.
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => { setEndMeetingConfirm(false) }}>No</Button>
+                                    <Button onClick={() => { dispatch(endMeeting({ link })) }}>Yes</Button>
+                                </DialogActions>
+                            </Dialog>
+                            </>
                         )}
                     </Stack>
                 </Stack>

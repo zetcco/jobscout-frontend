@@ -99,7 +99,14 @@ const getDesignTokens = (theme) => ({
           borderRadius: 30
         }
       }
-    }
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: '20px'
+        }
+      }
+    },
   },
 });
 
