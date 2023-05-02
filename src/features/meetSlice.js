@@ -162,6 +162,19 @@ export const fetchMeeting = createAsyncThunk('meet/fetchMeeting', async ({ link 
     }
 })
 
+export const endMeeting = createAsyncThunk('meet/endMeeting', async ({ link }, { dispatch, rejectWithValue }) => {
+    try {
+        const response = await serverClient.delete(`/meeting/${link}`)
+        console.log(response);
+        if (response.status === 200) {
+            dispatch(sendSignalToMeeting({}, "MEETING_END"))
+            dispatch(leaveFromJoin())
+        }
+    } catch (error) {
+        return rejectWithValue(error.response.data)
+    }
+})
+
 export const fetchMediaDevices = createAsyncThunk('meet/fetchMediaDevices', async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const audioDevices = { devices: {}, ids: [] }
@@ -351,6 +364,7 @@ const meetingSignalingResolver = (payload) => (dispatch, getState) => {
                 dispatch(removeScreenShareInfo({ peer: senderId, ...data }))
                 break;
             case "MEETING_END":
+                dispatch(leaveFromJoin())
                 break;
             default:
                 break;
