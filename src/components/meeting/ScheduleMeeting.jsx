@@ -1,12 +1,8 @@
 import { ContentCopyRounded, OpenInNew } from "@mui/icons-material";
-import { Alert, AlertTitle, Box, Button, Divider, IconButton, InputAdornment, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
-import axios from "axios";
+import { Alert, AlertTitle, Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import SmallPanel from "components/SmallPanel";
-import { selectAuthUserToken } from "features/authSlice";
 import { useFetch } from "hooks/useFetch";
-import { forEach } from "lodash";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 
 export const ScheduleMeeting = () => {
     const [ timestamp, setTimestamp ] = useState(getDateWithAddition(1));
