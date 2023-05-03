@@ -79,6 +79,7 @@ export const AddSkillsForm = ({ onUpdate, onCancel }) => {
 
   return (
     <CenteredHeaderCard
+      glassEffect={onUpdate ? false : true}
       title={'Add your Skills'}
       footer={
             <Stack direction="row" spacing={2}>

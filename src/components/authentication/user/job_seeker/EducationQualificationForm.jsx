@@ -66,6 +66,7 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
 
   return (
     <CenteredHeaderCard
+        glassEffect={onUpdate ? false : true}
         title={" Add Educational Qualifications"} 
         footer={
             <Stack direction="row" spacing={2}>

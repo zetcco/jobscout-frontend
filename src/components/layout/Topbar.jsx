@@ -49,14 +49,16 @@ export const Topbar = () => {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar sx={{
                 position: 'fixed',
-                zIndex: (theme) => theme.zIndex.drawer + 1
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                backdropFilter: 'blur(5px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
             }}
             elevation={0}
             >
                 {/* <Toolbar sx={{ color: (theme) => theme.palette.common.white, boxShadow: (theme) => theme.shadows[25] }}> */}
                 <Toolbar variant="dense" sx={{ 
                     color: (theme) => theme.palette.common.black,
-                    backgroundColor: (theme) => theme.palette.common.white,
                     boxShadow: (theme) => theme.shadows[25],
                     height: 64
                 }}>

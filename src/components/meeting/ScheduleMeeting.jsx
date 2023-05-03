@@ -23,7 +23,7 @@ export const ScheduleMeeting = () => {
 
     return (
         <Box sx={{ width: '50%' }}>
-        <SmallPanel mainTitle={response ? "Here's your link" : "Schedule a Meeting"}>
+        <SmallPanel mainTitle={response ? "Here's your link" : "Schedule a Meeting"} glassEffect={false}>
             {loading ? (
                 <Typography>Loading</Typography>
             ) : (

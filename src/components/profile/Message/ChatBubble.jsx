@@ -33,8 +33,8 @@ export const ChatBubble = forwardRef(({ sent, topSent, bottomSent, name, message
       <Stack direction={ sent ? "row-reverse" : "row" } alignItems="center" spacing={1}>
         { picture }
         <Box sx={{ 
-          backgroundColor: sent ? 'grey.300' : 'primary.main',
-          color: sent ? undefined : 'white',
+          backgroundColor: 'primary.main',
+          color: 'white',
           borderRadius: 1,
           borderTopRightRadius: sent && topSent ? 0 : '20px',
           borderBottomRightRadius: (sent && bottomSent) ? 0 : '20px',

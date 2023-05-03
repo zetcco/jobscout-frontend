@@ -102,7 +102,7 @@ export const ProfileAbout = () => {
                         </>
                         )}
                     </>
-                } noElevation padding={{ xs: 1 }}>
+                } noElevation padding={{ xs: 2 }}>
                 {about.intro ? (
                     <Typography>{about.intro}</Typography>
                 ) : ( 
@@ -139,7 +139,7 @@ export const ProfileAbout = () => {
                             </>
                             )}
                         </>
-                    } noElevation padding={{ xs: 1 }}>
+                    } noElevation padding={{ xs: 2 }}>
                         {about.introVideo ? (
                             <Box width={{ xs: '100%', md: '50%' }}>
                                 <video src={about.introVideo} controls width={'100%'}/>
@@ -152,7 +152,7 @@ export const ProfileAbout = () => {
                                 ) )}
                     </SmallPanel>
                 )}
-            <SmallPanel mainTitle={"Contact"} noElevation padding={{ xs: 1 }}>
+            <SmallPanel mainTitle={"Contact"} noElevation padding={{ xs: 2 }}>
                 <Stack spacing={2}>
                     {
                         about.phone && (
@@ -172,7 +172,7 @@ export const ProfileAbout = () => {
                     }
                 </Stack>
             </SmallPanel>
-            <SmallPanel noElevation padding={{ xs: 1 }} mainTitle={
+            <SmallPanel noElevation padding={{ xs: 2 }} mainTitle={
                     <>
                         Socials
                         { profileData.editable && (

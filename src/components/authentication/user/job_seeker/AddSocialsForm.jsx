@@ -49,6 +49,7 @@ export const AddSocialsForm = forwardRef(({ onUpdate, onCancel }, ref) => {
 
   return (
     <CenteredHeaderCard
+        glassEffect={onUpdate ? false : true}
         title={"Add Social Links"} 
         footer={
             <Stack direction="row" spacing={2}>

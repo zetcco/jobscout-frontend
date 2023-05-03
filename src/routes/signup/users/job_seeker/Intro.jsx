@@ -46,6 +46,7 @@ export const Intro = forwardRef(({ onUpdate, onCancel }, ref) => {
 
     return (
         <CenteredHeaderCard
+            glassEffect={onUpdate ? false : true}
             title={"Express yourself"}
             footer={
                 <Stack direction="row" spacing={2}>

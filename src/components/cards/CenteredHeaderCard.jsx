@@ -2,9 +2,9 @@ import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { BasicCard } from './BasicCard'
 
-export const CenteredHeaderCard = ({ title, footer, children, icon }) => {
+export const CenteredHeaderCard = ({ title, footer, children, icon, glassEffect }) => {
   return (
-    <BasicCard>
+    <BasicCard glassEffect={glassEffect}>
       <Stack
         direction="column"
         justifyContent="center"
@@ -21,4 +21,8 @@ export const CenteredHeaderCard = ({ title, footer, children, icon }) => {
       </Stack>
     </BasicCard>
   );
+}
+
+CenteredHeaderCard.defaultProps = {
+  glassEffect: true
 }
