@@ -14,16 +14,10 @@ import { selectAuthUserToken } from 'features/authSlice'
 import { useParams } from 'react-router-dom'
  
 
-function BlogPostSummary() {
-  const { postId } = useParams();
+function BlogPostSummary({id,name,timestamp,content}) {
   const [blogPostContent,setBlogPostContent] = useState();
   const authToken = useSelector(selectAuthUserToken);
-  const [profileName,setProfileName] = useState();
-  
-
-  
-
-  
+  console.log(timestamp)
 
   const loadPage = async () => {
     const response = await axios.get(
@@ -33,10 +27,7 @@ function BlogPostSummary() {
       }}
     );
       setBlogPostContent(response.data);
-      console.log(response.data)
-      console.log(postId);
   }
-
 
   return (
     <>
@@ -44,20 +35,19 @@ function BlogPostSummary() {
          <Stack spacing = {2}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                 <Stack direction="row" alignItems="center" spacing={2}>
-                        <ProfileHeaderCard name={'Gimhana Mahela'} /> 
-                        <tr>{22015}</tr>
+                        <ProfileHeaderCard name={name} /> 
+                        <Typography> {timestamp}   </Typography>
                 </Stack>
                 <MoreVertIcon />
             </Stack>
             <Stack alignItems={'flex-start'}>
                <Typography>
-                    {'this is the content of the post'}
-                    
+                    {content}          
                </Typography>
             </Stack>
 
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-               <RouterLink  to={"/blog/1"}>view more</RouterLink>
+               <RouterLink  to={"/blog/post/" + id}>view more</RouterLink>
             </Stack>
 
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
