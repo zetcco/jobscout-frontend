@@ -19,7 +19,7 @@ import { AddSkills } from "./routes/signup/users/job_seeker/AddSkills";
 import { UploadProfilePicture } from "./routes/signup/users/job_seeker/UploadProfilePicture";
 import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
 import AddCompany from "./routes/signup/users/job_creator/AddCompany";
-import Blog from "./routes/blog/Blog";
+import Blog from "./components/blog/Blog";
 import BlogPost from "./routes/blog/BlogPost";
 import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -28,7 +28,6 @@ import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 import CreateBlogPostForm from "components/blog/CreateBlogPostForm";
 import BlogPostContent from "components/blog/BlogPostContent";
-import BlogPostSummary from "components/blog/BlogPostSummary";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -87,17 +86,10 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
           <Route path="blog" element={<Blog/>}/>
           <Route path="blog">
-            <Route path=":blogId" element={<BlogPost/>}/>
-          </Route>
-        </Route>
-
-        <Route path="/" element={<NavigationLayout sx={{ mx: { md: "100px", lg: "250px" }, mt: 4 }}/>}>
-          <Route path="blo  g" element={<Blog/>}/>
-          <Route path="blog">
             <Route path="add" element={<CreateBlogPostForm/>}/>
-            <Route path="post" element={<BlogPostSummary/>}>
+            <Route path="post" element={<BlogPost/>}>
               <Route path=":postId" element={<BlogPostContent/>}/>
-            </Route>
+            </Route> 
           </Route>
         </Route>
 
@@ -113,7 +105,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>
           <Route path="/protected" element={<CreateJobPost/>}/>
         </Route>
-
+        
       </Route>
 
     </Route>
