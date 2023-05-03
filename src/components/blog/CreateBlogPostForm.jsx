@@ -8,13 +8,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const CreateBlogPostForm = () => {
   const navigate = useNavigate()
-
   const { postId } = useParams();
   const current = new Date();
   const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
   const authToken = useSelector(selectAuthUserToken)
   const [content,setContent] = useState("");
-  const {loading,setLoading} = useState(false);
+  const [loading,setLoading] = useState(false);
 
   const onSubmit = async(e) => {
     setLoading(true);
@@ -28,7 +27,8 @@ const CreateBlogPostForm = () => {
       	console.log(response.data)
       if (response.status === 200) {
         alert('Data saved successfully');
-        navigate(`post/${response.data.id}`)
+        navigate(`/blog/post/${response.data.id}`)
+
       } else {
         throw new Error('Failed to save data');
       }
