@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
+import { Button, CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box } from '@mui/system';
@@ -8,12 +8,15 @@ import { useEffect, useState } from 'react';
 import { selectAuthUser, serverClient } from 'features/authSlice';
 import { useSelector } from 'react-redux';
 import { RouterLink } from 'components/RouterLink';
+import { useFetch } from 'hooks/useFetch';
 
 export const Questionaries = () => {
 
   const [ loading, setLoading ] = useState()
   const [ posts, setPosts ] = useState([])
+  const [ searchQuery, setSearchQuery ] = useState('')
   const user = useSelector(selectAuthUser)
+  const fetch = useFetch()
 
   useEffect(() => {
     const fetch = async () => {
@@ -25,10 +28,17 @@ export const Questionaries = () => {
   }, [])
 
   const deleteQuestionary = async (id) => {
-    const response = await serverClient.delete(`/questionary/${id}`)
-    if (response.status === 200) {
+    fetch(`/questionary/${id}`, "DELETE", { onSuccess: () => {
       setPosts(posts => posts.filter(post => post.id !== id))
-    }
+    }, successMsg: "Questionary Deleted", errorMsg: "Failed to delete questionary" })
+  }
+
+  const searchQuestionary = async () => {
+    setLoading(true)
+    await fetch(`/questionary/search?q=${searchQuery}`, "GET", { onSuccess: (data) => {
+      setPosts(data)
+    } })  
+    setLoading(false)
   }
 
   return (
@@ -38,10 +48,12 @@ export const Questionaries = () => {
         <Stack direction={'row'} alignItems={'center'} spacing={2}>
         <TextField
           sx={{ mt: 3, mb: 2 }}
-          id='outlined-basic'
-          label='search-assesment'
+          value={searchQuery}
+          onChange={e => { setSearchQuery(e.target.value) }}
+          onKeyDown={e => { if (e.key === 'Enter') searchQuestionary() }}
+          label='Search for Questionaries'
           variant='outlined'
-          placeholder='Python'
+          placeholder='ex: Python'
           fullWidth
           InputProps={{
             startAdornment: (
@@ -51,6 +63,9 @@ export const Questionaries = () => {
             ),
           }}
         />
+            <IconButton variant='outlined' size='large' color='primary' onClick={searchQuestionary}>
+                <SearchIcon/>
+            </IconButton>
         {
           user.role === "ROLE_ADMIN" && (
             <RouterLink to={'/questionaries/add'}>
@@ -61,9 +76,12 @@ export const Questionaries = () => {
         </Stack>
         {
           loading ? <CircularProgress/> : (
-          posts.map((questionary, index) => (
-            <QuestionCard key={index} id={questionary.id} name={questionary.name} description={questionary.description} badge={questionary.badge} onDelete={user.role === "ROLE_ADMIN" && ( () =>  { deleteQuestionary(questionary.id) } )}/>
-          )))
+            posts.length !== 0 ? (
+              posts.map((questionary, index) => (
+              <QuestionCard key={index} id={questionary.id} name={questionary.name} description={questionary.description} badge={questionary.badge} onDelete={user.role === "ROLE_ADMIN" && ( () =>  { deleteQuestionary(questionary.id) } )}/>
+              ))) : (
+              <Typography>No questionaries found</Typography>
+          ))
         }
       </Stack>
     </Box>
