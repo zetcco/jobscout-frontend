@@ -1,6 +1,6 @@
 import {Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import ProfileHeaderCard from '../profile/ProfileHeaderCard'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -10,53 +10,60 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import { useSelector } from 'react-redux'
 import { selectAuthUserToken } from 'features/authSlice'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
 
 
-function BlogPostContent({userProfileName,blogContent,timeStamp}) {
-  const [blogPostContent,setBlogPostContent] = useState();
-  const [profileName,setProfileName] = useState();
-
+function BlogPostContent({name,timestamp,content}) {
+  const [blogPost,setBlogPost] = useState(null);
+  const [blogContent,setBlogContent] = useState(null);
   const authToken = useSelector(selectAuthUserToken);
 
   console.log(authToken);
 
+  const {postId} = useParams();
+
   const loadPage = async () => {
     const response = await axios.get(
-      '/posts?pageno=1&size=10',
+      '/posts/' + postId,
       { headers : {
           Authorization : `Bearer ${authToken}`
       }}
     );
-      setBlogPostContent(response.data);
+      setBlogPost(response.data);
+      setBlogContent(response.data);
       console.log(response.data)
   }
   
+    useEffect(()=>{
+    loadPage()
+    },[])
+
+
   return (
-    <BasicCard>
-      <stack spacing = {5}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                <Stack direction="row" alignItems="center" spacing={2}>
-                        <ProfileHeaderCard name={userProfileName} /> 
-                        <tr>{timeStamp}</tr>
-                </Stack>
-                <MoreVertIcon />
-            </Stack>
-            <Stack alignItems={'flex-start'}>
-               <Typography>
-                  {blogContent}
-
-               </Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                <Stack direction="row" alignItems="center" spacing={2}>
-                        <ThumbUpOffAltIcon />
-                        <ModeCommentOutlinedIcon />
-                </Stack>
-                <BookmarkBorderOutlinedIcon />
-            </Stack>
-        </stack>
-    </BasicCard>
+    <>
+            <BasicCard>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                      <Stack direction="row" alignItems="center" spacing={2}>
+                              <ProfileHeaderCard name={blogPost?.user.displayName} /> 
+                              <tr>{timestamp}</tr>
+                      </Stack>
+                      <MoreVertIcon />
+                  </Stack>
+                  <Stack alignItems={'flex-start'}>
+                    <Typography>
+                        {blogPost?.content}
+                    </Typography>
+                  </Stack>
+    
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                      <Stack direction="row" alignItems="center" spacing={2}>
+                              <ThumbUpOffAltIcon />
+                              <ModeCommentOutlinedIcon />
+                      </Stack>
+                      <BookmarkBorderOutlinedIcon />
+                  </Stack>
+          </BasicCard>
+    </>
   )
 }
 
