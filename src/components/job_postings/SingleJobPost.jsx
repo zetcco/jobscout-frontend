@@ -5,14 +5,14 @@ import { BasicCard } from "../cards/BasicCard";
 
 
 
-const SingleJobPost = ({ sx ,title , children , type  , skills}) => {
+const SingleJobPost = ({ sx ,title , children , type  , skills , status}) => {
 
     const handleDelete = () => {
         console.info('You clicked the delete icon.');
       };
     return (
             <BasicCard sx={{ 
-                ...sx
+                ...sx,
              }}>
                 <Stack
                     direction='column'
@@ -33,7 +33,7 @@ const SingleJobPost = ({ sx ,title , children , type  , skills}) => {
                         <Stack direction='row' spacing={1}>
                             {skills && <Chip label="React" variant="outlined" color="success" onDelete={handleDelete}/>}
                         </Stack>
-                        <Stack align="right">
+                        <Stack align="right" direction = {'row'} spacing = {1}>
                             {
                                 type && type === 'TYPE_PERMANENT' && <Chip label='Full Time' color="info" variant="outlined" />
                             } 
@@ -42,6 +42,15 @@ const SingleJobPost = ({ sx ,title , children , type  , skills}) => {
                             }
                             {
                                 type && type === 'TYPE_FREELANCE' && <Chip label='Freelance' color="error" variant="outlined" />
+                            }
+                            {
+                                status && status === "STATUS_ACTIVE" && <Chip label="Activated" variant="outlined" color='success'/>
+                            }
+                            {
+                                status && status === 'STATUS_HOLD' && <Chip label='Hold' color="warning" variant="outlined" />
+                            }
+                            {
+                                status && status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
                             }
                         </Stack>
                     </Stack>
