@@ -4,14 +4,18 @@ import { Typography } from "@mui/material";
 import Chip from '@mui/material/Chip';
 import { useState ,useEffect} from "react";
 
-export const Status = ({status , dueDate}) => {
+export const Status = ({status , dueDate , setDisable}) => {
     const [days , setDays] = useState(null);
+    const [jobPostStatus , setJobPostStatus] = useState('');
     useEffect(() =>{
         const remDays = Math.round(((new Date(dueDate) - new Date())/ (1000 * 3600 * 24)));
         if(remDays >= 0){
             setDays(remDays);
+            setJobPostStatus(status)
         }else{
             setDays("Expired!");
+            setJobPostStatus('STATUS_OVER')
+            setDisable(true)
         }
     } , [])
     
@@ -41,13 +45,13 @@ export const Status = ({status , dueDate}) => {
                     </Box>
                     <Box>
                         {
-                            status && status === "STATUS_ACTIVE" && <Chip label="Activated" variant="outlined" color='success'/>
+                            jobPostStatus && jobPostStatus === "STATUS_ACTIVE" && <Chip label="Activated" variant="outlined" color='success'/>
                         }
                         {
-                            status && status === 'STATUS_HOLD' && <Chip label='Hold' color="warning" variant="outlined" />
+                            jobPostStatus && jobPostStatus === 'STATUS_HOLD' && <Chip label='Hold' color="warning" variant="outlined" />
                         }
                         {
-                            status && status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
+                            jobPostStatus && jobPostStatus === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
                         }
                     </Box>
                 </Stack>
