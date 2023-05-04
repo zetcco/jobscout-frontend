@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Stack, TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Alert, AlertTitle} from '@mui/material';
+import { Grid, Stack, TextField, Button, FormControl, InputLabel, Select, MenuItem, Alert, AlertTitle} from '@mui/material';
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard';
-import { selectAuthUserToken } from 'features/authSlice';
+import { selectAuthUserToken, serverClient } from 'features/authSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { DatePicker} from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { RouterLink } from 'components/RouterLink';
 
 export const CreateJobPostForm = () => {
 
@@ -71,9 +70,7 @@ const token = useSelector(selectAuthUserToken);
 useEffect(()=>{
   const fetchCategories = async () => {
       try {
-          const response = await axios.get('/category/' , {
-              headers:{Authorization: `Bearer ${token}`}
-          })
+          const response = await serverClient.get('/category/')
           setCategories(response.data)
         
       } catch (error) {
@@ -83,7 +80,7 @@ useEffect(()=>{
   }
   fetchCategories()
 
-  },[token])
+  },[])
 
 
   return (
