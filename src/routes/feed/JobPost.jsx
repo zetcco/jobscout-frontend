@@ -5,10 +5,7 @@ import { Button } from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Status } from "../../components/job_postings/post/Status";
 import { Ownership } from "../../components/job_postings/post/Ownership";
-import { BasicCard } from "../../components/cards/BasicCard";
-import { useSelector } from "react-redux";
-import { selectAuthUserToken } from "features/authSlice";
-import axios from "axios";
+import { serverClient } from "features/authSlice";
 import { useParams } from "react-router-dom";
 
 
@@ -17,15 +14,11 @@ export const JobPost = () => {
 // Get the :postId param from the URL.
 const { postId }  = useParams();
 const [jobPost , setjobPost] = useState('');
-const token = useSelector(selectAuthUserToken);
+const [disable , setDisable] = useState(false);
 useEffect(()=>{
     const fetchJobPost = async () => {
         try{
-            const response = await axios.get(`/jobpost/jobPostId?val=${postId}` , {
-                headers:{
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const response = await serverClient.get(`/jobpost/jobPostId?val=${postId}`)
             console.log(response.data);
             setjobPost(response.data)
         }catch(error) {
@@ -33,7 +26,7 @@ useEffect(()=>{
         }
     }
     fetchJobPost()
-} , [token])
+} , [])
 
 
 
@@ -60,10 +53,11 @@ useEffect(()=>{
                                 children={<Status 
                                                 status = { jobPost.status }
                                                 dueDate = { jobPost.dueDate }
+                                                setDisable = { setDisable } 
                                                 />} 
                                 sx={{ flexGrow: 2 }} />
                         </Stack>
-                        <Button variant="contained" color='success' fullWidth size='large'>Apply now</Button>
+                        <Button variant="contained" color='success' fullWidth size='large' disabled = {disable}>Apply now</Button>
             </Stack>                   
         </Box>
      );
