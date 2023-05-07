@@ -41,6 +41,7 @@ import { Questionaries } from "components/authentication/user/job_seeker/questio
 import { QuestionDetail } from "components/authentication/user/job_seeker/questionaries/QuestionDetail";
 import { AddQuestionary } from "components/authentication/user/job_seeker/questionaries/AddQuestionary";
 import { EditQuestionary } from "components/authentication/user/job_seeker/questionaries/EditQuestionary";
+import { FindPeople } from "routes/profile/FindPeople";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -106,6 +107,10 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="blog">
             <Route path=":blogId" element={<BlogPost/>}/>
           </Route>
+        </Route>
+
+        <Route path="/" element={<NavigationLayout/>}>
+          <Route path="people" element={<FindPeople/>}/>
         </Route>
 
         <Route path="/" element={<NavigationLayout noRouteAnimation/>}>

@@ -1,4 +1,4 @@
-import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed, Home } from "@mui/icons-material"
+import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed, Home, PeopleRounded } from "@mui/icons-material"
 import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, Toolbar, Typography } from "@mui/material"
 import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
@@ -63,25 +63,32 @@ export const Topbar = () => {
                     <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}> JobScout </Typography></RouterLink>
                     <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}>Js</Typography></RouterLink>
                     <Box sx={{ flexGrow: 1, height: '100%' }}>
-                        <Stack justifyContent={{ xs: 'right', sm: 'center' }} sx={{ height: '100%' }} direction={'row'} spacing={{ xs: 0, md: 4 }}>
-                            <Stack sx={{  width: { sm: 100 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                        <Stack justifyContent={{ xs: 'right', sm: 'center' }} sx={{ height: '100%' }} direction={'row'} spacing={{ xs: 0, md: 0 }}>
+                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
                                 <RouterLink to={'/home'}>
                                     <IconButton size='large' color="inherit">
                                         <Home/>
                                     </IconButton>
                                 </RouterLink>
                             </Stack>
-                            <Stack sx={{  width: { sm: 100 }, ...(rel_location === 'blog' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'blog' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
                                 <RouterLink to={"/blog"}>
                                     <IconButton size='large' color='inherit'>
                                         <RssFeed />
                                     </IconButton>
                                 </RouterLink>
                             </Stack>
-                            <Stack sx={{  width: { sm: 100 }, ...(rel_location === 'manage' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'manage' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
                             <RouterLink to={'/home'}>
                                 <IconButton size='large' color='inherit'>
                                     <DashboardCustomizeOutlined />
+                                </IconButton>
+                            </RouterLink>
+                            </Stack>
+                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'people' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <RouterLink to={'/people'}>
+                                <IconButton size='large' color='inherit'>
+                                    <PeopleRounded />
                                 </IconButton>
                             </RouterLink>
                             </Stack>
