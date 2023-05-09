@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, CircularProgress, createFilterOptions, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Alert, AlertTitle, Autocomplete, Avatar, Box, Button, CircularProgress, createFilterOptions, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { CenteredHeaderCard } from '../../../cards/CenteredHeaderCard'
@@ -82,7 +82,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
     setLoading(false)
   }
 
-  const durationError = selectedExperience.startYear !== '' && selectedExperience.endYear !== '' && ( selectedExperience.startYear <= 1930 || selectedExperience.endYear <= 1930 || selectedExperience.endYear - selectedExperience.startYear > 8 || selectedExperience.endYear - selectedExperience.startYear <= 0 )
+  const durationError = selectedExperience.startYear !== '' && selectedExperience.endYear !== '' && ( selectedExperience.startYear <= 1930 || selectedExperience.endYear <= 1930 || selectedExperience.endYear - selectedExperience.startYear > 60 || selectedExperience.endYear - selectedExperience.startYear <= 0 )
 
   return (
     <CenteredHeaderCard
@@ -127,13 +127,13 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
                 )
             }
             <Grid container spacing={1}>
-              <Grid item xs={3} md={1.5}>
+              <Grid item xs={3}>
                 <TextField type={"number"} label="Start Year" error={durationError} value={selectedExperience.startYear} onChange={(e) => { setSelectedExperience({...selectedExperience, startYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={3} md={1.5}>
+              <Grid item xs={3}>
                 <TextField type={"number"} label="End Year" error={durationError} value={selectedExperience.endYear} onChange={(e) => { setSelectedExperience({...selectedExperience, endYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={6} md={4}>
+              <Grid item xs={6}>
                     <Autocomplete
                     value={value}
                     inputValue={inputValue}
@@ -180,7 +180,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
                     }}
                     />
               </Grid>
-              <Grid item xs={10} md={4}>
+              <Grid item xs={10}>
                 <Autocomplete
                   disabled={selectedExperience.organization.id === ''}
                   value={''}
@@ -224,7 +224,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
                   }}
                 />
               </Grid>
-              <Grid item xs={2} md={1}>
+              <Grid item xs={2}>
                 <Button variant='contained' fullWidth sx={{ height: '100%' }} onClick={addExperience} disabled={ 
                   durationError ||
                   selectedExperience.startYear === '' ||  

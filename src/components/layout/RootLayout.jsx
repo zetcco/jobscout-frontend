@@ -79,6 +79,13 @@ const getDesignTokens = (theme) => ({
         }
       }
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '20px'
+        }
+      }
+    },
     MuiAutocomplete: {
       styleOverrides: {
         paper: {
@@ -92,7 +99,14 @@ const getDesignTokens = (theme) => ({
           borderRadius: 30
         }
       }
-    }
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: '20px'
+        }
+      }
+    },
   },
 });
 

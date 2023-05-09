@@ -23,8 +23,8 @@ import BlogPost from "./routes/blog/BlogPost";
 import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
-import { Meeting } from "components/meeting/Meeting";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
+import RecommendationRequestsPage from "routes/recommendations/RecommendationRequests";
 import PastExperiencesForm from "components/authentication/user/job_seeker/PastExperiencesForm";
 import { Intro } from "routes/signup/users/job_seeker/Intro";
 import { Profile } from "components/profile/Profile";
@@ -35,10 +35,13 @@ import { ProfileAbout } from "routes/profile/job_seeker/ProfileAbout";
 import { ProfileExperiences } from "routes/profile/job_seeker/ProfileExperiences";
 import { ProfileSkills } from "routes/profile/job_seeker/ProfileSkills";
 import { CodingInterview } from "routes/CodingInterview";
+import AddRecommendationForm from "components/recommendation/AddRecommendationForm";
 import { Meet } from "components/meeting/Meet";
 import { Questionaries } from "components/authentication/user/job_seeker/questionaries/Questionaries";
-import { QuestionForm } from "components/authentication/user/job_seeker/questionaries/QuestionForm";
 import { QuestionDetail } from "components/authentication/user/job_seeker/questionaries/QuestionDetail";
+import { AddQuestionary } from "components/authentication/user/job_seeker/questionaries/AddQuestionary";
+import { EditQuestionary } from "components/authentication/user/job_seeker/questionaries/EditQuestionary";
+import { FindPeople } from "routes/profile/FindPeople";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -87,9 +90,15 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path="create" element={<CreateJobPost/>}/>
           </Route>
 
-
           <Route path="organizations">
             <Route path=":organizationId" element={<OrgJobPosts/>}/>
+          </Route>
+
+          <Route path="manage">
+            <Route path="recommendation" element={<RecommendationRequestsPage />} />
+            <Route path="recommendation">
+              <Route path=":requesterId" element={<AddRecommendationForm/>}/>
+            </Route>
           </Route>
         </Route>
 
@@ -98,6 +107,10 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="blog">
             <Route path=":blogId" element={<BlogPost/>}/>
           </Route>
+        </Route>
+
+        <Route path="/" element={<NavigationLayout/>}>
+          <Route path="people" element={<FindPeople/>}/>
         </Route>
 
         <Route path="/" element={<NavigationLayout noRouteAnimation/>}>
@@ -124,8 +137,10 @@ const router = createBrowserRouter(createRoutesFromElements(
         </Route>
 
         <Route path="/questionaries" element={ <ProtectedRoute role={"ROLE_JOB_SEEKER"} redirect={"/home"} /> }>
-          <Route element={<NavigationLayout/>}>
+          <Route element={<NavigationLayout />}>
             <Route index element={<Questionaries/>}/>
+            <Route path="add" element={<AddQuestionary/>}/>
+            <Route path=":questionaryId/edit" element={<EditQuestionary/>}/>
             <Route path=":questionaryId" element={<QuestionDetail/>}/>
           </Route>
         </Route>

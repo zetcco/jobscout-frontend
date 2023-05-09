@@ -107,13 +107,13 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
                 )
             }
             <Grid container spacing={1} >
-              <Grid item xs={3} md={1.5}>
+              <Grid item xs={3}>
                 <TextField type={"number"} label="Start Year" value={selectedQualification.startYear} error={durationError} onChange={(e) => { setSelectedQualification({...selectedQualification, startYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={3} md={1.5}>
+              <Grid item xs={3}>
                 <TextField type={"number"} label="End Year" value={selectedQualification.endYear} error={durationError} onChange={(e) => { setSelectedQualification({...selectedQualification, endYear: e.target.value}) }}/>
               </Grid>
-              <Grid item xs={6} md={4}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <InputLabel>Institute</InputLabel>
                   <Select label="Institute" fullWidth value={selectedQualification.institute.id} onChange={(e) => { setSelectedQualification({...selectedQualification, institute: institutes[e.target.value] }) }}>
@@ -125,7 +125,7 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={10} md={4}>
+              <Grid item xs={10}>
                 <FormControl fullWidth>
                   <InputLabel>Degree</InputLabel>
                   <Select label="Degree" fullWidth value={selectedQualification.degree.id} onChange={(e) => { setSelectedQualification({...selectedQualification, degree: degrees[e.target.value] }) }}>
@@ -137,7 +137,7 @@ export const EducationQualificationForm = forwardRef(({ onUpdate, onCancel }, re
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={2} md={1}>
+              <Grid item xs={2}>
                 <Button variant='contained' sx={{ height: '100%', width: '100%' }} onClick={addQualification} disabled={ 
                   durationError ||
                   selectedQualification.startYear === '' ||  

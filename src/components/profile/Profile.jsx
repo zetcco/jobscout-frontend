@@ -6,22 +6,23 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
 import { NewChat } from './Message/NewChat';
 import { UploadProfilePictureForm } from 'components/authentication/user/UploadProfilePictureForm';
+import { useFetch } from 'hooks/useFetch';
 
 export const ProfileContext = createContext()
 
 export const Profile = () => {
 
     const { userId } = useParams()
-    const authToken = useSelector(selectAuthUserToken)
     const authUser = useSelector(selectAuthUser)
     const [ profileData, setProfileData ] = useState(null)
     const navigate = useNavigate()
     const [ newChatOpen, setNewChatOpen ] = useState(false);
     const [ updateProfilePictureModal, setUpdateProfilePictureModal ] = useState(false)
+    const [ requestedForRecommendation, setRequestedForRecommendation ] = useState(false)
+    const fetch = useFetch()
 
     const location = useLocation()
     let rel_location = location.pathname.split("/")
@@ -29,17 +30,24 @@ export const Profile = () => {
     const [ selectedTab, setSelectedTab ] = useState('./' + rel_location)
 
     useEffect(() => {
-        const getProfileData = async () => {
-            const res = await axios.get(`/user/${userId}`, { headers: {
-                Authorization: `Bearer ${authToken}`
-             } })
-            setProfileData(res.data)
-        }
-        getProfileData()
-    }, [authToken, userId])
+        fetch(`/user/${userId}`, "GET", { onSuccess: (data) => { 
+            setProfileData(data) 
+            if (authUser.role === "ROLE_JOB_SEEKER" && data.role === "ROLE_JOB_CREATOR") 
+                fetch(`/recommendations/check-request/${userId}`, "GET", { onSuccess: (data) => { setRequestedForRecommendation(data) } })
+        } })
+    }, [userId])
 
     const { profileRouteButtons, role, editable } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
     const showRecommendBtn = profileData?.role === "ROLE_JOB_SEEKER" && authUser.role === "ROLE_JOB_CREATOR"
+    const showRequestRecommendationBtn = profileData?.role === "ROLE_JOB_CREATOR" && authUser.role === "ROLE_JOB_SEEKER"
+
+    const requestRecommendation = async () => {
+        fetch('/recommendations/request', "POST", { data: { responderId: profileData.id }, successMsg: "Requested for recommendation", onSuccess: () => { setRequestedForRecommendation(true) } })
+    }
+
+    const deleteRequest = async () => {
+        fetch(`/recommendations/delete?responder=${profileData.id}`, "DELETE", { successMsg: "Request deleted", onSuccess: () => { setRequestedForRecommendation(false) } })
+    }
 
     return (
         <Stack spacing={2}>
@@ -55,7 +63,7 @@ export const Profile = () => {
             }}
         >
             <Stack direction={'column'} spacing={4}>
-                <Stack direction={{ ...( !editable || showRecommendBtn ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !(!editable && showRecommendBtn) ? "center" : undefined } spacing={2}>
+                <Stack direction={{ ...( !editable || showRecommendBtn ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !(!editable && ( showRecommendBtn || showRequestRecommendationBtn )) ? "center" : undefined } spacing={2}>
                     <ProfileWithFullNameSubtitle
                         name={profileData?.displayName}
                         subtitle={role}
@@ -68,8 +76,9 @@ export const Profile = () => {
                     />
                         <Stack direction={"row"} alignItems="center" justifyContent={"space-between"}>
                             <Stack spacing={2} direction="row">
-                                { (!editable) && <Button onClick={() => setNewChatOpen(true)}>Message</Button> }
-                                { (showRecommendBtn) && <Button>Recommend</Button> }
+                                { (!editable) && <Button onClick={() => { setNewChatOpen(true) }}>Message</Button> }
+                                { showRecommendBtn && <Button onClick={() => { navigate(`/manage/recommendation/${profileData.id}`) }}>Recommend</Button> }
+                                { showRequestRecommendationBtn && <Button onClick={ requestedForRecommendation ? deleteRequest : requestRecommendation}>{ requestedForRecommendation ? 'Cancel Reqeust' : 'Request Recommendation' }</Button> }
                             </Stack>
                         </Stack>
                 </Stack>

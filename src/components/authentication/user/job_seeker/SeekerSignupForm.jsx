@@ -156,7 +156,7 @@ const SeekerSignupForm = () => {
                                 render={ ({ field }) => (
                                     <TextField 
                                         {...field}
-                                        error={errors.contactNo && true}
+                                        error={errors.contact && true}
                                         label="Contact Number" 
                                         variant="outlined"
                                         placeholder = "Enter Contact Number"
