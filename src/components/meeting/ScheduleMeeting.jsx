@@ -2,9 +2,9 @@ import { ContentCopyRounded, OpenInNew } from "@mui/icons-material";
 import { Alert, AlertTitle, Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import SmallPanel from "components/SmallPanel";
 import { useFetch } from "hooks/useFetch";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 
-export const ScheduleMeeting = () => {
+export const ScheduleMeeting = forwardRef((props, ref) => {
     const [ timestamp, setTimestamp ] = useState(getDateWithAddition(1));
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState(null);
@@ -80,7 +80,7 @@ export const ScheduleMeeting = () => {
         </SmallPanel>
         </Box>
     );
-};
+});
 
 const getDateWithAddition = (count) => {
     let dateTomorrow = new Date()

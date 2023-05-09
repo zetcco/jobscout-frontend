@@ -47,10 +47,10 @@ export const JobPost = () => {
                             >{ jobPost.description }
                             </SingleJobPost> 
                         </Box>
-                        <Stack direction={{ xs: "column", sm: "row" }} alignItems="stretch" justifyContent={"space-between"} spacing={2}>
+                        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                             <SmallPanel 
                                 mainTitle={'Ownership'} 
-                                sx={{ flexGrow: 1 }}>
+                                divsx={{ flexGrow: 1}}>
                                 <Stack spacing={2} direction={'column'}>
                                     <RouterLink to={`/users/${jobPost.jobCreator.id}`}>
                                         <ProfileWithHeader title = 'Posted by' name = {jobPost.jobCreator.displayName} src={jobPost.jobCreator.displayPicture} />
@@ -60,8 +60,8 @@ export const JobPost = () => {
                                         <ProfileWithHeader title = 'Owned By'  name = {jobPost.organization.displayName} src={jobPost.organization.displayPicture} />
                                     </RouterLink>)}
                                 </Stack> 
-                                </SmallPanel>
-                            <SmallPanel mainTitle={'Status'} sx={{ flexGrow: 2 }} >
+                            </SmallPanel>
+                            <SmallPanel mainTitle={'Status'} divsx={{ flexGrow: 2 }} >
                                 <Stack direction={'column'} spacing={3}>
                                     <Stack direction={'row'} justifyContent='space-between'>                   
                                         <Box>

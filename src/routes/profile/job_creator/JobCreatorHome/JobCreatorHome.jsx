@@ -41,14 +41,13 @@ export const JobCreatorHome = () => {
 
     return (
         <Stack direction = {'column'}>
-            <Stack>
-                <SmallPanel
-                    mainTitle = {'Actions'}
-                    noElevation
-                    sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
-                >
-                        <Grid container spacing={2}>
-                            <Grid item xs={3}>
+            <SmallPanel
+                mainTitle = {'Actions'}
+                noElevation
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+            >
+                    <Grid container spacing={2}>
+                        <Grid item xs={3}>
                             <RouterLink to={"/posts/create"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -56,9 +55,9 @@ export const JobCreatorHome = () => {
                                     <Typography fontSize={17} fontWeight={650} letterSpacing={1}>CREATE</Typography>
                                 </Stack>
                             </SelectableCard>
-                            </RouterLink>
-                            </Grid>
-                            <Grid item xs={3}>
+                        </RouterLink>
+                        </Grid>
+                        <Grid item xs={3}>
                             <RouterLink to={"/posts/1/manage"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -66,40 +65,39 @@ export const JobCreatorHome = () => {
                                     <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MANAGE</Typography>
                                 </Stack> 
                             </SelectableCard>
-                            </RouterLink>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <SelectableCard onClick={() => setMeetingModalOpen(true)}>
-                                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                        <VideoChatRounded sx={{ height: 30, width: 30 }}/>
-                                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MEET</Typography>
-                                    </Stack> 
-                                </SelectableCard>
-                                <Modal
-                                    open={meetingModalOpen}
-                                    onClose={() => setMeetingModalOpen(false)}
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                >
-                                    <ScheduleMeeting/>
-                                </Modal>
-                            </Grid>
-                            <Grid item xs={3}>
-                            <RouterLink to={"/manage/recommendation"}>
-                                <SelectableCard onClick={() => setMeetingModalOpen(true)}>
-                                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                        <RecommendIcon sx = {{ height:30, width:30 }}/>
-                                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMEND</Typography>
-                                    </Stack> 
-                                </SelectableCard>
-                            </RouterLink>
-                            </Grid>
+                        </RouterLink>
                         </Grid>
-                </SmallPanel>
-            </Stack>
+                        <Grid item xs={3}>
+                            <SelectableCard onClick={() => { setMeetingModalOpen(true) }}>
+                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                    <VideoChatRounded sx={{ height: 30, width: 30 }}/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MEET</Typography>
+                                </Stack> 
+                            </SelectableCard>
+                            <Modal
+                                open={meetingModalOpen}
+                                onClose={() => setMeetingModalOpen(false)}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <ScheduleMeeting/>
+                            </Modal>
+                        </Grid>
+                        <Grid item xs={3}>
+                        <RouterLink to={"/manage/recommendation"}>
+                            <SelectableCard onClick={() => setMeetingModalOpen(true)}>
+                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                    <RecommendIcon sx = {{ height:30, width:30 }}/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMEND</Typography>
+                                </Stack> 
+                            </SelectableCard>
+                        </RouterLink>
+                        </Grid>
+                    </Grid>
+            </SmallPanel>
             <SmallPanel
                 mainTitle = {'Actions'}
                 noElevation

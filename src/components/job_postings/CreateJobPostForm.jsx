@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { BasicCard } from 'components/cards/BasicCard';
 import { Controller, useForm } from 'react-hook-form';
 import { async } from 'q';
+import { AddQuestionary } from 'components/authentication/user/job_seeker/questionaries/AddQuestionary';
 
 export const CreateJobPostForm = () => {
 
@@ -26,6 +27,7 @@ export const CreateJobPostForm = () => {
     status:"",
     category:{ id: null, name: '' },
   })
+  const [addScreeningTest, setAddScreeningTest] = useState(false)
 
   const [loading, setLoading] = useState(false)
 
@@ -60,7 +62,7 @@ export const CreateJobPostForm = () => {
   }
 
   return (
-    <>
+    <Stack spacing={2}>
         <BasicCard sx={{ px: 2 }}>
           <Typography variant='h5' my={1}>Create a Job Listing</Typography>
           <form onSubmit={handleSubmit(onSubmitForm)}>
@@ -174,7 +176,7 @@ export const CreateJobPostForm = () => {
                       )}
                   /> )}/>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
                 <Controller
                   name="dueDate"
                   rules={{ required: true }}
@@ -198,7 +200,7 @@ export const CreateJobPostForm = () => {
                   defaultValue={false}
                   render={({field: { onChange, value }}) => (
                     <FormControlLabel sx={{ height: '100%', ml: 1 }} label='Urgent' control={
-                      <Checkbox color='primary' check={value} onChange={e => onChange(e.target.checked)} />
+                      <Checkbox color='primary' checked={value} onChange={e => onChange(e.target.checked)} />
                     }/>
                   )}
                 />
@@ -210,21 +212,34 @@ export const CreateJobPostForm = () => {
                   defaultValue={false}
                   render={({field: { onChange, value }}) => (
                     <FormControlLabel sx={{ height: '100%', ml: 1 }} label='On Hold' control={
-                      <Checkbox color='primary' check={value} onChange={e => onChange(e.target.checked)} />
+                      <Checkbox color='primary' checked={value} onChange={e => onChange(e.target.checked)} />
                     }/>
                   )}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Stack direction={'row'} justifyContent={'right'} spacing={2} md={6}>
-                  <Button variant='outlined' onClick={() => { navigate('/home') }}>Cancel</Button >         
-                  <Button variant='contained' type='submit' disabled={loading}>Submit</Button>
-                </Stack>
+              <Grid item xs={12} md={3}>
+                <FormControlLabel sx={{ height: '100%', ml: 1 }} label='Screening Test' control={
+                  <Checkbox color='primary' checked={addScreeningTest} onChange={e => setAddScreeningTest(e.target.checked)} />
+                }/>
               </Grid>
+              {
+                !addScreeningTest && (
+                  <Grid item xs={12}>
+                    <Stack direction={'row'} justifyContent={'right'} spacing={2} md={6}>
+                      <Button variant='outlined' onClick={() => { navigate('/home') }}>Cancel</Button >         
+                      <Button variant='contained' type='submit' disabled={loading}>Submit</Button>
+                    </Stack>
+                  </Grid>
+                )
+              }
             </Grid>
           </form>
         </BasicCard>
-      
-    </>
+        {
+          addScreeningTest && (
+            <AddQuestionary addPicture={false} handleSubmit={data => { console.log(data) }}/>
+          )
+        }
+    </Stack>
   );
 };
