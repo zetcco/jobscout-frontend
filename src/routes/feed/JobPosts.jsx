@@ -134,15 +134,15 @@ export const JobPosts = () => {
                     <Box sx={{ flexGrow: 9 }}>                           
                         <Stack direction={'column'} spacing={2} flexGrow = {1}>
                             {
-                                jobPosts.map((jobPost) =><RouterLink to={`/posts/${jobPost.id}`}><SingleJobPost 
+                            jobPosts.map((jobPost) =><RouterLink to={`/posts/${jobPost.id}`}>
+                                <SingleJobPost 
+                                summary={true}
                                 title = { jobPost.title }
                                 type = { jobPost.type }
-                                status = {jobPost.status}    
-                                sx={{ 
-                                    "&:hover": {
-                                        backgroundColor: (theme) => theme.palette.grey[100],
-                                    }
-                                }}>{ jobPost.description }</SingleJobPost></RouterLink>)
+                                status = {jobPost.status}>
+                                    { jobPost.description }
+                                </SingleJobPost>
+                            </RouterLink>)
                              }
                         </Stack>
                     </Box>

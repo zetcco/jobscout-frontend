@@ -1,37 +1,40 @@
 import React from "react";
-import { Stack, Typography} from '@mui/material'
+import { Box, Stack, Typography} from '@mui/material'
 import Chip from '@mui/material/Chip';
 import { BasicCard } from "../cards/BasicCard";
 
 
 
-const SingleJobPost = ({ sx ,title , children , type  , skills , status}) => {
-
-    const handleDelete = () => {
-        console.info('You clicked the delete icon.');
-      };
+const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary }) => {
     return (
             <BasicCard sx={{ 
-                ...sx,
-             }}>
+                ...sx ,
+                ...(summary && ({"&:hover": {
+                    backgroundColor: (theme) => theme.palette.grey[100],
+                }}))
+            }}>
                 <Stack
                     direction='column'
                     justifyContent='space-between'
-                    spacing={5}
+                    spacing={2}
                 >
                     <Stack spacing = {2}>
-                        {
-
-                        }
                         <Typography variant={'h5'} align= 'left'>{ title }</Typography>
-                        <Typography>
-                            { children }
-                        </Typography>
+                        <Box sx={{ position: 'relative' }}>
+                            <Box
+                                sx={{
+                                }}
+                            >
+                            </Box>
+                            <Typography sx={{whiteSpace: "pre-wrap", ...( summary && {maxHeight: 200, overflow: 'hidden', textOverflow: 'ellipsis'})}}> { children } </Typography>
+                        </Box>
                     </Stack>
 
-                    <Stack direction={{sm:'row', xs: 'column'}} spacing={{ xs: 2, md: 0 }} justifyContent='space-between'>
+                    <Stack direction={{sm:'row', xs: 'column'}} spacing={{ xs: 1, sm: 0 }} justifyContent='space-between'>
                         <Stack direction='row' spacing={1}>
-                            {skills && <Chip label="React" variant="outlined" color="success" onDelete={handleDelete}/>}
+                            {
+                                skills.map(skill => <Chip label={skill.name} key={skill.id} variant="outlined" color="success"/>)
+                            }
                         </Stack>
                         <Stack align="right" direction = {'row'} spacing = {1}>
                             {
@@ -59,5 +62,10 @@ const SingleJobPost = ({ sx ,title , children , type  , skills , status}) => {
             </BasicCard>     
      );
 }
- 
+
+SingleJobPost.defaultProps = {
+    skills: [],
+    summary: false
+}
+
 export default SingleJobPost;

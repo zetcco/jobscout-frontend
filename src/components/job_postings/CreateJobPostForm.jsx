@@ -1,239 +1,230 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Stack, TextField, Button, FormControl, InputLabel, Select, MenuItem, Alert, AlertTitle} from '@mui/material';
+import { Grid, Stack, TextField, Button, FormControl, InputLabel, Select, MenuItem, Alert, AlertTitle, Autocomplete, Box, Typography, FormControlLabel, Checkbox} from '@mui/material';
 import { CenteredHeaderCard } from '../cards/CenteredHeaderCard';
 import { selectAuthUserToken, serverClient } from 'features/authSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { DatePicker} from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { BasicCard } from 'components/cards/BasicCard';
+import { Controller, useForm } from 'react-hook-form';
+import { async } from 'q';
 
 export const CreateJobPostForm = () => {
 
-const navigate = useNavigate()
+  const navigate = useNavigate()
+  const { control, handleSubmit, formState: { errors } } = useForm();
 
-const [categories , setCategories] = useState([]);
-const [error , setError] = useState(null);
-const [data , setData] = useState({
-  dueDate:"",
-  title: "",
-  description: "",
-  type:"",
-  urgent:"",
-  status:"",
-  category:{
-    id:"",
-    title:"",
-    description:""
-  }
-})
+  const [categories , setCategories] = useState([]);
+  const [skills , setSkills] = useState([]);
+  const [error , setError] = useState(null);
+  const [data , setData] = useState({
+    dueDate:"",
+    title: "",
+    description: "",
+    type:"",
+    urgent:"",
+    status:"",
+    category:{ id: null, name: '' },
+  })
 
-const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-const handle= (e) => {
-  if (e.target.name === "category")
-    setData((prev) => ({ ...prev , [e.target.name] : { id: e.target.value}}))
-  else
-    setData((prev) => ({...prev , [e.target.name] : e.target.value}))
-}
-
-// function for handle the submiting
-const handleSubmit = async () => {
-  try{
-    setLoading(true)
-    const resdata = await axios.post('/jobpost', data, { headers: { Authorization: `Bearer ${token}`}}) 
-    if (resdata.status === 200)
-      navigate(`/posts/${resdata.data.id}`)
-    console.log(resdata);
-  }catch(error){
-    setError(error.response.data);
-    console.log(error);
-  }
-  setLoading(false)
-}
-
-// function to handle the canceling
-const handleCancel = async () => {
-  try{
-    setLoading(true)
-    navigate(`/home`)
-  }catch(error){
-    setError(error.response.data)
-    console.log(error);
-  }
-  setLoading(false)
-}
-
-const token = useSelector(selectAuthUserToken);
-
-useEffect(()=>{
-  const fetchCategories = async () => {
-      try {
-          const response = await serverClient.get('/category/')
-          setCategories(response.data)
-        
-      } catch (error) {
-          setError(error.response.data);
-          console.error(error);
-      }
-  }
-  fetchCategories()
+  useEffect(()=>{
+    const fetchCategories = async () => {
+        try {
+            let response = await serverClient.get('/category/')
+            setCategories(response.data)
+            response = await serverClient.get('/skills/')
+            setSkills(response.data)
+        } catch (error) {
+            setError(error.response.data);
+            console.error(error);
+        }
+    }
+    fetchCategories()
 
   },[])
 
+  const onSubmitForm = async (data) => {
+    try {
+      data.status = data.status ? "STATUS_HOLD" : "STATUS_ACTIVE"
+      setLoading(true)
+      const response = await serverClient.post('/jobpost', data)
+      if (response.status === 200)
+        navigate(`/posts/${response.data.id}`)
+    } catch (error) {
+      setError(error.response.data)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
-      <Stack>
-        <CenteredHeaderCard
-          title={'Create Job Post'}
-          footer={
-            <Stack direction={'row'} spacing={2} md={6}>
-              <Button variant='outlined' fullWidth onClick={handleCancel}>Cancel</Button >         
-              <Button variant='contained' fullWidth onClick={handleSubmit} disabled={loading}>Submit</Button>
-            </Stack>
-          }
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              { error && (
-                  <Alert severity="error">
-                    <AlertTitle>Error!</AlertTitle>
-                    <strong>{error.message}</strong>
-                  </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <TextField
-                name = "title"
-                label = 'Title'
-                value = {data.title}
-                placeholder = 'Enter the Title'
-                variant = 'outlined'
-                onChange = {handle}
-                fullWidth
-                rules = {{required : true}} 
-              />
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <TextField
-                name = "description"
-                label = 'Description'
-                value = {data.description}
-                onChange = {handle}
-                placeholder = 'Enter the Description'
-                multiline
-                minRows={3}
-                maxRows={6}
-                fullWidth
-                rules = {{required : true}} 
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                  <InputLabel id="JobPost-Creation-Category-select-label">Select Category</InputLabel>
-                  <Select
-                      labelId = "JobPost-Creation-Category-select-label"
-                      name = "category"
-                      value = {data.category.id}
-                      onChange = {handle}
-                      label = "Category"
-                      rules = {{required : true}}    
-                      >
-                       {
-                        categories.map((category) =>
-                        <MenuItem value = { category.id }>{ category.name }</MenuItem>)
-                       }     
-                    </Select>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                  <InputLabel id="JobPost-Creation-Skill-select-label">Select Skills</InputLabel>
-                  <Select
-                      labelId = "JobPost-Creation-Skill-select-label"
-                      name = "skills"
-                      value = {data.category.id}
-                      onChange = {handle}
-                      label = "Skills"
-                      rules = {{required : true}}    
-                      >
-                       {
-                        categories.map((category) =>
-                        <MenuItem value = { category.id }>{ category.name }</MenuItem>)
-                       }     
-                    </Select>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-                  <InputLabel id="JobPost-Creation-Type-select-label">Select Type</InputLabel>
-                  <Select
-                      labelId="JobPost-Creation-Type-select-label"
-                      name="type"
-                      value = {data.type}
-                      onChange = {handle}
-                      label="Type"
-                      rules = {{required : true}}    
-                      >  
-                        <MenuItem value = {"TYPE_PERMANENT"}>Full Time</MenuItem> 
-                        <MenuItem value = {"TYPE_PART_TIME"}>Part Time</MenuItem> 
-                        <MenuItem value = {"TYPE_FREELANCE"}>Freelance</MenuItem> 
-                    </Select>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-                  <InputLabel id="JobPost-Creation-Status-select-label">Select Status</InputLabel>
-                  <Select
-                      labelId = "JobPost-Creation-Status-select-label"
-                      name = "status"
-                      value = {data.status}  
-                      onChange = {handle}
-                      label = "Status"
-                      rules = {{required : true}}    
-                      >
-                        <MenuItem value = {'STATUS_ACTIVE'}>Active</MenuItem> 
-                        <MenuItem value = {'STATUS_HOLD'}>Hold</MenuItem> 
-                        <MenuItem value = {'STATUS_OVER'}>Over</MenuItem>    
-                    </Select>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <Stack fullWidth>
-                  <DatePicker 
-                    name = "dueDate"
-                    label="Due Date"
-                    disablePast
-                    onChange={handle}
-                    value={data.dueDate}
-                    rules = {{required : true}} 
+        <BasicCard sx={{ px: 2 }}>
+          <Typography variant='h5' my={1}>Create a Job Listing</Typography>
+          <form onSubmit={handleSubmit(onSubmitForm)}>
+            <Grid container spacing={1.5} sx={{ mt: 0 }}>
+              <Grid item xs={12} md={12}>
+                { error && (
+                    <Alert severity="error">
+                      <AlertTitle>Error!</AlertTitle>
+                      <strong>{error.message}</strong>
+                    </Alert>
+                )}
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <Controller
+                    name="title"
+                    defaultValue={''}
+                    rules={{ required: true }}
+                    control={control}
+                    render={ ({field}) => (
+                      <TextField
+                          {...field}
+                          label="Title" 
+                          variant="outlined"
+                          placeholder = "Ex: Junior Frontend React Developer"
+                          fullWidth 
+                          error={errors.title && true}
+                      />
+                    )}
+                />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <Controller
+                    name="description"
+                    defaultValue={''}
+                    rules={{ required: true }}
+                    control={control}
+                    render={ ({field}) =>
+                      (<TextField
+                        {...field}
+                        error={errors.description && true}
+                        multiline
+                        label = 'Description'
+                        placeholder = 'Enter a breif about the Job Post. Ex: What type of Job, Working Days, Location of the Job, etc.'
+                        minRows={6}
+                        maxRows={6}
+                        fullWidth
+                      />)}/>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name="category"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({field: { onChange }}) => (
+                    <Autocomplete
+                        onChange={(e, value) => onChange(value)} 
+                        options={categories}
+                        renderInput={params => <TextField {...params} label='Select Category' placeholder='Ex: Database Engineering' error={ errors.category && true }/>}
+                        isOptionEqualToValue={(option, value) => ( option.id === value.id )}
+                        getOptionLabel={option => option.name || ""}
+                        renderOption={(props, option) => (
+                            <Box component={'li'} {...props} value={option.id}>
+                                {option.name}
+                            </Box>
+                        )}
                     />
-                    </Stack>
-                </LocalizationProvider>     
+                  )}
+                >
+                </Controller>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name="type"
+                  rules={{ required: true }}
+                  control={control}
+                  defaultValue={''}
+                  render={({field}) => (
+                    <FormControl fullWidth>
+                      <InputLabel id="JobPost-Creation-Type-select-label" error={errors.type && true}>Select Type</InputLabel>
+                      <Select
+                        {...field}
+                        labelId="JobPost-Creation-Type-select-label"
+                        label="Select Type"
+                        error={errors.type && true}
+                        >  
+                          <MenuItem value = {"TYPE_PERMANENT"}>Full Time</MenuItem> 
+                          <MenuItem value = {"TYPE_PART_TIME"}>Part Time</MenuItem> 
+                          <MenuItem value = {"TYPE_FREELANCE"}>Freelance</MenuItem> 
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Controller
+                  name="skillList"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({field: { onChange }}) => (
+                  <Autocomplete
+                      multiple
+                      onChange={(e, value) => onChange(value)} 
+                      options={skills}
+                      renderInput={params => <TextField {...params} label='Select Skills' error={ errors.skillList && true }/>}
+                      isOptionEqualToValue={(option, value) => ( option.id === value.id )}
+                      getOptionLabel={option => option.name || ""}
+                      renderOption={(props, option) => (
+                          <Box component={'li'} {...props} value={option.id}>
+                              {option.name}
+                          </Box>
+                      )}
+                  /> )}/>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name="dueDate"
+                  rules={{ required: true }}
+                  control={control}
+                  defaultValue={''}
+                  render={({field}) => (
+                    <TextField
+                      {...field}
+                      type='date'
+                      label="Due Date"
+                      InputLabelProps={{ shrink: true }}
+                      error={errors.dueDate && true}
+                      fullWidth
+                    /> )}
+                />
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <Controller
+                  name="urgent"
+                  control={control}
+                  defaultValue={false}
+                  render={({field: { onChange, value }}) => (
+                    <FormControlLabel sx={{ height: '100%', ml: 1 }} label='Urgent' control={
+                      <Checkbox color='primary' check={value} onChange={e => onChange(e.target.checked)} />
+                    }/>
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <Controller
+                  name="status"
+                  control={control}
+                  defaultValue={false}
+                  render={({field: { onChange, value }}) => (
+                    <FormControlLabel sx={{ height: '100%', ml: 1 }} label='On Hold' control={
+                      <Checkbox color='primary' check={value} onChange={e => onChange(e.target.checked)} />
+                    }/>
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Stack direction={'row'} justifyContent={'right'} spacing={2} md={6}>
+                  <Button variant='outlined' onClick={() => { navigate('/home') }}>Cancel</Button >         
+                  <Button variant='contained' type='submit' disabled={loading}>Submit</Button>
+                </Stack>
+              </Grid>
             </Grid>
-                       
-            <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-                  <InputLabel id="JobPost-Creation-Urgent-select-label">Select Urgent</InputLabel>
-                  <Select
-                      labelId = "JobPost-Creation-Urgent-select-label"
-                      name = "urgent"
-                      value = {data.urgent}
-                      onChange = {handle}
-                      label = "Urgent" 
-                      rules = {{required : true}}  
-                      >
-                        <MenuItem value = {true}>Urgent</MenuItem> 
-                        <MenuItem value = {false}>Not urgent</MenuItem>    
-                    </Select>
-                </FormControl>
-            </Grid>
-          </Grid>
-        </CenteredHeaderCard>
-      </Stack>
+          </form>
+        </BasicCard>
+      
     </>
   );
 };
