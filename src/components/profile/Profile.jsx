@@ -30,9 +30,11 @@ export const Profile = () => {
     const [ selectedTab, setSelectedTab ] = useState('./' + rel_location)
 
     useEffect(() => {
-        fetch(`/user/${userId}`, "GET", { onSuccess: (data) => { setProfileData(data) } })
-        if (authUser.role !== "ROLE_JOB_CREATOR") 
-            fetch(`/recommendations/check-request/${userId}`, "GET", { onSuccess: (data) => { setRequestedForRecommendation(data) } })
+        fetch(`/user/${userId}`, "GET", { onSuccess: (data) => { 
+            setProfileData(data) 
+            if (authUser.role === "ROLE_JOB_SEEKER" && data.role === "ROLE_JOB_CREATOR") 
+                fetch(`/recommendations/check-request/${userId}`, "GET", { onSuccess: (data) => { setRequestedForRecommendation(data) } })
+        } })
     }, [userId])
 
     const { profileRouteButtons, role, editable } = useMemo(() => getButtons(profileData, authUser), [profileData, authUser])
