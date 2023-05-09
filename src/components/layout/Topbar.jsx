@@ -64,7 +64,7 @@ export const Topbar = () => {
                     <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}>Js</Typography></RouterLink>
                     <Box sx={{ flexGrow: 1, height: '100%' }}>
                         <Stack justifyContent={{ xs: 'right', sm: 'center' }} sx={{ height: '100%' }} direction={'row'} spacing={{ xs: 0, md: 0 }}>
-                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <Stack sx={{ display: { xs: 'none', sm: 'flex' },  width: { sm: 80 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
                                 <RouterLink to={'/home'}>
                                     <IconButton size='large' color="inherit">
                                         <Home/>

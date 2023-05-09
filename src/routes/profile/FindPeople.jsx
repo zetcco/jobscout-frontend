@@ -1,13 +1,22 @@
-import { Box, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Popover, Select, Stack, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Popover, Select, Stack, TextField, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import React, { useEffect, useState } from 'react'
 import { BasicCard } from 'components/cards/BasicCard';
 import { AvatarWithInitials } from 'components/AvatarWithInitials';
 import { ResponsiveIconButton } from 'components/ResponsiveIconButton';
-import { PeopleTwoTone } from '@mui/icons-material';
+import { Clear, PeopleTwoTone, Save } from '@mui/icons-material';
 import { useFetch } from 'hooks/useFetch';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
+const init_search_query = {
+    name: '',
+    role: '',
+    degrees: [],
+    institutes: [],
+    categories: [],
+    skills: []
+}
 
 export const FindPeople = () => {
 
@@ -16,36 +25,39 @@ export const FindPeople = () => {
     const [resultUsers, setResultUsers] = useState(null)
     const [loading, setLoading] = useState(false)
     const [showFilters, setShowFilters] = useState(null)
-    const [searchQuery, setSearchQuery] = useState({
-        name: '',
-        role: '',
-        degrees: [],
-        institutes: [],
-        categories: [],
-        skills: []
-    })
+    const [searchQuery, setSearchQuery] = useState(init_search_query)
     const [degrees, setDegrees] = useState([])
     const [institutes, setInstitues] = useState([])
     const [categories, setCategories] = useState([])
     const [skills, setSkills] = useState([])
+
+    const [ routerSearchParams, setRouterSearchParams ] = useSearchParams()
+
+    const onSubmit = async () => {
+        const query = getQuery(searchQuery)
+        submitSearch(query)
+    }
+
+    const submitSearch = async (query) => {
+        setLoading(true)
+        setRouterSearchParams(query)
+        await fetch(`/user/search?${query}`, "GET", { onSuccess: (data) => {
+            setResultUsers(data)
+        }, onError: (error) => {
+            console.log(error)
+        }, errorMsg: "Failed to perform search"})
+        setLoading(false)
+    }
 
     useEffect(() => {
         fetch('/qualifications/degrees', "GET", { onSuccess: (data) => { setDegrees(data) } })
         fetch('/qualifications/institutes', "GET", { onSuccess: (data) => { setInstitues(data) } })
         fetch('/category/', "GET", { onSuccess: (data) => { setCategories(data) } })
         fetch('/skills/', "GET", { onSuccess: (data) => { setSkills(data) } })
-    }, [])
+        if (routerSearchParams.toString() !== '')
+            submitSearch(routerSearchParams.toString())
 
-    const onSubmit = async () => {
-        setLoading(true)
-        const query = getQuery(searchQuery)
-        await fetch(`/user/search?${query}`, "GET", { onSuccess: (data) => {
-            setResultUsers(data)
-        }, onError: (error) => {
-            console.log(error)
-        }})
-        setLoading(false)
-    }
+    }, [])
 
     const isJobSeekerSelected = searchQuery.role === "ROLE_JOB_SEEKER"
 
@@ -60,6 +72,7 @@ export const FindPeople = () => {
                 fullWidth
                 value={searchQuery.name}
                 onChange={e => { setSearchQuery(ex => ({...ex, name: e.target.value})) }} 
+                onKeyDown={e => { if (e.keyCode === 13) onSubmit() }}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -74,7 +87,7 @@ export const FindPeople = () => {
                     </IconButton>
                     <Popover open={Boolean(showFilters)} onClose={() => { setShowFilters(null) }} anchorEl={showFilters} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
                         <Stack spacing={2} m={2}>
-                            <FormControl sx={{ width: 300 }}>
+                            <FormControl sx={{ width: { xs: 300, sm: 350 } }}>
                                 <InputLabel>User Type</InputLabel>
                                 <Select value={searchQuery.role} onChange={e => { setSearchQuery(ex => ({ ...ex, role: e.target.value })) }} input={<OutlinedInput label={'User Type'}/>}>
                                     <MenuItem value={"ROLE_JOB_SEEKER"}>Job Seeker</MenuItem>
@@ -82,54 +95,74 @@ export const FindPeople = () => {
                                     <MenuItem value={"ROLE_ORGANIZATION"}>Organization</MenuItem>
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ width: 300 }} disabled={!isJobSeekerSelected}>
-                                <InputLabel>Degrees</InputLabel>
-                                <Select value={searchQuery.degrees} onChange={e => { 
-                                    setSearchQuery(ex => ({...ex, degrees: e.target.value}))
-                                }} input={<OutlinedInput label={'Degrees'}/>} multiple>
-                                    {
-                                        degrees.map((degree, index) => (
-                                            <MenuItem value={degree.id} key={index}>{degree.name}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ width: 300 }} disabled={!isJobSeekerSelected}>
-                                <InputLabel>Institute</InputLabel>
-                                <Select value={searchQuery.institutes} onChange={e => { 
-                                    setSearchQuery(ex => ({...ex, institutes: e.target.value}))
-                                }} input={<OutlinedInput label={'Institute'}/>} multiple>
-                                    {
-                                        institutes.map((institute, index) => (
-                                            <MenuItem value={institute.id} key={index}>{institute.name}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ width: 300 }} disabled={!isJobSeekerSelected}>
-                                <InputLabel>Category</InputLabel>
-                                <Select value={searchQuery.categories} onChange={e => { 
-                                    setSearchQuery(ex => ({...ex, categories: e.target.value}))
-                                }} input={<OutlinedInput label={'Category'}/>} multiple>
-                                    {
-                                        categories.map((category, index) => (
-                                            <MenuItem value={category.id} key={index}>{category.name}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ width: 300 }} disabled={!isJobSeekerSelected}>
-                                <InputLabel>Skills</InputLabel>
-                                <Select value={searchQuery.skills} onChange={e => { 
-                                    setSearchQuery(ex => ({...ex, skills: e.target.value}))
-                                }} input={<OutlinedInput label={'Skills'}/>} multiple>
-                                    {
-                                        skills.map((skill, index) => (
-                                            <MenuItem value={skill.id} key={index}>{skill.name}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
+                            <Autocomplete
+                                sx={{ width: { xs: 300, sm: 350 } }}
+                                autoComplete
+                                multiple
+                                value={searchQuery.degrees}
+                                onChange={(e, value) => { setSearchQuery(ex => ({...ex, degrees: value})) }} 
+                                disabled={!isJobSeekerSelected}
+                                options={degrees}
+                                renderInput={params => <TextField {...params} label='Degrees'/>}
+                                getOptionLabel={option => option.name}
+                                renderOption={(props, option) => (
+                                    <Box component={'li'} {...props} value={option.id}>
+                                        {option.name}
+                                    </Box>
+                                )}
+                            />
+                            <Autocomplete
+                                sx={{ width: { xs: 300, sm: 350 } }}
+                                autoComplete
+                                multiple
+                                value={searchQuery.institutes}
+                                onChange={(e, value) => { setSearchQuery(ex => ({...ex, institutes: value})) }} 
+                                disabled={!isJobSeekerSelected}
+                                options={institutes}
+                                renderInput={params => <TextField {...params} label='Institute'/>}
+                                getOptionLabel={option => option.name}
+                                renderOption={(props, option) => (
+                                    <Box component={'li'} {...props} value={option.id}>
+                                        {option.name}
+                                    </Box>
+                                )}
+                            />
+                            <Autocomplete
+                                sx={{ width: { xs: 300, sm: 350 } }}
+                                autoComplete
+                                multiple
+                                value={searchQuery.categories}
+                                onChange={(e, value) => { setSearchQuery(ex => ({...ex, categories: value})) }} 
+                                disabled={!isJobSeekerSelected}
+                                options={categories}
+                                renderInput={params => <TextField {...params} label='Categories'/>}
+                                getOptionLabel={option => option.name}
+                                renderOption={(props, option) => (
+                                    <Box component={'li'} {...props} value={option.id}>
+                                        {option.name}
+                                    </Box>
+                                )}
+                            />
+                            <Autocomplete
+                                sx={{ width: { xs: 300, sm: 350 } }}
+                                autoComplete
+                                multiple
+                                value={searchQuery.skills}
+                                onChange={(e, value) => { setSearchQuery(ex => ({...ex, skills: value})) }} 
+                                disabled={!isJobSeekerSelected}
+                                options={skills}
+                                renderInput={params => <TextField {...params} label='Skills'/>}
+                                getOptionLabel={option => option.name}
+                                renderOption={(props, option) => (
+                                    <Box component={'li'} {...props} value={option.id}>
+                                        {option.name}
+                                    </Box>
+                                )}
+                            />
+                            <Stack width={'100%'} direction={'row'} justifyContent={'right'}>
+                                <Button onClick={() => { setSearchQuery(init_search_query) }} color='error' startIcon={<Clear/>}>Clear</Button>
+                                <Button onClick={() => { setShowFilters(null) }} startIcon={<Save/>}>Save</Button>
+                            </Stack>
                         </Stack>
                     </Popover>
                 </Box>
@@ -180,8 +213,9 @@ export const FindPeople = () => {
 const getQuery = (query) => {
     let out_query = ""
     Object.keys(query).forEach(key => {
+        console.log(query[key])
         out_query += query[key].length === 0 ? '' : `${key}=${
-            ((typeof query[key] === 'string') ? query[key] : query[key].join(","))
+            ((typeof query[key] === 'string') ? query[key] : query[key].map(obj => obj.id).join(","))
         }&` 
     })
     return out_query;
