@@ -44,6 +44,7 @@ export const JobPost = () => {
                                 status={ jobPost.status }
                                 title = { jobPost.title }
                                 type = { jobPost.type }
+                                questionaryId={ jobPost.questionaryId }
                             >{ jobPost.description }
                             </SingleJobPost> 
                         </Box>
@@ -82,9 +83,7 @@ export const JobPost = () => {
                                         }
                                     </Stack>
                                     <Stack direction={'row'} justifyContent='space-between'>
-                                        <Box>
-                                            <Typography>Status</Typography>
-                                        </Box>
+                                        <Typography>Status</Typography>
                                         <Box>
                                             {
                                                 jobPost.status === "STATUS_ACTIVE" && <Chip label="Activated" variant="outlined" color='success'/>

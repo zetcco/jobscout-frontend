@@ -49,7 +49,7 @@ export const CreateJobPostForm = () => {
 
   const onSubmitForm = async (data) => {
     try {
-      data.status = data.status ? "STATUS_HOLD" : "STATUS_ACTIVE"
+      data.jobPost.status = data.jobPost.status ? "STATUS_HOLD" : "STATUS_ACTIVE"
       setLoading(true)
       const response = await serverClient.post('/jobpost', data)
       if (response.status === 200)
@@ -237,7 +237,13 @@ export const CreateJobPostForm = () => {
         </BasicCard>
         {
           addScreeningTest && (
-            <AddQuestionary addPicture={false} handleSubmit={data => { console.log(data) }}/>
+            <AddQuestionary addPicture={false} handleSubmit={(questionary) => { 
+              handleSubmit(data => {
+                onSubmitForm({
+                  questionary: questionary.request,
+                  jobPost: {...data}
+                })
+              })()}}/>
           )
         }
     </Stack>

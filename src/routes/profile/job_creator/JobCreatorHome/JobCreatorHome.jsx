@@ -47,7 +47,7 @@ export const JobCreatorHome = () => {
                 sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
             >
                     <Grid container spacing={2}>
-                        <Grid item xs={3}>
+                        <Grid item xs={6} md={3}>
                             <RouterLink to={"/posts/create"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -57,7 +57,7 @@ export const JobCreatorHome = () => {
                             </SelectableCard>
                         </RouterLink>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={6} md={3}>
                             <RouterLink to={"/posts/1/manage"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
@@ -67,7 +67,7 @@ export const JobCreatorHome = () => {
                             </SelectableCard>
                         </RouterLink>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={6} md={3}>
                             <SelectableCard onClick={() => { setMeetingModalOpen(true) }}>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                     <VideoChatRounded sx={{ height: 30, width: 30 }}/>
@@ -86,7 +86,7 @@ export const JobCreatorHome = () => {
                                 <ScheduleMeeting/>
                             </Modal>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={6} md={3}>
                         <RouterLink to={"/manage/recommendation"}>
                             <SelectableCard onClick={() => setMeetingModalOpen(true)}>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>

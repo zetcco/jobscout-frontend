@@ -139,7 +139,9 @@ export const JobPosts = () => {
                                 summary={true}
                                 title = { jobPost.title }
                                 type = { jobPost.type }
-                                status = {jobPost.status}>
+                                status = {jobPost.status}
+                                questionaryId={ jobPost.questionaryId }
+                                >
                                     { jobPost.description }
                                 </SingleJobPost>
                             </RouterLink>)

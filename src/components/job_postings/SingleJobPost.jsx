@@ -5,7 +5,7 @@ import { BasicCard } from "../cards/BasicCard";
 
 
 
-const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary }) => {
+const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary, questionaryId }) => {
     return (
             <BasicCard sx={{ 
                 ...sx ,
@@ -54,6 +54,9 @@ const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary
                             }
                             {
                                 status && status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
+                            }
+                            {
+                                questionaryId &&  <Chip label='Screening Test' color="warning" variant="outlined"/>
                             }
                         </Stack>
                     </Stack>
