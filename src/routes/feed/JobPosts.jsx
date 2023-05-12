@@ -134,7 +134,8 @@ export const JobPosts = () => {
                     <Box sx={{ flexGrow: 9 }}>                           
                         <Stack direction={'column'} spacing={2} flexGrow = {1}>
                             {
-                            jobPosts.map((jobPost) =><RouterLink to={`/posts/${jobPost.id}`}>
+                            jobPosts.map((jobPost) =>
+                            <RouterLink to={`/posts/${jobPost.id}`}>
                                 <SingleJobPost 
                                 summary={true}
                                 title = { jobPost.title }

@@ -58,7 +58,7 @@ export const JobCreatorHome = () => {
                         </RouterLink>
                         </Grid>
                         <Grid item xs={6} md={3}>
-                            <RouterLink to={"/posts/1/manage"}>
+                            <RouterLink to={"/posts/manage"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                     <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>

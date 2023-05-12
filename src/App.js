@@ -42,6 +42,7 @@ import { QuestionDetail } from "components/authentication/user/job_seeker/questi
 import { AddQuestionary } from "components/authentication/user/job_seeker/questionaries/AddQuestionary";
 import { EditQuestionary } from "components/authentication/user/job_seeker/questionaries/EditQuestionary";
 import { FindPeople } from "routes/profile/FindPeople";
+import { ManageJobPosts } from "components/job_postings/ManageJobPosts";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -88,6 +89,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path=":postId" element={<JobPost/>}/>
             <Route path=":postId/manage" element={<ManageJobPost/>}/>
             <Route path="create" element={<CreateJobPost/>}/>
+            <Route path="manage" element={<ManageJobPosts/>}/>
           </Route>
 
           <Route path="organizations">

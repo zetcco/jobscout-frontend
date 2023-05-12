@@ -4,10 +4,12 @@ import { Stack, Box } from "@mui/system";
 import { Button, Chip, CircularProgress, Typography } from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Ownership } from "../../components/job_postings/post/Ownership";
-import { serverClient } from "features/authSlice";
-import { useParams } from "react-router-dom";
+import { selectAuthUser, serverClient } from "features/authSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import ProfileWithHeader from "components/profile/ProfileWithHeader";
 import { RouterLink } from "components/RouterLink";
+import { useSelector } from "react-redux";
+import { useFetch } from "hooks/useFetch";
 
 
 export const JobPost = () => {
@@ -16,6 +18,13 @@ export const JobPost = () => {
     const { postId }  = useParams();
     const [jobPost , setjobPost] = useState('');
     const [ loading, setLoading ] = useState(true)
+    const authUser = useSelector(selectAuthUser)
+    const navigate = useNavigate()
+    const fetch = useFetch()
+
+    const handleApply = () => {
+        fetch(`/jobpost/${postId}/apply`, "PATCH", { successMsg: "Successfully applied" })
+    }
 
     useEffect(()=>{
         const fetchJobPost = async () => {
@@ -36,8 +45,17 @@ export const JobPost = () => {
     return ( 
         <Box>
             {
-            loading ? <CircularProgress/> : (
+            loading ? (
+                <Stack width={'100%'} justifyContent={'center'}>
+                    <CircularProgress sx={{ m: 'auto' }}/>
+                </Stack>
+            ) : (
             <Stack spacing={2} sx={{ width: '100%' }} mb={2}>
+                        {
+                            authUser.role === "ROLE_JOB_CREATOR" && (
+                                <Button onClick={() => { navigate(`/posts/${jobPost.id}/manage`) }} variant="outlined">Manage</Button>
+                            )
+                        }
                         <Box> 
                             <SingleJobPost
                                 skills={ jobPost.skillList }
@@ -69,7 +87,7 @@ export const JobPost = () => {
                                             <Typography>Number of applicants</Typography>
                                         </Box>
                                         <Box>
-                                        <Chip label="21" variant="outlined" color='primary'/>
+                                        <Chip label={jobPost.applicationCount} variant="outlined" color='primary'/>
                                         </Box>
                                     </Stack>
                                     <Stack direction={'row'} justifyContent='space-between'>
@@ -99,7 +117,11 @@ export const JobPost = () => {
                                 </Stack>
                             </SmallPanel>
                         </Stack>
-                        <Button variant="contained" color='success' fullWidth size='large' disabled = {new Date(jobPost.dueDate) < new Date()}>Apply now</Button>
+                        {
+                            authUser.role === 'ROLE_JOB_SEEKER' && (
+                                <Button variant="contained" color='success' fullWidth size='large' disabled = {new Date(jobPost.dueDate) < new Date()} onClick={handleApply}>Apply now</Button>
+                            )
+                        }
             </Stack>                   
                 )
             }
