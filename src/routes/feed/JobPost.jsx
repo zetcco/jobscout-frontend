@@ -1,7 +1,7 @@
 import { useState , useEffect } from "react";
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
 import { Stack, Box } from "@mui/system";
-import { Button, Chip, CircularProgress, Typography } from "@mui/material";
+import { Alert, AlertTitle, Button, Chip, CircularProgress, Typography } from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Ownership } from "../../components/job_postings/post/Ownership";
 import { selectAuthUser, serverClient } from "features/authSlice";
@@ -18,12 +18,17 @@ export const JobPost = () => {
     const { postId }  = useParams();
     const [jobPost , setjobPost] = useState('');
     const [ loading, setLoading ] = useState(true)
+    const [ error, setError ] = useState(null)
     const authUser = useSelector(selectAuthUser)
     const navigate = useNavigate()
     const fetch = useFetch()
 
     const handleApply = () => {
-        fetch(`/jobpost/${postId}/apply`, "PATCH", { successMsg: "Successfully applied" })
+        if (jobPost.questionaryId) {
+            navigate(`/questionaries/${jobPost.questionaryId}?jobpost=${jobPost.id}`)
+        } else {
+            fetch(`/jobpost/${postId}/apply`, "PATCH", { successMsg: "Successfully applied" })
+        }
     }
 
     useEffect(()=>{
@@ -34,12 +39,20 @@ export const JobPost = () => {
                 console.log(response.data);
                 setjobPost(response.data)
             }catch(error) {
-                console.log(error);
+                setError(error.response.data);
             }
             setLoading(false)
         }
         fetchJobPost()
     } , [])
+
+    if (error)
+        return (
+            <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                <Typography>{error.message}</Typography>
+            </Alert>
+        )
 
 
     return ( 

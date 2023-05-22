@@ -42,10 +42,10 @@ function ManageJobPost() {
                 <BasicCard sx={{ width: '100%' }} key={index}>
                     <Stack direction={'row'} spacing={{ xs: 2, md: 10 }}>
                         <Stack direction={'row'} spacing = {2} alignItems={'center'}>
-                            <AvatarWithInitials size={{ xs: 60, md: 70 }} src={application.displayPicture} name={application.displayName}/>
+                            <AvatarWithInitials size={{ xs: 60, md: 70 }} src={application.jobSeeker.displayPicture} name={application.jobSeeker.displayName}/>
                             <Stack direction={'column'} spacing={0.2}>
-                                <Typography variant='h5' fontWeight={600}>{ application.displayName }</Typography>
-                                <Typography fontSize={16}>{ application.email }</Typography> 
+                                <Typography variant='h5' fontWeight={600}>{ application.jobSeeker.displayName }</Typography>
+                                <Typography fontSize={16}>{ application.jobSeeker.email }</Typography> 
                             </Stack>                      
                         </Stack>
                         <Stack direction={'row'} spacing={1}>
