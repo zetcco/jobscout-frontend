@@ -8,11 +8,13 @@ import { useParams } from 'react-router-dom'
 import { BasicCard } from 'components/cards/BasicCard'
 import { AvatarWithInitials } from 'components/AvatarWithInitials'
 import { ResponsiveIconButton } from 'components/ResponsiveIconButton'
-import { CheckCircleOutline, DeleteOutline, FilterListRounded } from '@mui/icons-material'
+import { CheckCircleOutline, Clear, DeleteOutline, FilterListRounded, SearchOutlined } from '@mui/icons-material'
+import { getQuery } from 'hooks/getQuery'
+import { RouterLink } from 'components/RouterLink'
 
 const init_search_query = {
     name: '',
-    role: '',
+    status: '',
     degrees: [],
     institutes: [],
     categories: [],
@@ -44,6 +46,14 @@ function ManageJobPost() {
     fetchData()
   }, [])
 
+  const setFilters = (key, value) => {
+    setSearchQuery(ex => ({...ex, [key]: value}))
+  }
+
+  const filterApplications = () => {
+    fetch(`/jobpost/${postId}/applications?${getQuery(searchQuery)}`, "GET", { onSuccess: setApplications })
+  }
+
   if (loading)
     return (
       <Stack width={'100%'} justifyContent={'center'}>
@@ -59,9 +69,13 @@ function ManageJobPost() {
             <Stack spacing={2} m={2}>
               <FormControl sx={{ width: { xs: 300, sm: 250 } }}>
                   <InputLabel>Status</InputLabel>
-                  <Select value={searchQuery.role} onChange={e => { setSearchQuery(ex => ({ ...ex, role: e.target.value })) }} input={<OutlinedInput label={'Status'}/>}>
-                      <MenuItem value={"ROLE_JOB_SEEKER"}>Accepted</MenuItem>
-                      <MenuItem value={"ROLE_JOB_CREATOR"}>Rejected</MenuItem>
+                  <Select value={searchQuery.status} 
+                  onChange={e => { setFilters('status', e.target.value) }} 
+                  input={<OutlinedInput label={'Status'}/>}
+                  >
+                      <MenuItem value={"INTERVIEW_SELECTED"}>Accepted</MenuItem>
+                      <MenuItem value={"REJECTED"}>Rejected</MenuItem>
+                      <MenuItem value={"APPLIED"}>Not Decided</MenuItem>
                   </Select>
               </FormControl>
               <Autocomplete
@@ -69,7 +83,7 @@ function ManageJobPost() {
                   autoComplete
                   multiple
                   value={searchQuery.degrees}
-                  onChange={(e, value) => { setSearchQuery(ex => ({...ex, degrees: value})) }} 
+                  onChange={(e, value) => { setFilters('degrees', value) }} 
                   options={degrees}
                   renderInput={params => <TextField {...params} label='Degrees'/>}
                   getOptionLabel={option => option.name}
@@ -109,13 +123,24 @@ function ManageJobPost() {
                       </Box>
                   )}
               />
+              <Stack width={'100%'} direction={'row'} justifyContent={'right'}>
+                  <Button onClick={() => { setSearchQuery(init_search_query) }} color='error' startIcon={<Clear/>}>Clear</Button>
+                  <Button onClick={() => { 
+                    filterApplications()
+                    setShowFilters(null) 
+                  }} startIcon={<SearchOutlined/>}>Search</Button>
+              </Stack>
           </Stack>
           </Popover>
-          <Stack spacing={2}>
+          <Stack spacing={2} width={'100%'}>
             {
+              applications.length === 0 ? (
+                <Typography>No applications found</Typography>
+              ) : ( 
               applications.map((application, index) => (
                 <BasicCard sx={{ width: '100%' }} key={index}>
-                    <Stack direction={'row'} spacing={{ xs: 2, md: 10 }} alignItems={'center'}>
+                    <Stack direction={'row'} spacing={{ xs: 2, md: 10 }} alignItems={'center'} justifyContent={'space-between'}>
+                        <RouterLink to={`/users/${application.jobSeeker.id}`}>
                         <Stack direction={'row'} spacing = {2} alignItems={'center'}>
                             <AvatarWithInitials size={{ xs: 60, md: 70 }} src={application.jobSeeker.displayPicture} name={application.jobSeeker.displayName}/>
                             <Stack direction={'column'} spacing={0.2}>
@@ -123,23 +148,29 @@ function ManageJobPost() {
                                 <Typography fontSize={16}>{ application.jobSeeker.email }</Typography> 
                             </Stack>                      
                         </Stack>
+                        </RouterLink>
                         { application.status === "INTERVIEW_SELECTED" && <Chip label="Accepted" variant="outlined" color='success'/> }
                         { application.status === "REJECTED" && <Chip label="Rejected" variant="outlined" color='error'/> }
+                        { application.status === "APPLIED" && <Chip label="Not Decided" variant="outlined" color='info'/> }
                         <Stack direction={'row'} spacing={1}>
                             <ResponsiveIconButton color={'error'} startIcon={<DeleteOutline/>} 
                             onClick={ () => { fetch(`/jobpost/application/${application.id}/reject`, "PATCH", { successMsg: "Application Rejected", onSuccess: () => {
-                              setApplications(application => application.filter(obj => obj.id !== application.id))
-                            }})}}>Reject</ResponsiveIconButton>
+                              setApplications(applications => applications.filter(obj => obj.id !== application.id))
+                            }})}}
+                            disabled={application.status === "REJECTED"}
+                            >Reject</ResponsiveIconButton>
                             <ResponsiveIconButton startIcon={<CheckCircleOutline/>}
                             onClick={ () => { fetch(`/jobpost/application/${application.id}/accept`, "PATCH", { successMsg: "Application Accepted", onSuccess: () => {
-                              setApplications(application => application.filter(obj => obj.id !== application.id))
-                            }})}}>Accept</ResponsiveIconButton>
+                              setApplications(applications => applications.filter(obj => obj.id !== application.id))
+                            }})}}
+                            disabled={application.status === "INTERVIEW_SELECTED"}
+                            >Accept</ResponsiveIconButton>
                         </Stack>
                     </Stack>
                 </BasicCard>
 
               ))
-            } 
+            )} 
           </Stack>
         </Stack>
   )

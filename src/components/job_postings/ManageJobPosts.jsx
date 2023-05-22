@@ -1,4 +1,4 @@
-import { CircularProgress, Stack } from '@mui/material'
+import { CircularProgress, Stack, Typography } from '@mui/material'
 import { selectAuthUserId } from 'features/authSlice'
 import { useFetch } from 'hooks/useFetch'
 import React, { useEffect, useState } from 'react'
@@ -26,10 +26,12 @@ export const ManageJobPosts = () => {
         return <CircularProgress/>
 
     return ( 
+        <Stack spacing={4}>
+        <Typography variant='h4'>Manage Job Posts</Typography>
         <Stack spacing={2}>
         { 
             jobPosts.map( jobPost => 
-            <RouterLink to={`/posts/${jobPost.id}`}>
+            <RouterLink to={`/posts/${jobPost.id}`} key={jobPost.id}>
                 <SingleJobPost 
                     summary={true}
                     title = { jobPost.title }
@@ -41,6 +43,7 @@ export const ManageJobPosts = () => {
                 </SingleJobPost>
             </RouterLink>
         ) }
+        </Stack>
         </Stack>
     )
 }
