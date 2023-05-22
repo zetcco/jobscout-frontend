@@ -44,6 +44,7 @@ import { EditQuestionary } from "components/authentication/user/job_seeker/quest
 import { FindPeople } from "routes/profile/FindPeople";
 import { ManageJobPosts } from "components/job_postings/ManageJobPosts";
 import { JobApplications } from "routes/profile/job_seeker/JobApplications";
+import { ProfilePosts } from "routes/profile/job_creator/ProfilePosts";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -125,7 +126,7 @@ const router = createBrowserRouter(createRoutesFromElements(
               <Route path="recommendations" element={<ProfileRecommendations/>}/>
               <Route path="qualifications" element={<ProfileQualifications/>}/>
               <Route path="experiences" element={<ProfileExperiences/>}/>
-              <Route path="posts" element={<Typography>Posts</Typography>}/>
+              <Route path="posts" element={<ProfilePosts/>}/>
               <Route path="gallery" element={<Typography>Gallery</Typography>}/>
             </Route>
           </Route>

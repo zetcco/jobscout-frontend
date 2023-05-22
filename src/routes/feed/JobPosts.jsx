@@ -133,8 +133,8 @@ export const JobPosts = () => {
                         >
                             { jobPost.description }
                         </SingleJobPost>
-                    </RouterLink>)
-                        }
+                    </RouterLink>
+                    ) }
                 </Stack>
             </Stack>              
         </Stack>
