@@ -1,95 +1,58 @@
 import React, { useState , useEffect } from "react";
 import { Stack } from "@mui/system";
-import { TextField, Box, Popover, IconButton, Alert, AlertTitle } from "@mui/material";
+import { TextField, Box, Popover, IconButton, Alert, AlertTitle, FormControl, InputLabel, Select, MenuItem, OutlinedInput, Button, Autocomplete, FormControlLabel, Checkbox } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { FilterPosts } from "../../components/job_postings/posts/FilterPosts";
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
-import { BasicCard } from "../../components/cards/BasicCard";
-import SmallPanel from "../../components/SmallPanel";
-import SubCategories from "../../components/job_postings/posts/SubCategories";
 import { RouterLink } from "../../components/RouterLink";
-import { serverClient } from "features/authSlice";
+import { useFetch } from "hooks/useFetch";
+import { ResponsiveIconButton } from "components/ResponsiveIconButton";
+import { Clear, Save, Search } from "@mui/icons-material";
+import { getQuery } from "hooks/getQuery";
+
+const init_search_query = {
+    description: '',
+    type: '',
+    degrees: [],
+    institutes: [],
+    categories: [],
+    skills: [],
+}
 
 export const JobPosts = () => {
 
-    {/*job post function*/}
+    const [showFilters, setShowFilters] = useState(null)
+    const [searchQuery, setSearchQuery] = useState(init_search_query)
     const [jobPosts , setjobPosts] = useState([]);
-    const [error , setError] = useState('');
+    const [categories, setCategories] = useState([])
+    const [skills, setSkills] = useState([])
+    
+    const fetch = useFetch()
+
     useEffect(() =>{
-        const fetchJobPosts = async () => {
-            try{
-                const response = await serverClient.get('/jobpost?page=0&size=15')
-                console.log(response.data);
-                setjobPosts(response.data);
-            }catch(error) {
-                setError(error.response.data)
-                console.log(error);
-            }
-        }
-        fetchJobPosts()
+        fetch('/category/', "GET", { onSuccess: setCategories })
+        fetch('/skills/', "GET", { onSuccess: setSkills })
+        fetch(`/jobpost/search?status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
     } , [])
 
-    const [ filterValues, setFilterValues ] = useState({
-        category: '',
-        skill: '',
-        status: '',
-        type: ''
-    })
+    const onSubmit = () => {
+        fetch(`/jobpost/search?${getQuery(searchQuery)}status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
+    }
 
-    useEffect(()=>{
-        const fetchJobPostsByCategoryId = async () => {
-            try{
-                const categoryResponse = await serverClient.get(`/jobpost/category/${filterValues.category}`);
-                const statusResponse = await serverClient.get(`jobpost/status?val=${filterValues.status}`);
-                const typeResponse = await serverClient.get(`jobpost/type?val=${filterValues.type}`);
-                console.log(categoryResponse.data);
-                console.log(statusResponse.data);
-                console.log(typeResponse.data);
-                setjobPosts(categoryResponse.data);
-                setjobPosts(statusResponse.data);
-                setjobPosts(typeResponse.data);
-            }catch(error){
-                console.log(error.response.data);
-                console.log(error);
-            }
-        }
-        fetchJobPostsByCategoryId();
-    } , [filterValues])
-
-    
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-
-    console.log(filterValues)
     return ( 
         <Stack spacing={2} sx={{ width: '100%' }}>
             <Stack>
-            { error && (
-                  <Alert severity="error">
-                    <AlertTitle>Error!</AlertTitle>
-                    <strong>{error.message}</strong>
-                  </Alert>
-              )}
             </Stack>
             <Stack direction={"row"} spacing={2} alignItems="center">
                 <Box sx={{ height: '100%', flexGrow: 1 }}>
                     <TextField 
-                    id="outlined-basic" 
                     label="Search for jobs" 
                     variant="outlined"
                     placeholder = "Example-React Developer"
+                    value={searchQuery.description}
+                    onChange={e => { setSearchQuery(ex => ({...ex, description: e.target.value})) }} 
+                    onKeyDown={e => { if (e.keyCode === 13) onSubmit() }}
                     type="text"
                     fullWidth
                     InputProps={{
@@ -101,54 +64,77 @@ export const JobPosts = () => {
                         }}
                     />  
                 </Box>
-                <Box sx={{ flexShrink: 1 }}>
-                    <IconButton variant='contained' sx={{ height: '100%', width: '100%' }} size='large'>
-                        <SearchIcon/>
-                    </IconButton>
+                <Box>
+                    <Button startIcon={<FilterListIcon/>} onClick={e => { setShowFilters(e.currentTarget) }}>Filters</Button>
+                    <Popover open={Boolean(showFilters)} onClose={() => { setShowFilters(null) }} anchorEl={showFilters} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                        <Stack spacing={2} m={2}>
+                            <FormControl sx={{ width: { xs: 300, sm: 350 } }}>
+                                <InputLabel>Select Type</InputLabel>
+                                <Select value={searchQuery.type} onChange={e => { setSearchQuery(ex => ({ ...ex, type: e.target.value })) }} input={<OutlinedInput label={'Select Type'}/>}>
+                                    <MenuItem value={"TYPE_FREELANCE"}>Freelance</MenuItem>
+                                    <MenuItem value={"TYPE_PERMANENT"}>Permanent</MenuItem>
+                                    <MenuItem value={"TYPE_PART_TIME"}>Part Time</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <Autocomplete
+                                sx={{ width: { xs: 300, sm: 350 } }}
+                                autoComplete
+                                multiple
+                                value={searchQuery.categories}
+                                onChange={(e, value) => { setSearchQuery(ex => ({...ex, categories: value})) }} 
+                                options={categories}
+                                renderInput={params => <TextField {...params} label='Categories'/>}
+                                getOptionLabel={option => option.name}
+                                renderOption={(props, option) => (
+                                    <Box component={'li'} {...props} value={option.id}>
+                                        {option.name}
+                                    </Box>
+                                )}
+                            />
+                            <Autocomplete
+                                sx={{ width: { xs: 300, sm: 350 } }}
+                                autoComplete
+                                multiple
+                                value={searchQuery.skills}
+                                onChange={(e, value) => { setSearchQuery(ex => ({...ex, skills: value})) }} 
+                                options={skills}
+                                renderInput={params => <TextField {...params} label='Skills'/>}
+                                getOptionLabel={option => option.name}
+                                renderOption={(props, option) => (
+                                    <Box component={'li'} {...props} value={option.id}>
+                                        {option.name}
+                                    </Box>
+                                )}
+                            />
+                            <FormControlLabel sx={{ height: '100%', ml: 1 }} label='Urgent' control={
+                                <Checkbox color='primary' checked={searchQuery.urgent} onChange={e => setSearchQuery(ex => ({...ex, urgent: e.target.checked}))} />
+                            }/>
+                            <Stack width={'100%'} direction={'row'} justifyContent={'right'}>
+                                <Button onClick={() => { setSearchQuery(init_search_query) }} color='error' startIcon={<Clear/>}>Clear</Button>
+                                <Button onClick={() => { setShowFilters(null) }} startIcon={<Save/>}>Save</Button>
+                            </Stack>
+                        </Stack>
+                    </Popover>
                 </Box>
-                <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
-                    <IconButton variant="contained" size="large" aria-describedby={id} onClick={handleClick}>
-                        <FilterListIcon/>
-                    </IconButton>
-                </Box>
+                <ResponsiveIconButton startIcon={<Search/>} onClick={onSubmit}>Search</ResponsiveIconButton>
             </Stack>
 
             <Stack direction={'row'} spacing={{ lg: 2, xs: 0 }}>
-                <Box sx={{ flexShrink: 0, flexGrow: 3, display: { xs: 'none', lg: 'block' } }}>
-                    <Stack direction={"column"} spacing={2}>                           
-                            <SmallPanel mainTitle = {'Filter By'} children = {<FilterPosts setFilterValues={setFilterValues} filterValues={filterValues}/>} /> 
-                            <SmallPanel mainTitle = {'Filter By'} children = {<SubCategories/>} />                                
-                    </Stack>
-                </Box>
-
-                {/* This is the Popover component of the filters on smaller screens  */}
-                <Popover id={id} open={open} anchorEl={anchorEl} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left', }}>
-                    <BasicCard>
-                        <Stack direction={"column"} spacing={2}>                           
-                            <SmallPanel mainTitle = {'Filter By'} children = {<FilterPosts setFilterValues={setFilterValues} filterValues={filterValues}/>} /> 
-                            <SmallPanel mainTitle = {'Filter By'} children = {<SubCategories/>} />                                
-                        </Stack>
-                    </BasicCard>
-                </Popover>
-                <Stack>
-                    <Box sx={{ flexGrow: 9 }}>                           
-                        <Stack direction={'column'} spacing={2} flexGrow = {1}>
-                            {
-                            jobPosts.map((jobPost) =>
-                            <RouterLink to={`/posts/${jobPost.id}`}>
-                                <SingleJobPost 
-                                summary={true}
-                                title = { jobPost.title }
-                                type = { jobPost.type }
-                                status = {jobPost.status}
-                                questionaryId={ jobPost.questionaryId }
-                                >
-                                    { jobPost.description }
-                                </SingleJobPost>
-                            </RouterLink>)
-                             }
-                        </Stack>
-                    </Box>
+                <Stack direction={'column'} spacing={2} flexGrow = {1}>
+                    {
+                    jobPosts.map((jobPost) =>
+                    <RouterLink to={`/posts/${jobPost.id}`} key={jobPost.id}>
+                        <SingleJobPost 
+                        summary={true}
+                        title = { jobPost.title }
+                        type = { jobPost.type }
+                        status = {jobPost.status}
+                        questionaryId={ jobPost.questionaryId }
+                        >
+                            { jobPost.description }
+                        </SingleJobPost>
+                    </RouterLink>)
+                        }
                 </Stack>
             </Stack>              
         </Stack>

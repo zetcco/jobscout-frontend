@@ -16,9 +16,8 @@ export const useFetch = () => {
             else if (reqType === "GET")
                 response = await serverClient.get(url)
             else if (reqType === "PATCH")
-                response = await serverClient.patch(url)
+                response = await serverClient.patch(url, data)
             
-            console.log(response)
             if (successMsg)
                 dispatch(setToastMessage({ severity: 'success', message: successMsg }))
             onSuccess(response.data)

@@ -5,7 +5,7 @@ import { forwardRef } from "react"
 export const BasicCard = forwardRef(({ children, sx, divsx, onClick, fullHeight, padding, noElevation, inner_sx, error, onClose, onMouseEnter, onMouseLeave }, ref ) => {
 
     return (
-        <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ ...divsx }}>
+        <Box onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} sx={{ ...divsx }}>
         <Paper sx={{
             ...(   !noElevation && 
                 ({
@@ -40,6 +40,6 @@ export const BasicCard = forwardRef(({ children, sx, divsx, onClick, fullHeight,
                 {children}
             </Box>
         </Paper>
-        </div>
+        </Box>
     )
 })

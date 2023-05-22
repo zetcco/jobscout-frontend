@@ -1,7 +1,7 @@
 import { useState , useEffect } from "react";
 import SingleJobPost from "../../components/job_postings/SingleJobPost";
 import { Stack, Box } from "@mui/system";
-import { Alert, AlertTitle, Button, Chip, CircularProgress, Typography } from "@mui/material";
+import { Alert, AlertTitle, Button, Chip, CircularProgress, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import SmallPanel from "../../components/SmallPanel";
 import { Ownership } from "../../components/job_postings/post/Ownership";
 import { selectAuthUser, serverClient } from "features/authSlice";
@@ -10,6 +10,7 @@ import ProfileWithHeader from "components/profile/ProfileWithHeader";
 import { RouterLink } from "components/RouterLink";
 import { useSelector } from "react-redux";
 import { useFetch } from "hooks/useFetch";
+import { Edit, ManageAccounts } from "@mui/icons-material";
 
 
 export const JobPost = () => {
@@ -31,12 +32,17 @@ export const JobPost = () => {
         }
     }
 
+    const setJobPostStatus = (value) => {
+        fetch(`/jobpost/${postId}/set-status`, "PATCH", { data: { status: value }, successMsg: "Changed successfully", onSuccess: () => {
+            setjobPost(post => ({ ...post, status: value }))
+        } })
+    }
+
     useEffect(()=>{
         const fetchJobPost = async () => {
             try{
                 setLoading(true)
                 const response = await serverClient.get(`/jobpost/${postId}`)
-                console.log(response.data);
                 setjobPost(response.data)
             }catch(error) {
                 setError(error.response.data);
@@ -66,7 +72,19 @@ export const JobPost = () => {
             <Stack spacing={2} sx={{ width: '100%' }} mb={2}>
                         {
                             authUser.role === "ROLE_JOB_CREATOR" && (
-                                <Button onClick={() => { navigate(`/posts/${jobPost.id}/manage`) }} variant="outlined">Manage</Button>
+                                <Stack direction={'row'} spacing={1} justifyContent={'right'}>
+                                    <FormControl
+                                    sx={{ width: { xs: 300, sm: 250 } }}
+                                    >
+                                    <InputLabel>Set Status</InputLabel>
+                                    <Select label="Set Status" value={jobPost.status} onChange={e => { setJobPostStatus(e.target.value) }}>  
+                                        <MenuItem value = {"STATUS_HOLD"}>On Hold</MenuItem> 
+                                        <MenuItem value = {"STATUS_ACTIVE"}>Active</MenuItem> 
+                                        <MenuItem value = {"STATUS_OVER"}>Over</MenuItem> 
+                                    </Select>
+                                    </FormControl>
+                                    <Button startIcon={<ManageAccounts/>} onClick={() => { navigate(`/posts/${jobPost.id}/manage`) }} variant="contained">Applicants</Button>
+                                </Stack>
                             )
                         }
                         <Box> 

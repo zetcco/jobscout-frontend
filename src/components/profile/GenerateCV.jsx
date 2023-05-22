@@ -44,7 +44,7 @@ export const GenerateCV = forwardRef(({ onClose }, ref) => {
     }
 
     return (
-    <SmallPanel mainTitle={"Select a Template"} sx={{ width: { xs: '95%', md: '50%' } }}>
+    <SmallPanel mainTitle={"Select a Template"} divsx={{ width: { xs: '95%', md: '50%' } }}>
         <Grid container spacing={2} height={{ xs: '60vh', md: '50vh' }} sx={{ overflowY: 'scroll' }}>
             {
                 loading ? (
