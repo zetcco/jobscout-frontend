@@ -10,10 +10,13 @@ import { RouterLink } from '../../../../components/RouterLink'
 import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
 import { VideoChatRounded } from '@mui/icons-material'
 import RecommendIcon from '@mui/icons-material/Recommend';
+import { useSelector } from 'react-redux'
+import { selectAuthUserId } from 'features/authSlice'
 
 export const JobCreatorHome = () => {
 
     const [ meetingModalOpen, setMeetingModalOpen ] = useState(false);
+    const userId = useSelector(selectAuthUserId)
 
     return (
         <Stack direction = {'column'}>
@@ -35,7 +38,7 @@ export const JobCreatorHome = () => {
                             </RouterLink>
                             </Grid>
                             <Grid item xs={3}>
-                            <RouterLink to={"/posts/1/manage"}>
+                            <RouterLink to={`/posts/${userId}/manage`}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                     <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>

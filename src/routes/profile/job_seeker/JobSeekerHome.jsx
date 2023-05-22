@@ -8,8 +8,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import WorkIcon from '@mui/icons-material/Work';
 import QuizIcon from '@mui/icons-material/Quiz';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useSelector } from 'react-redux'
+import { selectAuthUserId } from 'features/authSlice'
 
 export const JobSeekerHome = () => {
+    const userId = useSelector(selectAuthUserId)
+
   return (
     <Stack>
     <SmallPanel
@@ -19,7 +23,7 @@ export const JobSeekerHome = () => {
     >
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={3}>
-                <RouterLink to={"/users/1"}>
+                <RouterLink to={`/users/${userId}`}>
                 <SelectableCard>
                     <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                         <AccountCircleIcon sx = {{height:'30px' , width:'30px'}}/>
