@@ -43,6 +43,7 @@ import { AddQuestionary } from "components/authentication/user/job_seeker/questi
 import { EditQuestionary } from "components/authentication/user/job_seeker/questionaries/EditQuestionary";
 import { FindPeople } from "routes/profile/FindPeople";
 import { ManageJobPosts } from "components/job_postings/ManageJobPosts";
+import { JobApplications } from "routes/profile/job_seeker/JobApplications";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -117,6 +118,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path="/" element={<NavigationLayout noRouteAnimation/>}>
           <Route path="users">
+            <Route path="applications" element={<JobApplications/>}/>
             <Route path=":userId" element={<Profile/>}>
               <Route index element={<ProfileAbout/>}/>
               <Route path="skills" element={<ProfileSkills/>}/>
