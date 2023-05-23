@@ -1,9 +1,9 @@
 import React from "react";
 import ProfileHeaderCard from "./ProfileHeaderCard";
 
-const ProfileWithHeader = ({title , name }) => {
+const ProfileWithHeader = ({title , name, src }) => {
     return ( 
-                <ProfileHeaderCard title={ title } name={ name }/>
+        <ProfileHeaderCard title={ title } name={ name } src={ src }/>
      );
 }
  

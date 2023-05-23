@@ -41,8 +41,6 @@ export const QuestionaryAttempt = ({ questions, timePerQuestion, onSubmit }) => 
         openedQuestions.push(selectedQuestion)
     }
 
-    console.log(timeLeft)
-
     if (selectedQuestion === null)
         return (
             <Stack sx={{ width: '100%' }} justifyContent={'center'} spacing={2}>

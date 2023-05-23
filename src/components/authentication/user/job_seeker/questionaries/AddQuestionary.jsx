@@ -5,7 +5,7 @@ import { AddQuestion } from './AddQuestion'
 import { serverClient } from 'features/authSlice'
 import { useNavigate } from 'react-router-dom'
 
-export const AddQuestionary = ({ initRequest, initQuestionRefs, initEdit }) => {
+export const AddQuestionary = ({ initRequest, initQuestionRefs, initEdit, addPicture, handleSubmit }) => {
     const [ request, setRequest ] = useState(initRequest)
     const [ questionRefs, setQuestionRefs ] = useState(initQuestionRefs)
     const [edit, setEdit] = useState(initEdit)
@@ -48,18 +48,23 @@ export const AddQuestionary = ({ initRequest, initQuestionRefs, initEdit }) => {
         if (!errorsFound) {
             const data = {request: {...request.request, questions: questions.map(question => question.question)}, file: request.file}
             data.request.timePerQuestion = data.request.timePerQuestion * 1000
-            console.log(data)
-            const formData = new FormData()
-            formData.append('data', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
-            if (data.file)
-                formData.append('file', data.file[0]);
-            let response;
-            if (Object.keys(initRequest).length === 0) {
-                response = await serverClient.post('/questionary/create', formData)
-            } else 
-                response = await serverClient.put(`/questionary/${initRequest.request.id}/update`, formData)
-            if (response.status === 200)
-                navigate(`/questionaries/${response.data.id}`)
+            if (handleSubmit)
+                handleSubmit(data)
+            else {
+                const formData = new FormData()
+                if (addPicture) {
+                    formData.append('data', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
+                    if (data.file)
+                        formData.append('file', data.file[0]);
+                }
+                let response;
+                if (Object.keys(initRequest).length === 0) {
+                    response = await serverClient.post('/questionary/create', formData)
+                } else 
+                    response = await serverClient.put(`/questionary/${initRequest.request.id}/update`, formData)
+                if (response.status === 200)
+                    navigate(`/questionaries/${response.data.id}`)
+            }
         } else
             questions[errorIndex].ref.current.getRef().current.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
@@ -69,7 +74,7 @@ export const AddQuestionary = ({ initRequest, initQuestionRefs, initEdit }) => {
         <AddQuestionaryDetails initDetails={request} setDetails={(data) => { 
             setRequest(e => ({...e, ...data })) 
             setEdit(false)
-        }} edit={edit} setEdit={setEdit}/>
+        }} edit={edit} setEdit={setEdit} addPicture={addPicture}/>
         {
             questionRefs.map((question, index) => (
                 <AddQuestion ref={question.ref} key={index} index={index} onRemove={(index) => { setQuestionRefs(ref => ref.filter((_, qIndex) => qIndex !== index)) }} initQuesiton={question.init}/>
@@ -95,5 +100,6 @@ export const AddQuestionary = ({ initRequest, initQuestionRefs, initEdit }) => {
 AddQuestionary.defaultProps = {
     initRequest: {},
     initQuestionRefs: [], 
-    initEdit: true
+    initEdit: true,
+    addPicture: true
 }

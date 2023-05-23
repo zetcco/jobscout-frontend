@@ -181,6 +181,7 @@ const CreatorSignupForm = () => {
                                         type="date"
                                         placeholder = "Enter your Date of Birth"
                                         InputLabelProps={{ shrink: true }}
+                                        InputProps={{inputProps: { min: "1920-01-01", max: "2005-12-31"} }}
                                         fullWidth 
                                     />        
                                 )}

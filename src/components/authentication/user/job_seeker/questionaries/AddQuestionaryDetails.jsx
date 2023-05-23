@@ -3,7 +3,7 @@ import { BasicCard } from 'components/cards/BasicCard'
 import { UploadArea } from 'components/input/UploadArea'
 import { Controller, useForm } from 'react-hook-form'
 
-export const AddQuestionaryDetails = ({ edit, setEdit, setDetails, initDetails }) => {
+export const AddQuestionaryDetails = ({ edit, setEdit, setDetails, initDetails, addPicture }) => {
 
     const { register, control, handleSubmit, formState: { errors }, watch} = useForm({
         defaultValues: { 
@@ -91,19 +91,23 @@ export const AddQuestionaryDetails = ({ edit, setEdit, setDetails, initDetails }
                             />)}
                     />
                 </Stack>
-                <UploadArea 
-                    showPreview
-                    src={initDetails.request?.badge}
-                    disabled={!edit}
-                    register={
-                        register(
-                            "file",
-                            { required: initDetails ? false : true }
-                        )} 
-                    text={"Click here to Upload Badge"}
-                    error={errors.file}
-                    files={watch("file")}
-                />
+                {
+                    addPicture && (
+                        <UploadArea 
+                            showPreview
+                            src={initDetails.request?.badge}
+                            disabled={!edit}
+                            register={
+                                register(
+                                    "file",
+                                    { required: initDetails ? false : true }
+                                )} 
+                            text={"Click here to Upload Badge"}
+                            error={errors.file}
+                            files={watch("file")}
+                        />
+                    )
+                }
                 {
                     edit &&
                     <Stack direction={'row'} justifyContent={'end'} spacing={1}>

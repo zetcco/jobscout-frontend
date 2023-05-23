@@ -8,6 +8,7 @@ import { ResponsiveIconButton } from 'components/ResponsiveIconButton';
 import { Clear, PeopleTwoTone, Save } from '@mui/icons-material';
 import { useFetch } from 'hooks/useFetch';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getQuery } from 'hooks/getQuery';
 
 const init_search_query = {
     name: '',
@@ -208,17 +209,6 @@ export const FindPeople = () => {
             </Stack>
         </Stack>
     )
-}
-
-const getQuery = (query) => {
-    let out_query = ""
-    Object.keys(query).forEach(key => {
-        console.log(query[key])
-        out_query += query[key].length === 0 ? '' : `${key}=${
-            ((typeof query[key] === 'string') ? query[key] : query[key].map(obj => obj.id).join(","))
-        }&` 
-    })
-    return out_query;
 }
 
 const resolve_user_role = (role) => {
