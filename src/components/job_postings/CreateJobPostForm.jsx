@@ -49,12 +49,14 @@ export const CreateJobPostForm = () => {
 
   const onSubmitForm = async (data) => {
     try {
-      data.status = data.status ? "STATUS_HOLD" : "STATUS_ACTIVE"
+      data.jobPost.status = data.jobPost.status ? "STATUS_HOLD" : "STATUS_ACTIVE"
       setLoading(true)
-      const response = await serverClient.post('/jobpost', { jobPost: {...data} })
+      console.log(data)
+      const response = await serverClient.post('/jobpost', data)
       if (response.status === 200)
         navigate(`/posts/${response.data.id}`)
     } catch (error) {
+      console.log(error)
       setError(error.response.data)
     } finally {
       setLoading(false)
@@ -65,7 +67,7 @@ export const CreateJobPostForm = () => {
     <Stack spacing={2}>
         <BasicCard sx={{ px: 2 }}>
           <Typography variant='h5' my={1}>Create a Job Listing</Typography>
-          <form onSubmit={handleSubmit(onSubmitForm)}>
+          <form onSubmit={handleSubmit((data) => { onSubmitForm({ jobPost: {...data} }) })}>
             <Grid container spacing={1.5} sx={{ mt: 0 }}>
               <Grid item xs={12} md={12}>
                 { error && (
@@ -188,6 +190,9 @@ export const CreateJobPostForm = () => {
                       type='date'
                       label="Due Date"
                       InputLabelProps={{ shrink: true }}
+                      inputProps={{
+                          min: (new Date().toLocaleDateString('en-CA'))
+                      }}
                       error={errors.dueDate && true}
                       fullWidth
                     /> )}
