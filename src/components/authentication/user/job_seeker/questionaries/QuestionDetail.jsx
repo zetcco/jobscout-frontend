@@ -10,11 +10,15 @@ import { useParams, useNavigate } from 'react-router';
 import { QuestionaryAttempt } from './QuestionaryAttempt';
 import { QuestionaryResults } from './QuestionaryResults';
 import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import { useFetch } from 'hooks/useFetch';
 
 export const QuestionDetail = () => {
 
   const { questionaryId } = useParams()
   const navigate = useNavigate()
+
+  const fetch = useFetch()
 
   const [ details, setDetails ] = useState(null)
   const [ loading, setLoading ] = useState(true)
@@ -24,6 +28,8 @@ export const QuestionDetail = () => {
   const [ results, setResults ] = useState(null)
 
   const authUser = useSelector(selectAuthUser)
+
+  const [ queryParams, setQueryParams ] = useSearchParams()
 
   useEffect(() => {
     const getData = async () => {
@@ -44,6 +50,7 @@ export const QuestionDetail = () => {
       setStarted(false)
       setLoading(true)
       try {
+        console.log(answers)
         const data = await submitAnswers(questionaryId, answers)
         setResults(data)
       } catch (error) {
@@ -54,6 +61,22 @@ export const QuestionDetail = () => {
     submitData()
   }
 
+  const onResultSubmit = async () => {
+    try {
+        if (queryParams.get("jobpost")) {
+          fetch(`/jobpost/${queryParams.get("jobpost")}/apply`, "PATCH", { successMsg: "Successfully applied", onSuccess: () => {
+            navigate('/home')
+          } })
+        } else {
+          const response = await serverClient.put(`/questionary/attempts/${details.id}/set-privacy`, { privacy: true })
+          if (response.status === 200)
+              navigate('/home')
+        }
+    } catch (error) {
+        setError(error)
+    }
+  }
+
   if (loading)
     return (
       <BasicCard>
@@ -61,7 +84,7 @@ export const QuestionDetail = () => {
       </BasicCard>
     )
   if (started === false && results !== null) {
-    return ( <QuestionaryResults results={results} id={questionaryId}/> )
+    return ( <QuestionaryResults results={results} id={questionaryId} onSubmit={onResultSubmit} submitText={queryParams.get("jobpost") ? "Apply for the Job" : "Add to profile"}/> )
   }
   
   if (started) {

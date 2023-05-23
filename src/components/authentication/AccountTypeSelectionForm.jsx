@@ -5,12 +5,12 @@ import { SelectableCard } from '../cards/SelectableCard'
 import { Link as RounterLink } from 'react-router-dom'
 
 export const AccountTypeSelectionForm = () => {
-    const [ selected, setSelected ] = useState()
+    const [ selected, setSelected ] = useState(null)
 
     return (
             <CenteredHeaderCard 
                 title={"Select Account Type"}
-                footer={<Button component={RounterLink} to={ selected === "Organization" ? "/signup/organization/account" : ( selected === "Job Seeker" ) ? "/signup/user/seeker/account" : "/signup/user/creator/account"} variant='contained' sx={{ width: '100%' }}>Continue</Button>}
+                footer={<Button component={RounterLink} disabled={selected === null} to={ selected === "Organization" ? "/signup/organization/account" : ( selected === "Job Seeker" ) ? "/signup/user/seeker/account" : "/signup/user/creator/account"} variant='contained' sx={{ width: '100%' }}>Continue</Button>}
             >
                 <Stack direction={{ sm: "column", lg: "row" }} spacing={2} sx={{  width: '100%' }} alignItems={{ lg: 'stretch' }}>
                     <Box sx={{ flex: 1 }}>

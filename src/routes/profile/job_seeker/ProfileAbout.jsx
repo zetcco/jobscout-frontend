@@ -198,7 +198,7 @@ export const ProfileAbout = () => {
                         )}
                     </>
                 }>
-                    {about.socials.length !== 0 ? (
+                    {about.socials?.length !== 0 ? (
                         <Stack spacing={2} direction={"row"}>
                         {
                             about.socials.map( (social, index) => {

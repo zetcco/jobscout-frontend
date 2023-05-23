@@ -4,23 +4,11 @@ import { serverClient } from 'features/authSlice'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export const QuestionaryResults = ({ id, results }) => {
+export const QuestionaryResults = ({ id, results, onSubmit, submitText }) => {
 
     const navigate = useNavigate()
     const [ loading, setLoading ] = useState(false)
     const [ error, setError ] = useState(null)
-
-    const addToProfile = async () => {
-        setLoading(true)
-        try {
-            const response = await serverClient.put(`/questionary/attempts/${id}/set-privacy`, { privacy: true })
-            setLoading(false)
-            if (response.status === 200)
-                navigate('/home')
-        } catch (error) {
-            setError(error)
-        }
-    }
 
     return (
         <BasicCard>
@@ -29,7 +17,7 @@ export const QuestionaryResults = ({ id, results }) => {
             <Typography>You have scored <strong>{results}</strong> marks</Typography>
             <Stack direction={'row'} spacing={2} sx={{ width: '100%' }}>
             <Button variant='outlined' onClick={ () => { navigate(`/questionaries`) }} sx={{ width: '100%' }}>Retry</Button>
-            { results >= 70 && <Button variant='contained' sx={{ width: '100%' }} disabled={loading} onClick={addToProfile}>{ loading ? <CircularProgress/> : 'Add to Profile' }</Button> }
+            { results >= 70 && <Button variant='contained' sx={{ width: '100%' }} disabled={loading} onClick={onSubmit}>{ loading ? <CircularProgress/> : submitText }</Button> }
             </Stack>
         </Stack>
         </BasicCard>

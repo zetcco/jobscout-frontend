@@ -45,7 +45,7 @@ export const ChatBubble = forwardRef(({ sent, topSent, bottomSent, name, message
           py: 1.2, px: 2
           }}
           >
-            <Typography variant={"body2"} sx={{ fontWeight: 450, fontSize: 15 }}>{message.content}</Typography>
+            <Typography variant={"body2"} sx={{ fontWeight: 450, fontSize: 15, whiteSpace: 'pre-wrap' }}>{message.content}</Typography>
         </Box>
         { showHover && sent && (
           <IconButton onClick={(e) => { setAnchorEl(e.target) }}>
