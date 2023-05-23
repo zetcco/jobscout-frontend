@@ -12,6 +12,9 @@ import { CheckCircleOutline, Clear, DeleteOutline, FilterListRounded, SearchOutl
 import { getQuery } from 'hooks/getQuery'
 import { RouterLink } from 'components/RouterLink'
 import { getDateWithAddition } from 'components/meeting/ScheduleMeeting'
+import { TimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const init_search_query = {
     name: '',
@@ -34,6 +37,7 @@ function ManageJobPost() {
   const [showFilters, setShowFilters] = useState(null)
   const [showInterview, setShowInterview] = useState(null)
   const [ timestamp, setTimestamp ] = useState(getDateWithAddition(1));
+  const [ startTime, setStartTime ] = useState(null);
   const fetch = useFetch()
 
   useEffect(() => {
@@ -58,8 +62,10 @@ function ManageJobPost() {
   }
 
   const scheduleInterview = (id) => {
-    fetch(`/jobpost/interview/${id}`, "PATCH", { data: { timestamp }, onSuccess: () => {
+    fetch(`/jobpost/interview/${id}?time=${startTime.$H}:${startTime.$m}:00`, "PATCH", { data: { timestamp }, onSuccess: () => {
       setApplications(applications => applications.filter(obj => obj.id !== id))
+      setTimestamp(getDateWithAddition(1))
+      setStartTime(null)
     }, successMsg: "Scheduled interview", errorMsg: "Failed to schedule interview"})
   }
 
@@ -182,25 +188,26 @@ function ManageJobPost() {
                               <>
                              <ResponsiveIconButton startIcon={<CheckCircleOutline/>} onClick={e => { setShowInterview(e.currentTarget) }} >Interview</ResponsiveIconButton> 
                               <Popover open={Boolean(showInterview)} onClose={() => { setShowInterview(null) }} anchorEl={showInterview} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                                <Stack m={2} spacing={1}>
+                                <Stack m={2} spacing={1} sx={{ width: { xs: 400 } }}>
                                 <Typography variant="body2">Pick a date for the interview</Typography>
                                 <Stack direction={'row'} spacing={1}>
                                     <TextField
                                         type="date"
                                         value={timestamp.toLocaleDateString('en-CA')}
                                         onChange={(e) => { setTimestamp(new Date( e.target.value )) }}
-                                        sx={{ width: '100%' }}
+                                        fullWidth
                                         inputProps={{
                                             min: (getDateWithAddition(1).toLocaleDateString('en-CA'))
                                         }}
                                     />
                                     <TextField label="Day(s)" type={'number'} value={Math.ceil((timestamp - new Date())/(1000 * 60 * 60 * 24))} onChange={e => { 
                                         setTimestamp(getDateWithAddition(parseInt(e.target.value))) 
-                                    }} inputProps={{
-                                        min: 1
-                                    }}/>
+                                    }} inputProps={{ min: 1 }}/>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                      <TimePicker sx={{ width: '100%' }} label="Time" value={startTime} onChange={setStartTime} />
+                                    </LocalizationProvider>
                                 </Stack>
-                                <Button variant="contained" onClick={() => { scheduleInterview(application.id) }}>Schedule Now</Button>
+                                <Button variant="contained" onClick={() => { scheduleInterview(application.id) }} disabled={startTime === null}>Schedule Now</Button>
                                 </Stack>
                               </Popover>
                               </>) }
