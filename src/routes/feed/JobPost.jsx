@@ -19,6 +19,7 @@ export const JobPost = () => {
     const { postId }  = useParams();
     const [jobPost , setjobPost] = useState('');
     const [ loading, setLoading ] = useState(true)
+    const [ applied, setApplied ] = useState(false)
     const [ error, setError ] = useState(null)
     const authUser = useSelector(selectAuthUser)
     const navigate = useNavigate()
@@ -28,7 +29,7 @@ export const JobPost = () => {
         if (jobPost.questionaryId) {
             navigate(`/questionaries/${jobPost.questionaryId}?jobpost=${jobPost.id}`)
         } else {
-            fetch(`/jobpost/${postId}/apply`, "PATCH", { successMsg: "Successfully applied" })
+            fetch(`/jobpost/${postId}/apply`, "PATCH", { successMsg: "Successfully applied", onSuccess: () => { setApplied(true) } })
         }
     }
 
@@ -43,6 +44,8 @@ export const JobPost = () => {
             try{
                 setLoading(true)
                 const response = await serverClient.get(`/jobpost/${postId}`)
+                if (authUser.role === "ROLE_JOB_SEEKER") 
+                    setApplied((await serverClient.get(`/jobpost/check-application?jobPostId=${postId}`)).data)
                 setjobPost(response.data)
             }catch(error) {
                 setError(error.response.data);
@@ -150,7 +153,7 @@ export const JobPost = () => {
                         </Stack>
                         {
                             authUser.role === 'ROLE_JOB_SEEKER' && (
-                                <Button variant="contained" color='success' fullWidth size='large' disabled = {new Date(jobPost.dueDate) < new Date()} onClick={handleApply}>Apply now</Button>
+                                <Button variant="contained" color='success' fullWidth size='large' disabled = {new Date(jobPost.dueDate) < new Date() || applied} onClick={handleApply}>{ applied ? 'Already Applied' : 'Apply Now' }</Button>
                             )
                         }
             </Stack>                   
