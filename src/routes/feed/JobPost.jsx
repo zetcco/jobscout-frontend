@@ -55,8 +55,6 @@ export const JobPost = () => {
         fetchJobPost()
     } , [])
 
-    console.log(applied)
-
     if (error)
         return (
             <Alert severity="error">
