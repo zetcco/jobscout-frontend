@@ -35,7 +35,7 @@ const AddCompanyForm = () => {
         { headers: { "Authorization": `Bearer ${authToken}` }}
       ).then((response) => {
         setSubmitOrgsLoading(false);
-        navigate("/home")
+        navigate("/signup/user/dp")
       }).catch((error) => {
         setError(error.response.data)
         setSubmitOrgsLoading(false);
@@ -123,7 +123,11 @@ const AddCompanyForm = () => {
                 <Stack direction={"column"}>
                   <Typography variant='profile_name'>{value.displayName}</Typography>
                   <Typography variant='h6'>{value.email}</Typography>
-                  <Typography variant='subtitle1'>{value.address?.city + ", " + value.address?.province + ", " + value.address?.country}</Typography>
+                  {
+                    value.address && (
+                      <Typography variant='subtitle1'>{value.address?.city + ", " + value.address?.province + ", " + value.address?.country}</Typography>
+                    )
+                  }
                 </Stack>
               </Stack>
             </CardWithCloseButton>

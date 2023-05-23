@@ -6,13 +6,24 @@ const initialState = {
     loading: false,
     userInfo: JSON.parse(localStorage.getItem('userInfo')),
     token: JSON.parse(localStorage.getItem('token')),
-    error: null
+    error: null,
+    success: false
 }
 
 export const selectAuthUser = (state) => state.auth.userInfo;
+export const selectAuthUserId = (state) => state.auth.userInfo.id;
 export const selectAuthUserToken = (state) => state.auth.token;
 export const selectAuthError = (state) => state.auth.error;
 export const selectAuthLoading = (state) => state.auth.loading;
+export const selectAuthSuccess = (state) => state.auth.success;
+
+const getServerClient = (token) => axios.create({
+    baseURL: '',
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+})
+export let serverClient = getServerClient(JSON.parse(localStorage.getItem('token')))
 
 const authenticationSlice = createSlice({
     name: 'auth',
@@ -23,6 +34,13 @@ const authenticationSlice = createSlice({
             state.userInfo = ""
             localStorage.removeItem('userInfo')
             localStorage.removeItem('token')
+            serverClient = null
+        },
+        resetSuccess(state, _) {
+            state.success = false
+        },
+        clearError(state, _) {
+            state.error = null
         }
     },
     extraReducers(builder) {
@@ -30,10 +48,11 @@ const authenticationSlice = createSlice({
             .addMatcher(
                 (action) => /auth\/profile.*fulfilled/.test(action.type),
                 (state, action) => {
-                    const userInfo = { ...action.payload, ...state.userInfo }
+                    const userInfo = { ...state.userInfo, ...action.payload }
                     state.userInfo = userInfo
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     state.loading = false
+                    state.success = true
                 }
             )
             .addMatcher(
@@ -60,6 +79,7 @@ const authenticationSlice = createSlice({
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
                     state.loading = false
+                    serverClient = getServerClient(state.token)
                 }
             )
             .addMatcher(
@@ -144,7 +164,7 @@ export const updateDisplayPicture = createAsyncThunk('auth/profile/updateDisplay
     }
 })
 
-export const { logout } = authenticationSlice.actions;
+export const { logout, resetSuccess, clearError } = authenticationSlice.actions;
 
 export const handleCommsError = (e, rejectWithValue) => {
     console.log(e)

@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
-import { selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
+import { clearError, selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
 import { requestJobCreatorSignup } from '../../../../features/authSlice'
 
 /* eslint-disable no-useless-escape */
@@ -29,17 +29,21 @@ const CreatorSignupForm = () => {
     const authError = useSelector(selectAuthError);
     useEffect(() => {
         if (authError && authError.status === 409) {
-            setError('companyName')
             setError('email')
         } 
     }, [setError, authError])
     /* ---------------- */
+
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
 
     const countries = useSelector(selectCountries);
     const provice = useSelector(selectProvince);
     const cities = useSelector(selectCities);
 
     const onSubmit=(data) =>{
+        dispatch(clearError())
         dispatch(requestJobCreatorSignup(data))
     }
 
@@ -54,6 +58,8 @@ const CreatorSignupForm = () => {
     useEffect(() => {
         dispatch(fetchCities(watchProvince))
     }, [dispatch, watchProvince])
+
+    console.log(errors)
 
     return ( 
         <CenteredHeaderCard
@@ -151,14 +157,14 @@ const CreatorSignupForm = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>   
                             <Controller
-                                name="contactNo"
+                                name="contact"
                                 rules={{ required: true, pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im }}
                                 control={control}
                                 defaultValue=""
                                 render={ ({ field }) => (
                                     <TextField 
                                         {...field}
-                                        error={errors.contactNo && true}
+                                        error={errors.contact && true}
                                         label="Contact Number" 
                                         variant="outlined"
                                         placeholder = "Enter Contact Number"
@@ -181,6 +187,7 @@ const CreatorSignupForm = () => {
                                         type="date"
                                         placeholder = "Enter your Date of Birth"
                                         InputLabelProps={{ shrink: true }}
+                                        InputProps={{inputProps: { min: "1920-01-01", max: "2005-12-31"} }}
                                         fullWidth 
                                     />        
                                 )}
@@ -231,7 +238,7 @@ const CreatorSignupForm = () => {
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
                                 <Controller
                                     name="address.country"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (
@@ -255,7 +262,7 @@ const CreatorSignupForm = () => {
                                 <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
                                 <Controller
                                     name="address.province"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (
@@ -279,7 +286,7 @@ const CreatorSignupForm = () => {
                                 <InputLabel id="Org-registration-city-select-label">City</InputLabel>
                                 <Controller
                                     name="address.city"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (

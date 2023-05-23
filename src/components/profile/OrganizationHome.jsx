@@ -20,50 +20,27 @@ export const OrganizationHome = () => {
      <Stack>
         <SmallPanel
             mainTitle = {'Actions'}
+            noElevation
+            sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
         >
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                    <SelectableCard
-                        title = { 
-                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    {/* <WorkIcon sx = {{height:'30px' , width:'30px'}}/> */}
-                                    <VideoChatRounded sx={{ height: 30, width: 30 }}/>
-                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MEET</Typography>
-                                </Stack> 
-                                }
-                            onClick={() => setMeetingModalOpen(true)}
-                            />
-                        <Modal
-                                open={meetingModalOpen}
-                                onClose={() => setMeetingModalOpen(false)}
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}
-                            >
-                            <ScheduleMeeting/>
-                        </Modal>
+                    <SelectableCard>
+                        <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                            <VideoChatRounded sx={{ height: 30, width: 30 }}/>
+                            <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MEET</Typography>
+                        </Stack> 
+                    </SelectableCard>
                     </Grid>
                     <Grid item xs={4}>
                     <RouterLink to={"/join-requests"}>
-                    <SelectableCard
-                        title = { 
-                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>
-                                    <Typography variant = 'h6'>REQUEST</Typography>
-                                </Stack> }
-                        />
+                    <SelectableCard>
+                        <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                            <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>
+                            <Typography fontSize={17} fontWeight={650} letterSpacing={1}>REQUESTS</Typography>
+                        </Stack>
+                    </SelectableCard>
                     </RouterLink>
-                    </Grid>
-                    <Grid item xs={4}>
-                    <SelectableCard
-                        title = { 
-                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    <WorkIcon sx = {{height:'30px' , width:'30px'}}/>
-                                    <Typography variant = 'h6'>Vaccanies</Typography>
-                                </Stack> }
-                        />
                     </Grid>
                 </Grid>
         </SmallPanel>

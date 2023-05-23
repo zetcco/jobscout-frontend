@@ -4,73 +4,93 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import axios from "axios";
-import { selectAuthUserToken } from "features/authSlice";
-import { useSelector } from "react-redux";
+import { serverClient } from "features/authSlice";
 
-const FilterPosts = () => { 
+export const FilterPosts = ({ filterValues, setFilterValues }) => { 
 
     const [categories , setCategories] = useState([]);
-    const [category , setCategory] = useState('');
-    const token = useSelector(selectAuthUserToken)
+    const [skills , setSkills] = useState([]);
+
     useEffect(()=>{
-        const fetchCategories = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get('/category/' , {
-                    headers:{
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                setCategories(response.data)
+                const resCategory = await serverClient.get('/category/')
+                const resSkill = await serverClient.get('/skills/')
+                setCategories(resCategory.data)
+                setSkills(resSkill.data)
             } catch (error) {
                 console.error(error)
             }
         }
-        fetchCategories()
+        fetchData()
     
-        },[token])
+        },[])
 
     return ( 
 
-                        <Stack direction={'column'} spacing={4}>
-                                <FormControl>
-                                    <InputLabel id="Small-panel-filter-by-fields-label">Filter by fields</InputLabel>
-                                    <Select
-                                        labelId="Small-panel-filter-by-fields-label"
-                                        id="Small-panel-filter-by-fields"
-                                        value = {category}
-                                        onChange = {(e) => setCategory(e.target.value)}
-                                        label="Fileds"      
-                                    >
-                                        {
-                                            categories.map((category) =>
-                                            <MenuItem value = {category.id}>{category.name}</MenuItem>)
-                                        }
-                                    </Select>
-                                </FormControl>
-                                <FormControl>
-                                    <InputLabel id="Small-panel-filter-by-skills-label">Filter by skills</InputLabel>
-                                    <Select
-                                        labelId="Org-registration-city-select-label"
-                                        id="Org-registration-city-select"
-                                        label="City"
-    
-                                    >
-                            
-                                    </Select>
-                                </FormControl>
-                                <FormControl>
-                                    <InputLabel id="Small-panel-filter-by-location-label">Filter by location</InputLabel>
-                                    <Select
-                                        labelId="Org-registration-city-select-label"
-                                        id="Org-registration-city-select"
-                                        label="City"
-                                 >
-                                       
-                                    </Select>
-                            </FormControl>
-                    </Stack>
-     );
-}           
+                <Stack direction={'column'} spacing={4}>
+                        <FormControl>
+                            <InputLabel id="Small-panel-filter-by-categories-label">Filter by Category</InputLabel>
+                            <Select
+                                labelId="Small-panel-filter-by-categories-label" 
+                                id="Small-panel-filter-by-categories"
+                                value = {filterValues.category}
+                                onChange = {(e) => setFilterValues({ ...filterValues, category: e.target.value })}
+                                label="category"      
+                            >
+                                {
+                                    categories.map((category, index) =>
+                                    <MenuItem value = {category.id} key={index}>{category.name}</MenuItem>)
+                                }
+                            </Select>
+                        </FormControl>
+                        <FormControl>
+                            <InputLabel id="Small-panel-filter-by-skills-label">Filter by skills</InputLabel>
+                            <Select
+                                labelId="Small-panel-filter-by-skills-label"
+                                id="Small-panel-filter-by-skills"
+                                label="skill"
+                                value={filterValues.skill}
+                                onChange = {(e) => setFilterValues({ ...filterValues, skill: e.target.value })}
+                            >
+                                {
+                                    skills.map((skill , index) =>
+                                    <MenuItem value={skill.id} key={index}>{skill.name}</MenuItem>)
+                                }
+                    
+                            </Select>
+                        </FormControl>
+                        <FormControl>
+                            <InputLabel id="Small-panel-filter-by-status-label">Filter by Status</InputLabel>
+                            <Select
+                                labelId="Small-panel-filter-by-status-label"
+                                id="Small-panel-filter-by-status"
+                                label="status"
+                                value={filterValues.status}
+                                onChange={(e) => setFilterValues({ ...filterValues , status: e.target.value})}
+                            >
+                                <MenuItem value = {'STATUS_ACTIVE'}>Activated</MenuItem>
+                                <MenuItem value = {'STATUS_OVER'}>Deactivated</MenuItem>
+                                <MenuItem value = {'STATUS_HOLD'}>Holded</MenuItem>   
+                            </Select>
+                        </FormControl>
+                        <FormControl>
+                            <InputLabel id="Small-panel-filter-by-type-label">Filter by Type</InputLabel>
+                            <Select
+                                labelId="Small-panel-filter-by-type-label"
+                                id="Small-panel-filter-by-type"
+                                label="type"
+                                value={filterValues.type}
+                                onChange={(e) => setFilterValues({ ...filterValues , type: e.target.value})}
+                            >
+                                <MenuItem value = {'TYPE_PERMANENT'}>Full Time</MenuItem>
+                                <MenuItem value = {'TYPE_PART_TIME'}>Part Time</MenuItem>
+                                <MenuItem value = {'TYPE_FREELANCE'}>Freelance</MenuItem> 
+                            </Select>
+                        </FormControl>
+                </Stack>
+            )
+        };
+          
  
-export default FilterPosts;
+//export default FilterPosts;

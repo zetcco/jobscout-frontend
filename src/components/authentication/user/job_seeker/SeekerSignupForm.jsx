@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
-import { requestJobSeekerSignup, selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
+import { clearError, requestJobSeekerSignup, selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
 
 /* eslint-disable no-useless-escape */
 
@@ -27,11 +27,14 @@ const SeekerSignupForm = () => {
     const authError = useSelector(selectAuthError);
     useEffect(() => {
         if (authError && authError.status === 409) {
-            setError('companyName')
             setError('email')
         } 
     }, [setError, authError])
     /* ---------------- */
+
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
 
     const countries = useSelector(selectCountries);
     const provice = useSelector(selectProvince);
@@ -149,14 +152,14 @@ const SeekerSignupForm = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>   
                             <Controller
-                                name="contactNo"
+                                name="contact"
                                 rules={{ required: true, pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im }}
                                 control={control}
                                 defaultValue=""
                                 render={ ({ field }) => (
                                     <TextField 
                                         {...field}
-                                        error={errors.contactNo && true}
+                                        error={errors.contact && true}
                                         label="Contact Number" 
                                         variant="outlined"
                                         placeholder = "Enter Contact Number"
@@ -179,6 +182,7 @@ const SeekerSignupForm = () => {
                                         type="date"
                                         placeholder = "Enter your Date of Birth"
                                         InputLabelProps={{ shrink: true }}
+                                        InputProps={{inputProps: { min: "1920-01-01", max: "2005-12-31"} }}
                                         fullWidth 
                                     />        
                                 )}

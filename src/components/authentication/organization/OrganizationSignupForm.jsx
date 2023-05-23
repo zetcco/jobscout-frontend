@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from '@mui/material/TextField';
-import { Alert, AlertTitle, Button, Grid } from '@mui/material';
+import { Alert, AlertTitle, Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -9,7 +9,7 @@ import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthError, selectAuthLoading } from "../../../features/authSlice";
+import { clearError, selectAuthError, selectAuthLoading } from "../../../features/authSlice";
 import { UploadArea } from '../../input/UploadArea'
 import { useAddress } from "../../../hooks/useAddress";
 import { requestOrganizationSignup } from "../../../features/authSlice";
@@ -19,6 +19,8 @@ import { requestOrganizationSignup } from "../../../features/authSlice";
 const OrganizationSignupForm = () => {
     const { register, control, handleSubmit, formState: { errors }, watch, setError }= useForm();
     const dispatch = useDispatch();
+
+    const [ agreed, setAgreed ] = useState(false)
 
     /* Form submission */
     const loading = useSelector(selectAuthLoading);
@@ -37,7 +39,11 @@ const OrganizationSignupForm = () => {
         } 
     }, [setError, authError])
     /* ---------------- */
-    
+
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
+
     const {countries, provice, cities} = useAddress(watch("request.address.country"), watch("request.address.province"));
 
     return (
@@ -247,7 +253,13 @@ const OrganizationSignupForm = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Button type="submit" variant="contained" fullWidth disabled={loading}>Continue</Button>
+                        <FormControlLabel sx={{ height: '100%', ml: 1 }} label='I confirm that all the provided information is accurate and complete, and acknowledge that the necessary trademarks are in place.' control={
+                            <Checkbox color='primary' checked={agreed} onChange={e => setAgreed(e.target.checked)} />
+                        }/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Button type="submit" variant="contained" fullWidth disabled={loading || !agreed}>Continue</Button>
                     </Grid>
                 
                     </Grid>

@@ -1,39 +1,34 @@
 import { ContentCopyRounded, OpenInNew } from "@mui/icons-material";
-import { Alert, AlertTitle, Button, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
-import axios from "axios";
+import { Alert, AlertTitle, Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import SmallPanel from "components/SmallPanel";
-import { selectAuthUserToken } from "features/authSlice";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useFetch } from "hooks/useFetch";
+import React, { forwardRef, useState } from "react";
 
-export const ScheduleMeeting = () => {
-    const [ timestamp, setTimestamp ] = useState('');
+export const ScheduleMeeting = forwardRef((props, ref) => {
+    const [ timestamp, setTimestamp ] = useState(getDateWithAddition(1));
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
-    const authToken = useSelector(selectAuthUserToken);
+    const fetch = useFetch()
 
     const hostMeeting = async () => {
         setLoading(true)
-        try {
-            const response = await axios.post('/meeting/host', { timestamp }, {
-                headers: { Authorization: `Bearer ${authToken}` }
-            })
-
-            setResponse(process.env.REACT_APP_FRONTEND_URL + "/meet/" + response.data.link)
-        } catch (error) {
+        await fetch('/meeting/host', "POST", { data: { timestamp }, successMsg: "Meeting created", errorMsg: "Failed to create meeting", onSuccess: (data) => {
+            setResponse(process.env.REACT_APP_FRONTEND_URL + "/meet/" + data.link)
+        }, onError: (error) => {
             setError(error)
-        }
+        }})
         setLoading(false)
     }
 
     return (
-        <SmallPanel mainTitle={response ? "Here's your link" : "Schedule a Meeting"} sx={{ width: '40%' }}>
+        <Box sx={{ width: '50%' }}>
+        <SmallPanel mainTitle={response ? "Here's your link" : "Schedule a Meeting"}>
             {loading ? (
                 <Typography>Loading</Typography>
             ) : (
                     response ? (
-                        <>
+                        <Stack spacing={2}>
                         <Typography variant="body2">Copy this link and send it to people you want to meet with. Be sure to save it so you can use it later, too.</Typography>
                         <TextField
                             value={response}
@@ -52,31 +47,44 @@ export const ScheduleMeeting = () => {
                                 style: { fontSize: 15 }
                             }}
                         />
-                        </>
+                        </Stack>
                     ) : (
-                        <>
+                        <Stack spacing={2}>
                         { error && (
                             <Alert severity="error">
                                 <AlertTitle>Error</AlertTitle>
-                                <strong>{error.response.message}</strong>
+                                <strong>{error.response.data.message}</strong>
                             </Alert>
                         )}
-                        <TextField
-                            label="Enter a Schedule"
-                            type="date"
-                            placeholder="Enter your Date of Birth"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                        />
-                        <Divider>
-                            <Typography align="center" variant="overline" fullWidth>
-                                OR
-                            </Typography>
-                        </Divider>
+                        <Typography variant="body2">Set the expiration date for the meeting below.</Typography>
+                        <Stack direction={'row'} spacing={2}>
+                            <TextField
+                                type="date"
+                                value={timestamp.toLocaleDateString('en-CA')}
+                                onChange={(e) => { setTimestamp(new Date( e.target.value )) }}
+                                sx={{ width: '100%' }}
+                                inputProps={{
+                                    min: (getDateWithAddition(1).toLocaleDateString('en-CA'))
+                                }}
+                            />
+                            <TextField label="Day(s)" type={'number'} value={Math.ceil((timestamp - new Date())/(1000 * 60 * 60 * 24))} onChange={e => { 
+                                setTimestamp(getDateWithAddition(parseInt(e.target.value))) 
+                            }} inputProps={{
+                                min: 1
+                            }}/>
+                        </Stack>
                         <Button variant="contained" onClick={hostMeeting}>Schedule Now</Button>
-                        </>
+                        </Stack>
                     )
             )}
         </SmallPanel>
+        </Box>
     );
-};
+});
+
+export const getDateWithAddition = (count) => {
+    let dateTomorrow = new Date()
+    let dateToday = new Date()
+    dateTomorrow.setDate(dateToday.getDate() + count)
+    return dateTomorrow
+}

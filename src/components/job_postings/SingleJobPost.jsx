@@ -1,37 +1,73 @@
 import React from "react";
-import { Stack, Typography} from '@mui/material'
+import { Box, Stack, Typography} from '@mui/material'
 import Chip from '@mui/material/Chip';
 import { BasicCard } from "../cards/BasicCard";
 
 
-const SingleJobPost = ({ sx }) => {
 
-    const handleDelete = () => {
-        console.info('You clicked the delete icon.');
-      };
+const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary, questionaryId, applicationStatus, applicantCount, urgent }) => {
     return (
             <BasicCard sx={{ 
-                ...sx
-             }}>
+                ...sx ,
+                ...(summary && ({"&:hover": {
+                    backgroundColor: (theme) => theme.palette.grey[100],
+                }}))
+            }}>
                 <Stack
                     direction='column'
                     justifyContent='space-between'
-                    spacing={5}
+                    spacing={2}
                 >
-                    <Stack>
-                        <Typography variant={'h5'} align= 'left'>React Developer</Typography>
-                        <Typography>
-                            Check your proxy settings or contact your network administrator to make sure the proxy server is working. If you don't believe you should be using a proxy server: Go to the Main menu  Settings  Change Proxy Settings LAN Settings and deselect "Use a proxy server for your LAN".
-                        </Typography>
+                    <Stack spacing = {2}>
+                        <Stack direction={'row'} justifyContent={'space-between'}>
+                            <Typography variant={'h5'} align= 'left'>{ title }</Typography>
+                            { applicationStatus === "INTERVIEW_SELECTED" && <Chip label="Called for Interview" variant="contained" color='warning' sx={{ color: 'white' }}/> }
+                            { applicationStatus === "ACCEPTED" && <Chip label="Accepted" variant="contained" color='success' sx={{ color: 'white' }}/> }
+                            { applicationStatus === "REJECTED" && <Chip label="Rejected" variant="contained" color='error'/> }
+                            { applicationStatus === "APPLIED" && <Chip label="Not Decided" variant="contained" color='info'/> }
+                            { applicantCount > 0 && <Chip label={applicantCount} variant="contained" color="info"/> }
+                        </Stack>
+                        <Box sx={{ position: 'relative' }}>
+                            <Box
+                                sx={{
+                                }}
+                            >
+                            </Box>
+                            <Typography sx={{whiteSpace: "pre-wrap", ...( summary && {maxHeight: 200, overflow: 'hidden', textOverflow: 'ellipsis'})}}> { children } </Typography>
+                        </Box>
                     </Stack>
 
-                    <Stack direction={{sm:'row', xs: 'column'}} spacing={{ xs: 2, md: 0 }} justifyContent='space-between'>
+                    <Stack direction={{sm:'row', xs: 'column'}} spacing={{ xs: 1, sm: 0 }} justifyContent='space-between'>
                         <Stack direction='row' spacing={1}>
-                            <Chip label="React" variant="outlined" color="success" onDelete={handleDelete}/>
-                            <Chip label="Boostrap" variant="outlined" color="success" onDelete={handleDelete}/>
+                            {
+                                skills.map(skill => <Chip label={skill.name} key={skill.id} variant="outlined" color="success"/>)
+                            }
                         </Stack>
-                        <Stack align="right">
-                            <Chip label="Freelancer" color="info" variant="outlined" />
+                        <Stack align="right" direction = {'row'} spacing = {1}>
+                            {
+                                type && type === 'TYPE_PERMANENT' && <Chip label='Full Time' color="info" variant="outlined" />
+                            } 
+                            {
+                                type && type === 'TYPE_PART_TIME' && <Chip label='Part Time' color="warning" variant="outlined" />
+                            }
+                            {
+                                type && type === 'TYPE_FREELANCE' && <Chip label='Freelance' color="error" variant="outlined" />
+                            }
+                            {
+                                status && status === "STATUS_ACTIVE" && <Chip label="Activated" variant="outlined" color='success'/>
+                            }
+                            {
+                                status && status === 'STATUS_HOLD' && <Chip label='Hold' color="warning" variant="outlined" />
+                            }
+                            {
+                                status && status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
+                            }
+                            {
+                                questionaryId &&  <Chip label='Screening Test' color="warning" variant="outlined"/>
+                            }
+                            {
+                                urgent && <Chip label='Urgent' color="error" variant="contained" />
+                            }
                         </Stack>
                     </Stack>
                 </Stack>
@@ -39,5 +75,10 @@ const SingleJobPost = ({ sx }) => {
             </BasicCard>     
      );
 }
- 
+
+SingleJobPost.defaultProps = {
+    skills: [],
+    summary: false
+}
+
 export default SingleJobPost;
