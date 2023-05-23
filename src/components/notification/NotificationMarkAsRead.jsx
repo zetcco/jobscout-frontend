@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CircleIcon from '@mui/icons-material/Circle';
 
-export const NotificationMarkAsRead = () => {
+export const NotificationMarkAsRead = ({ onClick }) => {
     const [ markAsReadHover, setMarkAsReadHover ] = useState(false);
 
     return (
-        <IconButton onMouseEnter={() => setMarkAsReadHover(true)} onMouseLeave={() => setMarkAsReadHover(false)}>
+        <IconButton onMouseEnter={() => setMarkAsReadHover(true)} onMouseLeave={() => setMarkAsReadHover(false)} onClick={onClick}>
             { markAsReadHover ? (
                 <CheckCircleOutlineIcon sx={{ width: 16, height: 16 }} fontSize="small" color="primary"/> 
             ) : (

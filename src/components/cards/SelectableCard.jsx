@@ -1,9 +1,8 @@
-import { Box, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
 import { BasicCard } from './BasicCard'
 
-export const SelectableCard = ({ title, selected, onClick, sx }) => {
+export const SelectableCard = ({ children, selected, onClick, sx, padding, onMouseEnter, onMouseLeave, divsx }) => {
   return (
     <BasicCard sx={{
         cursor: 'pointer',
@@ -27,10 +26,14 @@ export const SelectableCard = ({ title, selected, onClick, sx }) => {
         }),
         ...sx
     }}
+    divsx={{ ...divsx }}
+    padding={padding}
     onClick={onClick}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
     >
         <Stack direction={"column"} alignItems={"center"}>
-            <Typography variant={ selected ? "body3" : undefined}>{ title }</Typography>
+            { children }
         </Stack>
     </BasicCard>
   )

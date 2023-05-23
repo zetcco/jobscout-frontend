@@ -151,7 +151,7 @@ const CreatorSignupForm = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>   
                             <Controller
-                                name="contactNo"
+                                name="contact"
                                 rules={{ required: true, pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im }}
                                 control={control}
                                 defaultValue=""
@@ -181,6 +181,7 @@ const CreatorSignupForm = () => {
                                         type="date"
                                         placeholder = "Enter your Date of Birth"
                                         InputLabelProps={{ shrink: true }}
+                                        InputProps={{inputProps: { min: "1920-01-01", max: "2005-12-31"} }}
                                         fullWidth 
                                     />        
                                 )}

@@ -1,44 +1,33 @@
 import { Button, Grid, Stack, TextField } from '@mui/material'
 import { CenteredHeaderCard } from 'components/cards/CenteredHeaderCard'
 import React, { useState } from 'react'
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { selectAuthUserToken } from 'features/authSlice';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useFetch } from 'hooks/useFetch';
 
-const CreateBlogPostForm = () => {
+const CreateBlogPostForm = ({ initContent }) => {
   const navigate = useNavigate()
-  const { postId } = useParams();
   const current = new Date();
   const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
-  const authToken = useSelector(selectAuthUserToken)
-  const [content,setContent] = useState("");
+  const [content,setContent] = useState(initContent ? initContent.content : null);
   const [loading,setLoading] = useState(false);
+  const fetch = useFetch()
 
-  const onSubmit = async(e) => {
+  console.log(initContent)
+
+  const onSubmit = async (e) => {
     setLoading(true);
-    const data = { content, date };
-    
-    try {
-      const response = await axios.post('/posts/add', 
-        data,
-        { headers: { Authorization: `Bearer ${authToken}` }}
-      );
-      	console.log(response.data)
-      if (response.status === 200) {
-        alert('Data saved successfully');
-        navigate(`/blog/post/${response.data.id}`)
-
-      } else {
-        throw new Error('Failed to save data');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Failed to save data');
+    const data = { ...initContent, content, date };
+    if (initContent) {
+      await fetch('/posts/update', "PUT", { data: data, successMsg: "Post updated succesfully", onSuccess: (data) => {
+        navigate(`/blog/post/${data.id}`)
+      } })
+    } else {
+      await fetch('/posts/add', "POST", { data: data, successMsg: "Post added succesfully", onSuccess: (data) => {
+        navigate(`/blog/post/${data.id}`)
+      } })
     }
     setLoading(false);
-};
-
+  };
 
   return (
     <div>
@@ -51,29 +40,20 @@ const CreateBlogPostForm = () => {
                 Cancel
               </Button>
               <Button disabled={content === '' || loading} onClick={onSubmit} variant='contained' fullWidth >
-                Submit
+                { initContent ? "Update" : "Submit" }
               </Button>
             </Stack>
           }
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              {/* <TextField
-                id='outlined-basic'
-                label='Blog Post Title'
-                placeholder='Enter the Blog Post Title'
-                variant='outlined'
-                fullWidth
-              /> */}
-            </Grid>
+          <Grid container>
             <Grid item xs={12} md={12}>
               <TextField
                 id='outlined-multiline-static'
                 label='Content'
                 placeholder='Enter the content of the Blog Post'
                 multiline
-                minRows={3}
-                maxRows={6}
+                minRows={9}
+                maxRows={9}
                 fullWidth
                 value={content}
                 onChange={(e) => setContent(e.target.value)}

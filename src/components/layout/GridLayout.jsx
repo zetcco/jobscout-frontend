@@ -6,9 +6,13 @@ import { Outlet, useLocation } from 'react-router-dom'
 export const GridLayout = () => {
 
   const { pathname } = useLocation();
+  let largeSize = '250px';
+
+  if (pathname === '/login')
+    largeSize = '450px';
 
   return (
-    <Box sx={{ mx: { md: '200px', lg: '350px' } }}>
+    <Box sx={{ mx: { md: '200px', lg: largeSize } }}>
         <motion.div
           key={pathname}
           initial={{ opacity: 0 }}

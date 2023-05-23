@@ -11,7 +11,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { UploadArea } from "components/input/UploadArea";
 import { Controller, useForm } from "react-hook-form";
 
-export const NewChat = forwardRef(({ onClose }) => {
+export const NewChat = forwardRef(({ onClose, initialParticipants }, ref) => {
     const [ response, setResponse ] = useState(null)
 
     const [error, setError] = useState(null);
@@ -21,9 +21,7 @@ export const NewChat = forwardRef(({ onClose }) => {
     const [ responseLoading, setResponseLoading ] = useState(false);
     const [ popupOpen, setPopupOpen ] = useState(false)
     const [ options, setOptions ] = useState([])
-    const [ selectedParticipants, setSelectedParticipants ] = useState([])
-
-    const [ newChatName, setNewChatName ] = useState('')
+    const [ selectedParticipants, setSelectedParticipants ] = useState(initialParticipants)
 
     const { register, control, handleSubmit, watch }= useForm();
 
@@ -67,7 +65,6 @@ export const NewChat = forwardRef(({ onClose }) => {
                 headers: { Authorization: `Bearer ${authToken}` }
             })
             setResponse(response.data)
-            setNewChatName(response.data.name ? response.data.name : response.data.participants[0].displayName)
         } catch (error) {
             setError(error)
         }
@@ -99,7 +96,7 @@ export const NewChat = forwardRef(({ onClose }) => {
     }, [email])
 
     return (
-        <SmallPanel mainTitle={response ? "Chat created! Yay!" : "Create a new chat"} sx={{ width: { xs: '80%', md: '40%' } }}>
+        <SmallPanel mainTitle={response ? "Chat created! Yay!" : "Create a new chat"} divsx={{ width: { xs: '80%', md: '40%' } }}>
             <Stack spacing={2}>
             { error && (
                 <Alert severity="error">
@@ -115,7 +112,7 @@ export const NewChat = forwardRef(({ onClose }) => {
                                 <Controller
                                     name="chatname"
                                     control={control}
-                                    defaultValue={newChatName}
+                                    defaultValue={""}
                                     render={ ({ field }) => (
                                         <TextField 
                                             {...field}
@@ -135,7 +132,7 @@ export const NewChat = forwardRef(({ onClose }) => {
                                 />
                                 <Stack direction={"row"} spacing={2}>
                                     <Button fullWidth onClick={onClose}>Close</Button>
-                                    <Button type="submit" variant="contained" fullWidth disabled={loading}>Save</Button>
+                                    <Button type="submit" variant="contained" fullWidth disabled={loading || watch("chatname") === ''}>Save</Button>
                                 </Stack>
                             </Stack>
                         </form>
@@ -207,3 +204,6 @@ export const NewChat = forwardRef(({ onClose }) => {
     );
 });
 
+NewChat.defaultProps = {
+    initialParticipants: []
+}

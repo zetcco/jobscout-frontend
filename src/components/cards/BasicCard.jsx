@@ -1,25 +1,45 @@
-import { Box, Paper } from "@mui/material"
+import { Close } from "@mui/icons-material"
+import { Box, IconButton, Paper } from "@mui/material"
+import { forwardRef } from "react"
 
-export const BasicCard = ({ children, sx, onClick, fullHeight }) => {
+export const BasicCard = forwardRef(({ children, sx, divsx, onClick, fullHeight, padding, noElevation, inner_sx, error, onClose, onMouseEnter, onMouseLeave }, ref ) => {
 
     return (
+        <Box onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} sx={{ ...divsx }}>
         <Paper sx={{
-            boxShadow: '0px 5px 14px 2px rgba(0,0,0,0.13)',
-            // borderStyle: 'solid',
-            // borderWidth: 2,
-            borderRadius: (theme) => theme.shape.borderRadius / 500,
-            // borderColor: (theme) => theme.palette.grey[300],
+            ...(   !noElevation && 
+                ({
+                    boxShadow: 25,
+                    borderRadius: (theme) => theme.shape.borderRadius / 500
+                })
+            ),
+            ...(error && (
+                {
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    borderColor: (theme) => theme.palette.error.main,
+                }
+            )),
             ...( fullHeight && ({height: '100vh'}) ),
             ...sx
         }}
         onClick={onClick ? onClick : undefined}
+        elevation={noElevation ? 0 : undefined}
         >
-            <Box sx={{ 
-                p: { xs: 2, sm: 4 },
-                ...( fullHeight && ({height: '100%'}))
+            <Box ref={ref} sx={{ 
+                p: ( padding ? padding : { xs: 2, sm: 4 }),
+                ...( fullHeight && ({height: '100%'})),
+                ...inner_sx,
+                position: 'relative'
                 }}>
+                { onClose && (
+                    <Box sx={{ position: 'absolute', top: 5, right: 5 }}>
+                    <IconButton onClick={onClose}><Close fontSize="small"/></IconButton>
+                    </Box>
+                )}
                 {children}
             </Box>
         </Paper>
+        </Box>
     )
-}
+})

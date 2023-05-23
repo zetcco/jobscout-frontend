@@ -1,21 +1,33 @@
 import { Alert, AlertTitle, Button, Stack } from '@mui/material'
-import React from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
-import { selectAuthError, selectAuthLoading, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { selectAuthError, selectAuthLoading, selectAuthSuccess, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
 import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard'
 import { UploadArea } from '../../input/UploadArea'
 
-export const UploadProfilePictureForm = () => {
+export const UploadProfilePictureForm = forwardRef(({ onUpdate, onCancel }, ref ) => {
   const dispatch = useDispatch();
   const loading = useSelector(selectAuthLoading);
   const authError = useSelector(selectAuthError);
   const authUser = useSelector(selectAuthUser);
+  const authSuccess = useSelector(selectAuthSuccess)
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const navigate = useNavigate();
 
-  if(authUser?.displayPicture) 
+  useEffect(() => {
+    if (authSuccess)
+      navigate(0)
+  }, [authSuccess])
+
+  if(!onUpdate && authUser?.displayPicture) 
     return <Navigate to="/home"/>
+
+  // if (onUpdate && authSuccess) {
+    // dispatch(resetSuccess)
+    // return <Navigate to={`/users/${authUser.id}`}/>
+  // }
 
   const onSubmit = (data) => {
     dispatch(updateDisplayPicture(data))
@@ -41,11 +53,17 @@ export const UploadProfilePictureForm = () => {
                 files={watch("file")}
             />
             <Stack spacing={2} direction="row">
-              <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
+              {
+                onUpdate ? (
+                  <Button variant='outlined' sx={{ width: '100%' }} onClick={onCancel}>Close</Button>
+                ) : (
+                  <Button variant='outlined' sx={{ width: '100%' }} onClick={() => { navigate('/home') }}>Skip</Button>
+                )
+              }
               <Button type="submit" variant="contained" fullWidth disabled={loading}>Continue</Button>
             </Stack>
         </Stack>
         </form>
     </CenteredHeaderCard>
     )
-  }
+  })
