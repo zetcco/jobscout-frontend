@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
-import { selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
+import { clearError, selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
 import { requestJobCreatorSignup } from '../../../../features/authSlice'
 
 /* eslint-disable no-useless-escape */
@@ -29,17 +29,21 @@ const CreatorSignupForm = () => {
     const authError = useSelector(selectAuthError);
     useEffect(() => {
         if (authError && authError.status === 409) {
-            setError('companyName')
             setError('email')
         } 
     }, [setError, authError])
     /* ---------------- */
+
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
 
     const countries = useSelector(selectCountries);
     const provice = useSelector(selectProvince);
     const cities = useSelector(selectCities);
 
     const onSubmit=(data) =>{
+        dispatch(clearError())
         dispatch(requestJobCreatorSignup(data))
     }
 
@@ -55,9 +59,11 @@ const CreatorSignupForm = () => {
         dispatch(fetchCities(watchProvince))
     }, [dispatch, watchProvince])
 
+    console.log(errors)
+
     return ( 
         <CenteredHeaderCard
-            title={"Register to JobScout"}
+            title={"Register to IT-Scout"}
         >
             <Stack spacing={2} sx={{ width: '100%' }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -158,7 +164,7 @@ const CreatorSignupForm = () => {
                                 render={ ({ field }) => (
                                     <TextField 
                                         {...field}
-                                        error={errors.contactNo && true}
+                                        error={errors.contact && true}
                                         label="Contact Number" 
                                         variant="outlined"
                                         placeholder = "Enter Contact Number"
@@ -232,7 +238,7 @@ const CreatorSignupForm = () => {
                                 <InputLabel id="Org-registration-country-select-label">Country</InputLabel>
                                 <Controller
                                     name="address.country"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (
@@ -256,7 +262,7 @@ const CreatorSignupForm = () => {
                                 <InputLabel id="Org-registration-province-select-label">Province</InputLabel>
                                 <Controller
                                     name="address.province"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (
@@ -280,7 +286,7 @@ const CreatorSignupForm = () => {
                                 <InputLabel id="Org-registration-city-select-label">City</InputLabel>
                                 <Controller
                                     name="address.city"
-                                    rules={{ required: true }}
+                                    // rules={{ required: true }}
                                     control={control}
                                     defaultValue=""
                                     render={ ({ field }) => (

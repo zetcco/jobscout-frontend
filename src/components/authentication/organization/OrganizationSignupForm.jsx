@@ -9,7 +9,7 @@ import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthError, selectAuthLoading } from "../../../features/authSlice";
+import { clearError, selectAuthError, selectAuthLoading } from "../../../features/authSlice";
 import { UploadArea } from '../../input/UploadArea'
 import { useAddress } from "../../../hooks/useAddress";
 import { requestOrganizationSignup } from "../../../features/authSlice";
@@ -39,11 +39,15 @@ const OrganizationSignupForm = () => {
         } 
     }, [setError, authError])
     /* ---------------- */
-    
+
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
+
     const {countries, provice, cities} = useAddress(watch("request.address.country"), watch("request.address.province"));
 
     return (
-        <CenteredHeaderCard title={"Register to JobScout"} >
+        <CenteredHeaderCard title={"Register to IT-Scout"} >
             <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
                 <Grid container spacing={2}>
                     <Grid item xs={12}>

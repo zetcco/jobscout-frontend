@@ -20,9 +20,10 @@ import { CreatorSignup } from "./routes/signup/users/job_creator/CreatorSignup";
 import AddCompany from "./routes/signup/users/job_creator/AddCompany";
 import Blog from "./components/blog/Blog";
 import BlogPost from "./routes/blog/BlogPost";
-import ManageJobPost from "./routes/feed/ManageJobPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
+import { ManageJobPost } from "components/job_postings/manage/ManageJobPost";
+import { JoinRequestList } from "routes/profile/organization/JoinRequestList";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 import CreateBlogPostForm from "components/blog/CreateBlogPostForm";
 import BlogPostContent from "components/blog/BlogPostContent";
@@ -51,7 +52,6 @@ import { BlogPostEdit } from "components/blog/BlogPostEdit";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
-
       <Route path="/" element={ <GridLayout/> }>
         <Route path="login" element={<Login/>}/>
         <Route path="signup">
@@ -100,6 +100,8 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Route path="organizations">
             <Route path=":organizationId" element={<OrgJobPosts/>}/>
           </Route>
+
+          <Route path="join-requests" element={<JoinRequestList/>} />
 
           <Route path="manage">
             <Route path="recommendation" element={<RecommendationRequestsPage />} />

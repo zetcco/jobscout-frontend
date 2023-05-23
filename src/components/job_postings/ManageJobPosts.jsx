@@ -16,7 +16,7 @@ export const ManageJobPosts = () => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            await fetch(`/jobpost/jobCreatorId?val=${authUserId}`, "GET", { onSuccess: setJobPosts })
+            await fetch(`/jobpost/search?jobcreator=${authUserId}`, "GET", { onSuccess: setJobPosts })
             setLoading(false)
         }
         fetchData()
@@ -30,19 +30,23 @@ export const ManageJobPosts = () => {
         <Typography variant='h4'>Manage Job Posts</Typography>
         <Stack spacing={2}>
         { 
-            jobPosts.map( jobPost => 
-            <RouterLink to={`/posts/${jobPost.id}`} key={jobPost.id}>
-                <SingleJobPost 
-                    applicantCount = {jobPost.applicationCount}
-                    summary={true}
-                    title = { jobPost.title }
-                    type = { jobPost.type }
-                    status = {jobPost.status}
-                    questionaryId={ jobPost.questionaryId }
-                >
-                    { jobPost.description }
-                </SingleJobPost>
-            </RouterLink>
+            jobPosts.length === 0 ? (
+                <Typography>You have not posted anything</Typography>
+            ) : (
+                jobPosts.map( jobPost => 
+                <RouterLink to={`/posts/${jobPost.id}`} key={jobPost.id}>
+                    <SingleJobPost 
+                        applicantCount = {jobPost.applicationCount}
+                        summary={true}
+                        title = { jobPost.title }
+                        type = { jobPost.type }
+                        status = {jobPost.status}
+                        questionaryId={ jobPost.questionaryId }
+                    >
+                        { jobPost.description }
+                    </SingleJobPost>
+                </RouterLink>
+            )
         ) }
         </Stack>
         </Stack>

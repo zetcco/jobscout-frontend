@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from "react";
 import { Stack } from "@mui/system";
-import { TextField, Box, Popover, IconButton, Alert, AlertTitle, FormControl, InputLabel, Select, MenuItem, OutlinedInput, Button, Autocomplete, FormControlLabel, Checkbox } from "@mui/material";
+import { TextField, Box, Popover, IconButton, Alert, AlertTitle, FormControl, InputLabel, Select, MenuItem, OutlinedInput, Button, Autocomplete, FormControlLabel, Checkbox, Avatar, Typography } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -10,6 +10,7 @@ import { useFetch } from "hooks/useFetch";
 import { ResponsiveIconButton } from "components/ResponsiveIconButton";
 import { Clear, Save, Search } from "@mui/icons-material";
 import { getQuery } from "hooks/getQuery";
+import axios from "axios";
 
 const init_search_query = {
     description: '',
@@ -18,6 +19,7 @@ const init_search_query = {
     institutes: [],
     categories: [],
     skills: [],
+    organization: ''
 }
 
 export const JobPosts = () => {
@@ -27,7 +29,11 @@ export const JobPosts = () => {
     const [jobPosts , setjobPosts] = useState([]);
     const [categories, setCategories] = useState([])
     const [skills, setSkills] = useState([])
-    
+    const [value, setValue] = useState(null);
+    const [inputValue, setInputValue] = useState('');
+    const [options, setOptions] = useState([]);
+    const [fetchOrgsLoading, setFetchOrgsLoading] = useState(false);
+
     const fetch = useFetch()
 
     useEffect(() =>{
@@ -35,6 +41,19 @@ export const JobPosts = () => {
         fetch('/skills/', "GET", { onSuccess: setSkills })
         fetch(`/jobpost/search?status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
     } , [])
+
+    useEffect(() => {
+        if (inputValue !== '') {
+            axios.get(`/organization/search?q=${inputValue}&limit=10&offset=0`)
+            .then((response) => {
+                setOptions(response.data)
+                setFetchOrgsLoading(false)
+            }).catch((error) => {
+                console.log(error)
+                setFetchOrgsLoading(false)
+            })
+        }
+    }, [inputValue])
 
     const onSubmit = () => {
         fetch(`/jobpost/search?${getQuery(searchQuery)}status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
@@ -105,6 +124,51 @@ export const JobPosts = () => {
                                         {option.name}
                                     </Box>
                                 )}
+                            />
+                            <Autocomplete
+                                value={value}
+                                inputValue={inputValue}
+                                onChange={(e, value) => { 
+                                    setValue(value) 
+                                    setSearchQuery(ex => ({...ex, organization: value ? value.id : null})) 
+                                }}
+                                onInputChange={(e, value) => { setInputValue(value) }}
+                                loading={fetchOrgsLoading}
+                                filterOptions={(x) => x}
+                                options={options}
+                                getOptionLabel={(option) => typeof option === 'string' ? option : option.displayName }
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                renderInput={(params) => 
+                                    <TextField 
+                                        {...params}
+                                        label="Search by Company"
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                            <InputAdornment position="start">
+                                                <SearchIcon />
+                                                {params.InputProps.startAdornment}
+                                            </InputAdornment>
+                                            )
+                                        }}
+                                    />
+                                }
+                                renderOption={(props, option) => {
+                                    return (
+                                        <li {...props}>
+                                        <Stack direction={"row"} spacing={1}>
+                                            {
+                                                option.displayPicture ? (
+                                                    <Avatar src={option.displayPicture} sx={{ width: 24, height: 24 }}/>
+                                                ) : (
+                                                    <Avatar sx={{ width: 24, height: 24 }}>{ option.displayName && (Array.from(option.displayName)[0]) }</Avatar>
+                                                )
+                                            }
+                                            <Typography>{option.displayName}</Typography>
+                                        </Stack>
+                                        </li>
+                                    )
+                                }}
                             />
                             <FormControlLabel sx={{ height: '100%', ml: 1 }} label='Urgent' control={
                                 <Checkbox color='primary' checked={searchQuery.urgent} onChange={e => setSearchQuery(ex => ({...ex, urgent: e.target.checked}))} />
