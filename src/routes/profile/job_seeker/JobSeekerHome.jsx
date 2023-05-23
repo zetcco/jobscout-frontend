@@ -23,7 +23,7 @@ export const JobSeekerHome = () => {
         noElevation
         sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
     >
-            <Grid container spacing={2}>
+            <Grid container spacing={2} justifyContent={'center'}>
                 <Grid item xs={12} sm={6} md={3}>
                 <RouterLink to={`/users/${userId}`}>
                 <SelectableCard>
@@ -76,6 +76,17 @@ export const JobSeekerHome = () => {
                     <GenerateCV onClose={() => { setGenerateCVOpen(false) }}/>
                 </Modal>
                 </Grid>  
+
+                <Grid item xs={12} sm={6} md={3}>
+                <RouterLink to={"/users/applications"}>
+                <SelectableCard>
+                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                    <QuizIcon sx = {{height:'30px' , width:'30px'}}/>
+                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>APPLICATIONS</Typography>
+                    </Stack> 
+                </SelectableCard>
+                </RouterLink>
+                </Grid> 
             </Grid>
     </SmallPanel> 
 </Stack>
