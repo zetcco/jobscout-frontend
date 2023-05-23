@@ -49,9 +49,9 @@ export const CreateJobPostForm = () => {
 
   const onSubmitForm = async (data) => {
     try {
-      data.jobPost.status = data.jobPost.status ? "STATUS_HOLD" : "STATUS_ACTIVE"
+      data.status = data.status ? "STATUS_HOLD" : "STATUS_ACTIVE"
       setLoading(true)
-      const response = await serverClient.post('/jobpost', data)
+      const response = await serverClient.post('/jobpost', { jobPost: {...data} })
       if (response.status === 200)
         navigate(`/posts/${response.data.id}`)
     } catch (error) {
