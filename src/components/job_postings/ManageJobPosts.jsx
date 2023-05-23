@@ -33,6 +33,7 @@ export const ManageJobPosts = () => {
             jobPosts.map( jobPost => 
             <RouterLink to={`/posts/${jobPost.id}`} key={jobPost.id}>
                 <SingleJobPost 
+                    applicantCount = {jobPost.applicationCount}
                     summary={true}
                     title = { jobPost.title }
                     type = { jobPost.type }

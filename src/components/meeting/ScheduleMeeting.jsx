@@ -82,7 +82,7 @@ export const ScheduleMeeting = forwardRef((props, ref) => {
     );
 });
 
-const getDateWithAddition = (count) => {
+export const getDateWithAddition = (count) => {
     let dateTomorrow = new Date()
     let dateToday = new Date()
     dateTomorrow.setDate(dateToday.getDate() + count)

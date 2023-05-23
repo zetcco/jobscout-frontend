@@ -5,7 +5,7 @@ import { BasicCard } from "../cards/BasicCard";
 
 
 
-const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary, questionaryId, applicationStatus }) => {
+const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary, questionaryId, applicationStatus, applicantCount }) => {
     return (
             <BasicCard sx={{ 
                 ...sx ,
@@ -21,9 +21,11 @@ const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary
                     <Stack spacing = {2}>
                         <Stack direction={'row'} justifyContent={'space-between'}>
                             <Typography variant={'h5'} align= 'left'>{ title }</Typography>
-                            { applicationStatus === "INTERVIEW_SELECTED" && <Chip label="Accepted" variant="contained" color='success' sx={{ color: 'white' }}/> }
+                            { applicationStatus === "INTERVIEW_SELECTED" && <Chip label="Called for Interview" variant="contained" color='warning' sx={{ color: 'white' }}/> }
+                            { applicationStatus === "ACCEPTED" && <Chip label="Accepted" variant="contained" color='success' sx={{ color: 'white' }}/> }
                             { applicationStatus === "REJECTED" && <Chip label="Rejected" variant="contained" color='error'/> }
                             { applicationStatus === "APPLIED" && <Chip label="Not Decided" variant="contained" color='info'/> }
+                            { applicantCount > 0 && <Chip label={applicantCount} variant="contained" color="info"/> }
                         </Stack>
                         <Box sx={{ position: 'relative' }}>
                             <Box
