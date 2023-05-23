@@ -91,7 +91,7 @@ export const JobCreatorHome = () => {
                         </Grid>
                         <Grid item xs={6} md={3}>
                         <RouterLink to={"/manage/recommendation"}>
-                            <SelectableCard onClick={() => setMeetingModalOpen(true)}>
+                            <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                     <RecommendIcon sx = {{ height:30, width:30 }}/>
                                     <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMEND</Typography>

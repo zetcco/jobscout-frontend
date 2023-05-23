@@ -63,18 +63,18 @@ export const JobSeekerHome = () => {
                         <FileDownloadIcon sx = {{height:'30px' , width:'30px'}}/>
                         <Typography fontSize={17} fontWeight={650} letterSpacing={1}>DOWNLOAD CV</Typography>
                     </Stack> 
-                    <Modal
-                        open={generateCVOpen}
-                        onClose={() => setGenerateCVOpen(false)}
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        <GenerateCV onClose={() => setGenerateCVOpen(false)}/>
-                    </Modal>
                 </SelectableCard>
+                <Modal
+                    open={generateCVOpen}
+                    onClose={() => { setGenerateCVOpen(false) }}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <GenerateCV onClose={() => { setGenerateCVOpen(false) }}/>
+                </Modal>
                 </Grid>  
             </Grid>
     </SmallPanel> 
