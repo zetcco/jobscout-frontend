@@ -11,14 +11,17 @@ import { serverClient } from 'features/authSlice'
 import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
 import { VideoChatRounded } from '@mui/icons-material'
 import RecommendIcon from '@mui/icons-material/Recommend';
+import { useSelector } from 'react-redux'
+import { selectAuthUserId } from 'features/authSlice'
 
 export const JobCreatorHome = () => {
 
+    const [ meetingModalOpen, setMeetingModalOpen ] = useState(false);
+    const userId = useSelector(selectAuthUserId)
     const [jobPostCount , setJobPostCount] = useState(0);
     const [activatedJobPostCount , setActivatedJobPostCount] = useState(0);
     const [deactivatedJobPostCount , setDeactivatedJobPostCount] = useState(0);
     const [holdedJobPostCount , setHoldedJobPostCount] = useState(0);
-    const [meetingModalOpen, setMeetingModalOpen] = useState(false)
 
     useEffect(()=>{
         const fetchJobPosts = async () =>{
@@ -88,7 +91,7 @@ export const JobCreatorHome = () => {
                         </Grid>
                         <Grid item xs={6} md={3}>
                         <RouterLink to={"/manage/recommendation"}>
-                            <SelectableCard onClick={() => setMeetingModalOpen(true)}>
+                            <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                                     <RecommendIcon sx = {{ height:30, width:30 }}/>
                                     <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMEND</Typography>

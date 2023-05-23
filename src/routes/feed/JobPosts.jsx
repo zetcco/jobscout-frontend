@@ -111,7 +111,10 @@ export const JobPosts = () => {
                             }/>
                             <Stack width={'100%'} direction={'row'} justifyContent={'right'}>
                                 <Button onClick={() => { setSearchQuery(init_search_query) }} color='error' startIcon={<Clear/>}>Clear</Button>
-                                <Button onClick={() => { setShowFilters(null) }} startIcon={<Save/>}>Save</Button>
+                                <Button onClick={() => { 
+                                    setShowFilters(null) 
+                                    onSubmit()
+                                }} startIcon={<Save/>}>Save</Button>
                             </Stack>
                         </Stack>
                     </Popover>
@@ -130,6 +133,7 @@ export const JobPosts = () => {
                         type = { jobPost.type }
                         status = {jobPost.status}
                         questionaryId={ jobPost.questionaryId }
+                        urgent={jobPost.urgent}
                         >
                             { jobPost.description }
                         </SingleJobPost>

@@ -146,6 +146,9 @@ export const JobPost = () => {
                                             {
                                                 jobPost.status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
                                             }
+                                            {
+                                                jobPost.status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
+                                            }
                                         </Box>
                                     </Stack>
                                 </Stack>

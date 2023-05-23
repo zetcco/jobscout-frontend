@@ -15,7 +15,7 @@ export const AdminHome = () => {
                     noElevation
                     sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
                 >
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} justifyContent={'center'}>
                             <Grid item xs={4}>
                             <RouterLink to={"/questionaries"}>
                             <SelectableCard>
@@ -26,66 +26,9 @@ export const AdminHome = () => {
                             </SelectableCard>
                             </RouterLink>
                             </Grid>
-                            <Grid item xs={4}>
-                            <RouterLink to={"/posts/1/manage"}>
-                            <SelectableCard>
-                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    <ManageAccountsOutlined sx = {{height:'30px' , width:'30px'}}/>
-                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MANAGE</Typography>
-                                </Stack> 
-                            </SelectableCard>
-                            </RouterLink>
-                            </Grid>
-                            <Grid item xs={4}>
-                            <SelectableCard onClick={() => {}}>
-                                    <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                        <VideoChatRounded sx={{ height: 30, width: 30 }}/>
-                                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MEET</Typography>
-                                    </Stack> 
-                                </SelectableCard>
-                            </Grid>
                         </Grid>
                 </SmallPanel> 
             </Stack>
-            
-            <SmallPanel
-                mainTitle={"Stats"}
-                noElevation
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
-            >
-            <Stack direction = {'row'} spacing = {2}>
-                <Grid container spacing={2} sx = {{alignItems:'stretch'}}>
-                    <Grid item xs = {12} md = {4}>
-                        <Stack flexGrow={1}>
-                            <JobCreatorHomeCards
-                                title = {'POSTS'}
-                                subtitle = {'No of job posts'}
-                                count = {6}
-                            />
-                        </Stack>
-                    </Grid>
-                    <Grid item xs = {12} md = {4}>
-                        <Stack flexGrow={1}>
-                            <JobCreatorHomeCards
-                                title = {'ACTIVATED POSTS'}
-                                subtitle = {'No of activated posts'}
-                                count = {10}
-                            />
-                        </Stack>
-                    </Grid>
-                    <Grid item xs = {12} md = {4}>
-                        <Stack flexGrow={1}>
-                            <JobCreatorHomeCards
-                                title = {'DEACTIVATED POSTS'}
-                                subtitle = {'No of deactivated posts'}
-                                count = {2}
-                            />
-                        </Stack>
-                    </Grid>
-                </Grid>           
-            </Stack>
-            </SmallPanel>
-
         </Stack>
         
   )
