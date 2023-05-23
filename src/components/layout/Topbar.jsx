@@ -7,7 +7,6 @@ import { logout, requestUserProfile, resetSuccess, selectAuthSuccess, selectAuth
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
-import { GenerateCV } from "components/profile/GenerateCV";
 import { fetchConversationsIndexed, selectUnreadConversationCount } from "features/indexedConversationSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,8 +20,6 @@ export const Topbar = () => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
-
-    const [ generateCVOpen, setGenerateCVOpen ] = useState(false)
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -125,23 +122,6 @@ export const Topbar = () => {
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => navigate(`/users/${authUser.id}`)}>My Profile</Button>
                                     <Button onClick={() => dispatch(logout())}>Logout</Button>
-                                    { authUser.role === "ROLE_JOB_SEEKER" && (
-                                        <>
-                                        <Button onClick={() => setGenerateCVOpen(true)}>Generate CV</Button>
-                                        <Modal
-                                            open={generateCVOpen}
-                                            onClose={() => setGenerateCVOpen(false)}
-                                            sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
-                                            }}
-                                        >
-                                            <GenerateCV onClose={() => setGenerateCVOpen(false)}/>
-                                        </Modal>
-                                        <Button onClick={() => navigate('/questionaries')}>Questionaries</Button>
-                                        </>
-                                    ) }
                                 </Stack>
                             </BasicCard>
                         </Popover>
