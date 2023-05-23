@@ -47,7 +47,7 @@ const OrganizationSignupForm = () => {
     const {countries, provice, cities} = useAddress(watch("request.address.country"), watch("request.address.province"));
 
     return (
-        <CenteredHeaderCard title={"Register to JobScout"} >
+        <CenteredHeaderCard title={"Register to IT-Scout"} >
             <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
                 <Grid container spacing={2}>
                     <Grid item xs={12}>

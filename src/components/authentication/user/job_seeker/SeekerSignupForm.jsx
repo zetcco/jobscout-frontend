@@ -58,7 +58,7 @@ const SeekerSignupForm = () => {
 
     return ( 
         <CenteredHeaderCard
-            title={"Register to JobScout"}
+            title={"Register to IT-Scout"}
         >
             <Stack spacing={2} sx={{ width: '100%' }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
