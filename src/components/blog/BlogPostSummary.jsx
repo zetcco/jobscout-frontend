@@ -8,7 +8,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import { RouterLink } from '../RouterLink'
 import { useFetch } from 'hooks/useFetch'
 
-function BlogPostSummary({id,name,timestamp,content, initUpvoteCount, initIsUpvoted}) {
+function BlogPostSummary({id, userId,name, src,timestamp,content, initUpvoteCount, initIsUpvoted}) {
 
   const fetch = useFetch()
 
@@ -28,7 +28,9 @@ function BlogPostSummary({id,name,timestamp,content, initUpvoteCount, initIsUpvo
          <Stack spacing = {2}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                 <Stack direction="row" alignItems="center" spacing={2}>
-                        <ProfileHeaderCard name={name} />
+                        <RouterLink to={`/users/${userId}`}>
+                            <ProfileHeaderCard name = {name} src={src} />
+                        </RouterLink>
                         <Typography>•</Typography>
                         <Typography> {new Date(timestamp).toDateString()}   </Typography>
                 </Stack>

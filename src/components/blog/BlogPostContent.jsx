@@ -14,6 +14,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useFetch } from 'hooks/useFetch'
 import { EditIcon } from 'routes/profile/EditIcon'
 import { DeleteOutline } from '@mui/icons-material'
+import ProfileWithHeader from 'components/profile/ProfileWithHeader'
+import { RouterLink } from 'components/RouterLink'
 
 
 function BlogPostContent() {
@@ -48,7 +50,9 @@ function BlogPostContent() {
          <Stack spacing = {2}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                 <Stack direction="row" alignItems="center" spacing={2}>
-                        <ProfileHeaderCard name={blogPost?.user.displayName} />
+                        <RouterLink to={`/users/${blogPost?.user.id}`}>
+                            <ProfileHeaderCard name = {blogPost?.user.displayName} src={blogPost?.user.displayPicture} />
+                        </RouterLink>
                         <Typography>•</Typography>
                         <Typography> {new Date(blogPost?.timeStamp).toDateString()}   </Typography>
                 </Stack>
@@ -69,7 +73,7 @@ function BlogPostContent() {
                 }
             </Stack>
             <Stack alignItems={'flex-start'}>
-               <Typography>
+               <Typography sx={{ whiteSpace: 'pre-wrap' }}>
                     {blogPost?.content}          
                </Typography>
             </Stack>

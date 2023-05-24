@@ -30,7 +30,7 @@ function Blog() {
                 <Typography>No posts found</Typography>
               ) : (
                 viewBlogPosts.map( (blogPost, index) => (
-                  <BlogPostSummary key={index} id ={blogPost.id} initUpvoteCount={blogPost.upvoteCount} initIsUpvoted={blogPost.isUpvoted} name={blogPost.user.displayName} timestamp={blogPost.timeStamp} content={blogPost.content}/>
+                  <BlogPostSummary key={index} userId={blogPost.user.id} src={blogPost.user.displayPicture} id ={blogPost.id} initUpvoteCount={blogPost.upvoteCount} initIsUpvoted={blogPost.isUpvoted} name={blogPost.user.displayName} timestamp={blogPost.timeStamp} content={blogPost.content}/>
                 ) )
               )
             }
