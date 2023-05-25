@@ -28,6 +28,7 @@ export const Employees = () => {
 
     return (
       <Stack direction={'column'} spacing={2} justifyContent={'center'} sx={{ width: '100%' }}>
+          <Typography variant='h4'>Employees</Typography>
           {
               loading ? (
                 <CircularProgress/>

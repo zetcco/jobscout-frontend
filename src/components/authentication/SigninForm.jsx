@@ -22,7 +22,7 @@ const SigninForm = () => {
 
     return (
         <CenteredHeaderCard
-        title = {"Welcome Back"}
+        title = {"Welcome Back to IT-Scout"}
         icon = {<Avatar style = {{backgroundColor:'#28AF38'}}><LockOutlinedIcon/></Avatar>}
         footer = {<Button component={RouterLink} to={"/signup/type"} variant="contained" fullWidth>Register</Button>}
         children = {

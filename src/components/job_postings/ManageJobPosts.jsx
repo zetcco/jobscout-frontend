@@ -1,5 +1,5 @@
 import { CircularProgress, Stack, Typography } from '@mui/material'
-import { selectAuthUserId } from 'features/authSlice'
+import { selectAuthUser, selectAuthUserId } from 'features/authSlice'
 import { useFetch } from 'hooks/useFetch'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -12,11 +12,12 @@ export const ManageJobPosts = () => {
     const [ loading, setLoading ] = useState(false)
     const fetch = useFetch()
     const authUserId = useSelector(selectAuthUserId)
+    const authUser = useSelector(selectAuthUser)
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            await fetch(`/jobpost/search?jobcreator=${authUserId}`, "GET", { onSuccess: setJobPosts })
+            await fetch(`/jobpost/search?${ authUser.role === "ROLE_JOB_CREATOR" ? "jobcreator" : "organization" }=${authUserId}`, "GET", { onSuccess: setJobPosts })
             setLoading(false)
         }
         fetchData()
