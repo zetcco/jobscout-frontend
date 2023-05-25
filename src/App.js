@@ -49,6 +49,7 @@ import { JobApplications } from "routes/profile/job_seeker/JobApplications";
 import { ProfilePosts } from "routes/profile/job_creator/ProfilePosts";
 import { BlogPostEdit } from "components/blog/BlogPostEdit";
 import ManageJobPost from "routes/feed/ManageJobPost";
+import { Employees } from "routes/profile/organization/Employees";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -102,6 +103,7 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
 
           <Route path="join-requests" element={<JoinRequestList/>} />
+          <Route path="employees" element={<Employees/>} />
 
           <Route path="manage">
             <Route path="recommendation" element={<RecommendationRequestsPage />} />

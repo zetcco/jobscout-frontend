@@ -64,6 +64,7 @@ export const FindPeople = () => {
 
     return (
         <Stack spacing={4}>
+            <Typography variant='h4'>Find People</Typography>
             <Stack direction={'row'} spacing={2} alignItems={'center'}>
                 <TextField 
                 label="Search for People" 

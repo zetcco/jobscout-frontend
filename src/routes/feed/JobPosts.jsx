@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from "react";
 import { Stack } from "@mui/system";
-import { TextField, Box, Popover, IconButton, Alert, AlertTitle, FormControl, InputLabel, Select, MenuItem, OutlinedInput, Button, Autocomplete, FormControlLabel, Checkbox, Avatar, Typography } from "@mui/material";
+import { TextField, Box, Popover, FormControl, InputLabel, Select, MenuItem, OutlinedInput, Button, Autocomplete, FormControlLabel, Checkbox, Avatar, Typography, CircularProgress } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -13,7 +13,7 @@ import { getQuery } from "hooks/getQuery";
 import axios from "axios";
 
 const init_search_query = {
-    description: '',
+    title: '',
     type: '',
     degrees: [],
     institutes: [],
@@ -33,13 +33,19 @@ export const JobPosts = () => {
     const [inputValue, setInputValue] = useState('');
     const [options, setOptions] = useState([]);
     const [fetchOrgsLoading, setFetchOrgsLoading] = useState(false);
+    const [loading, setLoading] = useState(false)
 
     const fetch = useFetch()
 
     useEffect(() =>{
-        fetch('/category/', "GET", { onSuccess: setCategories })
-        fetch('/skills/', "GET", { onSuccess: setSkills })
-        fetch(`/jobpost/search?status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
+        const fetchData = async () => {
+            setLoading(true)
+            await fetch('/category/', "GET", { onSuccess: setCategories })
+            await fetch('/skills/', "GET", { onSuccess: setSkills })
+            await fetch(`/jobpost/search?status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
+            setLoading(false)
+        }
+        fetchData()
     } , [])
 
     useEffect(() => {
@@ -49,14 +55,16 @@ export const JobPosts = () => {
                 setOptions(response.data)
                 setFetchOrgsLoading(false)
             }).catch((error) => {
-                console.log(error)
+                console.error(error)
                 setFetchOrgsLoading(false)
             })
         }
     }, [inputValue])
 
-    const onSubmit = () => {
-        fetch(`/jobpost/search?${getQuery(searchQuery)}status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
+    const onSubmit = async () => {
+        setLoading(true)
+        await fetch(`/jobpost/search?${getQuery(searchQuery)}status=STATUS_ACTIVE`, "GET", { onSuccess: setjobPosts })
+        setLoading(false)
     }
 
     return ( 
@@ -69,8 +77,8 @@ export const JobPosts = () => {
                     label="Search for jobs" 
                     variant="outlined"
                     placeholder = "Example-React Developer"
-                    value={searchQuery.description}
-                    onChange={e => { setSearchQuery(ex => ({...ex, description: e.target.value})) }} 
+                    value={searchQuery.title}
+                    onChange={e => { setSearchQuery(ex => ({...ex, title: e.target.value})) }} 
                     onKeyDown={e => { if (e.keyCode === 13) onSubmit() }}
                     type="text"
                     fullWidth
@@ -189,20 +197,27 @@ export const JobPosts = () => {
             <Stack direction={'row'} spacing={{ lg: 2, xs: 0 }}>
                 <Stack direction={'column'} spacing={2} flexGrow = {1}>
                     {
-                    jobPosts.map((jobPost) =>
-                    <RouterLink to={`/posts/${jobPost.id}`} key={jobPost.id}>
-                        <SingleJobPost 
-                        summary={true}
-                        title = { jobPost.title }
-                        type = { jobPost.type }
-                        status = {jobPost.status}
-                        questionaryId={ jobPost.questionaryId }
-                        urgent={jobPost.urgent}
-                        >
-                            { jobPost.description }
-                        </SingleJobPost>
-                    </RouterLink>
-                    ) }
+                        loading ? (
+                            <Stack direction={'row'} width={'100%'} justifyContent={'center'}>
+                                <CircularProgress/>
+                            </Stack>
+                        ) : (
+                            jobPosts.map((jobPost) =>
+                            <RouterLink to={`/posts/${jobPost.id}`} key={jobPost.id}>
+                                <SingleJobPost 
+                                summary={true}
+                                title = { jobPost.title }
+                                type = { jobPost.type }
+                                status = {jobPost.status}
+                                questionaryId={ jobPost.questionaryId }
+                                urgent={jobPost.urgent}
+                                >
+                                    { jobPost.description }
+                                </SingleJobPost>
+                            </RouterLink>
+                            )
+                        )
+                    }
                 </Stack>
             </Stack>              
         </Stack>

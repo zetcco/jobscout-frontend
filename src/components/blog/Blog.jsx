@@ -14,15 +14,14 @@ function Blog() {
   useEffect( () => {
     fetch(`/posts?pageno=0&size=10`, "GET", { onSuccess: (data) => { 
       setViewBlogPosts(data)
-      console.log(data)
     }})
   }, [] );
 
   return (
     <>
-        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
-          <Stack width={'100%'} justifyContent={'center'}>
-            <Button startIcon={<AddCircleOutline/>} onClick={() => { navigate('/blog/add') }}>Create Post</Button>
+        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2} width={'100%'}>
+          <Stack justifyContent={'right'}>
+            <Button startIcon={<AddCircleOutline/>} onClick={() => { navigate('/blog/add') }} variant="contained">Create Post</Button>
           </Stack>
           <Stack spacing={3} width={'100%'}>
             {

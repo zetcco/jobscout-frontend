@@ -58,6 +58,9 @@ const conversationSlice = createSlice({
         },
         markAsRead: (state, action) => {
             state.entities[action.payload].read = true
+        },
+        clearMessages: (state, action) => {
+            return initialState;
         }
     },
     extraReducers (builder) {
