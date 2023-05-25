@@ -44,8 +44,10 @@ export const JobPost = () => {
             try{
                 setLoading(true)
                 const response = await serverClient.get(`/jobpost/${postId}`)
-                if (authUser.role === "ROLE_JOB_SEEKER") 
+                if (authUser.role === "ROLE_JOB_SEEKER") {
+                    setjobPost(post => ({...post, applicationCount: post.applicationCount+1}))
                     setApplied((await serverClient.get(`/jobpost/check-application?jobPostId=${postId}`)).data)
+                }
                 setjobPost(response.data)
             }catch(error) {
                 setError(error.response.data);
@@ -74,7 +76,7 @@ export const JobPost = () => {
             ) : (
             <Stack spacing={2} sx={{ width: '100%' }} mb={2}>
                         {
-                            authUser.role === "ROLE_JOB_CREATOR" && (
+                            authUser.role === "ROLE_JOB_CREATOR" && (authUser.id === jobPost.jobCreator.id) && (
                                 <Stack direction={'row'} spacing={1} justifyContent={'right'}>
                                     <FormControl
                                     sx={{ width: { xs: 300, sm: 250 } }}
@@ -146,9 +148,6 @@ export const JobPost = () => {
                                             {
                                                 jobPost.status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
                                             }
-                                            {
-                                                jobPost.status === 'STATUS_OVER' && <Chip label='Deactived' color="error" variant="outlined" />
-                                            }
                                         </Box>
                                     </Stack>
                                 </Stack>
@@ -156,7 +155,7 @@ export const JobPost = () => {
                         </Stack>
                         {
                             authUser.role === 'ROLE_JOB_SEEKER' && (
-                                <Button variant="contained" color='success' fullWidth size='large' disabled = {new Date(jobPost.dueDate) < new Date() || applied} onClick={handleApply}>{ applied ? 'Already Applied' : 'Apply Now' }</Button>
+                                <Button variant="contained" color='success' fullWidth size='large' disabled = {new Date(jobPost.dueDate) < new Date() || applied || jobPost.status === "STATUS_HOLD" || jobPost.status === "STATUS_OVER"} onClick={handleApply}>{ applied ? 'Already Applied' : 'Apply Now' }</Button>
                             )
                         }
             </Stack>                   

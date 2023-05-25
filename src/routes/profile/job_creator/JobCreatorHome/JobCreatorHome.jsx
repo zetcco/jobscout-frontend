@@ -9,7 +9,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { RouterLink } from '../../../../components/RouterLink'
 import { serverClient } from 'features/authSlice'
 import { ScheduleMeeting } from 'components/meeting/ScheduleMeeting'
-import { VideoChatRounded } from '@mui/icons-material'
+import { AddBoxTwoTone, AppRegistrationRounded, ManageAccountsTwoTone, PeopleAltRounded, PeopleAltTwoTone, PeopleRounded, Person, RecommendTwoTone, RssFeed, RssFeedTwoTone, VideoChatRounded, VideoChatTwoTone, Work, WorkTwoTone } from '@mui/icons-material'
 import RecommendIcon from '@mui/icons-material/Recommend';
 import { useSelector } from 'react-redux'
 import { selectAuthUserId } from 'features/authSlice'
@@ -54,8 +54,8 @@ export const JobCreatorHome = () => {
                             <RouterLink to={"/posts/create"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    <AddBoxIcon sx = {{height:'30px' , width:'30px'}}/>
-                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>CREATE</Typography>
+                                    <AddBoxTwoTone sx = {{height:'30px' , width:'30px'}} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>CREATE</Typography>
                                 </Stack>
                             </SelectableCard>
                         </RouterLink>
@@ -64,8 +64,8 @@ export const JobCreatorHome = () => {
                             <RouterLink to={"/posts/manage"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    <ManageAccountsIcon sx = {{height:'30px' , width:'30px'}}/>
-                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MANAGE</Typography>
+                                    <AppRegistrationRounded sx = {{height:'30px' , width:'30px'}} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>MANAGE</Typography>
                                 </Stack> 
                             </SelectableCard>
                         </RouterLink>
@@ -73,8 +73,8 @@ export const JobCreatorHome = () => {
                         <Grid item xs={6} md={3}>
                             <SelectableCard onClick={() => { setMeetingModalOpen(true) }}>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    <VideoChatRounded sx={{ height: 30, width: 30 }}/>
-                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>MEET</Typography>
+                                    <VideoChatTwoTone sx={{ height: 30, width: 30 }} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>MEET</Typography>
                                 </Stack> 
                             </SelectableCard>
                             <Modal
@@ -93,8 +93,48 @@ export const JobCreatorHome = () => {
                         <RouterLink to={"/manage/recommendation"}>
                             <SelectableCard>
                                 <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
-                                    <RecommendIcon sx = {{ height:30, width:30 }}/>
-                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMEND</Typography>
+                                    <RecommendTwoTone sx = {{ height:30, width:30 }} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>RECOMMEND</Typography>
+                                </Stack> 
+                            </SelectableCard>
+                        </RouterLink>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                        <RouterLink to={`/users/${userId}`}>
+                            <SelectableCard>
+                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                    <ManageAccountsTwoTone sx = {{ height:30, width:30 }} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>MY PROFILE</Typography>
+                                </Stack> 
+                            </SelectableCard>
+                        </RouterLink>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                        <RouterLink to={"/posts"}>
+                            <SelectableCard>
+                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                    <WorkTwoTone sx = {{ height:30, width:30 }} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>JOBS</Typography>
+                                </Stack> 
+                            </SelectableCard>
+                        </RouterLink>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                        <RouterLink to={"/people"}>
+                            <SelectableCard>
+                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                    <PeopleAltTwoTone sx = {{ height:30, width:30 }} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>FIND PEOPLE</Typography>
+                                </Stack> 
+                            </SelectableCard>
+                        </RouterLink>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                        <RouterLink to={"/blog"}>
+                            <SelectableCard>
+                                <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
+                                    <RssFeedTwoTone sx = {{ height:30, width:30 }} color='primary'/>
+                                    <Typography fontSize={17} fontWeight={650} letterSpacing={1} color={'primary.darker'}>BLOG</Typography>
                                 </Stack> 
                             </SelectableCard>
                         </RouterLink>
@@ -102,7 +142,7 @@ export const JobCreatorHome = () => {
                     </Grid>
             </SmallPanel>
             <SmallPanel
-                mainTitle = {'Actions'}
+                mainTitle = {'Stats'}
                 noElevation
                 sx={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
             >

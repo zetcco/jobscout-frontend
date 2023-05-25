@@ -22,7 +22,6 @@ import Blog from "./components/blog/Blog";
 import BlogPost from "./routes/blog/BlogPost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Messaging } from "./components/profile/Message/Messaging";
-import { ManageJobPost } from "components/job_postings/manage/ManageJobPost";
 import { JoinRequestList } from "routes/profile/organization/JoinRequestList";
 import ConversationMessaging from "components/profile/Message/ConversationMessaging";
 import CreateBlogPostForm from "components/blog/CreateBlogPostForm";
@@ -49,6 +48,8 @@ import { ManageJobPosts } from "components/job_postings/ManageJobPosts";
 import { JobApplications } from "routes/profile/job_seeker/JobApplications";
 import { ProfilePosts } from "routes/profile/job_creator/ProfilePosts";
 import { BlogPostEdit } from "components/blog/BlogPostEdit";
+import ManageJobPost from "routes/feed/ManageJobPost";
+import { Employees } from "routes/profile/organization/Employees";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -102,6 +103,7 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
 
           <Route path="join-requests" element={<JoinRequestList/>} />
+          <Route path="employees" element={<Employees/>} />
 
           <Route path="manage">
             <Route path="recommendation" element={<RecommendationRequestsPage />} />

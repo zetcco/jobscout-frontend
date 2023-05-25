@@ -1,6 +1,6 @@
 import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed, Home, PeopleRounded } from "@mui/icons-material"
 import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, Toolbar, Typography } from "@mui/material"
-import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
+import { clearNotifications, fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, requestUserProfile, resetSuccess, selectAuthSuccess, selectAuthUser } from '../../features/authSlice'
@@ -34,6 +34,11 @@ export const Topbar = () => {
         dispatch(fetchNotifications(2))
         dispatch(fetchConversationsIndexed())
     }, [dispatch])
+
+    const onLogout = () => {
+        dispatch(clearNotifications())
+        dispatch(logout())
+    }
 
     const selectedStyles = {
         borderBottom: '3px solid',
@@ -121,7 +126,7 @@ export const Topbar = () => {
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => navigate(`/users/${authUser.id}`)}>My Profile</Button>
-                                    <Button onClick={() => dispatch(logout())}>Logout</Button>
+                                    <Button onClick={onLogout}>Logout</Button>
                                 </Stack>
                             </BasicCard>
                         </Popover>

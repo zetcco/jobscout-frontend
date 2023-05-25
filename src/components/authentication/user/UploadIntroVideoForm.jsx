@@ -64,7 +64,7 @@ const validate = async (file) => {
     if (file.size >= 52428800)
         throw new Error("File size too large (Video size must be less than 50mb)")
     const duration = await getDuration(file)
-    if (duration > 120)
+    if (duration > 300)
         throw new Error("Video duration must not exceed 2 minutes duration")
 }
 

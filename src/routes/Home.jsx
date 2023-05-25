@@ -4,6 +4,7 @@ import { selectAuthUser } from "../features/authSlice"
 import { OrganizationHome } from "../components/profile/OrganizationHome"
 import { AdminHome } from "./profile/AdminHome"
 import { JobSeekerHome } from "./profile/job_seeker/JobSeekerHome"
+import { Navigate } from "react-router-dom"
 
 export const Home = () => {
     
@@ -15,6 +16,8 @@ export const Home = () => {
         return (<JobCreatorHome/>)
     else if (authUser.role === "ROLE_ADMIN")
         return (<AdminHome/>)
-    else
+    else if (authUser.role === "ROLE_ORGANIZATION")
         return <OrganizationHome/>
+    else
+        <Navigate to={"/home.html"}/>
 }
