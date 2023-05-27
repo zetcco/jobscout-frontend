@@ -64,8 +64,10 @@ export const Topbar = () => {
                     boxShadow: (theme) => theme.shadows[25],
                     height: 64
                 }}>
-                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}> IT-Scout </Typography></RouterLink>
-                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}>ITS</Typography></RouterLink>
+                    <RouterLink to={"/home"}>
+                        <Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}> IT-Scout </Typography>
+                        <Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }} >ITS </Typography>
+                    </RouterLink>
                     <Box sx={{ flexGrow: 1, height: '100%' }}>
                         <Stack justifyContent={{ xs: 'right', sm: 'center' }} sx={{ height: '100%' }} direction={'row'} spacing={{ xs: 0, md: 0 }}>
                             <Stack sx={{ display: { xs: 'none', sm: 'flex' },  width: { sm: 80 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
