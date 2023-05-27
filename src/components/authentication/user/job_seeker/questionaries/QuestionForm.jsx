@@ -6,14 +6,16 @@ export const QuestionForm = ({ question, index, time, answers, setAnswers }) => 
 
   const disabled = time === 0
 
+  console.log(answers)
+
   return (
     <BasicCard>
       <FormControl fullWidth disabled={disabled}>
         <Stack direction={'column'} spacing={1}>
           <Typography fontWeight={'bold'} color={ disabled && answers[index] === -1 && 'error' }>{question.question} ({ getReadableTime(time) })</Typography>
-            <RadioGroup value={answers[index]} onChange={(e) => { setAnswers(prevState => {
+            <RadioGroup value={answers[index] === null ? '' : answers[index].answer} onChange={(e) => { setAnswers(prevState => {
               const arr = prevState.slice()
-              arr[index] = parseInt(e.target.value)
+              arr[index] = { questionId: question.id, answer: parseInt(e.target.value) }
               return arr
             }) }}>
               <Stack direction={'column'}>

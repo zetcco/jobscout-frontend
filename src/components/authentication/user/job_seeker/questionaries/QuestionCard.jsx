@@ -10,7 +10,7 @@ export const QuestionCard = ({ id, name, description, badge, onDelete }) => {
     const navigate = useNavigate()
 
     return (
-        <SelectableCard onClick={() => { navigate(`/questionaries/${id}`) }} onMouseEnter={onDelete && (() => { setToggleDelete(true) })} onMouseLeave={onDelete && (() => { setToggleDelete(false) })}>
+        <SelectableCard onClick={() => { navigate(`/questionaries/${id}`) }} onMouseEnter={onDelete ? (() => { setToggleDelete(true) }) : undefined} onMouseLeave={onDelete ? (() => { setToggleDelete(false) }) : undefined}>
           <Stack direction={'row'} justifyContent={'space-between'} sx={{ width: '100%' }}>
             <Stack direction={'row'} spacing={3}>
               <img style={{ width: 60, height: 60 }} src={badge} />

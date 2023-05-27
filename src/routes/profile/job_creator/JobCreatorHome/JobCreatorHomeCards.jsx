@@ -10,7 +10,7 @@ export const JobCreatorHomeCards = ({title , subtitle , count}) => {
             {title && <Typography variant='h6'>{title}</Typography>}
             <Stack direction={'row'} justifyContent = 'space-between' alignItems = 'center'>
                 { subtitle && <Typography variant='subtitle'>{ subtitle }</Typography>}
-                { count && <Typography variant='h2'>{ count }</Typography>}
+                <Typography variant='h2'>{ count }</Typography>
             </Stack>
         </Stack>
     </BasicCard>

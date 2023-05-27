@@ -1,42 +1,56 @@
-import {Typography } from '@mui/material'
+import {Button, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import React from 'react'
+import React, { useState } from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import ProfileHeaderCard from '../profile/ProfileHeaderCard'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import { RouterLink } from '../RouterLink'
+import { useFetch } from 'hooks/useFetch'
 
-function BlogPostSummary() {
+function BlogPostSummary({id, userId,name, src,timestamp,content, initUpvoteCount, initIsUpvoted}) {
+
+  const fetch = useFetch()
+
+  const [ upvoteCount, setUpvoteCount ] = useState(initUpvoteCount)
+  const [ isUpvoted, setIsUpvoted ] = useState(initIsUpvoted)
+
+  const toggleUpvote = (id) => {
+    fetch(`/posts/upvote/${id}`, "PATCH", { errorMsg: "Error performing action", onSuccess: () => {
+      setUpvoteCount(x => isUpvoted ? --x : ++x)
+      setIsUpvoted(x => !x)
+    } })
+  }
+
   return (
     <>
         <BasicCard>
          <Stack spacing = {2}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                 <Stack direction="row" alignItems="center" spacing={2}>
-                        <ProfileHeaderCard name={'Indrajith Madhumal'} /> 
-                        <tr>18:00 - Dec 28</tr>
+                        <RouterLink to={`/users/${userId}`}>
+                            <ProfileHeaderCard name = {name} src={src} />
+                        </RouterLink>
+                        <Typography>•</Typography>
+                        <Typography> {new Date(timestamp).toDateString()}   </Typography>
                 </Stack>
-                <MoreVertIcon />
             </Stack>
             <Stack alignItems={'flex-start'}>
                <Typography>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                    {content}          
                </Typography>
             </Stack>
 
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-               <RouterLink  to={"/blog/1"}> view more</RouterLink>
+              <RouterLink  to={"/blog/post/" + id}>
+                <Button>
+                  view more
+                </Button>
+              </RouterLink>
             </Stack>
-
-            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                <Stack direction="row" alignItems="center" spacing={2}>
-                        <ThumbUpOffAltIcon />
-                        <ModeCommentOutlinedIcon />
-                </Stack>
-                <BookmarkBorderOutlinedIcon />
+            <Stack justifyContent={'right'} direction={'row'} alignItems={'center'} spacing={2}>
+              <Button onClick={() => { toggleUpvote(id) }} startIcon={<ThumbUpOffAltIcon/>} variant={isUpvoted ? 'contained' : 'text'}>{isUpvoted ? 'Unvote' : 'Upvote'}</Button>
+              <Typography>{upvoteCount}</Typography>
             </Stack>
         </Stack>
         </BasicCard>

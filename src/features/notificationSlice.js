@@ -27,6 +27,9 @@ const notificationSlice = createSlice({
         },
         markNotificationAsRead: (state, action) => {
             state.entities[action.payload.id].status = action.payload.value
+        },
+        clearNotifications: (state, action) => {
+            return initialState;
         }
     },
     extraReducers(builder) {
@@ -53,7 +56,7 @@ export const {
     selectByIds: selectNotificationIds
 } = notificationAdapter.getSelectors(state => state.notification)
 export const selectNotificationsLoading = (state) => state.notification.loading;
-export const { setNewNotification, setError, setSubscribeToNotification, setUnsubscribeToNotification, markNotificationAsRead } = notificationSlice.actions;
+export const { setNewNotification, setError, setSubscribeToNotification, setUnsubscribeToNotification, markNotificationAsRead, clearNotifications } = notificationSlice.actions;
 export const selectUnreadNotificationCount = createSelector(
     [selectNotifications],
     (notifications) => notifications.filter((notification) => notification.status ===  "UNREAD").length

@@ -3,7 +3,7 @@ import React, { forwardRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { selectAuthError, selectAuthLoading, selectAuthSuccess, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
+import { clearError, selectAuthError, selectAuthLoading, selectAuthSuccess, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
 import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard'
 import { UploadArea } from '../../input/UploadArea'
 
@@ -21,6 +21,10 @@ export const UploadProfilePictureForm = forwardRef(({ onUpdate, onCancel }, ref 
       navigate(0)
   }, [authSuccess])
 
+  useEffect(() => {
+    dispatch(clearError())
+  }, [])
+
   if(!onUpdate && authUser?.displayPicture) 
     return <Navigate to="/home"/>
 
@@ -30,6 +34,7 @@ export const UploadProfilePictureForm = forwardRef(({ onUpdate, onCancel }, ref 
   // }
 
   const onSubmit = (data) => {
+    dispatch(clearError())
     dispatch(updateDisplayPicture(data))
   }
 
@@ -57,7 +62,10 @@ export const UploadProfilePictureForm = forwardRef(({ onUpdate, onCancel }, ref 
                 onUpdate ? (
                   <Button variant='outlined' sx={{ width: '100%' }} onClick={onCancel}>Close</Button>
                 ) : (
-                  <Button variant='outlined' sx={{ width: '100%' }} onClick={() => { navigate('/home') }}>Skip</Button>
+                  <Button variant='outlined' sx={{ width: '100%' }} onClick={() => { 
+                    navigate('/home') 
+                    dispatch(clearError())
+                  }}>Skip</Button>
                 )
               }
               <Button type="submit" variant="contained" fullWidth disabled={loading}>Continue</Button>

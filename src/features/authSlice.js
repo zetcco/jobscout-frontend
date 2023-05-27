@@ -38,6 +38,9 @@ const authenticationSlice = createSlice({
         },
         resetSuccess(state, _) {
             state.success = false
+        },
+        clearError(state, _) {
+            state.error = null
         }
     },
     extraReducers(builder) {
@@ -161,7 +164,7 @@ export const updateDisplayPicture = createAsyncThunk('auth/profile/updateDisplay
     }
 })
 
-export const { logout, resetSuccess } = authenticationSlice.actions;
+export const { logout, resetSuccess, clearError } = authenticationSlice.actions;
 
 export const handleCommsError = (e, rejectWithValue) => {
     console.log(e)

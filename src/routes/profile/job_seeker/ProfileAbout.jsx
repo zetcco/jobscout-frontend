@@ -12,6 +12,7 @@ import { EditIcon } from '../EditIcon'
 import { A } from 'components/RouterLink'
 import AddSocialsForm from 'components/authentication/user/job_seeker/AddSocialsForm'
 import { UploadIntroVideoForm } from 'components/authentication/user/UploadIntroVideoForm'
+import ProfileHeaderCard from 'components/profile/ProfileHeaderCard'
 
 export const ProfileAbout = () => {
 
@@ -30,6 +31,7 @@ export const ProfileAbout = () => {
     const [ updateIntroModal, setUpdateIntroModal ] = useState(false)
     const [ updateSocialModal, setUpdateSocialModal ] = useState(false)
     const [ updateIntroVideoModal, setUpdateIntroVideoModal ] = useState(false)
+    const [ organizationProfile, setOrganizationProfile ] = useState()
 
     const profileData = useContext(ProfileContext);
 
@@ -47,6 +49,13 @@ export const ProfileAbout = () => {
 
                     response = await serverClient.get(`/job-seeker/${userId}/intro-video`)
                     setAbout((prevState) => ({ ...prevState, introVideo: response.data }))
+                }
+
+                if (response.data.role === "ROLE_JOB_CREATOR") {
+                    console.log(response.data)
+                    response = await serverClient.get(`/jobcreator/organization?jobCreator=${userId}`)
+                    if (response.status === 200)
+                        setOrganizationProfile(response.data)
                 }
 
                 response = await serverClient.get(`/user/${userId}/socials`)
@@ -152,6 +161,11 @@ export const ProfileAbout = () => {
                                 ) )}
                     </SmallPanel>
                 )}
+                { profileData.role === "ROLE_JOB_CREATOR" && (
+                    <SmallPanel mainTitle={ 'Organization'} noElevation padding={{ xs: 1 }}>
+                        { organizationProfile ? (<ProfileHeaderCard name={organizationProfile.displayName} src={organizationProfile.displayPicture}/> ) : <Typography variant='body2'>No Organization</Typography> }
+                    </SmallPanel>
+                )}
             <SmallPanel mainTitle={"Contact"} noElevation padding={{ xs: 2 }}>
                 <Stack spacing={2}>
                     {
@@ -198,7 +212,7 @@ export const ProfileAbout = () => {
                         )}
                     </>
                 }>
-                    {about.socials.length !== 0 ? (
+                    {about.socials?.length !== 0 ? (
                         <Stack spacing={2} direction={"row"}>
                         {
                             about.socials.map( (social, index) => {

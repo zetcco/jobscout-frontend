@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
-import { requestJobSeekerSignup, selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
+import { clearError, requestJobSeekerSignup, selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
 
 /* eslint-disable no-useless-escape */
 
@@ -27,11 +27,14 @@ const SeekerSignupForm = () => {
     const authError = useSelector(selectAuthError);
     useEffect(() => {
         if (authError && authError.status === 409) {
-            setError('companyName')
             setError('email')
         } 
     }, [setError, authError])
     /* ---------------- */
+
+    useEffect(() => {
+        dispatch(clearError())
+    }, [])
 
     const countries = useSelector(selectCountries);
     const provice = useSelector(selectProvince);
@@ -55,7 +58,7 @@ const SeekerSignupForm = () => {
 
     return ( 
         <CenteredHeaderCard
-            title={"Register to JobScout"}
+            title={"Register to IT-Scout"}
         >
             <Stack spacing={2} sx={{ width: '100%' }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -179,6 +182,7 @@ const SeekerSignupForm = () => {
                                         type="date"
                                         placeholder = "Enter your Date of Birth"
                                         InputLabelProps={{ shrink: true }}
+                                        InputProps={{inputProps: { min: "1920-01-01", max: "2005-12-31"} }}
                                         fullWidth 
                                     />        
                                 )}

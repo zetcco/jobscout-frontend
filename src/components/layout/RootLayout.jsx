@@ -103,6 +103,13 @@ const getDesignTokens = (theme) => ({
         }
       }
     },
+    MuiPickersPopper: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '20px'
+        }
+      }
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {

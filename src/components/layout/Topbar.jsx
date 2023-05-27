@@ -1,13 +1,12 @@
-import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed, Home } from "@mui/icons-material"
+import { ChatBubbleOutlineOutlined, DashboardCustomizeOutlined, NotificationsNoneOutlined, KeyboardArrowDownOutlined, RssFeed, Home, PeopleRounded } from "@mui/icons-material"
 import { AppBar, Avatar, Badge, Box, Button, IconButton, Modal, Popover, Stack, Toolbar, Typography } from "@mui/material"
-import { fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
+import { clearNotifications, fetchNotifications, selectUnreadNotificationCount } from "features/notificationSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, requestUserProfile, resetSuccess, selectAuthSuccess, selectAuthUser } from '../../features/authSlice'
 import { BasicCard } from "../cards/BasicCard";
 import { RouterLink } from "../RouterLink";
 import { NotificationPanel } from "components/notification/NotificationPanel";
-import { GenerateCV } from "components/profile/GenerateCV";
 import { fetchConversationsIndexed, selectUnreadConversationCount } from "features/indexedConversationSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -22,8 +21,6 @@ export const Topbar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
 
-    const [ generateCVOpen, setGenerateCVOpen ] = useState(false)
-
     const navigate = useNavigate()
     const location = useLocation()
     let rel_location = location.pathname.split("/").at(-1)
@@ -37,6 +34,11 @@ export const Topbar = () => {
         dispatch(fetchNotifications(2))
         dispatch(fetchConversationsIndexed())
     }, [dispatch])
+
+    const onLogout = () => {
+        dispatch(clearNotifications())
+        dispatch(logout())
+    }
 
     const selectedStyles = {
         borderBottom: '3px solid',
@@ -62,28 +64,35 @@ export const Topbar = () => {
                     boxShadow: (theme) => theme.shadows[25],
                     height: 64
                 }}>
-                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}> JobScout </Typography></RouterLink>
-                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}>Js</Typography></RouterLink>
+                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}> IT-Scout </Typography></RouterLink>
+                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}>ITS</Typography></RouterLink>
                     <Box sx={{ flexGrow: 1, height: '100%' }}>
-                        <Stack justifyContent={{ xs: 'right', sm: 'center' }} sx={{ height: '100%' }} direction={'row'} spacing={{ xs: 0, md: 4 }}>
-                            <Stack sx={{  width: { sm: 100 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                        <Stack justifyContent={{ xs: 'right', sm: 'center' }} sx={{ height: '100%' }} direction={'row'} spacing={{ xs: 0, md: 0 }}>
+                            <Stack sx={{ display: { xs: 'none', sm: 'flex' },  width: { sm: 80 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
                                 <RouterLink to={'/home'}>
                                     <IconButton size='large' color="inherit">
                                         <Home/>
                                     </IconButton>
                                 </RouterLink>
                             </Stack>
-                            <Stack sx={{  width: { sm: 100 }, ...(rel_location === 'blog' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'blog' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
                                 <RouterLink to={"/blog"}>
                                     <IconButton size='large' color='inherit'>
                                         <RssFeed />
                                     </IconButton>
                                 </RouterLink>
                             </Stack>
-                            <Stack sx={{  width: { sm: 100 }, ...(rel_location === 'manage' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'manage' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
                             <RouterLink to={'/home'}>
                                 <IconButton size='large' color='inherit'>
                                     <DashboardCustomizeOutlined />
+                                </IconButton>
+                            </RouterLink>
+                            </Stack>
+                            <Stack sx={{  width: { sm: 80 }, ...(rel_location === 'people' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <RouterLink to={'/people'}>
+                                <IconButton size='large' color='inherit'>
+                                    <PeopleRounded />
                                 </IconButton>
                             </RouterLink>
                             </Stack>
@@ -119,24 +128,7 @@ export const Topbar = () => {
                             <BasicCard>
                                 <Stack direction={"column"} spacing={2}>                           
                                     <Button onClick={() => navigate(`/users/${authUser.id}`)}>My Profile</Button>
-                                    <Button onClick={() => dispatch(logout())}>Logout</Button>
-                                    { authUser.role === "ROLE_JOB_SEEKER" && (
-                                        <>
-                                        <Button onClick={() => setGenerateCVOpen(true)}>Generate CV</Button>
-                                        <Modal
-                                            open={generateCVOpen}
-                                            onClose={() => setGenerateCVOpen(false)}
-                                            sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
-                                            }}
-                                        >
-                                            <GenerateCV onClose={() => setGenerateCVOpen(false)}/>
-                                        </Modal>
-                                        <Button onClick={() => navigate('/questionaries')}>Questionaries</Button>
-                                        </>
-                                    ) }
+                                    <Button onClick={onLogout}>Logout</Button>
                                 </Stack>
                             </BasicCard>
                         </Popover>
