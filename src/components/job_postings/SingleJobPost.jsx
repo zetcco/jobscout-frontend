@@ -1,11 +1,19 @@
-import React from "react";
-import { Box, Stack, Typography} from '@mui/material'
+import React, { useState } from "react";
+import { Box, Button, IconButton, Modal, Popover, Stack, Typography} from '@mui/material'
 import Chip from '@mui/material/Chip';
 import { BasicCard } from "../cards/BasicCard";
+import { MoreVertTwoTone, Report } from "@mui/icons-material";
+import { ReportPanel } from "components/ReportPanel";
+import { useSelector } from "react-redux";
+import { selectAuthUserId } from "features/authSlice";
 
 
 
-const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary, questionaryId, applicationStatus, applicantCount, urgent }) => {
+const SingleJobPost = ({ sx ,title , children , id, type  , skills , status, summary, questionaryId, applicationStatus, applicantCount, urgent }) => {
+    const [ reportModal, setReportModal ] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const authUserId = useSelector(selectAuthUserId)
+
     return (
             <BasicCard sx={{ 
                 ...sx ,
@@ -20,7 +28,35 @@ const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary
                 >
                     <Stack spacing = {2}>
                         <Stack direction={'row'} justifyContent={'space-between'}>
-                            <Typography variant={'h5'} align= 'left'>{ title }</Typography>
+                            <Stack direction={'row'} justifyContent={'space-between'} width={'100%'}>
+                                <Typography variant={'h5'} align= 'left'>{ title }</Typography>
+                                {
+                                    authUserId !== id && (
+                                    <>
+                                        <IconButton onClick={(e) => { setAnchorEl(e.target) }}>
+                                            <MoreVertTwoTone/>
+                                        </IconButton>
+                                        <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => { setAnchorEl(null) }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
+                                            <Stack p={2} direction={'column'} spacing={1}>
+                                                <Button startIcon={<Report/>} onClick={() => { setReportModal(true) }}>Report</Button>
+                                                <Modal
+                                                    open={reportModal}
+                                                    onClose={() => setReportModal(false)}
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
+                                                    }}
+                                                >
+                                                    <ReportPanel type={'REPORT_JOB_POST'} onClose={() => { setReportModal(false) }} id={id}/>
+                                                </Modal>
+                                            </Stack>
+                                        </Popover>
+                                    </>
+                                    )
+                                }
+                                </Stack>
+                            </Stack>
                             { applicationStatus === "INTERVIEW_SELECTED" && <Chip label="Called for Interview" variant="contained" color='warning' sx={{ color: 'white' }}/> }
                             { applicationStatus === "ACCEPTED" && <Chip label="Accepted" variant="contained" color='success' sx={{ color: 'white' }}/> }
                             { applicationStatus === "REJECTED" && <Chip label="Rejected" variant="contained" color='error'/> }
@@ -69,9 +105,7 @@ const SingleJobPost = ({ sx ,title , children , type  , skills , status, summary
                                 urgent && <Chip label='Urgent' color="error" variant="contained" />
                             }
                         </Stack>
-                    </Stack>
                 </Stack>
-                
             </BasicCard>     
      );
 }

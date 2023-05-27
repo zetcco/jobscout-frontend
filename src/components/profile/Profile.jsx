@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useMemo } from 'react'
 import { BasicCard } from '../cards/BasicCard'
 import { Stack } from '@mui/system'
-import { Box, Button, Modal, Tab, Tabs } from '@mui/material'
+import { Box, Button, IconButton, Modal, Popover, Tab, Tabs } from '@mui/material'
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectAuthUserToken } from 'features/authSlice';
@@ -10,6 +10,8 @@ import { ProfileWithFullNameSubtitle } from './ProfileWithFullNameSubtitle';
 import { NewChat } from './Message/NewChat';
 import { UploadProfilePictureForm } from 'components/authentication/user/UploadProfilePictureForm';
 import { useFetch } from 'hooks/useFetch';
+import { MoreVertTwoTone, Report } from '@mui/icons-material';
+import { ReportPanel } from 'components/ReportPanel';
 
 export const ProfileContext = createContext()
 
@@ -23,6 +25,8 @@ export const Profile = () => {
     const [ updateProfilePictureModal, setUpdateProfilePictureModal ] = useState(false)
     const [ requestedForRecommendation, setRequestedForRecommendation ] = useState(false)
     const fetch = useFetch()
+    const [ reportModal, setReportModal ] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const location = useLocation()
     let rel_location = location.pathname.split("/")
@@ -64,6 +68,7 @@ export const Profile = () => {
         >
             <Stack direction={'column'} spacing={4}>
                 <Stack direction={{ ...( !editable || showRecommendBtn ? { xs: 'column', md: 'row' } : { xs: 'row' } ) }} justifyContent={'space-between'} alignItems={ !(!editable && ( showRecommendBtn || showRequestRecommendationBtn )) ? "center" : undefined } spacing={2}>
+                    <Stack direction={'row'} spacing={2} alignItems={'center'}>
                     <ProfileWithFullNameSubtitle
                         name={profileData?.displayName}
                         subtitle={role}
@@ -74,13 +79,39 @@ export const Profile = () => {
                             </Box>
                         )}
                     />
-                        <Stack direction={"row"} alignItems="center" justifyContent={"space-between"}>
-                            <Stack spacing={2} direction="row">
-                                { (!editable) && <Button onClick={() => { setNewChatOpen(true) }}>Message</Button> }
-                                { showRecommendBtn && <Button onClick={() => { navigate(`/manage/recommendation/${profileData.id}`) }}>Recommend</Button> }
-                                { showRequestRecommendationBtn && <Button onClick={ requestedForRecommendation ? deleteRequest : requestRecommendation}>{ requestedForRecommendation ? 'Cancel Reqeust' : 'Request Recommendation' }</Button> }
-                            </Stack>
+                    {
+                        authUser.id !== userId && (
+                        <>
+                            <IconButton onClick={(e) => { setAnchorEl(e.target) }}>
+                                <MoreVertTwoTone/>
+                            </IconButton>
+                            <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => { setAnchorEl(null) }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
+                                <Stack p={2} direction={'column'} spacing={1}>
+                                    <Button startIcon={<Report/>} onClick={() => { setReportModal(true) }}>Report</Button>
+                                    <Modal
+                                        open={reportModal}
+                                        onClose={() => setReportModal(false)}
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <ReportPanel type={'REPORT_USER'} onClose={() => { setReportModal(false) }} id={userId}/>
+                                    </Modal>
+                                </Stack>
+                            </Popover>
+                        </>
+                        )
+                    }
+                    </Stack>
+                    <Stack direction={"row"} alignItems="center" justifyContent={"space-between"}>
+                        <Stack spacing={2} direction="row">
+                            { (!editable) && <Button onClick={() => { setNewChatOpen(true) }}>Message</Button> }
+                            { showRecommendBtn && <Button onClick={() => { navigate(`/manage/recommendation/${profileData.id}`) }}>Recommend</Button> }
+                            { showRequestRecommendationBtn && <Button onClick={ requestedForRecommendation ? deleteRequest : requestRecommendation}>{ requestedForRecommendation ? 'Cancel Reqeust' : 'Request Recommendation' }</Button> }
                         </Stack>
+                    </Stack>
                 </Stack>
                 <Tabs value={selectedTab} variant='scrollable' allowScrollButtonsMobile onChange={(e, v) => { 
                     setSelectedTab(v)

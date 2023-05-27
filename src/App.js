@@ -50,6 +50,7 @@ import { ProfilePosts } from "routes/profile/job_creator/ProfilePosts";
 import { BlogPostEdit } from "components/blog/BlogPostEdit";
 import ManageJobPost from "routes/feed/ManageJobPost";
 import { Employees } from "routes/profile/organization/Employees";
+import { Reports } from "routes/Reports";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -163,8 +164,10 @@ const router = createBrowserRouter(createRoutesFromElements(
           </Route>
         </Route>
 
-        <Route path="/protected" element={ <ProtectedRoute role={"ROLE_JOB_CREATOR"} redirect={"/home"} /> }>
-          <Route path="/protected" element={<CreateJobPost/>}/>
+        <Route path="/reports" element={ <ProtectedRoute role={"ROLE_ADMIN"} redirect={"/home"} /> }>
+          <Route path="" element={<NavigationLayout/>}>
+            <Route index element={<Reports/>}/>
+          </Route>
         </Route>
 
         <Route path="/" element={<NavigationLayout sx={{ widht: '100%' }}/>}>

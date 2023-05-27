@@ -23,7 +23,7 @@ export const ScheduleMeeting = forwardRef((props, ref) => {
 
     return (
         <Box sx={{ width: '50%' }}>
-        <SmallPanel mainTitle={response ? "Here's your link" : "Schedule a Meeting"} glassEffect={false}>
+        <SmallPanel mainTitle={response ? "Here's your link" : "Schedule a Meeting"} glassEffect={false} transparentBackground={false}>
             {loading ? (
                 <Typography>Loading</Typography>
             ) : (

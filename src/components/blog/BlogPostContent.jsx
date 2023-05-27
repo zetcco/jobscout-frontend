@@ -1,4 +1,4 @@
-import {Button, IconButton, Popover, Typography } from '@mui/material'
+import {Button, IconButton, Modal, Popover, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import { BasicCard } from '../cards/BasicCard'
@@ -9,15 +9,17 @@ import { useSelector } from 'react-redux'
 import { selectAuthUserId } from 'features/authSlice'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useFetch } from 'hooks/useFetch'
-import { DeleteOutline, Edit } from '@mui/icons-material'
+import { DeleteOutline, Edit, Report } from '@mui/icons-material'
 import { RouterLink } from 'components/RouterLink'
+import { ReportPanel } from 'components/ReportPanel'
 
 
 function BlogPostContent() {
   const [blogPost,setBlogPost] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
   const fetch = useFetch()
   const authUserId = useSelector(selectAuthUserId)
+  const [ reportModal, setReportModal ] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const {postId} = useParams();
   
@@ -51,21 +53,36 @@ function BlogPostContent() {
                         <Typography>•</Typography>
                         <Typography> {new Date(blogPost?.timeStamp).toDateString()}   </Typography>
                 </Stack>
-                {
-                  authUserId === blogPost?.user.id && (
-                    <>
                     <IconButton onClick={(e) => { setAnchorEl(e.target) }}>
                       <MoreVertIcon />
                     </IconButton>
                     <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => { setAnchorEl(null) }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}>
                       <Stack p={2} direction={'column'} spacing={1}>
-                        <Button startIcon={<Edit/>} onClick={() => { navigate(`/blog/edit/${blogPost?.id}`) }}>Edit</Button>
-                        <Button startIcon={<DeleteOutline/>} color='error' onClick={onDelete}>Delete</Button>
+                      {
+                        authUserId === blogPost?.user.id ? (
+                        <>
+                          <Button startIcon={<Edit/>} onClick={() => { navigate(`/blog/edit/${blogPost?.id}`) }}>Edit</Button>
+                          <Button startIcon={<DeleteOutline/>} color='error' onClick={onDelete}>Delete</Button>
+                        </>
+                        ) : (
+                          <>
+                          <Button startIcon={<Report/>} onClick={() => { setReportModal(true) }}>Report</Button>
+                          <Modal
+                              open={reportModal}
+                              onClose={() => setReportModal(false)}
+                              sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center'
+                              }}
+                          >
+                              <ReportPanel type={'REPORT_BLOG_POST'} onClose={() => { setReportModal(false) }} id={postId}/>
+                          </Modal>
+                          </>
+                        )
+                      }
                       </Stack>
                     </Popover>
-                    </>
-                  )
-                }
             </Stack>
             <Stack alignItems={'flex-start'}>
                <Typography sx={{ whiteSpace: 'pre-wrap' }}>
