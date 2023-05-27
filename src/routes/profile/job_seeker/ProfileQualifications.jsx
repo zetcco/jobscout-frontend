@@ -84,7 +84,7 @@ export const ProfileQualifications = () => {
                     </>
                     )}
                 </>
-            } noElevation padding={{ xs: 1 }}>
+            } noElevation padding={{ xs: 2 }}>
                 <Stack spacing={2}>
                     {
                         qualifications.length !== 0 ? qualifications.map( (qualification, index) => (
@@ -104,7 +104,7 @@ export const ProfileQualifications = () => {
                     }
                 </Stack>
             </SmallPanel>
-            <SmallPanel mainTitle={'Skill Tests'} noElevation padding={{ xs: 1 }}>
+            <SmallPanel mainTitle={'Skill Tests'} noElevation padding={{ xs: 2 }}>
                 <Stack spacing={2}>
                     {
                         skillQualifications.length !== 0 && skillQualifications.some(e => e.isPublic === true) ? skillQualifications.map( (qualification, index) => qualification.isPublic ? (

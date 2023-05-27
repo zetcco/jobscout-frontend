@@ -86,6 +86,7 @@ export const PastExperiencesForm = forwardRef(({ onUpdate, onCancel }, ref) => {
 
   return (
     <CenteredHeaderCard
+        glassEffect={onUpdate ? false : true}
         title={"Add Past Experiences"} 
         footer={
             <Stack direction="row" spacing={2}>

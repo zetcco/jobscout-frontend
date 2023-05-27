@@ -94,6 +94,7 @@ export const JobPost = () => {
                         }
                         <Box> 
                             <SingleJobPost
+                                id = {jobPost.id}
                                 skills={ jobPost.skillList }
                                 status={ jobPost.status }
                                 title = { jobPost.title }
@@ -105,7 +106,8 @@ export const JobPost = () => {
                         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                             <SmallPanel 
                                 mainTitle={'Ownership'} 
-                                divsx={{ flexGrow: 1}}>
+                                divsx={{ flexGrow: 1}}
+                                transparentBackground={false}>
                                 <Stack spacing={2} direction={'column'}>
                                     <RouterLink to={`/users/${jobPost.jobCreator.id}`}>
                                         <ProfileWithHeader title = 'Posted by' name = {jobPost.jobCreator.displayName} src={jobPost.jobCreator.displayPicture} />
@@ -116,7 +118,7 @@ export const JobPost = () => {
                                     </RouterLink>)}
                                 </Stack> 
                             </SmallPanel>
-                            <SmallPanel mainTitle={'Status'} divsx={{ flexGrow: 2 }} >
+                            <SmallPanel mainTitle={'Status'} divsx={{ flexGrow: 2 }} transparentBackground={false}>
                                 <Stack direction={'column'} spacing={3}>
                                     <Stack direction={'row'} justifyContent='space-between'>                   
                                         <Box>

@@ -25,7 +25,7 @@ export const UploadIntroVideoForm = forwardRef(({ onUpdate, onCancel }, ref ) =>
     }
 
     return (
-    <CenteredHeaderCard title={"Add your Intro Video"} >
+    <CenteredHeaderCard title={"Add your Intro Video"} glassEffect={onUpdate ? false : true}>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
         <Stack spacing={2} sx={{ width: '100%' }}>
             {

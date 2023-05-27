@@ -61,6 +61,16 @@ const getDesignTokens = (theme) => ({
     }
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundImage: `linear-gradient(19deg, #d2ffd3 0%, #e6f3d6 100%)`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: '100% 100%',
+          minHeight: '100vh',
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         contained: {

@@ -51,19 +51,23 @@ export const Topbar = () => {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar sx={{
                 position: 'fixed',
-                zIndex: (theme) => theme.zIndex.drawer + 1
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                backdropFilter: 'blur(5px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
             }}
             elevation={0}
             >
                 {/* <Toolbar sx={{ color: (theme) => theme.palette.common.white, boxShadow: (theme) => theme.shadows[25] }}> */}
                 <Toolbar variant="dense" sx={{ 
                     color: (theme) => theme.palette.common.black,
-                    backgroundColor: (theme) => theme.palette.common.white,
                     boxShadow: (theme) => theme.shadows[25],
                     height: 64
                 }}>
-                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}> IT-Scout </Typography></RouterLink>
-                    <RouterLink to={"/home"}><Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }}>ITS</Typography></RouterLink>
+                    <RouterLink to={"/home"}>
+                        <Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}> IT-Scout </Typography>
+                        <Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'block', sm: 'none' } }} >ITS </Typography>
+                    </RouterLink>
                     <Box sx={{ flexGrow: 1, height: '100%' }}>
                         <Stack justifyContent={{ xs: 'right', sm: 'center' }} sx={{ height: '100%' }} direction={'row'} spacing={{ xs: 0, md: 0 }}>
                             <Stack sx={{ display: { xs: 'none', sm: 'flex' },  width: { sm: 80 }, ...(rel_location === 'home' && selectedStyles) }} direction={'row'} justifyContent={'center'} alignItems={'center'}>

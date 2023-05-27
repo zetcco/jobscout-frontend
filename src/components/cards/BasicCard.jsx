@@ -2,7 +2,7 @@ import { Close } from "@mui/icons-material"
 import { Box, IconButton, Paper } from "@mui/material"
 import { forwardRef } from "react"
 
-export const BasicCard = forwardRef(({ children, sx, divsx, onClick, fullHeight, padding, noElevation, inner_sx, error, onClose, onMouseEnter, onMouseLeave }, ref ) => {
+export const BasicCard = forwardRef(({ children, sx, divsx, onClick, fullHeight, padding, noElevation, inner_sx, error, onClose, onMouseEnter, onMouseLeave, glassEffect }, ref ) => {
 
     return (
         <Box onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} sx={{ ...divsx }}>
@@ -21,6 +21,14 @@ export const BasicCard = forwardRef(({ children, sx, divsx, onClick, fullHeight,
                 }
             )),
             ...( fullHeight && ({height: '100vh'}) ),
+            ...( glassEffect && (
+                {
+                    background: 'rgba(255, 255, 255, 0.5)',
+                    // boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(5px)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                }
+            )),
             ...sx
         }}
         onClick={onClick ? onClick : undefined}
@@ -43,3 +51,7 @@ export const BasicCard = forwardRef(({ children, sx, divsx, onClick, fullHeight,
         </Box>
     )
 })
+
+BasicCard.defaultProps = {
+    glassEffect: true
+}

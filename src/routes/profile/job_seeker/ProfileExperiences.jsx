@@ -86,7 +86,7 @@ export const ProfileExperiences = () => {
                     </>
                     )}
                 </>
-            } noElevation padding={{ xs: 1 }}>
+            } noElevation padding={{ xs: 2 }}>
                 <Stack spacing={2}>
                     {
                         experiences.length !== 0 ? experiences.map( (experience, key) => (

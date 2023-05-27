@@ -300,52 +300,6 @@ const SeekerSignupForm = () => {
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item  xs={6} lg={4}>
-                            <Controller
-                                name="address.town"
-                                control={control}
-                                defaultValue=""
-                                render={ ({field}) =>(
-                                <TextField 
-                                    {...field}
-                                    label="Town" 
-                                    variant="outlined"
-                                    placeholder = "Your Town"
-                                    fullWidth 
-                                />)}
-                            />
-                        </Grid>
-                        <Grid item xs={6} lg={4}>
-                            <Controller
-                                name="address.street"
-                                control={control}
-                                defaultValue=""
-                                render={ ({field}) =>(
-                                <TextField 
-                                    {...field}
-                                    label="Steet" 
-                                    variant="outlined"
-                                    placeholder = "Your Street"
-                                    fullWidth 
-                                />)}
-                            />
-                        </Grid>
-                        <Grid item xs={6} lg={4}>
-                            <Controller
-                                name="address.steetNumber"
-                                control={control}
-                                defaultValue=""
-                                render={ ({field}) =>(
-                                <TextField 
-                                    {...field}
-                                    label="Steet Number" 
-                                    variant="outlined"
-                                    placeholder = "Your street number"
-                                    fullWidth 
-                                />)}
-                            />
-                        </Grid>
-
                     <Grid item xs={12}>   
                         <Button type="submit" variant="contained" fullWidth disabled={loading}>Continue</Button>
                     </Grid>     

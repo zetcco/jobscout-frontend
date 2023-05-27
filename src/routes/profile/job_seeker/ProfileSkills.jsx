@@ -81,7 +81,7 @@ export const ProfileSkills = () => {
                     </>
                     )}
                 </>
-            } noElevation padding={{ xs: 1 }}>
+            } noElevation padding={{ xs: 2 }}>
                 <Stack spacing={2}>
                     {
                         skillSets.length !== 0 ? skillSets.map( (skillSet, index) => (
