@@ -96,7 +96,7 @@ export const NewChat = forwardRef(({ onClose, initialParticipants }, ref) => {
     }, [email])
 
     return (
-        <SmallPanel mainTitle={response ? "Chat created! Yay!" : "Create a new chat"} divsx={{ width: { xs: '80%', md: '40%' } }}>
+        <SmallPanel mainTitle={response ? "Chat created! Yay!" : "Create a new chat"} divsx={{ width: { xs: '80%', md: '40%' } }} transparentBackground={false} glassEffect={false}>
             <Stack spacing={2}>
             { error && (
                 <Alert severity="error">

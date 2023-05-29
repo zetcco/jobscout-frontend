@@ -1,17 +1,10 @@
 import { Stack } from '@mui/system'
-import {Autocomplete, Box, Button, Chip, CircularProgress, FormControl, InputLabel, MenuItem, OutlinedInput, Popover, Select, TextField, Typography} from '@mui/material'
+import {Autocomplete, Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, OutlinedInput, Popover, Select, TextField, Typography} from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import ManageJobPostFrom from '../../components/job_postings/ManageJobPostFrom'
-import SmallPanel from '../../components/SmallPanel'
 import { useFetch } from 'hooks/useFetch'
 import { useParams } from 'react-router-dom'
-import { BasicCard } from 'components/cards/BasicCard'
-import { AvatarWithInitials } from 'components/AvatarWithInitials'
-import { ResponsiveIconButton } from 'components/ResponsiveIconButton'
-import { CheckCircleOutline, Clear, DeleteOutline, FilterListRounded, SearchOutlined } from '@mui/icons-material'
+import { Clear, FilterListRounded, SearchOutlined } from '@mui/icons-material'
 import { getQuery } from 'hooks/getQuery'
-import { RouterLink } from 'components/RouterLink'
-import { getDateWithAddition } from 'components/meeting/ScheduleMeeting'
 import { JobApplication } from './JobApplication'
 
 const init_search_query = {
@@ -74,6 +67,12 @@ function ManageJobPost() {
     }, successMsg: "Scheduled interview", errorMsg: "Failed to schedule interview"})
   }
 
+  const onComplete = (id) => {
+    fetch(`/jobpost/application/${id}/complete`, "PATCH", { successMsg: "Marked as complete", onSuccess: () => {
+      setApplications(applications => applications.filter(obj => obj.id !== id))
+    }})
+  }
+
   if (loading)
     return (
       <Stack width={'100%'} justifyContent={'center'}>
@@ -97,6 +96,7 @@ function ManageJobPost() {
                       <MenuItem value={"ACCEPTED"}>Accepted</MenuItem>
                       <MenuItem value={"REJECTED"}>Rejected</MenuItem>
                       <MenuItem value={"APPLIED"}>Not Decided</MenuItem>
+                      <MenuItem value={"COMPLETED"}>Completed</MenuItem>
                   </Select>
               </FormControl>
               <Autocomplete
@@ -159,7 +159,7 @@ function ManageJobPost() {
                 <Typography>No applications found</Typography>
               ) : ( 
               applications.map((application, index) => (
-                <JobApplication application={application} key={index} onAccept={onAccept} onReject={onReject} onInterview={onInterview}/>
+                <JobApplication onComplete={onComplete} application={application} key={index} onAccept={onAccept} onReject={onReject} onInterview={onInterview}/>
               ))
             )} 
           </Stack>

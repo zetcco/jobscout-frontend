@@ -9,7 +9,7 @@ export const ResponsiveIconButton = ({ onClick, startIcon, color, children, disa
         <Button onClick={onClick} sx={{
             minWidth: { xs: 0 },
             "& .MuiButton-startIcon": {
-                margin: { xs: 0 }
+                margin: { xs: 1 }
             }
         }} color={color} startIcon={startIcon} disabled={disabled}><span style={{ display: isSmallScreen && 'none' }}>{children}</span></Button>
     )

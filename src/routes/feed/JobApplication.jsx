@@ -1,4 +1,4 @@
-import { CheckCircleOutline, DeleteOutline } from '@mui/icons-material'
+import { CheckCircleOutline, DeleteOutline, DoneAllTwoTone } from '@mui/icons-material'
 import { Button, Chip, Popover, Stack, TextField, Typography } from '@mui/material'
 import { AvatarWithInitials } from 'components/AvatarWithInitials'
 import { ResponsiveIconButton } from 'components/ResponsiveIconButton'
@@ -10,7 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useState } from 'react'
 import { getDateWithAddition } from 'components/meeting/ScheduleMeeting'
 
-export const JobApplication = ({ application, onReject, onAccept, onInterview }) => {
+export const JobApplication = ({ application, onReject, onAccept, onInterview, onComplete }) => {
 
     const [showInterview, setShowInterview] = useState(null)
     const [ timestamp, setTimestamp ] = useState(getDateWithAddition(1));
@@ -32,17 +32,31 @@ export const JobApplication = ({ application, onReject, onAccept, onInterview })
                 { application.status === "ACCEPTED" && <Chip label="Accepted" variant="outlined" color='success'/> }
                 { application.status === "REJECTED" && <Chip label="Rejected" variant="outlined" color='error'/> }
                 { application.status === "APPLIED" && <Chip label="Not Decided" variant="outlined" color='info'/> }
-                { application.status !== "INTERVIEW_SELECTED" && (
+                { application.status === "COMPLETED" && <Chip label="Completed" variant="outlined" color='warning'/> }
+                { application.status === "APPLIED" && (
+                    <Stack direction={'row'} spacing={1}>
+                        <ResponsiveIconButton startIcon={<CheckCircleOutline/>}
+                            onClick={() => { onAccept(application.id) }}
+                            disabled={application.status === "ACCEPTED"}
+                        >Accept</ResponsiveIconButton>
+                        <ResponsiveIconButton color={'error'} startIcon={<DeleteOutline/>} 
+                            onClick={() => { onReject(application.id) }}
+                            disabled={application.status === "REJECTED"}
+                        >Reject</ResponsiveIconButton>
+                    </Stack>
+                )}
+                { application.status === "REJECTED" && (
+                    <ResponsiveIconButton startIcon={<CheckCircleOutline/>}
+                        onClick={() => { onAccept(application.id) }}
+                        disabled={application.status === "ACCEPTED"}
+                    >Accept</ResponsiveIconButton>
+                ) }
+                { application.status === "ACCEPTED" && (
                 <Stack direction={'row'} spacing={1}>
                     <ResponsiveIconButton color={'error'} startIcon={<DeleteOutline/>} 
                         onClick={() => { onReject(application.id) }}
                         disabled={application.status === "REJECTED"}
                     >Reject</ResponsiveIconButton>
-
-                    <ResponsiveIconButton startIcon={<CheckCircleOutline/>}
-                        onClick={() => { onAccept(application.id) }}
-                        disabled={application.status === "ACCEPTED"}
-                    >Accept</ResponsiveIconButton>
 
                     { application.status === "ACCEPTED" && 
                         (
@@ -75,7 +89,14 @@ export const JobApplication = ({ application, onReject, onAccept, onInterview })
                         </Stack>
                         </Popover>
                         </>) }
-                </Stack> )}
+                </Stack> )
+                }
+                {
+                application.status === "INTERVIEW_SELECTED" && (
+                    <ResponsiveIconButton startIcon={<DoneAllTwoTone/>}
+                        onClick={() => { onComplete(application.id) }}
+                    > Mark as Complete</ResponsiveIconButton>
+                )}
             </Stack>
         </BasicCard>
     )

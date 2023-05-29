@@ -8,7 +8,7 @@ import { selectAuthUser } from '../../features/authSlice';
 export const SelectAccountType = () => {
     const authUser = useSelector(selectAuthUser);
 
-    if (authUser)
+    if (authUser && authUser?.enabled !== false)
         return (<Navigate to={"/home"} replace/>)
   return (
     <Grid container>

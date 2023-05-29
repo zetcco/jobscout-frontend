@@ -51,10 +51,12 @@ import { BlogPostEdit } from "components/blog/BlogPostEdit";
 import ManageJobPost from "routes/feed/ManageJobPost";
 import { Employees } from "routes/profile/organization/Employees";
 import { Reports } from "routes/Reports";
+import { VerifiedAccout } from "routes/VerifiedAccout";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
       <Route path="/" element={ <GridLayout/> }>
+        <Route path="verify" element={<VerifiedAccout/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="signup">
           <Route path="type" element={ <SelectAccountType/> }/>

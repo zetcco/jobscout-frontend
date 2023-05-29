@@ -29,7 +29,7 @@ export default function RecommendationRequests() {
                     requesters.map(
                         (requester, index) => (
                             <BasicCard sx={{ width: '100%' }} key={index}>
-                                <Stack direction={'row'} spacing={{ xs: 2, md: 10 }}>
+                                <Stack direction={'row'} spacing={{ xs: 2, md: 10 }} justifyContent={'space-between'}>
                                     <Stack direction={'row'} spacing = {2} alignItems={'center'}>
                                         <AvatarWithInitials size={{ xs: 60, md: 70 }} src={requester.displayPicture} name={requester.displayName}/>
                                         <Stack direction={'column'} spacing={0.2}>
