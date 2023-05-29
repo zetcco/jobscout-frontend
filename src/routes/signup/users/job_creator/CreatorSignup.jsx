@@ -3,13 +3,13 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import CreatorSignupForm from '../../../../components/authentication/user/job_creator/CreatorSignupForm'
-import { selectAuthUser } from '../../../../features/authSlice';
+import { selectAccountEnabled } from '../../../../features/authSlice';
 
 export const CreatorSignup = () => {
-  const authUser = useSelector(selectAuthUser);
+  const accEnabled = useSelector(selectAccountEnabled);
 
-  if (authUser)
-      return (<Navigate to={"/signup/user/creator/profile/company"} replace/>)
+  if (accEnabled === false)
+      return (<Navigate to={"/login"} replace/>)
 
   return (
     <Grid container>

@@ -3,13 +3,13 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import OrganizationSignupForm from '../../../components/authentication/organization/OrganizationSignupForm'
-import { selectAuthUser } from '../../../features/authSlice';
+import { selectAccountEnabled } from '../../../features/authSlice';
 
 export const OrganizationSignup = () => {
-  const authUser = useSelector(selectAuthUser);
+  const accEnabled = useSelector(selectAccountEnabled);
 
-  if (authUser)
-      return (<Navigate to={"/signup/organization/profile"} replace/>)
+  if (accEnabled === false)
+      return (<Navigate to={"/login"} replace/>)
 
   return (
      <Grid container>

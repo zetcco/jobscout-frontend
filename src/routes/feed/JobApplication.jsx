@@ -33,6 +33,18 @@ export const JobApplication = ({ application, onReject, onAccept, onInterview, o
                 { application.status === "REJECTED" && <Chip label="Rejected" variant="outlined" color='error'/> }
                 { application.status === "APPLIED" && <Chip label="Not Decided" variant="outlined" color='info'/> }
                 { application.status === "COMPLETED" && <Chip label="Completed" variant="outlined" color='warning'/> }
+                { application.status === "APPLIED" && (
+                    <Stack direction={'row'} spacing={1}>
+                        <ResponsiveIconButton startIcon={<CheckCircleOutline/>}
+                            onClick={() => { onAccept(application.id) }}
+                            disabled={application.status === "ACCEPTED"}
+                        >Accept</ResponsiveIconButton>
+                        <ResponsiveIconButton color={'error'} startIcon={<DeleteOutline/>} 
+                            onClick={() => { onReject(application.id) }}
+                            disabled={application.status === "REJECTED"}
+                        >Reject</ResponsiveIconButton>
+                    </Stack>
+                )}
                 { application.status === "REJECTED" && (
                     <ResponsiveIconButton startIcon={<CheckCircleOutline/>}
                         onClick={() => { onAccept(application.id) }}

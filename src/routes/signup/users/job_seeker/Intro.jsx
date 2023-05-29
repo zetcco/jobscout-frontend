@@ -73,7 +73,7 @@ export const Intro = forwardRef(({ onUpdate, onCancel }, ref) => {
                         )
                     }
                     <Box sx={{ width: '100%' }}>
-                        <Button variant='contained' sx={{ width: '100%' }} onClick={updateIntro} disabled={intro === '' || loading}>Continue</Button>
+                        <Button variant='contained' sx={{ width: '100%' }} onClick={updateIntro} disabled={intro === "" || loading}>Continue</Button>
                     </Box>
                 </Stack>
             }

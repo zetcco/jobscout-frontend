@@ -16,6 +16,8 @@ export const selectAuthUserToken = (state) => state.auth.token;
 export const selectAuthError = (state) => state.auth.error;
 export const selectAuthLoading = (state) => state.auth.loading;
 export const selectAuthSuccess = (state) => state.auth.success;
+export const selectAccountEnabled = (state) => state.auth.userInfo?.enabled;
+export const selectAccountCompleted = (state) => state.auth.userInfo?.complete;
 
 const getServerClient = (token) => axios.create({
     baseURL: '',
@@ -70,11 +72,19 @@ const authenticationSlice = createSlice({
                 }
             )
             .addMatcher(
-                (action) => /auth\/auth.*fulfilled/.test(action.type),
+                (action) => /auth\/auth\/register.*fulfilled/.test(action.type),
+                (state, action) => {
+                    state.loading = false
+                    state.userInfo = { enabled: false }
+                    localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
+                }
+            )
+            .addMatcher(
+                (action) => /auth\/auth\/login.*fulfilled/.test(action.type),
                 (state, action) => {
                     state.token = action.payload.jwtToken
-                    let { sub, id, role } = jwtDecode(state.token)
-                    let userInfo = {id, email: sub, role}
+                    let { sub, id, role, complete } = jwtDecode(state.token)
+                    let userInfo = {id, email: sub, role, complete, enabled: true }
                     state.userInfo = userInfo
                     localStorage.setItem('userInfo', JSON.stringify(userInfo))
                     localStorage.setItem('token', JSON.stringify(action.payload.jwtToken))
@@ -101,7 +111,7 @@ const authenticationSlice = createSlice({
 
 export default authenticationSlice.reducer;
 
-export const requestLogin = createAsyncThunk('auth/auth/requestLogin', async (data, { rejectWithValue }) => {
+export const requestLogin = createAsyncThunk('auth/auth/login/requestLogin', async (data, { rejectWithValue }) => {
     try {
         return (await axios.post(`/auth/login`, data)).data
     } catch (e) {
@@ -109,7 +119,7 @@ export const requestLogin = createAsyncThunk('auth/auth/requestLogin', async (da
     }
 })
 
-export const requestOrganizationSignup = createAsyncThunk('auth/auth/requestOrganizationSignup', async (data, { rejectWithValue }) => {
+export const requestOrganizationSignup = createAsyncThunk('auth/auth/register/requestOrganizationSignup', async (data, { rejectWithValue }) => {
     try {
         var formData = new FormData()
         formData.append('request', new Blob([JSON.stringify(data.request)], { type: "application/json" }));
@@ -120,7 +130,7 @@ export const requestOrganizationSignup = createAsyncThunk('auth/auth/requestOrga
     }
 })
 
-export const requestJobCreatorSignup = createAsyncThunk('auth/auth/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
+export const requestJobCreatorSignup = createAsyncThunk('auth/auth/register/requestJobCreatorSignup', async (data, { rejectWithValue }) => {
     try {
         return (await axios.post(`/auth/register/jobcreator`, data)).data
     } catch (e) {
@@ -128,7 +138,7 @@ export const requestJobCreatorSignup = createAsyncThunk('auth/auth/requestJobCre
     }
 })
 
-export const requestJobSeekerSignup = createAsyncThunk('auth/auth/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
+export const requestJobSeekerSignup = createAsyncThunk('auth/auth/register/requestJobSeekerSignup', async (data, { rejectWithValue }) => {
     try {
         return (await axios.post(`/auth/register/jobseeker`, data)).data
     } catch (e) {

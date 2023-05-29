@@ -59,8 +59,6 @@ const CreatorSignupForm = () => {
         dispatch(fetchCities(watchProvince))
     }, [dispatch, watchProvince])
 
-    console.log(errors)
-
     return ( 
         <CenteredHeaderCard
             title={"Register to IT-Scout"}

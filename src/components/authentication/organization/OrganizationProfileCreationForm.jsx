@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Button, Stack } from '@mui/material'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { selectAuthError, selectAuthLoading, selectAuthUser, updateDisplayPicture } from '../../../features/authSlice'
 import { CenteredHeaderCard } from '../../cards/CenteredHeaderCard'
 import { UploadArea } from '../../input/UploadArea'
@@ -13,6 +13,7 @@ export const OrganizationProfileCreationForm = () => {
   const authError = useSelector(selectAuthError);
   const authUser = useSelector(selectAuthUser);
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const navigate = useNavigate()
 
   if(authUser?.displayPicture) 
     return <Navigate to="/home"/>
@@ -41,7 +42,7 @@ export const OrganizationProfileCreationForm = () => {
                 files={watch("file")}
             />
             <Stack spacing={2} direction="row">
-              <Button variant='outlined' sx={{ width: '100%' }}>Skip</Button>
+              <Button variant='outlined' sx={{ width: '100%' }} onClick={() => { navigate('/home') }}>Skip</Button>
               <Button type="submit" variant="contained" fullWidth disabled={loading}>Continue</Button>
             </Stack>
         </Stack>
