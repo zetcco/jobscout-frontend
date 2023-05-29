@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { CenteredHeaderCard } from "../../../cards/CenteredHeaderCard";
 import { Controller, useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCities, fetchCountries, fetchProvince, selectCities, selectCountries, selectProvince } from "../../../../features/addressSlice";
 import { clearError, requestJobSeekerSignup, selectAuthError, selectAuthLoading } from "../../../../features/authSlice";
@@ -17,6 +17,7 @@ import { clearError, requestJobSeekerSignup, selectAuthError, selectAuthLoading 
 const SeekerSignupForm = () => {
     const {control, handleSubmit, formState: { errors }, watch, setError }= useForm();
     const dispatch = useDispatch();
+    const [confirmpwd , setConfirmpwd] = useState('');
 
     const loading = useSelector(selectAuthLoading);
 
@@ -227,6 +228,18 @@ const SeekerSignupForm = () => {
                                     />               
                                 )}
                             />
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                                    <TextField 
+                                        error={confirmpwd !== watch('password')}
+                                        value={confirmpwd}
+                                        onChange={(e)=>setConfirmpwd(e.target.value)}
+                                        label="Reenter Password" 
+                                        type="password"
+                                        variant="outlined"
+                                        placeholder = "Reenter your password"
+                                        fullWidth 
+                                    />               
                         </Grid>
                         <Grid item xs={6} lg={4}>
                             <FormControl fullWidth error={errors.request?.address?.country && true}>

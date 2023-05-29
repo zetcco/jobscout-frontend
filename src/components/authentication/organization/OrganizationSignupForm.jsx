@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { CenteredHeaderCard } from "../../cards/CenteredHeaderCard";
 import { Controller, useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearError, selectAuthError, selectAuthLoading } from "../../../features/authSlice";
 import { UploadArea } from '../../input/UploadArea'
@@ -19,6 +19,7 @@ import { requestOrganizationSignup } from "../../../features/authSlice";
 const OrganizationSignupForm = () => {
     const { register, control, handleSubmit, formState: { errors }, watch, setError }= useForm();
     const dispatch = useDispatch();
+    const [confirmpwd , setConfirmpwd] = useState('');
 
     const [ agreed, setAgreed ] = useState(false)
 
@@ -114,6 +115,19 @@ const OrganizationSignupForm = () => {
                                 error={errors.request?.password && true}
                             />)}
                         />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                            <TextField
+                                error={confirmpwd !== watch('request.password')}
+                                value={confirmpwd}
+                                onChange={(e)=>setConfirmpwd(e.target.value)}
+                                label="Reenter Password" 
+                                type="password"
+                                variant="outlined"
+                                placeholder = "Reenter your password"
+                                fullWidth 
+                            />
                     </Grid>
 
                     <Grid item xs={6} lg={4}>

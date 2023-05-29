@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from '@mui/material/TextField';
 import { Alert, AlertTitle, Button, Grid, Stack} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
@@ -19,6 +19,7 @@ const CreatorSignupForm = () => {
 
     const {control, handleSubmit, formState: { errors }, watch, setError }= useForm();
     const dispatch = useDispatch();
+    const [ confirmPassword, setConfirmPassword ] = useState('')
 
     const loading = useSelector(selectAuthLoading);
 
@@ -230,6 +231,18 @@ const CreatorSignupForm = () => {
                                     />               
                                 )}
                             />
+                        </Grid>
+                        <Grid item xs={12} md={12}>   
+                            <TextField 
+                                error={confirmPassword !== watch('password')}
+                                    value={confirmPassword}
+                                    onChange={e => { setConfirmPassword(e.target.value) }}
+                                    label="Reenter Password" 
+                                    type="password"
+                                    variant="outlined"
+                                    placeholder = "Reenter your password"
+                                    fullWidth 
+                                />
                         </Grid>
                         <Grid item xs={6} lg={4}>
                             <FormControl fullWidth error={errors.request?.address?.country && true}>
