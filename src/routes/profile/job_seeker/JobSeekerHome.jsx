@@ -28,6 +28,7 @@ export const JobSeekerHome = () => {
 
   return (
     <Stack>
+    <Typography variant='h4' fontWeight={800}>Job Seeker</Typography>
     <SmallPanel
         mainTitle = {'Actions'}
         noElevation
@@ -70,7 +71,7 @@ export const JobSeekerHome = () => {
                 <SelectableCard onClick={() => { setGenerateCVOpen(true) }}>
                     <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                         <FileDownloadTwoTone sx = {{height:'30px' , width:'30px'}} color='primary'/>
-                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>DOWNLOAD CV</Typography>
+                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>GET CV</Typography>
                     </Stack> 
                 </SelectableCard>
                 <Modal
@@ -87,11 +88,11 @@ export const JobSeekerHome = () => {
                 </Grid>  
 
                 <Grid item xs={12} sm={6} md={3}>
-                <RouterLink to={"/users/applications"}>
+                <RouterLink to={"/sent-recommendation-requests"}>
                 <SelectableCard>
                     <Stack direction = {'column'} alignItems = {'center'} justifyContent = {'center'} spacing = {1}>
                     <QuizTwoTone sx = {{height:'30px' , width:'30px'}} color='primary'/>
-                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>APPLICATIONS</Typography>
+                        <Typography fontSize={17} fontWeight={650} letterSpacing={1}>RECOMMENDATIONS</Typography>
                     </Stack> 
                 </SelectableCard>
                 </RouterLink>

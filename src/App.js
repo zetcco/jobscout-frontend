@@ -52,6 +52,7 @@ import ManageJobPost from "routes/feed/ManageJobPost";
 import { Employees } from "routes/profile/organization/Employees";
 import { Reports } from "routes/Reports";
 import { VerifiedAccout } from "routes/VerifiedAccout";
+import { SentRecommendationRequests } from "routes/profile/job_seeker/SentRecommendationRequests";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -107,6 +108,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
           <Route path="join-requests" element={<JoinRequestList/>} />
           <Route path="employees" element={<Employees/>} />
+          <Route path="sent-recommendation-requests" element={<SentRecommendationRequests/>}/>
 
           <Route path="manage">
             <Route path="recommendation" element={<RecommendationRequestsPage />} />
