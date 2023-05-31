@@ -30,6 +30,7 @@ export const OrganizationHome = () => {
   return (
     <Stack direction = {'column'} spacing = {4}>
      <Stack>
+        <Typography variant='h4' fontWeight={800}>Organization</Typography>
         <SmallPanel
             mainTitle = {'Actions'}
             noElevation

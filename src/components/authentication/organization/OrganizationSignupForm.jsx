@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TextField from '@mui/material/TextField';
-import { Alert, AlertTitle, Button, Checkbox, FormControlLabel, Grid } from '@mui/material';
+import { Alert, AlertTitle, Button, Checkbox, CircularProgress, FormControlLabel, Grid } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -273,7 +273,7 @@ const OrganizationSignupForm = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Button type="submit" variant="contained" fullWidth disabled={loading || !agreed}>Continue</Button>
+                        <Button type="submit" variant="contained" fullWidth disabled={loading || !agreed}  startIcon={ loading ? <CircularProgress sx={{ color: 'grey.400' }} size={20}/> : undefined }>Continue</Button>
                     </Grid>
                 
                     </Grid>

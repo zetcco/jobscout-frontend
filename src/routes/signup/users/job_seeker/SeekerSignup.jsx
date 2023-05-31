@@ -11,7 +11,6 @@ export const SeekerSignup = () => {
   if (accEnabled === false)
       return (<Navigate to={"/login"} replace/>)
 
-
   return (
     <Grid container>
       <Grid item xs={12}>

@@ -76,7 +76,6 @@ const authenticationSlice = createSlice({
                 (state, action) => {
                     state.loading = false
                     state.userInfo = { enabled: false }
-                    localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
                 }
             )
             .addMatcher(

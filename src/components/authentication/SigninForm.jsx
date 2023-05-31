@@ -6,7 +6,7 @@ import { CenteredHeaderCard } from "../cards/CenteredHeaderCard";
 import { Link as RouterLink } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { requestLogin, selectAuthError, selectAuthLoading } from "../../features/authSlice";
+import { requestLogin, selectAccountEnabled, selectAuthError, selectAuthLoading } from "../../features/authSlice";
 
 const SigninForm = () => {
 
@@ -15,6 +15,7 @@ const SigninForm = () => {
 
     const loading = useSelector(selectAuthLoading);
     const authError = useSelector(selectAuthError);
+    const authEnabled = useSelector(selectAccountEnabled)
 
     const onSubmit = (data) => { 
         dispatch(requestLogin(data))
@@ -36,6 +37,15 @@ const SigninForm = () => {
                                     <Alert severity="error">
                                         <AlertTitle>Error</AlertTitle>
                                         <strong>{authError.message}</strong>
+                                    </Alert>
+                                )
+                            }
+                            {
+                                authEnabled === false && 
+                                (
+                                    <Alert severity="info">
+                                        <AlertTitle>Verification</AlertTitle>
+                                        <strong>{"Please check your email to verify your account before logging in."}</strong>
                                     </Alert>
                                 )
                             }

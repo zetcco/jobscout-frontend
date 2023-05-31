@@ -44,6 +44,7 @@ export const JobCreatorHome = () => {
 
     return (
         <Stack direction = {'column'}>
+            <Typography variant='h4' fontWeight={800}>Job Creator</Typography>
             <SmallPanel
                 mainTitle = {'Actions'}
                 noElevation
